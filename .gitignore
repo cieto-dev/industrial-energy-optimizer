@@ -1,123 +1,64 @@
-# ==========================================
-# OS Files
-# ==========================================
-.DS_Store
-Thumbs.db
-Desktop.ini
-
-# ==========================================
 # Python
-# ==========================================
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 *.so
-*.egg-info/
-.pytest_cache/
-.mypy_cache/
-.coverage
-htmlcov/
-.cache/
 
-# Virtual Environments
+# Virtual environments
 venv/
 .venv/
 env/
-ENV/
 
-# ==========================================
-# Environment Variables
-# ==========================================
+# Environment variables
 .env
 .env.*
-!.env.example
 
-# ==========================================
 # Logs
-# ==========================================
 *.log
-logs/
 
-# ==========================================
+# macOS
+.DS_Store
+
 # VS Code
-# ==========================================
 .vscode/
-.history/
 
-# ==========================================
 # JetBrains
-# ==========================================
 .idea/
 
-# ==========================================
-# macOS
-# ==========================================
-.AppleDouble
-.LSOverride
+# Python testing
+.pytest_cache/
+.coverage
+htmlcov/
 
-# ==========================================
-# Node / Next.js
-# ==========================================
-node_modules/
-.next/
-out/
-dist/
-build/
+# Type checking
+.mypy_cache/
+.pyre/
 
-# npm / pnpm / yarn
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# ==========================================
-# TypeScript
-# ==========================================
-*.tsbuildinfo
-
-# ==========================================
-# Database
-# ==========================================
-*.db
-*.sqlite
-*.sqlite3
-
-# PostgreSQL local dumps
-*.sql
-
-# ==========================================
-# Testing
-# ==========================================
-.coverage.*
-coverage/
-
-# ==========================================
-# Docker
-# ==========================================
-.docker/
-
-# ==========================================
-# Generated Reports
-# ==========================================
-reports/output/
-exports/
-generated/
-
-# ==========================================
-# Temporary Files
-# ==========================================
-tmp/
-temp/
-*.tmp
-
-# ==========================================
 # Jupyter
-# ==========================================
 .ipynb_checkpoints/
 
-# ==========================================
-# Misc
-# ==========================================
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# SQLite databases
+*.db
+*.sqlite3
+
+# Temporary files
+*.tmp
 *.swp
-*.swo
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# Data (only if you DON'T want to version datasets)
+data/
+outputs/
+results/
+models/

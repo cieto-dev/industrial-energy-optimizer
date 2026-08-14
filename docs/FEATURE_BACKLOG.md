@@ -14,7 +14,7 @@
 |--------|--------|
 | Research | ✅ Completed |
 | Documentation | 🟡 In Progress |
-| Architecture Design | 🟡 In Progress |
+| Architecture Design | ✅ completed|
 | Database Design | ⏳ Pending |
 | Backend Development | ⏳ Pending |
 | Frontend Development | ⏳ Pending |
@@ -40,7 +40,7 @@
 
 | Feature | Priority | Status |
 |----------|----------|--------|
-| README.md | 🔴 | ⏳ |
+| README.md|    🔴    | ⏳.    |
 | PROJECT_STATE.md | 🔴 | ✅ |
 | SYSTEM_DESIGN.md | 🔴 | 🟡 |
 | FEATURE_BACKLOG.md | 🔴 | 🟡 |

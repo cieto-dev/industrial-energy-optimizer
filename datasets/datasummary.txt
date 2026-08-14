@@ -1,0 +1,343 @@
+This `datasets/` folder is one of the **most important folders** in your project. Think of it as the **knowledge base** that your optimizer uses to make decisions.
+
+Instead of hardcoding values in Python like:
+
+```python
+electricity_price = 8.5
+```
+
+you store them in CSV files so they're easy to update.
+
+Let's go through every file.
+
+---
+
+# 1. biomass_atlas.csv
+
+## What is it?
+
+A database of **biomass availability** district-wise.
+
+Your optimizer needs to know:
+
+> "If this factory is in Ludhiana, is biomass available nearby?"
+
+Without this file, your optimizer cannot recommend biomass boilers confidently.
+
+---
+
+### Example
+
+| State   | District | Biomass Type | Annual Availability (tons) | Cost (₹/ton) |
+| ------- | -------- | ------------ | -------------------------- | ------------ |
+| Punjab  | Ludhiana | Rice Husk    | 180000                     | 2500         |
+| Punjab  | Patiala  | Wheat Straw  | 95000                      | 2200         |
+| Haryana | Karnal   | Rice Husk    | 120000                     | 2400         |
+
+---
+
+### Where do you get this data?
+
+Possible sources:
+
+* Ministry of New & Renewable Energy (MNRE)
+* Biomass Atlas of India
+* IISc Biomass Atlas
+* Agricultural reports
+* Government datasets
+
+Since your SIH project already includes **BiomassAtlas**, you can extract data directly from that report. 
+
+---
+
+# 2. district_coordinates.csv
+
+## What is it?
+
+Every district has a latitude and longitude.
+
+Example
+
+| District | State            | Latitude | Longitude |
+| -------- | ---------------- | -------- | --------- |
+| Mandi    | Himachal Pradesh | 31.708   | 76.931    |
+| Ludhiana | Punjab           | 30.900   | 75.857    |
+| Jaipur   | Rajasthan        | 26.912   | 75.787    |
+
+---
+
+### Why?
+
+Suppose user selects
+
+```
+District = Mandi
+```
+
+Now your program can:
+
+* show the factory on a map
+* calculate nearest biomass source
+* estimate transport distance
+* show nearby solar irradiation
+
+---
+
+### Where to get?
+
+Very easy.
+
+Sources:
+
+* Census India
+* OpenStreetMap
+* GeoNames
+* Kaggle
+* Government GIS datasets
+
+---
+
+# 3. electricity_tariffs.csv
+
+This tells the software
+
+> How much does electricity cost in each state?
+
+Example
+
+| State     | Industrial Tariff (₹/kWh) |
+| --------- | ------------------------- |
+| Punjab    | 7.8                       |
+| Haryana   | 8.2                       |
+| Gujarat   | 6.9                       |
+| Karnataka | 8.7                       |
+
+---
+
+Why?
+
+If electricity costs ₹5
+
+Electrification becomes attractive.
+
+If electricity costs ₹12
+
+Maybe biomass is cheaper.
+
+---
+
+### Where?
+
+State DISCOM websites
+
+Examples:
+
+* PSPCL
+* BESCOM
+* UPPCL
+* TANGEDCO
+
+Or CEA tariff reports.
+
+---
+
+# 4. industrial_fuels.csv
+
+This is one of the easiest.
+
+It contains properties of fuels.
+
+Example
+
+| Fuel    | Cost/kg | Calorific Value | CO₂ Factor     |
+| ------- | ------- | --------------- | -------------- |
+| Coal    | 8       | 24 MJ/kg        | 2.4 kg CO₂/kg  |
+| Diesel  | 95/L    | 43 MJ/kg        | 2.68 kg CO₂/L  |
+| LPG     | 75/kg   | 46 MJ/kg        | 3.0 kg CO₂/kg  |
+| Biomass | 3/kg    | 15 MJ/kg        | 0.15 kg CO₂/kg |
+
+---
+
+Your optimizer uses it to calculate
+
+```
+Current Cost
+
+Current Emissions
+
+Fuel Consumption
+
+Savings
+```
+
+---
+
+### Where?
+
+Very common sources
+
+* IPCC emission factors
+* CEA reports
+* Bureau of Energy Efficiency
+* Manufacturer specifications
+
+---
+
+# 5. temperature_ranges.csv
+
+This file tells
+
+> Which technology works for which temperature?
+
+Example
+
+| Technology        | Min Temp | Max Temp |
+| ----------------- | -------- | -------- |
+| Heat Pump         | 40       | 120      |
+| Solar Thermal     | 70       | 180      |
+| Biomass Boiler    | 120      | 800      |
+| Electric Boiler   | 100      | 500      |
+| Induction Heating | 500      | 1600     |
+
+---
+
+Suppose user enters
+
+```
+Required Temperature = 650°C
+```
+
+Program checks
+
+```
+Heat Pump ❌
+
+Solar ❌
+
+Electric Boiler ❌
+
+Biomass ✔
+
+Induction ✔
+```
+
+That's exactly how the **constraint engine** filters technologies before optimization. 
+
+---
+
+# How do you fill these CSVs?
+
+There are three methods.
+
+### Method 1 — Extract from your research papers (recommended)
+
+You already have PDFs like:
+
+* Biomass Atlas
+* MSME Green Transition
+* Electrifying Industrial Heat
+* FlexiHeat
+
+Read the tables and copy the verified values into CSV files.
+
+---
+
+### Method 2 — Government datasets
+
+Best for:
+
+* Tariffs
+* Coordinates
+* Biomass
+* Emission factors
+
+---
+
+### Method 3 — Build your own small MVP dataset
+
+For SIH, you **do not need all 700+ Indian districts**.
+
+Instead, create a representative dataset like:
+
+```
+10 districts
+20 biomass records
+10 fuel records
+5 technologies
+10 electricity tariffs
+```
+
+This is enough to demonstrate the complete workflow.
+
+---
+
+# How the optimizer actually uses these files
+
+```text
+User says:
+
+Industry = Textile
+
+District = Mandi
+
+Temperature = 650°C
+
+        │
+        ▼
+
+temperature_ranges.csv
+      │
+      ▼
+Possible Technologies
+
+        │
+        ▼
+
+biomass_atlas.csv
+      │
+      ▼
+Is biomass available?
+
+        │
+        ▼
+
+electricity_tariffs.csv
+      │
+      ▼
+Electricity cost
+
+        │
+        ▼
+
+industrial_fuels.csv
+      │
+      ▼
+Current fuel cost & emissions
+
+        │
+        ▼
+
+Optimizer
+
+        │
+        ▼
+
+Best recommendation
+```
+
+---
+
+## My recommendation for your SIH project
+
+Don't try to collect nationwide data immediately. Start with a **small, high-quality dataset** that covers a handful of districts and technologies. Once your pipeline works, you can expand it gradually.
+
+As you paste each folder or file, I can explain:
+
+* **Why it exists**
+* **Who uses it**
+* **Exactly where to obtain the data**
+* **Which columns it should contain**
+* **A ready-to-use sample CSV**
+* **How your Python code will read and use it**
+
+That way, you'll understand not just what each file is, but how it fits into the entire system.

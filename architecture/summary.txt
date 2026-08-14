@@ -1,0 +1,266 @@
+Perfect—that folder is your **software architecture documentation**. These `.drawio` files are diagrams created with **draw.io (diagrams.net)**. They explain how your system works before you write the code.
+
+For your SIH project, here's what each file usually represents:
+
+### 1. `system_architecture.drawio` ⭐ (Start here)
+
+This is the **big picture** of the entire project.
+
+It answers:
+
+* What components does the system have?
+* How do they communicate?
+
+Example:
+
+```text
+              User
+                │
+                ▼
+        Streamlit Frontend
+                │
+                ▼
+        FastAPI Backend
+        ┌───────┴────────┐
+        ▼                ▼
+ Optimization      Database
+        │                │
+        └───────┬────────┘
+                ▼
+      Recommendation Engine
+                │
+                ▼
+           Results Dashboard
+```
+
+Think of it as the map of your whole application.
+
+---
+
+## 2. `data_flow.drawio`
+
+This explains **how data moves** through the system.
+
+Example for your project:
+
+```text
+Factory Owner
+      │
+      ▼
+Enter factory details
+      │
+      ▼
+Backend validates input
+      │
+      ▼
+Baseline Calculator
+      │
+      ▼
+Technology Models
+      │
+      ▼
+Constraint Engine
+      │
+      ▼
+Scenario Generator
+      │
+      ▼
+Optimizer
+      │
+      ▼
+Financial Analysis
+      │
+      ▼
+Dashboard
+```
+
+This is basically **the journey of the input data**.
+
+---
+
+## 3. `database_er.drawio`
+
+ER = **Entity Relationship Diagram**
+
+This is your database design.
+
+Example:
+
+```text
+Factory
+--------
+factory_id
+name
+location
+industry
+
+        │
+        │ 1
+        │
+        │
+        ▼
+EnergyData
+-----------
+energy_id
+factory_id
+coal_usage
+electricity_usage
+
+        │
+        ▼
+
+Recommendations
+----------------
+recommendation_id
+factory_id
+technology
+payback
+co2_saved
+```
+
+It tells the database developer:
+
+* Which tables exist
+* Their columns
+* How tables are connected
+
+---
+
+## 4. `decision_flow.drawio`
+
+This is your application's **logic flow**.
+
+Example:
+
+```text
+User Input
+      │
+      ▼
+Is data valid?
+     │
+ ┌──Yes─────No───┐
+ │               │
+ ▼               ▼
+Continue      Show Error
+
+      │
+      ▼
+Temperature > 500°C ?
+      │
+ ┌────┴─────┐
+ ▼          ▼
+Electric   Biomass
+
+      │
+      ▼
+Run Optimizer
+      │
+      ▼
+Best Recommendation
+```
+
+It explains **how decisions are made**.
+
+---
+
+## 5. `api_flow.drawio`
+
+This shows how frontend and backend communicate.
+
+Example:
+
+```text
+Frontend
+     │
+POST /optimize
+     │
+     ▼
+FastAPI
+
+     │
+     ▼
+Optimization Engine
+
+     │
+     ▼
+JSON Response
+
+{
+  "technology":"Biomass Boiler",
+  "payback":3.2
+}
+
+     │
+     ▼
+Frontend Dashboard
+```
+
+It focuses on API requests and responses.
+
+---
+
+## 6. `deployment.drawio`
+
+This shows **where your software runs**.
+
+Example:
+
+```text
+             User Browser
+                  │
+                  ▼
+         Streamlit / React App
+                  │
+                  ▼
+          FastAPI Server
+                  │
+        ┌─────────┴─────────┐
+        ▼                   ▼
+    SQLite DB         Optimization Engine
+```
+
+If deployed to the cloud:
+
+```text
+Laptop
+   │
+Internet
+   │
+Render / Railway / AWS
+   │
+FastAPI
+   │
+Database
+```
+
+---
+
+# Relating this to your SIH project
+
+From your project's architecture, the system follows this pipeline: user input → application layer → baseline model → technology models → constraint engine → scenario generator → optimizer → finance & impact → recommendation dashboard. 
+
+So your diagrams likely correspond to:
+
+| File                         | What it shows                                  |
+| ---------------------------- | ---------------------------------------------- |
+| `system_architecture.drawio` | Entire project architecture                    |
+| `data_flow.drawio`           | Movement of factory data through the optimizer |
+| `database_er.drawio`         | SQLite/PostgreSQL schema                       |
+| `decision_flow.drawio`       | Logic for selecting technologies               |
+| `api_flow.drawio`            | Frontend ↔ Backend communication               |
+| `deployment.drawio`          | How the application is hosted                  |
+
+### My suggestion
+
+Open and complete them in this order:
+
+1. ✅ `system_architecture.drawio`
+2. ✅ `data_flow.drawio`
+3. ✅ `decision_flow.drawio`
+4. ✅ `api_flow.drawio`
+5. ✅ `database_er.drawio`
+6. ✅ `deployment.drawio`
+
+That order makes the design process much easier because each diagram builds on the previous one.
+
+Feel free to paste **any one of these diagrams** or ask about any box, arrow, or symbol you don't understand, and I'll explain it in simple terms and help you create or improve it.
