@@ -1,6 +1,6 @@
 # PROJECT_STATE.md
 
-> **Project:** SIH 2026 – AI-Powered Industrial Energy Transition Platform
+> **Project:** SIH 2026 – Industrial Energy Transition Decision Support Platform
 >
 > **Version:** 1.0 (Foundation)
 >
@@ -14,7 +14,7 @@
 
 | Field | Value |
 |--------|-------|
-| Project Name | AI-Powered Industrial Energy Transition Platform |
+| Project Name | Constrained Industrial Energy Transition Optimizer |
 | Competition | Smart India Hackathon (SIH) 2026 |
 | Category | AI + Energy + Sustainability |
 | Domain | Industrial Decarbonization |
@@ -26,7 +26,7 @@
 
 # 2. PROJECT VISION
 
-Develop an AI-assisted platform that helps industries, especially MSMEs, transition towards cleaner energy systems by analysing their existing processes, evaluating multiple decarbonization technologies, and recommending technically feasible and economically viable transition pathways.
+Develop an intelligent industrial energy decision support platform that helps industries, especially MSMEs, transition towards cleaner energy systems by analysing their existing processes, evaluating multiple decarbonization technologies, and recommending technically feasible and economically viable transition pathways.
 
 The platform should function as an engineering decision-support system rather than a generic AI chatbot.
 
