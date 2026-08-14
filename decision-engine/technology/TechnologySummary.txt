@@ -1,0 +1,952 @@
+Excellent. Now we're moving into the **Engineering Layer (G1)** of your Industrial Energy Transition Optimizer.
+
+From the SIH architecture, this folder belongs to the **Technology Models** layer, whose responsibility is to represent each technology (biomass, solar, electrification, storage, waste heat, etc.), evaluate its technical capability, efficiency, temperature limits, and other engineering characteristics before passing feasible options to later stages. 
+
+---
+
+# Folder: `technology/`
+
+```text
+technology/
+│
+├── technology_engine.py
+├── technology_filter.py
+└── technology_matcher.py
+```
+
+---
+
+# Before understanding the files, understand the business problem
+
+Imagine you own a textile factory.
+
+Your factory currently uses:
+
+* Coal Boiler
+* Diesel Generator
+
+You ask your software:
+
+> "What technologies can replace coal?"
+
+The software **cannot** simply answer:
+
+> Solar
+> Biomass
+> Hydrogen
+> Heat Pump
+
+Because every factory is different.
+
+Instead, it must answer:
+
+* Is Biomass available?
+* Is Solar possible?
+* Can Heat Pumps reach the required temperature?
+* Is Hydrogen realistic?
+* Does the factory have enough roof area?
+* Is the electrical grid strong enough?
+
+Only after answering these questions can the software recommend technologies.
+
+This entire responsibility belongs to the **Technology Folder**.
+
+---
+
+# Big Picture
+
+```text
+Factory Information
+        │
+        ▼
+ Baseline Energy Model
+        │
+        ▼
+Technology Folder
+        │
+        ▼
+Possible Technologies
+        │
+        ▼
+Scenario Generator
+        │
+        ▼
+Optimizer
+```
+
+Notice:
+
+The optimizer never discovers technologies.
+
+It only compares technologies that this folder has already approved.
+
+---
+
+# Think of this folder as a hiring process
+
+Imagine a company hiring employees.
+
+```text
+1000 Applicants
+
+↓
+
+Matcher
+Who is eligible?
+
+↓
+
+Filter
+Remove obvious bad candidates
+
+↓
+
+Engine
+Detailed technical evaluation
+
+↓
+
+Qualified Candidates
+```
+
+Exactly the same happens here.
+
+---
+
+# File 1
+
+# `technology_matcher.py`
+
+---
+
+# 1. What is this file?
+
+This is the **technology finder**.
+
+Its job is:
+
+> Which technologies are even worth considering?
+
+It does NOT calculate costs.
+
+It does NOT optimize.
+
+It simply finds candidates.
+
+---
+
+# Real-world analogy
+
+Suppose someone needs transportation.
+
+Possible vehicles:
+
+```text
+Car
+
+Bike
+
+Helicopter
+
+Train
+
+Boat
+```
+
+If the destination is inside a city,
+
+the matcher immediately ignores
+
+```text
+Boat
+
+Helicopter
+```
+
+before deeper evaluation.
+
+---
+
+# Why does this file exist?
+
+Without it,
+
+every technology would be evaluated.
+
+Imagine evaluating
+
+* Hydrogen
+* Nuclear
+* Solar
+* Biomass
+* Geothermal
+* Wind
+* Heat Pump
+
+for every factory.
+
+That wastes huge amounts of computation.
+
+Instead,
+
+Matcher asks
+
+> "Which technologies even make sense?"
+
+---
+
+# Where it fits
+
+```text
+Factory Input
+
+↓
+
+Technology Matcher
+
+↓
+
+Candidate Technologies
+
+↓
+
+Technology Filter
+
+↓
+
+Technology Engine
+```
+
+---
+
+# Inputs
+
+Usually receives
+
+```json
+{
+  "industry": "Textile",
+
+  "temperature": 180,
+
+  "location": "Punjab",
+
+  "roof_area": 1800,
+
+  "grid_capacity": 600
+}
+```
+
+---
+
+# Outputs
+
+```json
+{
+ "candidates":[
+   "Solar Thermal",
+   "Biomass Boiler",
+   "Heat Pump"
+ ]
+}
+```
+
+---
+
+# Logic
+
+Mostly rule matching.
+
+Example
+
+```text
+Temperature < 100°C
+
+↓
+
+Heat Pump
+
+YES
+
+Biomass
+
+YES
+
+Electric Boiler
+
+YES
+```
+
+---
+
+```text
+Temperature > 900°C
+
+↓
+
+Heat Pump
+
+NO
+
+Solar Thermal
+
+NO
+
+Electric Furnace
+
+YES
+```
+
+---
+
+# Who calls it?
+
+Usually
+
+```text
+technology_engine.py
+```
+
+or
+
+the main pipeline.
+
+---
+
+# What does it call?
+
+Mostly databases.
+
+Technology library.
+
+Knowledge base.
+
+---
+
+# Where does data come from?
+
+Factory profile.
+
+Technology database.
+
+Engineering assumptions.
+
+---
+
+# Where does output go?
+
+Technology Filter.
+
+---
+
+# Real Example
+
+Factory
+
+```text
+Food Industry
+
+Temperature
+
+120°C
+```
+
+Available technologies
+
+```text
+Heat Pump
+
+Biomass
+
+Solar Thermal
+
+Electric Boiler
+```
+
+Matcher ignores
+
+```text
+Hydrogen Furnace
+```
+
+because it is unnecessary.
+
+---
+
+# Concept
+
+This file performs
+
+**Capability Matching.**
+
+Not optimization.
+
+---
+
+# Common beginner mistake
+
+People confuse
+
+Matching
+
+with
+
+Ranking.
+
+Matching only says
+
+> Possible.
+
+It never says
+
+> Best.
+
+---
+
+# Improvements
+
+Could use
+
+Machine Learning
+
+or
+
+Industry Ontologies
+
+later.
+
+---
+
+# File 2
+
+# `technology_filter.py`
+
+---
+
+# What is it?
+
+The cleaner.
+
+After matching,
+
+remove technologies that cannot actually be used.
+
+---
+
+# Why?
+
+Matcher only performs broad matching.
+
+Filter applies business constraints.
+
+---
+
+# Example
+
+Matcher says
+
+```text
+Solar
+
+Biomass
+
+Heat Pump
+
+Electric Boiler
+```
+
+Filter removes
+
+```text
+Solar
+```
+
+because
+
+```text
+Roof Area
+
+Too Small
+```
+
+---
+
+# Inputs
+
+Candidate technologies.
+
+Factory constraints.
+
+---
+
+# Outputs
+
+Reduced technology list.
+
+---
+
+# Logic
+
+Typical checks
+
+```text
+Budget
+
+Location
+
+Fuel Availability
+
+Grid Capacity
+
+Installation Space
+
+Maintenance
+
+Resource Availability
+```
+
+---
+
+# Example
+
+Factory
+
+```text
+Budget
+
+₹15 lakh
+```
+
+Technology
+
+```text
+Hydrogen Boiler
+
+₹4 crore
+```
+
+Filter rejects immediately.
+
+---
+
+# Workflow
+
+```text
+Matcher
+
+↓
+
+12 Technologies
+
+↓
+
+Filter
+
+↓
+
+5 Technologies
+```
+
+---
+
+# Concept
+
+Reduce computation.
+
+Keep only realistic technologies.
+
+---
+
+# Common mistake
+
+Putting engineering calculations here.
+
+Filtering should be
+
+fast.
+
+---
+
+# Improvements
+
+Ranking technologies by confidence.
+
+---
+
+# File 3
+
+# `technology_engine.py`
+
+This is the **heart of the Technology Folder**.
+
+---
+
+# 1. What is it?
+
+The engineering calculator.
+
+This file answers
+
+> "Exactly how would this technology perform?"
+
+---
+
+# Why?
+
+Knowing
+
+```text
+Biomass exists
+```
+
+is useless.
+
+We need
+
+```text
+Biomass
+
+Efficiency
+
+82%
+
+Fuel Consumption
+
+3.1 tons/day
+
+CapEx
+
+₹45 lakh
+
+CO₂
+
+18%
+```
+
+---
+
+# Problem it solves
+
+Converts
+
+Technology
+
+↓
+
+Engineering Numbers
+
+---
+
+# Where it fits
+
+```text
+Technology Filter
+
+↓
+
+Technology Engine
+
+↓
+
+Scenario Generator
+```
+
+---
+
+# Inputs
+
+Example
+
+```json
+{
+ "technology":"Biomass",
+
+ "heat_demand":18000,
+
+ "temperature":250,
+
+ "operating_hours":18
+}
+```
+
+---
+
+# Outputs
+
+Example
+
+```json
+{
+ "technology":"Biomass",
+
+ "capacity":2200,
+
+ "efficiency":0.86,
+
+ "fuel_required":3200,
+
+ "annual_cost":4100000,
+
+ "co2":1200,
+
+ "feasible":true
+}
+```
+
+---
+
+# Logic
+
+This file contains the real engineering calculations.
+
+Examples
+
+* Efficiency equations
+* Energy balances
+* Fuel conversion
+* Heat calculations
+* Equipment sizing
+* Capacity estimation
+* Fuel consumption
+* Operating cost estimation
+* Technical feasibility
+
+This aligns with the SIH handbook, which states that each technology model should record output/capacity, efficiency, temperature capability, resource requirements, CapEx assumptions, sector suitability, and limitations before later stages evaluate them. 
+
+---
+
+# Who calls it?
+
+Usually
+
+```text
+Scenario Generator
+
+or
+
+Main Pipeline
+```
+
+---
+
+# What does it call?
+
+Individual technology models.
+
+Example
+
+```text
+Biomass Model
+
+Solar Model
+
+Battery Model
+
+Heat Pump Model
+```
+
+---
+
+# Data source
+
+Engineering databases.
+
+Manufacturer specifications.
+
+Research papers.
+
+Emission factors.
+
+Efficiency tables.
+
+---
+
+# Output destination
+
+Scenario Generator.
+
+---
+
+# Real Example
+
+Current factory
+
+```text
+Coal
+
+2 tons/day
+```
+
+Heat demand
+
+```text
+25 MWh/day
+```
+
+Technology Engine evaluates
+
+Biomass Boiler
+
+Result
+
+| Parameter        | Value        |
+| ---------------- | ------------ |
+| Capacity         | 3 MW         |
+| Biomass Required | 2.6 tons/day |
+| Efficiency       | 84%          |
+| Annual Cost      | ₹48 lakh     |
+| CO₂ Reduction    | 40%          |
+| Feasible         | Yes          |
+
+---
+
+# Complete Workflow
+
+```text
+                 Factory Input
+                       │
+                       ▼
+            Baseline Energy Model
+                       │
+                       ▼
+          technology_matcher.py
+      Finds technologies that fit broadly
+                       │
+                       ▼
+          technology_filter.py
+     Removes technologies that clearly fail
+                       │
+                       ▼
+          technology_engine.py
+ Performs detailed engineering calculations
+                       │
+                       ▼
+         Engineering Results per Technology
+                       │
+                       ▼
+            scenario_generator.py
+```
+
+---
+
+# How this folder interacts with every other module
+
+```text
+                User Input
+                     │
+                     ▼
+              Baseline Module
+                     │
+                     ▼
+          ┌───────────────────────┐
+          │   Technology Folder    │
+          │                       │
+          │ Matcher → Filter → Engine
+          └───────────────────────┘
+                     │
+                     ▼
+             Scenario Folder
+                     │
+                     ▼
+               Optimization
+                     │
+                     ▼
+          Finance & Impact
+                     │
+                     ▼
+             Report Generator
+```
+
+The Technology Folder is the **gateway** between the baseline model and the decision engine. Every later module trusts that the technologies it receives are technically sound.
+
+---
+
+# Why is the project designed this way?
+
+Many beginners expect one file like:
+
+```text
+technology.py
+```
+
+containing everything.
+
+That quickly becomes difficult to maintain because it mixes:
+
+* Technology discovery
+* Eligibility rules
+* Engineering calculations
+* Performance estimation
+
+Instead, the project separates responsibilities:
+
+```text
+technology_matcher.py
+        │
+        ▼
+Finds relevant technologies
+
+technology_filter.py
+        │
+        ▼
+Removes unrealistic candidates
+
+technology_engine.py
+        │
+        ▼
+Calculates engineering performance
+```
+
+This follows the **Single Responsibility Principle**, making each module easier to understand, test, and extend. For example, adding a new technology (such as green hydrogen) mainly affects the matcher and engine, while the optimizer and reporting modules remain unchanged.
+
+---
+
+# Common beginner mistakes
+
+1. **Confusing matching with optimization**
+
+   * Matcher answers *"Can this technology be considered?"*
+   * Optimizer answers *"Which technology is best?"*
+
+2. **Putting financial calculations into the engine**
+
+   * The engine should estimate engineering quantities (capacity, efficiency, fuel).
+   * Detailed financial refinement belongs to the finance layer.
+
+3. **Skipping filtering**
+
+   * Evaluating every technology wastes computation and creates unrealistic scenarios.
+
+4. **Mixing business rules with physics**
+
+   * Engineering equations and business constraints should remain separate.
+
+---
+
+# Suggested Improvements
+
+As the project grows, you could enhance this folder by:
+
+* Maintaining a versioned technology database.
+* Supporting technology plug-ins so new technologies can be added without changing the engine.
+* Including confidence levels for engineering assumptions.
+* Tracking evidence and source references for each technology parameter.
+* Caching repeated engineering calculations for similar factories.
+
+---
+
+# Summary Table
+
+| File                    | Purpose                                                                  | Inputs                                                                | Outputs                                            | Dependencies                                                       |
+| ----------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------------ |
+| `technology_matcher.py` | Identifies technologies suitable for the factory's basic characteristics | Factory profile, industry type, process requirements                  | Candidate technology list                          | Technology database, engineering rules                             |
+| `technology_filter.py`  | Removes technologies that fail obvious practical constraints             | Candidate technologies, budget, infrastructure, resource availability | Filtered technology list                           | Matcher output, factory constraints                                |
+| `technology_engine.py`  | Performs detailed engineering calculations for each technology           | Filtered technologies, baseline energy data, engineering parameters   | Technical performance metrics, feasibility results | Technology models, engineering formulas, emissions/assumption data |
+
+### Folder-Level Dependencies
+
+| Receives Data From                                      | Sends Data To              |
+| ------------------------------------------------------- | -------------------------- |
+| Baseline model, Factory inputs, Engineering assumptions | Scenario generation module |
+
+**One-sentence takeaway:** The **Technology Folder** is the engineering brain of the system—it decides **which technologies are technically appropriate, removes impractical ones, and computes the engineering performance data that every downstream module (scenarios, optimization, finance, and reporting) depends on.**

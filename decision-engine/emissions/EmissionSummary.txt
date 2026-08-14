@@ -1,0 +1,414 @@
+Let's continue with the **Emissions** module.
+
+This module answers one question:
+
+> **"What is the environmental impact of the current factory and each proposed technology?"**
+
+If the economics module tells you **"Is it profitable?"**, the emissions module tells you **"Is it cleaner?"**
+
+---
+
+# Overall Flow
+
+```text
+Factory Input
+      │
+      ▼
+Current Fuel Usage
+      │
+      ▼
+Emission Factors
+      │
+      ▼
+CO₂ Calculator
+      │
+      ▼
+Emission Engine
+      │
+      ▼
+Current Emissions
+      │
+      ▼
+Compare with New Technology
+      │
+      ▼
+CO₂ Reduction
+```
+
+---
+
+# Folder Structure
+
+```text
+emissions/
+│
+├── emission_factors.py
+├── co2_calculator.py
+└── emission_engine.py
+```
+
+Each file has a specific responsibility.
+
+---
+
+# 1. emission_factors.py
+
+## Purpose
+
+This file contains **standard emission factors**.
+
+An emission factor tells us:
+
+> **How much CO₂ is released when using one unit of a fuel?**
+
+Example:
+
+| Fuel        |                                              Emission Factor |
+| ----------- | -----------------------------------------------------------: |
+| Coal        |                                               2.42 kg CO₂/kg |
+| Diesel      |                                                2.68 kg CO₂/L |
+| LPG         |                                               3.00 kg CO₂/kg |
+| Biomass     |                 0.10–0.20 kg CO₂/kg (depends on methodology) |
+| Electricity | 0.71 kg CO₂/kWh *(depends on the grid emission factor used)* |
+
+Think of this file as a lookup table.
+
+```python
+EMISSION_FACTORS = {
+    "coal": 2.42,
+    "diesel": 2.68,
+    "electricity": 0.71
+}
+```
+
+---
+
+## Where do these values come from?
+
+Typical sources:
+
+* IPCC Guidelines
+* Central Electricity Authority (CEA) grid emission factor reports
+* Bureau of Energy Efficiency (BEE)
+* Government publications
+
+These values **should not be invented**. They should come from documented sources.
+
+---
+
+# 2. co2_calculator.py
+
+This file performs the actual calculation.
+
+The basic formula is:
+
+```text
+CO₂ Emissions
+
+=
+
+Fuel Used
+
+×
+
+Emission Factor
+```
+
+---
+
+### Example 1
+
+Factory burns
+
+```text
+Coal = 2000 kg/day
+```
+
+Emission factor
+
+```text
+2.42 kg CO₂/kg
+```
+
+Calculation
+
+```text
+2000 × 2.42
+
+=
+
+4840 kg CO₂/day
+```
+
+---
+
+### Example 2
+
+Electricity
+
+```text
+4000 kWh/day
+```
+
+Grid factor
+
+```text
+0.71 kg CO₂/kWh
+```
+
+Calculation
+
+```text
+4000 × 0.71
+
+=
+
+2840 kg CO₂/day
+```
+
+---
+
+Total emissions
+
+```text
+Coal
+
+4840
+
++
+
+Electricity
+
+2840
+
+=
+
+7680 kg CO₂/day
+```
+
+This is exactly what `co2_calculator.py` should do.
+
+---
+
+# Inputs
+
+```json
+{
+    "coal_kg_day": 2000,
+    "electricity_kwh_day": 4000
+}
+```
+
+---
+
+# Output
+
+```json
+{
+    "coal_co2": 4840,
+    "electricity_co2": 2840,
+    "total_co2": 7680
+}
+```
+
+---
+
+# 3. emission_engine.py
+
+This is the **manager**.
+
+It doesn't perform the multiplication itself.
+
+Instead it:
+
+1. Reads factory fuel usage.
+2. Gets emission factors.
+3. Calls the CO₂ calculator.
+4. Produces a complete emissions report.
+
+Flow:
+
+```text
+Factory Data
+
+↓
+
+Read Emission Factors
+
+↓
+
+Calculate CO₂
+
+↓
+
+Return Emission Summary
+```
+
+---
+
+# Complete Example
+
+Suppose the user enters:
+
+| Parameter   |        Value |
+| ----------- | -----------: |
+| Coal        |  2000 kg/day |
+| Electricity | 4000 kWh/day |
+
+---
+
+### Step 1
+
+Read factors
+
+```text
+Coal
+
+↓
+
+2.42
+```
+
+```text
+Electricity
+
+↓
+
+0.71
+```
+
+---
+
+### Step 2
+
+Calculate
+
+```text
+Coal CO₂
+
+=
+
+2000 × 2.42
+
+=
+
+4840
+```
+
+```text
+Electricity CO₂
+
+=
+
+4000 × 0.71
+
+=
+
+2840
+```
+
+---
+
+### Step 3
+
+Total
+
+```text
+4840
+
++
+
+2840
+
+=
+
+7680 kg/day
+```
+
+---
+
+### Step 4
+
+Return
+
+```json
+{
+    "total_emissions": 7680
+}
+```
+
+---
+
+# Why is this needed?
+
+Suppose your optimizer evaluates two technologies.
+
+### Option A
+
+| Technology  | Biomass  |
+| ----------- | -------- |
+| Annual Cost | ₹11 lakh |
+| CO₂         | 500 tons |
+
+---
+
+### Option B
+
+| Technology  | Electric Boiler |
+| ----------- | --------------- |
+| Annual Cost | ₹12 lakh        |
+| CO₂         | 300 tons        |
+
+Without the emissions module, the optimizer only knows the cost.
+
+With it, the optimizer can say:
+
+> Biomass is cheaper, but the electric boiler produces much lower emissions.
+
+This is exactly the type of trade-off your optimizer is meant to evaluate.
+
+---
+
+# Relationship with Other Modules
+
+```text
+Baseline Module
+      │
+(Current fuel use)
+      ▼
+Emissions Module
+      │
+(Current CO₂)
+      ▼
+Technology Module
+(New fuel use)
+      ▼
+Emissions Module Again
+      │
+(New CO₂)
+      ▼
+Optimizer
+      │
+Compares
+      ▼
+CO₂ Saved
+```
+
+The emissions module is used **twice**:
+
+* Once for the **current factory** (baseline).
+* Again for **every candidate technology/scenario**.
+
+---
+
+# Summary
+
+| File                  | Responsibility               | Input                 | Output                     |
+| --------------------- | ---------------------------- | --------------------- | -------------------------- |
+| `emission_factors.py` | Stores emission factors      | Fuel type             | Emission factor            |
+| `co2_calculator.py`   | Calculates CO₂ emissions     | Fuel usage + factor   | CO₂ values                 |
+| `emission_engine.py`  | Coordinates the calculations | Factory/scenario data | Complete emissions summary |
+
+### Design recommendation
+
+Rather than hardcoding emission factors in `emission_factors.py`, consider loading them from your `datasets/industrial_fuels.csv` (or a dedicated `emission_factors.csv`). That way, if an official emission factor changes or you decide to use a different published source, you only update the dataset—not the Python code. This keeps your calculations transparent and easy to maintain.

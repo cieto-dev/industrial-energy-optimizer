@@ -178,15 +178,15 @@ These research documents act as the project's knowledge base.
 *(Subject to refinement during architecture design.)*
 
 | Layer | Proposed Technology |
-|--------|---------------------|
+|--------|----------------------|
 | Frontend | Next.js + TypeScript |
-| Backend | FastAPI |
+| Backend | FastAPI (Python) |
 | Database | PostgreSQL |
-| AI Layer | LLM + Rule-Based Decision Engine |
-| Optimization | Python Optimization Libraries |
-| Data Analysis | Pandas / NumPy |
-| Visualization | Charts & Interactive Dashboards |
-| Deployment | TBD |
+| AI Layer | LLM + RAG + Rule-Based Decision Engine |
+| Optimization | OR-Tools + PuLP |
+| Data Analysis | Pandas + NumPy |
+| Visualization | Plotly + Interactive Dashboards |
+| Deployment | Docker + Vercel + Railway |
 
 ---
 
@@ -233,59 +233,11 @@ AI Explanation Layer
 
 ↓
 
-Final Recommendations
+Final Recommendations(reports)
 ```
 
 ---
-
-# 10. PROJECT STATUS
-
-## Completed
-
-- Problem statement analysis
-- Initial brainstorming
-- Domain research
-- Collection of reference documents
-- Technology exploration
-- Documentation planning
-
----
-
-## In Progress
-
-- Project documentation
-- System architecture
-- Module planning
-- Repository structure
-
----
-
-## Pending
-
-- Database schema
-- API contracts
-- Backend implementation
-- Frontend implementation
-- AI integration
-- Testing
-- Deployment
-
----
-
-# 11. DOCUMENTATION STATUS
-
-| Document | Status |
-|-----------|--------|
-| README.md | Pending |
-| PROJECT_STATE.md | Active |
-| MASTER_DOCUMENTATION.md | Pending |
-| FEATURE_BACKLOG.md | Pending |
-| SESSION_LOG.md | Pending |
-| MENTOR_NOTES.md | Pending |
-
----
-
-# 12. ENGINEERING PRINCIPLES
+# 10. ENGINEERING PRINCIPLES
 
 Every module should satisfy the following:
 
@@ -298,7 +250,7 @@ Every module should satisfy the following:
 
 ---
 
-# 13. DEFINITION OF DONE
+# 11. DEFINITION OF DONE
 
 A module is considered complete only when:
 
@@ -312,24 +264,7 @@ A module is considered complete only when:
 
 ---
 
-# 14. CURRENT PRIORITIES
-
-Priority Order
-
-1. Complete documentation
-2. Finalise architecture
-3. Design database
-4. Design APIs
-5. Setup repository
-6. Backend development
-7. Frontend development
-8. AI integration
-9. Testing
-10. SIH deployment
-
----
-
-# 15. LONG-TERM ROADMAP
+# 12. LONG-TERM ROADMAP
 
 Phase 1
 
@@ -376,47 +311,6 @@ Deployment
 Phase 8
 
 SIH Final Submission
-
----
-
-# 16. KEY DECISIONS LOG
-
-| Date | Decision | Reason |
-|------|----------|--------|
-| Project Start | Documentation-first development | Prevent architectural drift and maintain a single source of truth. |
-| Project Start | Research-driven engineering | Ensure recommendations are backed by credible technical sources. |
-| Project Start | AI as an assistant, not the decision maker | Maintain transparency and engineering reliability. |
-| Project Start | Modular architecture | Improve maintainability, scalability and testing. |
-
----
-
-# 17. CURRENT BLOCKERS
-
-No technical blockers.
-
-Current effort is focused on building complete documentation before implementation begins.
-
----
-
-# 18. NEXT SESSION OBJECTIVES
-
-- Complete README.md
-- Begin MASTER_DOCUMENTATION.md
-- Finalise repository structure
-- Define major system modules
-- Prepare development roadmap
-
----
-
-# 19. SESSION START RULES
-
-Before beginning any new development session:
-
-- Read this file.
-- Read the latest SESSION_LOG.md entry.
-- Review pending tasks.
-- Do not implement features without updating documentation.
-- Record important architectural decisions before writing code.
 
 ---
 
