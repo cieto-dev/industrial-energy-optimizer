@@ -1,0 +1,854 @@
+{
+  "schema_version": "2.0",
+  "file": "knowledge-base/policies/renewable_purchase_obligations.json",
+  "policy_domain": "renewable_purchase_and_consumption_obligations",
+  "country": "India",
+  "status": "active",
+  "last_verified": "2026-08-16",
+
+  "purpose": "Regulatory knowledge used by the Industrial Energy Transition Optimizer to determine whether a factory or other electricity consumer is subject to renewable purchase/consumption obligations and whether a proposed transition pathway contributes toward compliance.",
+
+  "architecture_role": {
+    "layer": "policy_engine",
+    "position_in_pipeline": [
+      "factory_input",
+      "engineering_models",
+      "constraint_engine",
+      "feasible_pathway",
+      "financial_analysis",
+      "policy_engine",
+      "renewable_obligation_check",
+      "optimizer",
+      "final_recommendation"
+    ],
+    "primary_output": [
+      "obligation_applicability",
+      "applicable_target",
+      "renewable_energy_requirement",
+      "compliance_gap",
+      "eligible_compliance_routes",
+      "compliance_status"
+    ]
+  },
+
+  "important_regulatory_distinction": {
+    "rpo": {
+      "name": "Renewable Purchase Obligation",
+      "nature": "Electricity-sector regulatory obligation",
+      "primary_regulators": [
+        "State Electricity Regulatory Commissions",
+        "Joint Electricity Regulatory Commissions",
+        "Central Government where applicable"
+      ],
+      "important_rule": "RPO requirements are not a universal percentage applicable to every Indian MSME."
+    },
+    "rco": {
+      "name": "Renewable Consumption Obligation",
+      "legal_basis": "Energy Conservation Act, 2001 as amended by the Energy Conservation Amendment Act, 2022",
+      "current_central_notification": "Ministry of Power Notification S.O. 4421(E), dated 27 September 2025",
+      "scope": [
+        "electricity distribution licensees",
+        "designated open access consumers",
+        "designated captive users"
+      ],
+      "important_rule": "The current central RCO framework must not be interpreted as a universal renewable-energy mandate for every MSME."
+    },
+    "optimizer_rule": "First determine whether the factory is an obligated entity or designated consumer. Only then calculate an RPO/RCO compliance requirement."
+  },
+
+  "applicability": {
+    "default_for_msm_e": "not_automatically_applicable",
+    "check_before_calculation": [
+      "is_distribution_licensee",
+      "is_designated_consumer",
+      "uses_open_access",
+      "uses_captive_power",
+      "annual_energy_consumption",
+      "industry_sector",
+      "state",
+      "applicable_SERC_or_JERC_regulation",
+      "central_RCO_notification_applicability"
+    ],
+    "decision_states": [
+      "not_applicable",
+      "applicable",
+      "conditionally_applicable",
+      "insufficient_data"
+    ]
+  },
+
+  "current_central_rco_framework": {
+    "notification": {
+      "authority": "Ministry of Power",
+      "notification_number": "S.O. 4421(E)",
+      "notification_date": "2025-09-27",
+      "effective_framework_start": "2024-04-01",
+      "supersedes": "S.O. 4617(E), dated 2023-10-20"
+    },
+
+    "covered_entities": {
+      "distribution_licensees": {
+        "covered": true,
+        "condition": "All electricity distribution licensees designated under the applicable framework."
+      },
+      "open_access_consumers": {
+        "covered": true,
+        "condition": "Only where the consumer is a designated consumer under the Energy Conservation Act framework."
+      },
+      "captive_users": {
+        "covered": true,
+        "condition": "Only where the captive user is a designated consumer under the Energy Conservation Act framework."
+      },
+      "ordinary_grid_connected_msm_e": {
+        "covered_automatically": false,
+        "condition": "Ordinary electricity consumption from a distribution licensee does not by itself make an MSME an RCO-obligated entity."
+      }
+    },
+
+    "target_trajectory": {
+      "unit": "percentage_of_applicable_electricity_consumption",
+
+      "2024-25": {
+        "wind_percent": 0.67,
+        "hydro_percent": 0.38,
+        "distributed_renewable_percent": 1.50,
+        "other_renewable_percent": 27.36,
+        "total_renewable_percent": 29.91
+      },
+
+      "2025-26": {
+        "wind_percent": 1.45,
+        "hydro_percent": 1.22,
+        "distributed_renewable_percent": 2.10,
+        "other_renewable_percent": 28.24,
+        "total_renewable_percent": 33.01
+      },
+
+      "2026-27": {
+        "wind_percent": 1.97,
+        "hydro_percent": 1.34,
+        "distributed_renewable_percent": 2.70,
+        "other_renewable_percent": 29.94,
+        "total_renewable_percent": 35.95
+      },
+
+      "2027-28": {
+        "wind_percent": 2.45,
+        "hydro_percent": 1.42,
+        "distributed_renewable_percent": 3.30,
+        "other_renewable_percent": 31.64,
+        "total_renewable_percent": 38.81
+      },
+
+      "2028-29": {
+        "wind_percent": 2.95,
+        "hydro_percent": 1.42,
+        "distributed_renewable_percent": 3.90,
+        "other_renewable_percent": 33.09,
+        "total_renewable_percent": 41.36
+      },
+
+      "2029-30": {
+        "wind_percent": 3.48,
+        "hydro_percent": 1.33,
+        "distributed_renewable_percent": 4.50,
+        "other_renewable_percent": 34.02,
+        "total_renewable_percent": 43.33
+      }
+    }
+  },
+
+  "rco_components": {
+    "wind": {
+      "component": "wind_renewable_energy",
+      "target_unit": "percent",
+      "eligibility_rule": "Energy from Wind Power Projects commissioned after 2024-03-31.",
+      "commissioning_cutoff": "2024-03-31",
+      "fungibility": "fungible_with_hydro_and_other_renewable_components",
+      "project_type": "wind_power"
+    },
+
+    "hydro": {
+      "component": "hydro_renewable_energy",
+      "target_unit": "percent",
+      "eligibility_rule": "Energy from Hydro Power Projects commissioned after 2024-03-31, subject to the notification conditions.",
+      "commissioning_cutoff": "2024-03-31",
+      "additional_sources": [
+        "eligible_free_power from qualifying hydro projects",
+        "approved hydro projects located outside India on a case-by-case basis"
+      ],
+      "fungibility": "fungible_with_wind_and_other_renewable_components",
+      "project_type": "hydro_power"
+    },
+
+    "distributed_renewable_energy": {
+      "component": "distributed_renewable_energy",
+      "target_unit": "percent",
+      "maximum_project_capacity_mw": 10,
+      "eligible_configurations": [
+        "net_metering",
+        "gross_metering",
+        "virtual_net_metering",
+        "group_net_metering",
+        "behind_the_meter",
+        "other_government_notified_configurations"
+      ],
+      "typical_project": [
+        "rooftop_solar",
+        "small_distributed_renewable_project"
+      ],
+      "compliance_measurement": "energy_kwh",
+      "fallback_generation_conversion": {
+        "when_generation_data_unavailable": true,
+        "multiplier_kwh_per_kw_per_day": 4
+      },
+      "shortfall_fungibility": "non_fungible",
+      "surplus_treatment": "surplus_may_offset_other_renewable_components"
+    },
+
+    "other_renewable_energy": {
+      "component": "other_renewable_energy",
+      "target_unit": "percent",
+      "includes": [
+        "renewable_projects not classified under wind requirement",
+        "renewable projects not classified under hydro requirement",
+        "eligible pre-2024 hydro generation where permitted",
+        "co_firing_of_eligible_biomass_pellets",
+        "eligible_charcoal_from_municipal_solid_waste",
+        "other renewable energy sources notified by the Central Government"
+      ],
+      "fungibility": "fungible_with_wind_and_hydro_components"
+    }
+  },
+
+  "state_specific_rpo": {
+    "principle": "RPO has historically been specified through SERC/JERC regulations and therefore state-specific rules must be consulted when the central RCO framework does not directly govern the entity.",
+    "state_policy_file": "knowledge-base/policies/state_policies.json",
+    "required_factory_input": "state",
+    "required_regulatory_lookup": [
+      "state electricity regulatory commission",
+      "current renewable energy purchase obligation regulation",
+      "latest amendment",
+      "current financial-year target",
+      "eligible renewable sources",
+      "REC treatment",
+      "captive/open-access applicability"
+    ],
+    "precedence": {
+      "designated_consumer_under_current_central_rco": "apply_current_central_rco_framework",
+      "other_state_obligated_entity": "apply_current_SERC_or_JERC_RPO_rule",
+      "conflict": "do_not_assume; flag_for_regulatory_verification"
+    },
+    "important_rule": "Do not place invented state RPO percentages in this national file. State-specific targets belong in state_policies.json after verification from the applicable SERC/JERC."
+  },
+
+  "designated_consumer_thresholds": {
+    "unit": "toe_per_year",
+    "description": "Energy-intensive sectors with annual energy consumption at or above the notified threshold may be designated consumers under the Energy Conservation Act framework.",
+    "sectors": {
+      "aluminum": {
+        "threshold_toe_per_year": 7500
+      },
+      "cement_integrated_unit": {
+        "threshold_toe_per_year": 30000
+      },
+      "cement_grinding_unit": {
+        "threshold_toe_per_year": 10000
+      },
+      "hotel": {
+        "threshold_toe_per_year": 500
+      },
+      "airport": {
+        "threshold_toe_per_year": 500
+      },
+      "chlor_alkali": {
+        "threshold_toe_per_year": 12000
+      },
+      "electricity_distribution_company": {
+        "threshold": "all_distribution_licensees_as_notified_by_SERC_or_JERC"
+      },
+      "fertilizer": {
+        "threshold_toe_per_year": 30000
+      },
+      "iron_and_steel": {
+        "threshold_toe_per_year": 20000
+      },
+      "pulp_and_paper": {
+        "threshold_toe_per_year": 7500
+      },
+      "petroleum_refinery": {
+        "threshold_toe_per_year": 90000
+      },
+      "petrochemical_gas_or_naphtha_cracker": {
+        "threshold_toe_per_year": 100000
+      },
+      "railway_zonal_traction": {
+        "threshold_toe_per_year": 70000
+      },
+      "railway_workshop": {
+        "threshold_toe_per_year": 750
+      },
+      "textiles": {
+        "threshold_toe_per_year": 3000
+      },
+      "petrochemical_fiber_intermediates": {
+        "threshold_toe_per_year": 50000
+      },
+      "petrochemical_polymers": {
+        "threshold_toe_per_year": 10000
+      },
+      "petrochemical_detergent_intermediates": {
+        "threshold_toe_per_year": 9000
+      },
+      "petrochemical_performance_plastics": {
+        "threshold_toe_per_year": 3000
+      },
+      "petrochemical_other_products": {
+        "threshold_toe_per_year": 6000
+      },
+      "petrochemical_synthetic_rubber": {
+        "threshold_toe_per_year": 15000
+      },
+      "petrochemical_aromatics": {
+        "threshold_toe_per_year": 20000
+      },
+      "sugar": {
+        "threshold_toe_per_year": 10000
+      },
+      "chemical_alkali": {
+        "threshold_toe_per_year": 3000
+      },
+      "chemical_inorganic": {
+        "threshold_toe_per_year": 3000
+      },
+      "chemical_organic": {
+        "threshold_toe_per_year": 3000
+      },
+      "chemical_pesticides": {
+        "threshold_toe_per_year": 3000
+      },
+      "chemical_dyes_and_pigments": {
+        "threshold_toe_per_year": 3000
+      },
+      "chemical_pharmaceutical_api": {
+        "threshold_toe_per_year": 3000
+      },
+      "ceramic": {
+        "threshold_toe_per_year": 5000
+      },
+      "glass": {
+        "threshold_toe_per_year": 10000
+      },
+      "zinc": {
+        "threshold_toe_per_year": 20000
+      },
+      "copper": {
+        "threshold_toe_per_year": 10000
+      },
+      "port_trust": {
+        "threshold_toe_per_year": 500
+      },
+      "dairy": {
+        "threshold_toe_per_year": 2500
+      },
+      "automobile_assembly": {
+        "threshold_toe_per_year": 3000
+      },
+      "tyre_manufacturer": {
+        "threshold_toe_per_year": 7000
+      },
+      "forging": {
+        "threshold_toe_per_year": 1500
+      },
+      "foundry": {
+        "threshold_toe_per_year": 5000
+      },
+      "refractories": {
+        "threshold_toe_per_year": 3000
+      }
+    },
+    "important_rule": "The optimizer must not infer designated-consumer status from MSME category alone. Sector and annual energy consumption must be checked."
+  },
+
+  "rco_consumption_basis": {
+    "distribution_licensee": {
+      "basis": "electrical_energy_supplied_to_consumers_within_distribution_licensee_periphery",
+      "exclude": [
+        "open_access consumption sourced outside distribution licensee",
+        "electricity generated and self-consumed by captive users"
+      ]
+    },
+
+    "open_access_designated_consumer": {
+      "basis": "electrical_energy_consumption_at_point_of_grid_drawal",
+      "scope": "electricity consumed from sources other than distribution licensee"
+    },
+
+    "captive_designated_consumer": {
+      "basis": "electricity_generated_and_self_consumed",
+      "exclude_auxiliary_consumption": true
+    }
+  },
+
+  "captive_power_adjustments": {
+    "excluded_from_obligation": [
+      {
+        "source": "electricity generated and self-consumed from fossil-fuel waste-heat-recovery processes",
+        "exception": "WHRSG in a captive combined-cycle gas-based generating station"
+      },
+      {
+        "source": "electricity generated and self-consumed through waste-energy recovery",
+        "examples": [
+          "by-product gases",
+          "industrial residual energy"
+        ]
+      }
+    ],
+    "partial_exclusions": {
+      "fossil_fuel_based_cogeneration": {
+        "excluded_percent": 50
+      },
+      "aluminum_smelter_fossil_fuel_electricity": {
+        "excluded_percent": 50
+      }
+    },
+    "nuclear": {
+      "excluded_from_rco_calculation": true
+    }
+  },
+
+  "compliance_mechanisms": {
+    "direct_renewable_consumption": {
+      "allowed": true,
+      "methods": [
+        "onsite_renewable_generation",
+        "renewable_power_purchase",
+        "renewable_power_through_open_access",
+        "renewable_electricity_through_energy_storage"
+      ]
+    },
+
+    "renewable_energy_certificates": {
+      "allowed": true,
+      "instrument": "REC",
+      "regulator": "Central Electricity Regulatory Commission",
+      "can_include": [
+        "purchased_RECs",
+        "self_generated_RECs_where_allowed",
+        "RECs_acquired_under_virtual_power_purchase_agreements"
+      ],
+      "energy_equivalence": {
+        "one_rec_mwh": 1,
+        "one_rec_kwh": 1000
+      },
+      "solar_non_solar_categories": {
+        "separate_trading_categories": false,
+        "reason": "CERC REC framework introduced the multiplier concept and discontinued the earlier separate solar/non-solar trading categorisation from December 2022."
+      }
+    },
+
+    "energy_storage": {
+      "allowed_as_compliance_route": true,
+      "condition": "Renewable electricity consumed directly or through an energy storage system can contribute to RCO compliance subject to applicable accounting rules."
+    },
+
+    "virtual_power_purchase_agreement": {
+      "allowed_for_rec_route": true,
+      "condition": "RECs acquired under qualifying VPPAs may be used in the RCO framework."
+    },
+
+    "buyout": {
+      "allowed": true,
+      "regulator": "Central Electricity Regulatory Commission",
+      "purpose": "Alternative compliance mechanism",
+      "fund_destination": "Central Energy Conservation Fund",
+      "state_fund_share_percent": 75,
+      "important_rule": "Buyout is a compliance mechanism, not an energy-transition technology and must not be treated as renewable generation in the technical model."
+    }
+  },
+
+  "buyout_price": {
+    "currency": "INR",
+    "unit": "INR_per_MWh",
+    "source": "CERC Suo-Motu Order in Petition No. 12/SM/2025 dated 2026-02-18",
+    "values": {
+      "2024-25": 347,
+      "2025-26": 347,
+      "2026-27": 364,
+      "2027-28": 382,
+      "2028-29": 401,
+      "2029-30": 421
+    },
+    "equivalent_inr_per_kwh": {
+      "2024-25": 0.347,
+      "2025-26": 0.347,
+      "2026-27": 0.364,
+      "2027-28": 0.382,
+      "2028-29": 0.401,
+      "2029-30": 0.421
+    },
+    "revision_rule": "CERC determined the FY 2024-25 and FY 2025-26 price at INR 347/MWh and escalated the subsequent years by 5 percent annually.",
+    "review_rule": "Prices remain applicable through FY 2029-30 unless reviewed by CERC."
+  },
+
+  "compliance_calculations": {
+    "total_required_renewable_energy": {
+      "formula": "applicable_electricity_consumption_mwh * total_rco_percent / 100",
+      "unit": "MWh_per_year"
+    },
+
+    "required_renewable_energy_kwh": {
+      "formula": "applicable_electricity_consumption_kwh * total_rco_percent / 100",
+      "unit": "kWh_per_year"
+    },
+
+    "compliance_gap": {
+      "formula": "max(0, required_renewable_energy_mwh - eligible_renewable_energy_mwh)",
+      "unit": "MWh_per_year"
+    },
+
+    "compliance_percentage": {
+      "formula": "(eligible_renewable_energy_mwh / applicable_electricity_consumption_mwh) * 100",
+      "unit": "percent"
+    },
+
+    "shortfall_percentage_points": {
+      "formula": "max(0, target_percent - actual_eligible_renewable_share_percent)",
+      "unit": "percentage_points"
+    },
+
+    "buyout_cost": {
+      "formula": "rco_shortfall_mwh * applicable_buyout_price_inr_per_mwh",
+      "unit": "INR_per_year",
+      "important_rule": "Use only when the entity is legally eligible to use the buyout mechanism."
+    },
+
+    "rec_requirement": {
+      "formula": "rco_shortfall_mwh / 1",
+      "unit": "REC_units",
+      "basis": "1 REC corresponds to 1 MWh of renewable electricity injected into the grid."
+    }
+  },
+
+  "optimizer_integration": {
+    "factory_input_fields": [
+      "state",
+      "industry",
+      "annual_electricity_consumption_mwh",
+      "annual_total_energy_consumption_toe",
+      "is_udyam_registered",
+      "is_open_access_consumer",
+      "is_captive_user",
+      "has_captive_power_plant",
+      "has_distribution_license",
+      "annual_renewable_electricity_mwh",
+      "onsite_solar_capacity_kw",
+      "onsite_renewable_generation_mwh",
+      "renewable_open_access_purchase_mwh",
+      "renewable_storage_delivered_mwh",
+      "rec_holdings",
+      "year"
+    ],
+
+    "pathway_fields": [
+      "onsite_solar_mwh",
+      "renewable_open_access_mwh",
+      "wind_mwh",
+      "hydro_mwh",
+      "distributed_renewable_mwh",
+      "other_renewable_mwh",
+      "renewable_storage_mwh",
+      "rec_units_purchased",
+      "rco_buyout_mwh"
+    ],
+
+    "evaluation_order": [
+      "determine_entity_type",
+      "determine_designated_consumer_status",
+      "determine_applicable_RPO_or_RCO_framework",
+      "determine_financial_year",
+      "load_target",
+      "calculate_applicable_electricity_consumption",
+      "calculate_eligible_renewable_consumption",
+      "calculate_component_compliance",
+      "calculate_total_compliance",
+      "calculate_shortfall",
+      "evaluate_direct_RE_option",
+      "evaluate_REC_option",
+      "evaluate_buyout_option",
+      "pass_compliance_result_to_finance_and_optimizer"
+    ]
+  },
+
+  "pathway_relevance": {
+    "solar_pv": {
+      "rco_relevance": "high",
+      "especially_relevant_to": [
+        "distributed_renewable_component",
+        "onsite renewable electricity"
+      ],
+      "condition": "Project capacity and applicable accounting rules must satisfy the relevant RCO category."
+    },
+
+    "wind_power": {
+      "rco_relevance": "conditional",
+      "condition": "For the wind component, the relevant generation must come from qualifying post-31-March-2024 wind projects."
+    },
+
+    "hydro_power": {
+      "rco_relevance": "conditional",
+      "condition": "For the hydro component, qualifying post-31-March-2024 hydro generation is relevant subject to the notification."
+    },
+
+    "biomass": {
+      "rco_relevance": "conditional",
+      "condition": "Biomass electricity may contribute where it qualifies under the applicable renewable-energy category. Biomass used only for process heat does not itself satisfy an electricity RPO/RCO requirement."
+    },
+
+    "biomass_boiler": {
+      "rco_relevance": "indirect",
+      "condition": "A biomass boiler producing process heat reduces fossil-fuel use but does not automatically create renewable electricity for RPO/RCO accounting."
+    },
+
+    "electric_boiler": {
+      "rco_relevance": "indirect",
+      "condition": "Electrification can increase electricity consumption; if the factory is an obligated/designated consumer, the increased electrical load must be reflected in the compliance calculation."
+    },
+
+    "battery_storage": {
+      "rco_relevance": "supporting",
+      "condition": "Storage can be used with renewable electricity for compliance where the applicable accounting framework recognises the renewable electricity consumed through storage."
+    },
+
+    "waste_heat_recovery": {
+      "rco_relevance": "conditional",
+      "condition": "Waste-heat recovery for process heat is not itself renewable electricity. Specific fossil-based waste-heat electricity exclusions apply for designated captive users."
+    },
+
+    "renewable_open_access": {
+      "rco_relevance": "high",
+      "condition": "Potentially relevant for designated open-access consumers and subject to applicable open-access and state regulatory rules."
+    }
+  },
+
+  "msme_specific_logic": {
+    "micro": {
+      "automatic_rpo": false
+    },
+    "small": {
+      "automatic_rpo": false
+    },
+    "medium": {
+      "automatic_rpo": false
+    },
+    "large": {
+      "automatic_rpo": false
+    },
+    "actual_rule": "MSME classification does not by itself determine RPO/RCO liability.",
+    "decision_factors": [
+      "sector",
+      "energy_consumption",
+      "designated_consumer_status",
+      "open_access_status",
+      "captive_power_status",
+      "distribution_licensee_status",
+      "state_regulatory_framework"
+    ]
+  },
+
+  "example_1_non_obligated_msm_e": {
+    "factory": {
+      "enterprise_category": "small",
+      "industry": "food_processing",
+      "annual_electricity_consumption_mwh": 1200,
+      "annual_total_energy_consumption_toe": 600,
+      "is_open_access_consumer": false,
+      "is_captive_user": false,
+      "is_distribution_licensee": false
+    },
+    "result": {
+      "rco_applicable": false,
+      "rpo_applicable": "check_state_rules",
+      "optimizer_action": "Do_not_impose_central_RCO_target_automatically"
+    }
+  },
+
+  "example_2_designated_textile_consumer": {
+    "factory": {
+      "enterprise_category": "medium",
+      "industry": "textiles",
+      "annual_total_energy_consumption_toe": 4500,
+      "is_open_access_consumer": true,
+      "is_captive_user": false,
+      "financial_year": "2026-27",
+      "applicable_electricity_consumption_mwh": 10000
+    },
+    "eligibility": {
+      "textile_designated_consumer_threshold_toe": 3000,
+      "annual_energy_consumption_toe": 4500,
+      "designated_consumer_candidate": true
+    },
+    "rco_target": {
+      "total_percent": 35.95,
+      "required_renewable_mwh": 3595
+    },
+    "optimizer_action": [
+      "calculate_current_renewable_consumption",
+      "calculate_rco_gap",
+      "compare_onsite_solar",
+      "compare_renewable_open_access",
+      "compare_REC_purchase",
+      "compare_buyout_if_applicable"
+    ]
+  },
+
+  "example_3_rooftop_solar_compliance": {
+    "factory": {
+      "financial_year": "2026-27",
+      "applicable_electricity_consumption_mwh": 5000,
+      "designated_consumer": true
+    },
+    "rco_target_percent": 35.95,
+    "total_rco_requirement_mwh": 1797.5,
+    "distributed_renewable_target_percent": 2.70,
+    "distributed_renewable_requirement_mwh": 135,
+    "optimizer_note": "For the distributed-renewable component, the model must separately test the DRE requirement instead of assuming that excess electricity from any renewable source automatically closes a DRE shortfall."
+  },
+
+  "example_4_buyout_calculation": {
+    "financial_year": "2026-27",
+    "applicable_electricity_consumption_mwh": 10000,
+    "rco_target_percent": 35.95,
+    "required_renewable_mwh": 3595,
+    "eligible_renewable_consumption_mwh": 3400,
+    "shortfall_mwh": 195,
+    "buyout_price_inr_per_mwh": 364,
+    "estimated_buyout_cost_inr": 70980,
+    "important_note": "This is a compliance-cost calculation only and must not be represented as a subsidy or renewable-energy generation."
+  },
+
+  "policy_engine_output": {
+    "required_fields": [
+      "obligation_status",
+      "framework",
+      "financial_year",
+      "target_percent",
+      "applicable_consumption_mwh",
+      "eligible_renewable_mwh",
+      "compliance_percent",
+      "shortfall_mwh",
+      "compliance_gap_status"
+    ],
+    "optional_fields": [
+      "wind_component_status",
+      "hydro_component_status",
+      "distributed_renewable_component_status",
+      "other_renewable_component_status",
+      "rec_requirement",
+      "buyout_cost",
+      "recommended_compliance_route"
+    ],
+    "status_values": [
+      "not_applicable",
+      "compliant",
+      "partially_compliant",
+      "non_compliant",
+      "insufficient_data"
+    ]
+  },
+
+  "financial_model_rules": {
+    "rpo_compliance_cost": {
+      "include_in_opex": true,
+      "condition": "Only when the entity is legally obligated and the pathway requires purchased RE, RECs, storage-backed renewable electricity or buyout."
+    },
+    "renewable_generation": {
+      "do_not_double_count": true,
+      "rule": "Renewable electricity generated onsite must not simultaneously be counted as both physical electricity savings and an independent REC unless the applicable REC accounting framework permits the claim."
+    },
+    "subsidy": {
+      "rpo_is_not_subsidy": true
+    },
+    "capex": {
+      "rpo_does_not_reduce_capex": true
+    },
+    "buyout": {
+      "treat_as_compliance_cost": true,
+      "treat_as_renewable_generation": false
+    },
+    "rec": {
+      "treat_as_compliance_instrument": true,
+      "treat_as_physical_energy_generation": false
+    }
+  },
+
+  "data_quality_rules": {
+    "never_assume_rpo_for_all_msm_es": true,
+    "never_use_old_2022_rpo_trajectory_without_checking_current_framework": true,
+    "never_use_2023_rco_notification_as_current_when_2025_notification_applies": true,
+    "never_mix_rpo_and_rco_without_recording_framework": true,
+    "never_use_state_rpo_percentage_without_state_source": true,
+    "never_calculate_compliance_without_financial_year": true,
+    "never_calculate_designated_consumer_status_without_energy_consumption": true,
+    "never_count_process_heat_biomass_as_renewable_electricity": true,
+    "never_count_buyout_as_renewable_generation": true,
+    "never_count_rec_as_physical_generation": true,
+    "flag_missing_regulatory_data": true
+  },
+
+  "source_provenance": {
+    "primary_sources": [
+      {
+        "authority": "Ministry of Power",
+        "document": "Revised Renewable Consumption Obligation Gazette Notification",
+        "notification": "S.O. 4421(E)",
+        "date": "2025-09-27",
+        "status": "primary_current"
+      },
+      {
+        "authority": "Bureau of Energy Efficiency",
+        "document": "Renewable Consumption Obligations RCO",
+        "status": "primary_current"
+      },
+      {
+        "authority": "Bureau of Energy Efficiency",
+        "document": "List of Designated Consumers based on Energy Consumption Thresholds",
+        "status": "primary"
+      },
+      {
+        "authority": "Central Electricity Regulatory Commission",
+        "document": "Suo-Motu Order in Petition No. 12/SM/2025",
+        "date": "2026-02-18",
+        "subject": "RCO buyout price",
+        "status": "primary_current"
+      },
+      {
+        "authority": "Central Electricity Regulatory Commission",
+        "document": "Renewable Energy Certificate regulations and market reports",
+        "status": "primary"
+      },
+      {
+        "authority": "India Code",
+        "document": "Energy Conservation Act, 2001",
+        "status": "primary_legal_basis"
+      }
+    ]
+  },
+
+  "maintenance": {
+    "review_frequency": "quarterly",
+    "mandatory_review_triggers": [
+      "new Ministry of Power RPO/RCO notification",
+      "new Electricity Amendment Rules",
+      "new Energy Conservation Act notification",
+      "new BEE RCO compliance procedure",
+      "new CERC REC regulation",
+      "new CERC RCO buyout price",
+      "SERC/JERC RPO amendment",
+      "new state renewable energy regulation"
+    ],
+    "stale_after_days": 90,
+    "current_target_horizon": "2029-30",
+    "rule": "If a newer official notification supersedes the current trajectory, the newest legally applicable notification must replace the older values before the optimizer uses them."
+  }
+}
