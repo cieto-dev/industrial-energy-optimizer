@@ -1,0 +1,86 @@
+{
+  "constraint_name": "grid_emissions",
+  "version": "1.0",
+  "description": "Defines grid electricity emission factors used to estimate greenhouse gas emissions associated with electricity consumption.",
+
+  "grid": {
+    "name": "Indian Grid",
+    "country": "India",
+    "scope": "National interconnected electricity grid"
+  },
+
+  "units": {
+    "emission_factor": "kgCO2e/kWh",
+    "electricity_consumption": "kWh",
+    "emissions": "kgCO2e"
+  },
+
+  "default_factor": {
+    "type": "weighted_average_including_res_and_captive",
+    "value": 0.7117,
+    "unit": "kgCO2e/kWh",
+    "reporting_year": "FY 2024-25"
+  },
+
+  "factors": {
+    "weighted_average": {
+      "value": 0.8337,
+      "unit": "kgCO2e/kWh",
+      "reporting_year": "FY 2024-25",
+      "basis": "Weighted average emission rate"
+    },
+
+    "weighted_average_including_res_and_captive": {
+      "value": 0.7117,
+      "unit": "kgCO2e/kWh",
+      "reporting_year": "FY 2024-25",
+      "basis": "Weighted average grid emission rate including renewable energy and captive power injection"
+    },
+
+    "operating_margin": {
+      "value": 0.9646,
+      "unit": "kgCO2e/kWh",
+      "reporting_year": "FY 2024-25",
+      "basis": "Simple operating margin"
+    },
+
+    "build_margin": {
+      "value": 0.5119,
+      "unit": "kgCO2e/kWh",
+      "reporting_year": "FY 2024-25",
+      "basis": "Build margin"
+    },
+
+    "combined_margin": {
+      "value": 0.7383,
+      "unit": "kgCO2e/kWh",
+      "reporting_year": "FY 2024-25",
+      "basis": "Combined margin"
+    }
+  },
+
+  "calculation": {
+    "formula": "electricity_consumption_kwh * grid_emission_factor_kgco2e_per_kwh",
+    "output": "grid_emissions_kgco2e"
+  },
+
+  "source": {
+    "organization": "Central Electricity Authority",
+    "document": "CO2 Baseline Database for the Indian Power Sector",
+    "version": "21.0",
+    "publication_period": "November 2025",
+    "source_type": "Government of India official source"
+  },
+
+  "methodology": {
+    "grid_structure": "Indian Grid",
+    "notes": "CEA treats the interconnected Indian electricity system as the unified Indian Grid for its baseline database."
+  },
+
+  "validation": {
+    "factor_must_be_numeric": true,
+    "factor_must_be_non_negative": true,
+    "electricity_consumption_must_be_numeric": true,
+    "electricity_consumption_must_be_non_negative": true
+  }
+}
