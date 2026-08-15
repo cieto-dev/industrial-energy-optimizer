@@ -1,0 +1,23 @@
+{
+  "electric_boiler": {
+    "minimum_grid_kw": 500
+  },
+  "heat_pump": {
+    "minimum_grid_kw": 150
+  },
+  "industrial_heat_pump": {
+    "minimum_grid_kw": 250
+  },
+  "electric_resistance_heating": {
+    "minimum_grid_kw": 100
+  },
+  "boiler_electrification": {
+    "minimum_grid_kw": 500
+  },
+  "dryer_electrification": {
+    "minimum_grid_kw": 200
+  },
+  "gas_coal_to_electric_heating": {
+    "minimum_grid_kw": 300
+  }
+}
