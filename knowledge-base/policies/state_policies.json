@@ -1,0 +1,1302 @@
+{
+  "schema_version": "2.0",
+  "file": "knowledge-base/policies/state_policies.json",
+  "country": "India",
+  "purpose": "State-specific industrial, MSME, energy-efficiency, clean-technology and renewable-energy incentives that can modify the financial evaluation of industrial energy-transition pathways.",
+  "last_verified": "2026-08-16",
+
+  "architecture": {
+    "policy_layer": "state_policy_engine",
+    "called_after": [
+      "engineering_feasibility",
+      "constraint_engine",
+      "technology_filter",
+      "scenario_generation",
+      "baseline_finance"
+    ],
+    "called_before": [
+      "final_capex_adjustment",
+      "final_opex_adjustment",
+      "payback_calculation",
+      "roi_calculation",
+      "pathway_ranking"
+    ],
+    "primary_input": [
+      "state",
+      "district",
+      "block",
+      "taluka",
+      "enterprise_category",
+      "industry_sector",
+      "project_type",
+      "project_status",
+      "project_cost_inr",
+      "fixed_capital_investment_inr",
+      "loan_amount_inr",
+      "annual_electricity_consumption_kwh",
+      "new_or_existing",
+      "expansion_or_modernization",
+      "special_category"
+    ]
+  },
+
+  "critical_rules": {
+    "state_is_required": true,
+    "district_or_taluka_required_when_policy_is_location_based": true,
+    "do_not_assume_state_subsidy": true,
+    "do_not_apply_expired_policy": true,
+    "do_not_apply_incentive_without_eligibility_check": true,
+    "do_not_double_count_central_and_state_benefits": true,
+    "do_not_duplicate_electricity_tariffs": true,
+    "tariffs_are_stored_elsewhere": "datasets/electricity_tariffs/",
+    "tariff_master_file": "datasets/electricity_tariffs/tariff_master.csv",
+    "tariff_tod_file": "datasets/electricity_tariffs/tariff_tod.csv",
+    "tariff_slab_file": "datasets/electricity_tariffs/slab_rates.csv",
+    "policy_engine_must_return_unknown_when_no_verified_state_rule_exists": true
+  },
+
+  "financial_treatment": {
+    "capital_subsidy": {
+      "effect": "reduce_eligible_capex",
+      "formula": "eligible_capex_reduction = eligible_project_cost * subsidy_rate",
+      "cap_required": true
+    },
+    "interest_subsidy": {
+      "effect": "reduce_effective_financing_cost",
+      "formula": "annual_interest_support = eligible_loan_amount * subsidy_rate",
+      "loan_cap_required": true
+    },
+    "power_tariff_subsidy": {
+      "effect": "reduce_electricity_opex",
+      "formula": "eligible_power_cost_reduction = eligible_electricity_cost * subsidy_rate",
+      "duration_required": true
+    },
+    "electricity_duty_exemption": {
+      "effect": "reduce_electricity_opex",
+      "formula": "duty_savings = eligible_electricity_duty",
+      "duration_required": true
+    },
+    "sgst_reimbursement": {
+      "effect": "state_tax_reimbursement",
+      "do_not_treat_as_capex_subsidy": true,
+      "do_not_treat_as_immediate_cash_at_project_start": true,
+      "duration_required": true,
+      "maximum_fci_cap_required": true
+    },
+    "stamp_duty_exemption": {
+      "effect": "reduce_project_transaction_cost",
+      "do_not_apply_to_energy_opex": true
+    },
+    "green_technology_support": {
+      "effect": "reduce_eligible_clean_technology_capex",
+      "eligibility_must_be_verified": true
+    }
+  },
+
+  "states": {
+
+    "Himachal Pradesh": {
+      "state_code": "HP",
+      "policy_status": "active_with_amendments",
+      "primary_policy": {
+        "name": "Himachal Pradesh Industrial Investment Policy 2019 and Rules Regarding Grant of Incentives, Concessions and Facilities",
+        "latest_verified_amendment": "2023-12-13"
+      },
+
+      "transition_relevant_incentives": {
+
+        "environmental_equipment_assistance": {
+          "type": "capital_reimbursement",
+          "eligible_projects": [
+            "effluent_treatment_plant",
+            "rainwater_harvesting",
+            "environmental_compliance_equipment"
+          ],
+          "reimbursement_percent": 25,
+          "eligible_cost": "plant_and_machinery_or_equipment",
+          "maximum_per_enterprise_inr": 200000,
+          "construction_cost_included": false,
+          "optimizer_use": "reduce_eligible_environmental_project_capex"
+        },
+
+        "etp_power_tariff_reimbursement": {
+          "type": "opex_reimbursement",
+          "reimbursement_percent": 50,
+          "duration_years": 3,
+          "maximum_per_year_inr": 100000,
+          "condition": "separate electricity meter or sub-meter exclusively for ETP operation",
+          "optimizer_use": "reduce_environmental_equipment_operating_cost"
+        },
+
+        "net_sgst_reimbursement_msm_e": {
+          "type": "tax_reimbursement",
+          "eligible_enterprise_categories": [
+            "micro",
+            "small",
+            "medium"
+          ],
+          "steel_manufacturer_excluded": true,
+          "category_A_percent": 60,
+          "category_B_percent": 90,
+          "category_C_percent": 90,
+          "duration_years": 7,
+          "maximum_total_reimbursement_relative_to_fci_percent": 100,
+          "condition": "supplies/manufactured goods consumed within Himachal Pradesh",
+          "optimizer_use": "state_tax_cashflow_benefit"
+        },
+
+        "steel_msm_e_sgst_reimbursement": {
+          "type": "tax_reimbursement",
+          "eligible_enterprise_categories": [
+            "micro",
+            "small",
+            "medium"
+          ],
+          "category_A_percent": 50,
+          "category_B_percent": 80,
+          "category_C_percent": 90,
+          "duration_years": 7,
+          "maximum_total_reimbursement_relative_to_fci_percent": 80,
+          "optimizer_use": "state_tax_cashflow_benefit"
+        },
+
+        "msme_purchase_preference": {
+          "type": "market_support",
+          "minimum_local_order_share_percent": 25,
+          "eligible_enterprise_categories": [
+            "micro",
+            "small"
+          ],
+          "condition": "lowest approved rates and applicable procurement requirements",
+          "optimizer_use": "non_cash_incentive"
+        },
+
+        "msme_finance_listing_support": {
+          "type": "financial_access_support",
+          "reimbursement_percent": 50,
+          "maximum_per_enterprise_inr": 1000000,
+          "eligible_expense": [
+            "public_issue_expense",
+            "NSE_SME_platform_registration"
+          ],
+          "condition": "funds raised must be used for setting up or expanding the eligible enterprise in Himachal Pradesh"
+        }
+      },
+
+      "energy_transition_relevance": {
+        "high": [
+          "environmental_equipment",
+          "ETP",
+          "water_conservation",
+          "energy_efficiency_indirectly"
+        ],
+        "medium": [
+          "industrial_expansion",
+          "cleaner_production"
+        ]
+      },
+
+      "location_logic": {
+        "requires_area_category": true,
+        "categories": [
+          "A",
+          "B",
+          "C"
+        ],
+        "special_category_C": "Partial Tax Exempted Zones"
+      },
+
+      "source": {
+        "authority": "Government of Himachal Pradesh, Department of Industries",
+        "document": "Industrial Investment Policy 2019 and amended rules",
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Punjab": {
+      "state_code": "PB",
+      "policy_status": "active_policy_framework",
+      "primary_policy": {
+        "name": "Punjab Industrial and Business Development Policy 2022",
+        "effective_date": "2022-10-17",
+        "policy_period_years": 5
+      },
+
+      "power_policy": {
+        "industrial_power_tariff": {
+          "type": "regulated_tariff_support",
+          "variable_tariff_rs_per_kvah": 5.50,
+          "annual_increase_percent": 3,
+          "duration_years": 5,
+          "fixed_tariff_increase": false,
+          "non_peak_night_hours": {
+            "additional_reduction": true,
+            "exact_rate": "use_current_PSPCL_tariff_dataset"
+          },
+          "important_rule": "Do not hard-code the energy tariff into state_policies.json; the repository tariff dataset is authoritative for the actual tariff calculation."
+        }
+      },
+
+      "msme_incentives": {
+
+        "electricity_duty_exemption": {
+          "type": "electricity_duty_exemption",
+          "eligible_enterprise_categories": [
+            "micro",
+            "small",
+            "medium"
+          ],
+          "new_unit_exemption_percent": 100,
+          "duration_years": 7,
+          "expansion_condition": "benefit applies to eligible incremental investment subject to policy limits",
+          "application_deadline_months_after_commercial_production": 3,
+          "optimizer_use": "reduce electricity operating cost"
+        },
+
+        "technology_acquisition": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "maximum_inr": 2500000,
+          "condition": "technology acquired from a recognized national institute",
+          "frequency": "once_during_policy_validity",
+          "optimizer_relevance": [
+            "energy_efficiency",
+            "clean_production",
+            "process_modernization"
+          ]
+        },
+
+        "zed_additional_support": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "maximum_inr": 500000,
+          "eligible_items": [
+            "plant_and_machinery",
+            "testing_equipment"
+          ],
+          "condition": "first 100 units and achievement of at least Gold ZED status",
+          "important_rule": "This is additional state support and must be checked against central ZED support to avoid double counting."
+        },
+
+        "cluster_skill_centre": {
+          "type": "capital_subsidy",
+          "subsidy_percent": 50,
+          "maximum_per_cluster_inr": 50000000,
+          "eligible_for": [
+            "MSME_cluster_associations",
+            "SPVs"
+          ],
+          "eligible_costs": [
+            "building",
+            "machinery",
+            "training_equipment"
+          ]
+        }
+      },
+
+      "green_power_support": {
+        "solar_facilitation": {
+          "special_advisory_cell": true,
+          "agency": "PSPCL",
+          "purpose": "facilitate industrial solar and green-power adoption"
+        },
+        "renewable_energy_expansion_accounting": {
+          "condition": "renewable generation and grid consumption are jointly considered for specified electricity-duty calculations during eligible expansion",
+          "optimizer_use": "must be evaluated only when electricity-duty incentive is otherwise eligible"
+        }
+      },
+
+      "thrust_sector": {
+        "sgst_reimbursement_percent": 100,
+        "duration_years": 10,
+        "maximum_relative_to_fci_percent": 125,
+        "electricity_duty_exemption_percent": 100,
+        "electricity_duty_duration_years": 10,
+        "eligible_enterprise_categories": [
+          "micro",
+          "small",
+          "medium",
+          "large"
+        ],
+        "condition": "unit must qualify as a thrust-sector unit under the policy"
+      },
+
+      "compliance": {
+        "zed_required_for_selected_msm_e_benefits": true,
+        "minimum_zed_level": "Bronze",
+        "failure_effect": "future disbursement of specified fiscal incentives can be stopped"
+      },
+
+      "source": {
+        "authority": "Government of Punjab, Department of Industries and Commerce",
+        "document": "Punjab Industrial and Business Development Policy 2022",
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Gujarat": {
+      "state_code": "GJ",
+      "policy_status": "current_policy_listed_by_state_government",
+      "primary_policy": {
+        "name": "Gujarat Industrial Policy 2020"
+      },
+
+      "msme_financial_incentives": {
+
+        "interest_subsidy": {
+          "type": "interest_subsidy",
+          "category_1": {
+            "rate_percent": 7,
+            "maximum_per_year_inr": 3500000,
+            "duration_years": 7
+          },
+          "category_2": {
+            "rate_percent": 6,
+            "maximum_per_year_inr": 3000000,
+            "duration_years": 6
+          },
+          "category_3": {
+            "rate_percent": 5,
+            "maximum_per_year_inr": 2500000,
+            "duration_years": 5
+          },
+          "minimum_interest_borne_by_unit_percent": 2,
+          "additional_sc_st_percent": 1,
+          "additional_women_percent": 1,
+          "additional_physically_challenged_percent": 1,
+          "additional_startup_manufacturing_percent": 1,
+          "young_entrepreneur_additional_percent": 1,
+          "maximum_combined_interest_subsidy_percent": 9,
+          "optimizer_use": "reduce annual debt service"
+        },
+
+        "capital_subsidy": {
+          "type": "capital_subsidy",
+          "category_1_general_percent": 10,
+          "category_1_thrust_percent": 12,
+          "category_2_general_percent": 8,
+          "category_2_thrust_percent": 10,
+          "category_3_general_percent": 4,
+          "category_3_thrust_percent": 6,
+          "basis": "eligible_fixed_capital_investment_excluding_land",
+          "payment_period_years": 10,
+          "annual_ceiling_inr": 400000000,
+          "important_rule": "Eligibility depends on enterprise, sector, taluka category and scheme selection."
+        },
+
+        "energy_water_audit": {
+          "type": "audit_and_equipment_assistance",
+          "audit_reimbursement_percent": 75,
+          "audit_maximum_inr": 50000,
+          "recommended_equipment_reimbursement_percent": 25,
+          "equipment_maximum_inr": 2000000,
+          "condition": "equipment must be recommended by the recognized auditing authority",
+          "optimizer_relevance": [
+            "energy_efficiency",
+            "water_efficiency",
+            "process_efficiency"
+          ]
+        },
+
+        "power_connection_assistance": {
+          "type": "infrastructure_cost_reimbursement",
+          "reimbursement_percent": 35,
+          "maximum_inr": 500000,
+          "eligible_cost": [
+            "LT_service_line",
+            "HT_service_line",
+            "power_connection_charges"
+          ]
+        }
+      },
+
+      "solar_support": {
+        "msme_rooftop_solar": {
+          "supported": true,
+          "surplus_power_purchase_rate_rs_per_kwh": 2.25,
+          "consumption_calculation_window": "07:00-18:00",
+          "purpose": "reduce MSME electricity costs through rooftop solar and surplus-power purchase",
+          "important_rule": "Actual current DISCOM/net-metering rules must also be checked."
+        }
+      },
+
+      "transition_relevance": {
+        "very_high": [
+          "energy_efficiency",
+          "rooftop_solar",
+          "solar_electrification",
+          "cleaner_production"
+        ],
+        "high": [
+          "process_modernization"
+        ]
+      },
+
+      "source": {
+        "authority": "Government of Gujarat, Industries Commissionerate",
+        "documents": [
+          "Gujarat Industrial Policy 2020",
+          "GIDC policy and scheme pages"
+        ],
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Maharashtra": {
+      "state_code": "MH",
+      "policy_status": "active",
+      "primary_policy": {
+        "name": "Maharashtra Industries, Investment and Services Policy 2025",
+        "notification_date": "2025-12-31",
+        "valid_until": "2030-12-30"
+      },
+
+      "location_model": {
+        "classification": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "D+",
+          "special_backward_regions"
+        ],
+        "important_rule": "Benefit ceilings and duration depend on taluka/location classification and project category."
+      },
+
+      "manufacturing_incentives": {
+
+        "industrial_promotion_subsidy": {
+          "type": "gross_sgst_reimbursement",
+          "rate": 100,
+          "basis": "gross SGST on first sale of eligible products within Maharashtra",
+          "overall_ceiling_relative_to_fci_percent": {
+            "minimum": 30,
+            "maximum": 100
+          },
+          "duration_years": {
+            "minimum": 5,
+            "maximum": 10
+          },
+          "condition": "exact ceiling and duration depend on location and project category"
+        },
+
+        "capital_subsidy": {
+          "type": "capital_subsidy",
+          "thrust_sector_msm_e_rate_percent": 20,
+          "maximum_inr": 250000000,
+          "annual_cap_inr": 50000000,
+          "eligible_basis": "eligible fixed capital investment",
+          "zone_specific_machinery_coverage": {
+            "group_A_B_percent": 50,
+            "group_C_percent": 80,
+            "group_D_D_plus_and_below_percent": 100
+          }
+        },
+
+        "electricity_duty_exemption": {
+          "type": "electricity_duty_exemption",
+          "group_C_D_D_plus_and_below": {
+            "eligible": true,
+            "new_manufacturing_or_eligible_expansion": true,
+            "duration": "policy_condition_based"
+          },
+          "group_A_B": {
+            "eligible_conditions": [
+              "100_percent_export_oriented_unit",
+              "unit_fully_owned_by_women",
+              "unit_fully_owned_by_SC_ST",
+              "unit_fully_owned_by_persons_with_disabilities_and_employment_condition"
+            ],
+            "employment_condition_for_special_ownership": "at least 50 percent workforce from qualifying group"
+          }
+        },
+
+        "power_tariff_subsidy": {
+          "type": "power_tariff_subsidy",
+          "available": true,
+          "exact_rate": "location_and_project_category_dependent",
+          "optimizer_rule": "load only after taluka/category lookup"
+        },
+
+        "interest_subsidy": {
+          "type": "interest_subsidy",
+          "available": true,
+          "exact_rate": "location_and_project_category_dependent",
+          "optimizer_rule": "do not assume a universal Maharashtra interest-subsidy percentage"
+        },
+
+        "green_incentives": {
+          "available": true,
+          "relevance": [
+            "clean_production",
+            "energy_efficiency",
+            "circular_economy",
+            "green_technology",
+            "pollution_control"
+          ],
+          "exact_benefit": "project_and_zone_specific"
+        }
+      },
+
+      "msme_scaling": {
+        "regional_msme_parks": {
+          "planned_minimum": "one MSME park in each district excluding Mumbai",
+          "plug_and_play": true,
+          "market_access_support": true
+        },
+        "preferential_land_allocation": {
+          "share_reserved_for_msme_percent": 20
+        }
+      },
+
+      "financial_model_rules": {
+        "sgst_reimbursement_is_cashflow_benefit": true,
+        "do_not_reduce_initial_capex_by_full_sgst_entitlement": true,
+        "capital_subsidy_can_reduce_eligible_capex": true,
+        "electricity_duty_can_reduce_opex": true
+      },
+
+      "source": {
+        "authority": "Government of Maharashtra, Industries, Investment and Services Department",
+        "primary_document": "Maharashtra Industries, Investment and Services Policy 2025",
+        "verification_level": "primary_policy_plus_professional_policy_summary",
+        "note": "Detailed zone-specific rates should be loaded from the notified policy/operative GR before production use."
+      }
+    },
+
+
+    "Karnataka": {
+      "state_code": "KA",
+      "policy_status": "active",
+      "primary_policy": {
+        "name": "Karnataka Industrial Policy 2025-30",
+        "operative_guidelines_date": "2026-04-10",
+        "effective_period_years": 5
+      },
+
+      "green_transition_support": {
+
+        "sustainability_linked_incentive": {
+          "eligible_enterprise_categories": [
+            "micro",
+            "small",
+            "medium"
+          ],
+          "eligible_interventions": [
+            "energy_efficiency",
+            "cleaner_production",
+            "industrial_waste_recycling",
+            "ETP_upgrade",
+            "CETP",
+            "green_buildings",
+            "pollution_control",
+            "electrification_of_low_temperature_thermal_processes",
+            "battery_energy_storage_replacing_diesel_backup",
+            "electric_heat_pumps",
+            "induction_heating",
+            "electric_resistance_heating",
+            "microwave_heating",
+            "electric_boilers",
+            "electrically_heated_dryers"
+          ]
+        },
+
+        "energy_efficiency_equipment": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "maximum_inr": 5000000,
+          "examples": [
+            "high_efficiency_lighting",
+            "high_efficiency_motors",
+            "variable_frequency_drives",
+            "continuous_energy_monitoring"
+          ]
+        },
+
+        "low_temperature_electrification": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "maximum_inr": 5000000,
+          "eligible_equipment": [
+            "electric_heat_pump",
+            "electric_boiler",
+            "electric_resistance_heating",
+            "induction_heating",
+            "microwave_heating",
+            "electric_dryer"
+          ],
+          "optimizer_relevance": "very_high"
+        },
+
+        "battery_energy_storage": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "maximum_inr": 5000000,
+          "condition": "BESS replacing traditional diesel-generator backup",
+          "optimizer_relevance": [
+            "reliability",
+            "electrification",
+            "renewable_integration"
+          ]
+        },
+
+        "ev_conversion": {
+          "type": "capital_subsidy",
+          "subsidy_percent": 10,
+          "maximum_total_inr": 1000000,
+          "condition": "passenger or utility vehicles exclusively used in industrial areas"
+        }
+      },
+
+      "msme_policy": {
+        "capital_subsidy": {
+          "available": true,
+          "micro_small": true,
+          "medium": true,
+          "payment_period_micro_small_years": 2,
+          "payment_period_medium_years": 4
+        },
+
+        "electricity_tax_exemption": {
+          "available": true,
+          "important_rule": "The 2025-30 guidelines state that electricity-tax exemption becomes operative after the Energy Department issues the enabling notification.",
+          "production_rule": "do_not_apply_until_enabled"
+        },
+
+        "power_subsidy": {
+          "eligible_enterprise_categories": [
+            "micro",
+            "small"
+          ],
+          "available": true,
+          "exact_rate": "zone_and_policy_specific",
+          "optimizer_rule": "load from operative policy table before calculation"
+        }
+      },
+
+      "eligibility_rules": {
+        "new_and_additional_investment": true,
+        "expansion_modernization_diversification": true,
+        "minimum_additional_investment_for_expansion_percent": 25,
+        "msme_application_deadline_after_commercial_production_years": 1,
+        "commercial_production_deadline_for_msm_e_years": 3,
+        "policy_choice_exclusivity": true
+      },
+
+      "special_exclusion": {
+        "rooftop_solar_power_generation_as_enterprise": {
+          "eligible_for_general_industrial_policy_incentives": false,
+          "important_rule": "Do not confuse this exclusion with the factory's ability to install rooftop solar for its own electricity consumption."
+        }
+      },
+
+      "source": {
+        "authority": "Government of Karnataka, Department of Industries and Commerce",
+        "document": "Operative Guidelines Package of Incentives and Concessions under Industrial Policy 2025-30",
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Rajasthan": {
+      "state_code": "RJ",
+      "policy_status": "active",
+      "primary_policy": {
+        "name": "Rajasthan Investment Promotion Scheme 2024",
+        "validity": "policy_period_as_notified"
+      },
+
+      "manufacturing_msm_e_incentives": {
+
+        "interest_subvention": {
+          "type": "interest_subvention",
+          "loan_up_to_5_crore_rate_percent": 6,
+          "loan_5_to_10_crore_rate_percent": 4,
+          "loan_10_to_50_crore_rate_percent": 3,
+          "duration_years": 7,
+          "additional_rate_for_rural_tourism_and_agri_processing_percent": 1
+        },
+
+        "clean_production_machinery": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 10,
+          "eligible_cost": "machinery_and_equipment_using_clean_production_technology",
+          "eligible_enterprise_category": "MSME",
+          "maximum_scheme_ceiling": 100000000,
+          "optimizer_relevance": [
+            "energy_efficiency",
+            "clean_production",
+            "process_modernization"
+          ]
+        },
+
+        "environmental_projects": {
+          "type": "capital_reimbursement",
+          "reimbursement_percent": 50,
+          "eligible_project_type": "environmental_project",
+          "maximum_scheme_ceiling": 100000000,
+          "optimizer_rule": "verify project-level eligibility and cap before application"
+        },
+
+        "green_rating_consent_fee": {
+          "type": "fee_waiver",
+          "reimbursement_percent": 50,
+          "condition": "industries qualifying under Rajasthan Green Rating System"
+        },
+
+        "captive_renewable_electricity_duty": {
+          "type": "electricity_duty_exemption",
+          "exemption_percent": 100,
+          "duration_years": 7,
+          "condition": "captive renewable energy generation"
+        },
+
+        "electricity_duty": {
+          "type": "electricity_duty_exemption",
+          "new_msm_e_units_percent": 100,
+          "duration_years": 7
+        }
+      },
+
+      "solar_and_clean_energy": {
+        "solar_pv_module_and_cell_manufacturing": {
+          "asset_creation_incentive_capital_subsidy_percent_of_efci": {
+            "minimum": 13,
+            "maximum": 28
+          },
+          "turnover_linked_incentive_percent_of_net_sales": {
+            "minimum": 1.2,
+            "maximum": 2.0
+          },
+          "sgst_reimbursement_percent": 75,
+          "sgst_duration_years": 7,
+          "electricity_duty_exemption_percent": 100,
+          "electricity_duty_duration_years": 7,
+          "stamp_duty_exemption_percent": 100
+        }
+      },
+
+      "special_rule": {
+        "msme_training": {
+          "employer_epf_esi_reimbursement_percent": 50,
+          "duration_years": 7,
+          "overall_policy_ceiling_inr": 10000000
+        }
+      },
+
+      "optimizer_use": {
+        "high_relevance": [
+          "clean_production",
+          "energy_efficiency",
+          "captive_renewable_power",
+          "solar_manufacturing"
+        ],
+        "medium_relevance": [
+          "environmental_projects",
+          "green_rating"
+        ]
+      },
+
+      "source": {
+        "authority": "Government of Rajasthan",
+        "documents": [
+          "Rajasthan Investment Promotion Scheme 2024",
+          "Rajasthan Rising renewable-energy policy portal"
+        ],
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Uttar Pradesh": {
+      "state_code": "UP",
+      "policy_status": "active_policy_framework",
+      "primary_policy": {
+        "name": "Uttar Pradesh Micro, Small & Medium Enterprises Promotion Policy 2022",
+        "industrial_policy": "Uttar Pradesh Industrial Investment and Employment Promotion Policy 2022"
+      },
+
+      "msme_incentives": {
+
+        "capital_subsidy_bundelkhand_purvanchal": {
+          "micro_percent": 25,
+          "small_percent": 20,
+          "medium_percent": 15,
+          "maximum_per_unit_inr": 40000000
+        },
+
+        "capital_subsidy_madhyanchal_paschimanchal": {
+          "micro_percent": 20,
+          "small_percent": 15,
+          "medium_percent": 10,
+          "maximum_per_unit_inr": 40000000
+        },
+
+        "sc_st_women_additional_capital_subsidy_percent": 2,
+
+        "capital_subsidy_payment": {
+          "installments": 2,
+          "first_installment_condition": "completion_of_related_buildings",
+          "second_installment_condition": "at_least_50_percent_commercial_production_started"
+        },
+
+        "interest_subsidy": {
+          "eligible_enterprise_categories": [
+            "micro"
+          ],
+          "available": true,
+          "exact_rate": "policy_and_financing_condition_dependent"
+        },
+
+        "energy_water_audit": {
+          "audit_reimbursement_percent": 75,
+          "audit_maximum_inr": 50000,
+          "recommended_equipment_reimbursement_percent": 50,
+          "recommended_equipment_maximum_inr": 20000000,
+          "eligible_audit_types": [
+            "energy_conservation_audit",
+            "water_conservation_audit"
+          ],
+          "condition": "equipment must be recommended by the auditor"
+        },
+
+        "common_boiler_facility": {
+          "type": "project_capital_support",
+          "fiscal_assistance_percent": 50,
+          "maximum_inr": 5000000,
+          "minimum_participating_msm_e_units": 10,
+          "condition": "common facility rather than individual factory boiler"
+        },
+
+        "green_industrial_building_rating": {
+          "consultancy_reimbursement_percent": 50,
+          "maximum_inr": 250000,
+          "purpose": "green rating of industrial buildings"
+        },
+
+        "environment_management_laboratory": {
+          "reimbursement_percent": 50,
+          "maximum_inr": 1000000,
+          "eligible_project": [
+            "environment_management_laboratory",
+            "environment_management_system"
+          ]
+        }
+      },
+
+      "industrial_policy": {
+        "renewable_energy_sector": {
+          "recognized_as_focus_sector": true,
+          "policy_section": "Renewable Energy Solar"
+        },
+        "green_hydrogen": {
+          "recognized_as_sunrise_potential_sector": true
+        },
+        "biofuel": {
+          "recognized_as_focus_sector": true
+        }
+      },
+
+      "optimizer_relevance": {
+        "very_high": [
+          "energy_audit",
+          "energy_efficiency_equipment",
+          "common_boiler",
+          "green_building"
+        ],
+        "high": [
+          "clean_technology",
+          "renewable_energy",
+          "biofuel"
+        ]
+      },
+
+      "source": {
+        "authority": "Government of Uttar Pradesh, Invest UP",
+        "documents": [
+          "UP MSME Promotion Policy 2022",
+          "UP Industrial Investment and Employment Promotion Policy 2022"
+        ],
+        "verification_level": "primary_official"
+      }
+    },
+
+
+    "Tamil Nadu": {
+      "state_code": "TN",
+      "policy_status": "active_msm_e_incentive_portal",
+      "primary_authority": "Micro, Small and Medium Enterprises Department, Government of Tamil Nadu",
+
+      "manufacturing_incentives": {
+
+        "capital_subsidy": {
+          "type": "capital_subsidy",
+          "rate_percent": 25,
+          "maximum_inr": 15000000,
+          "eligible_cost": "eligible plant and machinery",
+          "eligible_enterprises": [
+            "micro",
+            "small",
+            "medium"
+          ],
+          "condition": "enterprise/activity must fall within the eligible manufacturing categories"
+        },
+
+        "additional_clean_technology_subsidy": {
+          "type": "capital_subsidy",
+          "rate_percent": 25,
+          "maximum_inr": 1000000,
+          "eligible_cost": "plant and machinery value installed for cleaner/environmentally friendly technology",
+          "eligible_for": [
+            "new_enterprises",
+            "existing_enterprises"
+          ],
+          "optimizer_relevance": "very_high"
+        },
+
+        "micro_enterprise_additional_capital_subsidy": {
+          "type": "additional_capital_subsidy",
+          "rate_percent": 10,
+          "maximum_inr": 500000,
+          "eligible_category": "micro"
+        },
+
+        "women_sc_st_differently_abled_transgender_additional_subsidy": {
+          "type": "additional_capital_subsidy",
+          "rate_percent": 5,
+          "maximum_inr": 500000,
+          "eligible_ownership_categories": [
+            "women",
+            "SC",
+            "ST",
+            "differently_abled",
+            "transgender"
+          ]
+        }
+      },
+
+     "low_tension_power_tariff_subsidy": {
+        "type": "power_tariff_subsidy",
+        "rate_percent": 20,
+        "duration_months": 36,
+        "eligible_power_supply": "LT Tariff III B",
+        "eligible_enterprises": [
+          "new_micro_manufacturing_enterprises_anywhere_in_state",
+          "new_small_and_medium_manufacturing_enterprises_in_eligible_industrially_backward_blocks",
+          "new_agro_based_industries_in_eligible_blocks",
+          "qualifying_existing_units_with_substantial_expansion_or_diversification"
+        ],
+        "expansion_threshold": {
+          "plant_and_machinery_increase_percent": 25,
+          "turnover_increase_percent": 25
+        },
+        "application_deadline_months": 3,
+        "multiple_connection_rule": "first LT service connection at the same premises",
+        "optimizer_relevance": "very_high"
+      },
+
+      "energy_efficiency": {
+        "PEACE": {
+          "full_name": "Promotion of Energy Audit and Conservation of Energy",
+          "active": true,
+          "purpose": [
+            "energy_audit",
+            "energy_conservation",
+            "energy_efficiency"
+          ],
+          "optimizer_relevance": "very_high"
+        }
+      },
+
+      "technology_and_sector_rules": {
+        "eligible_clean_transition_related_activities": [
+          "solar_energy_equipment",
+          "pollution_control_equipment",
+          "electric_vehicle_components",
+          "charging_infrastructure",
+          "electronic_waste_processing",
+          "industry_4_0",
+          "technical_textiles",
+          "food_processing",
+          "rubber",
+          "petrochemicals",
+          "pharmaceuticals"
+        ],
+        "important_rule": "The technology/project must fall within the state's eligible activity list."
+      },
+
+      "ineligible_activities_for_general_capital_subsidy": [
+        "sugar",
+        "distilleries",
+        "brewery_and_malt_extraction",
+        "fertilizer",
+        "mining_and_quarrying",
+        "iron_and_steel_smelting",
+        "cement",
+        "aluminium_smelting",
+        "caustic_soda",
+        "nylon_fibre",
+        "rayon_fibre",
+        "polyester_fibre",
+        "ozone_depleting_substance_related_industry"
+      ],
+
+      "optimizer_rules": {
+        "manufacturing_only_for_general_capital_subsidy": true,
+        "service_enterprises_not_eligible_for_general_capital_subsidy": true,
+        "capital_subsidy_application_deadline_years_after_commercial_production": 1,
+        "actual_claim_requires_document_verification": true
+      },
+
+      "source": {
+        "authority": "Government of Tamil Nadu, MSME Department",
+        "documents": [
+          "Capital Subsidy Guidelines",
+          "Low Tension Power Tariff Subsidy Guidelines",
+          "PEACE programme information"
+        ],
+        "verification_level": "primary_official"
+      }
+    }
+  },
+
+  "state_selection_logic": {
+    "required_factory_fields": [
+      "state",
+      "district",
+      "block_or_taluka",
+      "enterprise_category",
+      "industry_sector",
+      "project_type",
+      "new_or_existing",
+      "expansion_or_modernization",
+      "project_cost_inr",
+      "loan_amount_inr"
+    ],
+
+    "policy_match_order": [
+      "state",
+      "policy_status",
+      "district_or_taluka",
+      "enterprise_category",
+      "industry_sector",
+      "project_type",
+      "project_status",
+      "special_category",
+      "financial_limits"
+    ],
+
+    "if_state_not_supported": {
+      "status": "insufficient_data",
+      "do_not_apply_generic_subsidy": true,
+      "recommendation": "Use verified state policy source before applying any state incentive."
+    }
+  },
+
+  "pathway_policy_mapping": {
+    "electric_boiler": {
+      "high_priority_states": [
+        "Karnataka",
+        "Tamil Nadu",
+        "Gujarat",
+        "Maharashtra"
+      ],
+      "policy_checks": [
+        "clean_technology_capital_support",
+        "energy_efficiency_support",
+        "power_tariff_subsidy",
+        "electricity_duty"
+      ]
+    },
+
+    "heat_pump": {
+      "high_priority_states": [
+        "Karnataka",
+        "Tamil Nadu",
+        "Gujarat",
+        "Maharashtra"
+      ],
+      "policy_checks": [
+        "clean_technology_support",
+        "energy_efficiency_support",
+        "electricity_cost_support"
+      ]
+    },
+
+    "solar_pv": {
+      "policy_checks": [
+        "state_rooftop_solar_rules",
+        "electricity_duty",
+        "power_tariff",
+        "net_metering",
+        "renewable_energy_policy"
+      ],
+      "important_rule": "Solar generation incentives are not automatically equivalent to industrial-capital subsidies."
+    },
+
+    "biomass_boiler": {
+      "policy_checks": [
+        "clean_production",
+        "renewable_energy",
+        "bioenergy",
+        "environmental_compliance"
+      ],
+      "important_rule": "A biomass boiler for process heat must not be counted as renewable electricity for RPO/RCO purposes."
+    },
+
+    "waste_heat_recovery": {
+      "policy_checks": [
+        "energy_efficiency",
+        "cleaner_production",
+        "environmental_equipment"
+      ]
+    },
+
+    "battery_storage": {
+      "policy_checks": [
+        "renewable_integration",
+        "energy_efficiency",
+        "diesel_backup_replacement"
+      ]
+    }
+  },
+
+  "benefit_convergence_rules": {
+    "central_plus_state": {
+      "allowed": true,
+      "condition": "Both policies explicitly permit concurrent benefits and the same expenditure is not claimed twice."
+    },
+    "same_cost_component": {
+      "rule": "Do not subtract two subsidies from the same eligible cost unless the underlying policy explicitly permits stacking."
+    },
+    "tax_reimbursement": {
+      "rule": "SGST reimbursement must be modelled as a future tax-linked cashflow, not as an immediate CapEx reduction."
+    },
+    "interest_subsidy": {
+      "rule": "Interest subsidy affects financing cost and must not be deducted from initial project CAPEX."
+    },
+    "electricity_duty": {
+      "rule": "Electricity-duty exemption affects operating cost and must not be treated as a capital grant."
+    }
+  },
+
+  "state_policy_engine_output": {
+    "required_fields": [
+      "state",
+      "policy_id",
+      "eligibility_status",
+      "benefit_type",
+      "benefit_value",
+      "benefit_unit",
+      "maximum_benefit",
+      "duration",
+      "conditions",
+      "source",
+      "verification_status"
+    ],
+
+    "eligibility_status_values": [
+      "eligible",
+      "not_eligible",
+      "conditionally_eligible",
+      "insufficient_data",
+      "expired"
+    ],
+
+    "verification_status_values": [
+      "primary_official",
+      "primary_policy_plus_official_portal",
+      "secondary_summary_requires_primary_confirmation"
+    ]
+  },
+
+  "unsupported_state_behavior": {
+    "states_not_yet_populated": [
+      "Andhra Pradesh",
+      "Arunachal Pradesh",
+      "Assam",
+      "Bihar",
+      "Chhattisgarh",
+      "Goa",
+      "Jharkhand",
+      "Jammu and Kashmir",
+      "Kerala",
+      "Madhya Pradesh",
+      "Manipur",
+      "Meghalaya",
+      "Mizoram",
+      "Nagaland",
+      "Odisha",
+      "Sikkim",
+      "Telangana",
+      "Tripura",
+      "Uttarakhand",
+      "West Bengal",
+      "Delhi",
+      "Chandigarh",
+      "Puducherry",
+      "Ladakh",
+      "Andaman and Nicobar Islands",
+      "Dadra and Nagar Haveli and Daman and Diu",
+      "Lakshadweep"
+    ],
+    "engine_action": "Return insufficient_data for state incentive calculation rather than applying a national default.",
+    "reason": "State incentive structures are location, sector, enterprise-category and policy-period dependent."
+  },
+
+  "source_registry": {
+    "Himachal_Pradesh": {
+      "authority": "Department of Industries, Government of Himachal Pradesh",
+      "policy": "Industrial Investment Policy 2019 and amendments through 2023"
+    },
+    "Punjab": {
+      "authority": "Department of Industries and Commerce, Government of Punjab",
+      "policy": "Industrial and Business Development Policy 2022"
+    },
+    "Gujarat": {
+      "authority": "Industries Commissionerate, Government of Gujarat",
+      "policy": "Gujarat Industrial Policy 2020"
+    },
+    "Maharashtra": {
+      "authority": "Industries, Investment and Services Department, Government of Maharashtra",
+      "policy": "Maharashtra Industries, Investment and Services Policy 2025"
+    },
+    "Karnataka": {
+      "authority": "Department of Industries and Commerce, Government of Karnataka",
+      "policy": "Industrial Policy 2025-30 and operative guidelines approved 2026-04-10"
+    },
+    "Rajasthan": {
+      "authority": "Government of Rajasthan",
+      "policy": "Rajasthan Investment Promotion Scheme 2024"
+    },
+    "Uttar_Pradesh": {
+      "authority": "Invest UP, Government of Uttar Pradesh",
+      "policy": "UP MSME Promotion Policy 2022 and Industrial Investment and Employment Promotion Policy 2022"
+    },
+    "Tamil_Nadu": {
+      "authority": "Micro, Small and Medium Enterprises Department, Government of Tamil Nadu",
+      "policy": "MSME capital subsidy, LTPT subsidy and PEACE framework"
+    }
+  },
+
+  "maintenance": {
+    "review_frequency": "quarterly",
+    "mandatory_review_triggers": [
+      "new state industrial policy",
+      "state budget",
+      "policy extension",
+      "policy amendment",
+      "new electricity-duty notification",
+      "new renewable-energy policy",
+      "new MSME incentive notification",
+      "new clean-technology incentive",
+      "new power-tariff subsidy",
+      "policy expiry"
+    ],
+    "hard_rule": "A policy must never be marked active solely because it appeared in an old industrial-policy document. Its current validity must be checked against the responsible state government's latest notification or portal.",
+    "stale_after_days": 180
+  }
+}
