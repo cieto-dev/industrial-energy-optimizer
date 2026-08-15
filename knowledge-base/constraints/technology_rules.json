@@ -1,0 +1,233 @@
+{
+  "heat_pump": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "paper",
+      "dairy"
+    ],
+    "replaces_fuels": [
+      "natural_gas",
+      "coal",
+      "diesel",
+      "furnace_oil",
+      "lpg"
+    ],
+    "requires": [
+      "electricity"
+    ],
+    "requires_grid": true,
+    "requires_biomass_supply": false,
+    "requires_roof": false,
+    "requires_solar_resource": false,
+    "compatible_with": [
+      "solar_thermal",
+      "thermal_storage",
+      "waste_heat_recovery"
+    ],
+    "incompatible_with": [],
+    "maximum_process_temperature_c": 180,
+    "continuous_operation_required": false,
+    "retrofit_supported": true
+  },
+
+  "electric_boiler": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "paper",
+      "dairy"
+    ],
+    "replaces_fuels": [
+      "coal",
+      "natural_gas",
+      "diesel",
+      "furnace_oil",
+      "lpg",
+      "biomass"
+    ],
+    "requires": [
+      "electricity"
+    ],
+    "requires_grid": true,
+    "requires_biomass_supply": false,
+    "requires_roof": false,
+    "requires_solar_resource": false,
+    "compatible_with": [
+      "solar_pv",
+      "thermal_storage"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": false,
+    "retrofit_supported": true
+  },
+
+  "biomass_boiler": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "paper",
+      "dairy",
+      "cement",
+      "steel"
+    ],
+    "replaces_fuels": [
+      "coal",
+      "natural_gas",
+      "diesel",
+      "furnace_oil",
+      "lpg"
+    ],
+    "requires": [
+      "biomass_supply"
+    ],
+    "requires_grid": false,
+    "requires_biomass_supply": true,
+    "requires_roof": false,
+    "requires_solar_resource": false,
+    "compatible_with": [
+      "thermal_storage"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": true,
+    "retrofit_supported": true
+  },
+
+  "solar_thermal": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "dairy"
+    ],
+    "replaces_fuels": [
+      "natural_gas",
+      "coal",
+      "diesel",
+      "furnace_oil",
+      "lpg",
+      "biomass"
+    ],
+    "requires": [
+      "solar_resource",
+      "available_space"
+    ],
+    "requires_grid": false,
+    "requires_biomass_supply": false,
+    "requires_roof": true,
+    "requires_solar_resource": true,
+    "minimum_roof_area_m2": 400,
+    "compatible_with": [
+      "thermal_storage",
+      "electric_boiler",
+      "heat_pump",
+      "biomass_boiler"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": false,
+    "retrofit_supported": true
+  },
+
+  "solar_pv": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "paper",
+      "dairy",
+      "cement",
+      "steel"
+    ],
+    "replaces_fuels": [],
+    "requires": [
+      "solar_resource",
+      "available_space"
+    ],
+    "requires_grid": false,
+    "requires_biomass_supply": false,
+    "requires_roof": true,
+    "requires_solar_resource": true,
+    "minimum_roof_area_m2": 100,
+    "compatible_with": [
+      "electric_boiler",
+      "heat_pump",
+      "thermal_storage"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": false,
+    "retrofit_supported": true
+  },
+
+  "thermal_storage": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharmaceutical",
+      "chemical",
+      "paper",
+      "dairy",
+      "cement",
+      "steel"
+    ],
+    "replaces_fuels": [],
+    "requires": [
+      "heat_source"
+    ],
+    "requires_grid": false,
+    "requires_biomass_supply": false,
+    "requires_roof": false,
+    "requires_solar_resource": false,
+    "compatible_with": [
+      "solar_thermal",
+      "solar_pv",
+      "electric_boiler",
+      "heat_pump",
+      "biomass_boiler",
+      "waste_heat_recovery"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": false,
+    "retrofit_supported": true
+  },
+
+  "waste_heat_recovery": {
+    "allowed_industries": [
+      "cement",
+      "steel",
+      "chemical",
+      "glass",
+      "paper",
+      "food_processing"
+    ],
+    "replaces_fuels": [
+      "coal",
+      "natural_gas",
+      "diesel",
+      "furnace_oil",
+      "lpg",
+      "biomass"
+    ],
+    "requires": [
+      "recoverable_waste_heat"
+    ],
+    "requires_grid": false,
+    "requires_biomass_supply": false,
+    "requires_roof": false,
+    "requires_solar_resource": false,
+    "compatible_with": [
+      "thermal_storage",
+      "heat_pump"
+    ],
+    "incompatible_with": [],
+    "continuous_operation_required": true,
+    "retrofit_supported": true
+  }
+}
