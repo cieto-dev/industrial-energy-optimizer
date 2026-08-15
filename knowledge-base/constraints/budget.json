@@ -1,0 +1,791 @@
+{
+  "schema_version": "1.0",
+  "file_purpose": "Runtime financial/budget data for the Constraint Engine (feasibility) and Finance Layer (cost, savings, payback). Research narrative, caveats, and full source discussion live in sources.json / citations.json and are linked here by source_id only -- this file stays numeric and queryable.",
+  "units": {
+    "currency": "INR unless a unit field explicitly says otherwise (e.g. USD_per_kW)",
+    "electricity_energy_charge": "INR_per_kWh",
+    "electricity_fixed_charge": "INR_per_kW_month (see fixed_charge_basis if not per-kW)",
+    "electricity_demand_charge": "INR_per_kVA_month",
+    "fuel_price": "see unit field on each record (INR_per_tonne, INR_per_kg, INR_per_litre, INR_per_SCM)",
+    "capex": "see unit field on each record (INR_per_kW, INR_per_kWh, INR_lakh, USD_per_kW, etc. -- deliberately not force-converted to a single currency; see fx_conversion_policy)",
+    "opex": "INR_per_year unless stated otherwise",
+    "percentage_fields": "plain percent, e.g. 5.25 means 5.25%, not a fraction",
+    "lifetime": "years"
+  },
+  "fx_conversion_policy": "USD-denominated capex figures (WHR, thermal storage, hydrogen) are NOT converted to INR in this file. No verified INR/USD assumption was sourced for this dataset, and silently converting would present a fabricated exchange-rate assumption as sourced data. Convert at query time using a live rate.",
+  "confidence_scale": {
+    "high": "Primary/official source: regulator tariff order, government-notified price, or codified formula.",
+    "medium": "Credible India-specific secondary source (industry report, marketplace listing, aggregator), not primary.",
+    "low": "Global/non-India source, vendor-marketing claim, or single unverified source."
+  },
+  "msme_classification_thresholds": {
+    "id": "MSME_THRESH_2025",
+    "effective_from": "2025-04-01",
+    "governing_act": "MSMED Act 2006, via Udyam Registration",
+    "micro": {
+      "investment_inr_crore_max": 2.5,
+      "turnover_inr_crore_max": 10
+    },
+    "small": {
+      "investment_inr_crore_max": 25,
+      "turnover_inr_crore_max": 100
+    },
+    "medium": {
+      "investment_inr_crore_max": 125,
+      "turnover_inr_crore_max": 500
+    },
+    "confidence": "high",
+    "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
+  },
+  "electricity_tariffs": [
+    {
+      "id": "ELEC_TN_HT_IND",
+      "state": "Tamil Nadu",
+      "discom": "TANGEDCO",
+      "category": "HT_Industrial",
+      "voltage_level": "11kV+ (HV-3.1)",
+      "energy_charge_inr_per_kwh": 7.5,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 608,
+      "additional_surcharges_inr_per_kwh": {
+        "cross_subsidy": 1.99,
+        "wheeling": 1.03
+      },
+      "effective_from": "2025-07-01",
+      "confidence": "high",
+      "source_id": "SRC_TNERC_ORDER6_2025"
+    },
+    {
+      "id": "ELEC_UP_11KV",
+      "state": "Uttar Pradesh",
+      "discom": "UPPCL / UPERC",
+      "category": "Industrial",
+      "voltage_level": "11kV",
+      "energy_charge_inr_per_kvah": 7.1,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": null,
+      "wheeling_charge_inr_per_kwh": 1,
+      "transmission_charge_inr_per_kwh": 0.27,
+      "unit_note": "Billed per kVAh, not kWh -- do not treat as directly equal to kWh rate without a power-factor adjustment.",
+      "effective_from": "2025-04-01 (flat, no FY26 hike)",
+      "confidence": "medium",
+      "source_id": "SRC_UPERC_FY26"
+    },
+    {
+      "id": "ELEC_UP_11_66KV",
+      "state": "Uttar Pradesh",
+      "discom": "UPPCL / UPERC",
+      "category": "Industrial",
+      "voltage_level": "11-66kV",
+      "energy_charge_inr_per_kvah": 6.8,
+      "effective_from": "2025-04-01",
+      "confidence": "medium",
+      "source_id": "SRC_UPERC_FY26"
+    },
+    {
+      "id": "ELEC_UP_66_132KV",
+      "state": "Uttar Pradesh",
+      "discom": "UPPCL / UPERC",
+      "category": "Industrial",
+      "voltage_level": "66-132kV",
+      "energy_charge_inr_per_kvah": 6.4,
+      "effective_from": "2025-04-01",
+      "confidence": "medium",
+      "source_id": "SRC_UPERC_FY26"
+    },
+    {
+      "id": "ELEC_UP_ABV132KV",
+      "state": "Uttar Pradesh",
+      "discom": "UPPCL / UPERC",
+      "category": "Industrial",
+      "voltage_level": "above 132kV",
+      "energy_charge_inr_per_kvah": 6.1,
+      "effective_from": "2025-04-01",
+      "confidence": "medium",
+      "source_id": "SRC_UPERC_FY26"
+    },
+    {
+      "id": "ELEC_GJ_LT_GEN",
+      "state": "Gujarat",
+      "discom": "UGVCL/PGVCL/MGVCL/DGVCL",
+      "category": "LT_General_incl_Industrial",
+      "voltage_level": "LT, 10-40kW",
+      "energy_charge_inr_per_kwh": 4.65,
+      "fixed_charge_inr_per_kw_month": 85,
+      "demand_charge_inr_per_kva_month": null,
+      "effective_from": "2024-06-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_GJ_HT_GEN",
+      "state": "Gujarat",
+      "discom": "UGVCL/PGVCL/MGVCL/DGVCL",
+      "category": "HT_General_incl_Industrial",
+      "voltage_level": "100kVA+ (HTP-I)",
+      "energy_charge_inr_per_kwh": 4,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 150,
+      "effective_from": "2024-06-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_KA_LT5_IND",
+      "state": "Karnataka",
+      "discom": "BESCOM / KERC",
+      "category": "LT_Industrial",
+      "voltage_level": "LT-5",
+      "energy_charge_inr_per_kwh": 5.2,
+      "fixed_charge_inr_per_hp_month": 165,
+      "demand_charge_inr_per_kva_month": null,
+      "unit_note": "Fixed charge is per HP, not per kW.",
+      "effective_from": "2025-03 (FY2025-26 order)",
+      "confidence": "high",
+      "source_id": "SRC_KERC_MAR2025_ORDER"
+    },
+    {
+      "id": "ELEC_KA_HT2A_IND",
+      "state": "Karnataka",
+      "discom": "BESCOM / KERC",
+      "category": "HT_Industrial",
+      "voltage_level": "HT-2a",
+      "energy_charge_inr_per_kwh": 6.7,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 365,
+      "effective_from": "2025-03 (FY2025-26 order)",
+      "confidence": "high",
+      "source_id": "SRC_KERC_MAR2025_ORDER"
+    },
+    {
+      "id": "ELEC_HR_LT_IND",
+      "state": "Haryana",
+      "discom": "UHBVN/DHBVN",
+      "category": "LT_Industry_20_50kW",
+      "voltage_level": "LT",
+      "energy_charge_inr_per_kwh": 6.4,
+      "fixed_charge_inr_per_kw_month": 160,
+      "demand_charge_inr_per_kva_month": null,
+      "effective_from": "2024-04-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_HR_HT_IND",
+      "state": "Haryana",
+      "discom": "UHBVN/DHBVN",
+      "category": "HT_Industry",
+      "voltage_level": "11kV",
+      "energy_charge_inr_per_kwh": 6.65,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 165,
+      "effective_from": "2024-04-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_HP_LT_SIP",
+      "state": "Himachal Pradesh",
+      "discom": "HPSEBL",
+      "category": "LT_Small_Industrial_Power_Supply",
+      "voltage_level": "<=20kVA",
+      "energy_charge_inr_per_kwh": 5.92,
+      "fixed_charge_inr_per_month_flat": 155,
+      "demand_charge_inr_per_kva_month": null,
+      "effective_from": "2024-04-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_HP_HT1_IND",
+      "state": "Himachal Pradesh",
+      "discom": "HPSEBL",
+      "category": "HT1_Industrial",
+      "voltage_level": "upto 1MVA",
+      "energy_charge_inr_per_kwh": 6.06,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 250,
+      "effective_from": "2024-04-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_JK_LT_IND",
+      "state": "Jammu & Kashmir",
+      "discom": "JPDCL/KPDCL",
+      "category": "LT_Industrial",
+      "voltage_level": "<50kW",
+      "energy_charge_inr_per_kwh": 4.2,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 60,
+      "effective_from": "2023-12-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    },
+    {
+      "id": "ELEC_JK_HT_IND",
+      "state": "Jammu & Kashmir",
+      "discom": "JPDCL/KPDCL",
+      "category": "HT_Industrial",
+      "voltage_level": "11kV",
+      "energy_charge_inr_per_kwh": 4.1,
+      "fixed_charge_inr_per_kw_month": null,
+      "demand_charge_inr_per_kva_month": 175,
+      "tod_ref_id": "TOD_JK_HT_33KV",
+      "effective_from": "2023-12-01",
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    }
+  ],
+  "electricity_tod_rules": [
+    {
+      "id": "TOD_JK_HT_33KV",
+      "applies_to": "ELEC_JK_HT_IND",
+      "voltage_scope": "33kV and above only (not applicable at 11kV)",
+      "peak_hours": "06:00-08:00, 18:00-22:00",
+      "peak_multiplier_pct_of_base": 120,
+      "offpeak_hours": "23:00-05:00",
+      "offpeak_multiplier_pct_of_base": 90,
+      "confidence": "high",
+      "source_id": "SRC_TARIFF_MASTER_REPO"
+    }
+  ],
+  "electricity_coverage_gap": "No tariff record exists for Punjab or Uttarakhand -- both are target regions per district_coordinates_6_regions.csv. Needs PSPCL (Punjab) and UPCL (Uttarakhand) tariff orders before the optimizer can run for those regions.",
+  "fuel_prices": [
+    {
+      "id": "FUEL_COAL_EXMINE_G3",
+      "fuel": "coal",
+      "variant": "G3_high_grade",
+      "price_basis": "ex_mine_notified",
+      "unit": "INR_per_tonne",
+      "price": 5987,
+      "as_of": "2026-03 to 2026-06",
+      "confidence": "high",
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
+    },
+    {
+      "id": "FUEL_COAL_EXMINE_G11",
+      "fuel": "coal",
+      "variant": "G11_mid_grade",
+      "price_basis": "ex_mine_notified",
+      "unit": "INR_per_tonne",
+      "price": 1881,
+      "as_of": "2026-03 to 2026-06",
+      "confidence": "high",
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
+    },
+    {
+      "id": "FUEL_COAL_EXMINE_G13",
+      "fuel": "coal",
+      "variant": "G13_mid_low_grade",
+      "price_basis": "ex_mine_notified",
+      "unit": "INR_per_tonne",
+      "price": 1849,
+      "as_of": "2026-03 to 2026-06",
+      "confidence": "high",
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
+    },
+    {
+      "id": "FUEL_COAL_EXMINE_G15",
+      "fuel": "coal",
+      "variant": "G15_low_grade",
+      "price_basis": "ex_mine_notified",
+      "unit": "INR_per_tonne",
+      "price": 972,
+      "as_of": "2026-03 to 2026-06",
+      "confidence": "high",
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
+    },
+    {
+      "id": "FUEL_COAL_DELIVERED_MSME",
+      "fuel": "coal",
+      "variant": "industrial_non_coking",
+      "price_basis": "delivered_estimate_landed_cost",
+      "unit": "INR_per_kg",
+      "price": 8.5,
+      "note": "Not directly reconcilable with ex-mine grade prices above without a stated freight assumption -- treat as an independent delivered-cost estimate, not ex-mine + known transport.",
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_DIESEL_RETAIL",
+      "fuel": "diesel_hsd",
+      "variant": "industrial_bulk",
+      "price_basis": "retail_reference",
+      "unit": "INR_per_litre",
+      "price": 137.81,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_LPG_INDUSTRIAL",
+      "fuel": "lpg",
+      "variant": "industrial",
+      "price_basis": "retail_reference",
+      "unit": "INR_per_kg",
+      "price": 151.18,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_PNG_INDUSTRIAL",
+      "fuel": "natural_gas_png",
+      "variant": "industrial",
+      "price_basis": "retail_reference",
+      "unit": "INR_per_SCM",
+      "price": 50,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_RICE_HUSK",
+      "fuel": "biomass",
+      "variant": "rice_husk_loose",
+      "unit": "INR_per_kg",
+      "price": 8,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_WHEAT_STRAW",
+      "fuel": "biomass",
+      "variant": "wheat_straw_loose",
+      "unit": "INR_per_kg",
+      "price": 3,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_BAGASSE_WET",
+      "fuel": "biomass",
+      "variant": "bagasse_wet",
+      "unit": "INR_per_kg",
+      "price": 2.5,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_BAGASSE_DRY",
+      "fuel": "biomass",
+      "variant": "bagasse_dry",
+      "unit": "INR_per_kg",
+      "price": 3.5,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_WOOD_CHIPS",
+      "fuel": "biomass",
+      "variant": "wood_chips_industrial",
+      "unit": "INR_per_kg",
+      "price": 5.5,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_BRIQUETTES",
+      "fuel": "biomass",
+      "variant": "briquettes_industrial",
+      "unit": "INR_per_kg",
+      "price": 12.5,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_PELLETS",
+      "fuel": "biomass",
+      "variant": "pellets_industrial",
+      "unit": "INR_per_kg",
+      "price": 9,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_RICE_HUSK_PELLETS",
+      "fuel": "biomass",
+      "variant": "rice_husk_pellets",
+      "unit": "INR_per_kg",
+      "price": 10.5,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_PADDY_STRAW_PELLETS",
+      "fuel": "biomass",
+      "variant": "paddy_straw_parali_pellets",
+      "unit": "INR_per_kg",
+      "price": 11,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    },
+    {
+      "id": "FUEL_BIOMASS_WOOD_PELLETS",
+      "fuel": "biomass",
+      "variant": "wood_pellets",
+      "unit": "INR_per_kg",
+      "price": 15.75,
+      "confidence": "medium",
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+    }
+  ],
+  "fuel_price_escalation": [
+    {
+      "id": "ESC_COAL",
+      "fuel": "coal",
+      "pct_per_year_min": 5,
+      "pct_per_year_max": 7,
+      "pct_per_year_point": 6,
+      "confidence": "low",
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
+    },
+    {
+      "id": "ESC_NATURAL_GAS",
+      "fuel": "natural_gas_apm",
+      "pct_per_year_min": 3.5,
+      "pct_per_year_max": 4,
+      "pct_per_year_point": 4,
+      "confidence": "high",
+      "source_id": "SRC_PPAC_APM_FORMULA"
+    },
+    {
+      "id": "ESC_BIOMASS",
+      "fuel": "biomass",
+      "pct_per_year_min": 4,
+      "pct_per_year_max": 6,
+      "pct_per_year_point": 5,
+      "confidence": "low",
+      "source_id": "SRC_MOP_COFIRING_POLICY"
+    }
+  ],
+  "technology_costs": [
+    {
+      "id": "TECH_SOLAR_PV",
+      "technology": "solar_pv_industrial",
+      "capex_unit": "INR_per_kW",
+      "capex_min": 35000,
+      "capex_max": 50000,
+      "lifetime_years": 25,
+      "confidence": "medium",
+      "source_id": "SRC_SOLAR_VENDOR_COMPILE"
+    },
+    {
+      "id": "TECH_WHR",
+      "technology": "waste_heat_recovery",
+      "capex_unit": "USD_per_kW_thermal_recovered",
+      "capex_min": 300,
+      "capex_max": 900,
+      "lifetime_years": null,
+      "feasibility_flue_gas_temp_min_c": 500,
+      "confidence": "low",
+      "source_id": "SRC_WHR_GLOBAL_BENCHMARK"
+    },
+    {
+      "id": "TECH_VFD",
+      "technology": "variable_frequency_drive",
+      "capex_unit": "INR_per_kW",
+      "capex_min": 1335,
+      "capex_max": 8167,
+      "lifetime_years": null,
+      "note": "Range from 4 discrete IndiaMART listings (1.5-132kW), not a fitted curve.",
+      "confidence": "medium",
+      "source_id": "SRC_VFD_INDIAMART"
+    },
+    {
+      "id": "TECH_MOTOR_IE3_IE4_PREMIUM",
+      "technology": "motor_ie3_to_ie4_upgrade",
+      "capex_unit": "percent_premium_over_ie3_base_cost",
+      "capex_min": 20,
+      "capex_max": 30,
+      "lifetime_years": 12,
+      "confidence": "low",
+      "source_id": "SRC_MOTOR_IE4_GLOBAL"
+    },
+    {
+      "id": "TECH_BIOMASS_BOILER_1_10TPH",
+      "technology": "biomass_boiler_new_install",
+      "capacity_band": "1-10 TPH",
+      "capex_unit": "INR_lakh",
+      "capex_min": 15,
+      "capex_max": 50,
+      "lifetime_years": 15,
+      "confidence": "medium",
+      "source_id": "SRC_BIOMASS_BOILER_CHEEMA"
+    },
+    {
+      "id": "TECH_BIOMASS_BOILER_ABOVE_10TPH",
+      "technology": "biomass_boiler_new_install",
+      "capacity_band": "above 10 TPH",
+      "capex_unit": "INR_lakh",
+      "capex_min": 60,
+      "capex_max": null,
+      "lifetime_years": 15,
+      "confidence": "medium",
+      "source_id": "SRC_BIOMASS_BOILER_CHEEMA"
+    },
+    {
+      "id": "TECH_THERMAL_STORAGE",
+      "technology": "thermal_storage",
+      "capex_unit": "USD_per_kWh_thermal",
+      "capex_min": 4.55,
+      "capex_max": 4.55,
+      "max_temp_c": 1000,
+      "lifetime_years": null,
+      "confidence": "low",
+      "source_id": "SRC_THERMAL_STORAGE_ACADEMIC"
+    },
+    {
+      "id": "TECH_BATTERY_STORAGE",
+      "technology": "battery_storage_ci",
+      "capex_unit": "INR_per_kWh",
+      "capex_min": 37000,
+      "capex_max": 62000,
+      "lifetime_years": 10,
+      "confidence": "medium",
+      "source_id": "SRC_BATTERY_STORAGE_INDIA_CI"
+    },
+    {
+      "id": "TECH_HYDROGEN_ELECTROLYSIS",
+      "technology": "hydrogen_electrolysis",
+      "capex_unit": "USD_per_kW",
+      "capex_min": 620,
+      "capex_max": 960,
+      "capex_context": "IEA 2030 projection; real-world installed caution figure is 1900 USD_per_kW",
+      "lifetime_years": null,
+      "confidence": "low",
+      "source_id": "SRC_HYDROGEN_IEA_GLOBAL"
+    },
+    {
+      "id": "TECH_BOILER_GENERIC",
+      "technology": "boiler_generic",
+      "capex_unit": null,
+      "capex_min": null,
+      "capex_max": null,
+      "lifetime_years": 15,
+      "confidence": "high",
+      "source_id": "SRC_PROJECT_DEFAULTS"
+    },
+    {
+      "id": "TECH_MOTOR_GENERIC",
+      "technology": "motor_generic",
+      "capex_unit": null,
+      "capex_min": null,
+      "capex_max": null,
+      "lifetime_years": 12,
+      "confidence": "high",
+      "source_id": "SRC_PROJECT_DEFAULTS"
+    }
+  ],
+  "subsidy_schemes": [
+    {
+      "id": "SUB_CLCSS",
+      "name": "Credit Linked Capital Subsidy Scheme",
+      "type": "capital_subsidy_pct",
+      "value_pct": 15,
+      "applicable_to": "MSME (not large industry)",
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_CLCSS_SCHEME"
+    },
+    {
+      "id": "SUB_CGTMSE",
+      "name": "Credit Guarantee Fund Trust for Micro and Small Enterprises",
+      "type": "collateral_free_loan_guarantee",
+      "guarantee_coverage_pct_min": 75,
+      "guarantee_coverage_pct_max": 90,
+      "loan_cap_inr_crore": 2,
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_CGTMSE"
+    },
+    {
+      "id": "SUB_PSL_RE",
+      "name": "Priority Sector Lending -- Renewable Energy subcategory",
+      "type": "loan_rate_and_cap",
+      "per_borrower_loan_cap_inr_crore": 35,
+      "lending_rate_pct_min": 8,
+      "lending_rate_pct_max": 10,
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_PSL_RBI_2025"
+    },
+    {
+      "id": "SUB_MNRE_NBP_PELLET",
+      "name": "National Bioenergy Programme -- briquette/pellet manufacturing CFA",
+      "type": "capital_subsidy_flat_per_capacity",
+      "value_inr_per_mtph": 900000,
+      "cap_inr": 4500000,
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_MNRE_NBP"
+    },
+    {
+      "id": "SUB_MNRE_NBP_COGEN",
+      "name": "National Bioenergy Programme -- non-bagasse cogeneration CFA",
+      "type": "capital_subsidy_flat_per_capacity",
+      "value_inr_per_mw": 4000000,
+      "cap_inr": 50000000,
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_MNRE_NBP"
+    },
+    {
+      "id": "SUB_SIDBI_MSE_GIFT",
+      "name": "SIDBI MSE-GIFT interest subvention",
+      "type": "interest_subvention_pct",
+      "value_pct": 2,
+      "max_capital_layout_inr_crore": 2,
+      "example_use_case": "coal-to-biomass boiler switch, VFD installation",
+      "status": "live",
+      "confidence": "high",
+      "source_id": "SRC_SIDBI_MSE_GIFT"
+    },
+    {
+      "id": "SUB_NITI_MSME_SOLAR_CFA",
+      "name": "NITI Aayog proposed MSME rooftop solar capital subsidy (PM-Surya-Ghar-like)",
+      "type": "capital_subsidy_pct_proposed",
+      "value_pct_upto_3kw": 40,
+      "value_pct_3_to_10kw": 20,
+      "status": "proposed_not_live",
+      "confidence": "low",
+      "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
+    },
+    {
+      "id": "SUB_NITI_VGF",
+      "name": "NITI Aayog proposed sector-wide Viability Gap Funding",
+      "type": "sector_fund_proposed",
+      "value_inr_crore": 6000,
+      "status": "proposed_not_live_not_allocated",
+      "confidence": "low",
+      "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
+    }
+  ],
+  "financial_assumptions": {
+    "id": "FIN_ASSUMPTIONS_2026",
+    "discount_rate_pct": 5.25,
+    "discount_rate_basis": "RBI repo rate, 3-5 Aug 2026 MPC meeting",
+    "msme_lending_rate_pct_min": 9,
+    "msme_lending_rate_pct_max": 16,
+    "msme_lending_rate_pct_point_estimate": 12.5,
+    "inflation_near_term_pct": 5,
+    "inflation_near_term_horizon": "FY2026-27, RBI projection",
+    "inflation_long_run_pct": 4,
+    "inflation_long_run_horizon": "RBI FIT target midpoint, 2026-2031",
+    "confidence": "high",
+    "source_id": "SRC_RBI_MPC_AUG2026"
+  },
+  "sources": [
+    {
+      "id": "SRC_TNERC_ORDER6_2025",
+      "label": "TNERC Order No. 6 of 2025 (effective 2025-07-01)"
+    },
+    {
+      "id": "SRC_UPERC_FY26",
+      "label": "UPERC FY26 tariff schedule"
+    },
+    {
+      "id": "SRC_KERC_MAR2025_ORDER",
+      "label": "KERC tariff order, March 2025, effective FY2025-26"
+    },
+    {
+      "id": "SRC_TARIFF_MASTER_REPO",
+      "label": "project repo datasets/electricity_tariffs/tariff_master.csv + tariff_tod.csv, compiled from state DISCOM tariff orders"
+    },
+    {
+      "id": "SRC_COAL_INDIA_NOTIFIED",
+      "label": "Coal India Ltd notified prices, via Ministry of Coal / CEIC"
+    },
+    {
+      "id": "SRC_INDUSTRIAL_FUELS_CSV",
+      "label": "project repo datasets/industrial_fuels.csv (BEE + IPCC + supplier quotation compile)"
+    },
+    {
+      "id": "SRC_PPAC_APM_FORMULA",
+      "label": "PPAC / Kirit Parikh Committee APM gas pricing formula (2023 reform)"
+    },
+    {
+      "id": "SRC_MOP_COFIRING_POLICY",
+      "label": "Ministry of Power biomass co-firing policy, Nov 2023 (revised, effective FY2024-25)"
+    },
+    {
+      "id": "SRC_SOLAR_VENDOR_COMPILE",
+      "label": "8+ independent Indian solar EPC vendor quotes, aggregated"
+    },
+    {
+      "id": "SRC_WHR_GLOBAL_BENCHMARK",
+      "label": "coalbiomassboiler.com industrial WHRB cost-range compilation (non-India)"
+    },
+    {
+      "id": "SRC_VFD_INDIAMART",
+      "label": "IndiaMART/Moglix marketplace retail listings"
+    },
+    {
+      "id": "SRC_MOTOR_IE4_GLOBAL",
+      "label": "iecmotores.com global motor-manufacturer technical comparison (non-India)"
+    },
+    {
+      "id": "SRC_BIOMASS_BOILER_CHEEMA",
+      "label": "Cheema Boilers industrial biomass boiler pricing guide"
+    },
+    {
+      "id": "SRC_THERMAL_STORAGE_ACADEMIC",
+      "label": "ScienceDirect peer-reviewed FIRES-type thermal storage cost benchmark (US-centric)"
+    },
+    {
+      "id": "SRC_BATTERY_STORAGE_INDIA_CI",
+      "label": "ornatesolar.com India C&I BESS capex reference, 2025"
+    },
+    {
+      "id": "SRC_HYDROGEN_IEA_GLOBAL",
+      "label": "IEA global hydrogen electrolysis cost projections"
+    },
+    {
+      "id": "SRC_MSME_UDYAM_THRESHOLDS",
+      "label": "MSMED Act 2006, Udyam Registration portal, 2025-04-01 revision"
+    },
+    {
+      "id": "SRC_CLCSS_SCHEME",
+      "label": "Ministry of MSME CLCSS scheme documentation"
+    },
+    {
+      "id": "SRC_CGTMSE",
+      "label": "Ministry of MSME + SIDBI CGTMSE scheme documentation"
+    },
+    {
+      "id": "SRC_PSL_RBI_2025",
+      "label": "RBI Master Directions on Priority Sector Lending, effective 2025-04-01"
+    },
+    {
+      "id": "SRC_MNRE_NBP",
+      "label": "MNRE National Bioenergy Programme Phase-I guidelines"
+    },
+    {
+      "id": "SRC_SIDBI_MSE_GIFT",
+      "label": "SIDBI MSE-GIFT scheme documentation, under RAMP"
+    },
+    {
+      "id": "SRC_NITI_AAYOG_ROADMAP_JAN2026",
+      "label": "NITI Aayog 'Roadmap for Green Transition of MSMEs', 2026-01-21"
+    },
+    {
+      "id": "SRC_RBI_MPC_AUG2026",
+      "label": "RBI Monetary Policy Committee statement, 3-5 Aug 2026"
+    },
+    {
+      "id": "SRC_PROJECT_DEFAULTS",
+      "label": "project master document default assumptions (boiler=15yr, motor=12yr lifetime)"
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
