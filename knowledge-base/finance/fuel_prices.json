@@ -1,0 +1,543 @@
+{
+  "_meta": {
+    "dataset_id": "FIN_FUEL_PRICES",
+    "dataset_name": "Industrial Fuel Prices (India)",
+    "schema_version": "2.0",
+    "dataset_version": "1.0",
+    "country": "India",
+    "scope": "Indian MSME Industrial Energy Transition",
+    "owner": "Finance Team",
+    "last_updated": "2026-08-16",
+    "description": "Market and notified prices of fuels used in Indian industrial process heating -- coal, diesel, LPG, piped natural gas, and biomass variants -- for use by the Finance and Baseline Economics modules of the Industrial Energy Transition Optimizer.",
+    "currency": "INR",
+    "language": "en"
+  },
+  "entities": {
+    "FUEL_COAL": {
+      "id": "FUEL_COAL",
+      "display_name": "Coal (Non-Coking, Industrial Grades)",
+      "category": "fuel",
+      "status": "verified",
+      "description": "Domestic non-coking coal as used for industrial boilers/furnaces in Indian MSMEs. Coal India Ltd (CIL) notifies ex-mine prices by grade (G1 highest calorific value to G17 lowest); an independent delivered/landed-cost estimate is also tracked for MSME-scale procurement, since freight, handling, and dealer margins are not captured in the ex-mine price.",
+      "parameters": {
+        "price_exmine_g3_high_grade": {
+          "value": 5987,
+          "unit": "INR_per_tonne",
+          "status": "verified",
+          "confidence": 0.92,
+          "source_id": "SRC_COAL_INDIA_NOTIFIED",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "CIL notified ex-mine price for G3 (high calorific value, non-coking) grade coal.",
+            "assumptions": "Ex-mine gate price; excludes GST, royalty, freight, and handling.",
+            "limitations": "Grade-wise notified prices are revised periodically by CIL; verify current notification before use in a live quote."
+          }
+        },
+        "price_exmine_g11_mid_grade": {
+          "value": 1881,
+          "unit": "INR_per_tonne",
+          "status": "verified",
+          "confidence": 0.92,
+          "source_id": "SRC_COAL_INDIA_NOTIFIED",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "CIL notified ex-mine price for G11 (mid calorific value, non-coking) grade coal, the grade most commonly supplied to small/medium industrial boilers.",
+            "assumptions": "Ex-mine gate price; excludes GST, royalty, freight, and handling.",
+            "limitations": "Regional and colliery-level variation within a grade is not captured."
+          }
+        },
+        "price_exmine_g13_mid_low_grade": {
+          "value": 1849,
+          "unit": "INR_per_tonne",
+          "status": "verified",
+          "confidence": 0.9,
+          "source_id": "SRC_COAL_INDIA_NOTIFIED",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "CIL notified ex-mine price for G13 (mid-low calorific value, non-coking) grade coal.",
+            "assumptions": "Ex-mine gate price.",
+            "limitations": "Excludes transport to MSME site."
+          }
+        },
+        "price_exmine_g15_low_grade": {
+          "value": 972,
+          "unit": "INR_per_tonne",
+          "status": "verified",
+          "confidence": 0.9,
+          "source_id": "SRC_COAL_INDIA_NOTIFIED",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "CIL notified ex-mine price for G15 (low calorific value, non-coking) grade coal.",
+            "assumptions": "Ex-mine gate price.",
+            "limitations": "Excludes transport to MSME site."
+          }
+        },
+        "price_delivered_msme_estimate": {
+          "value": 8.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Independent delivered/landed-cost estimate for industrial non-coking coal reaching a small/medium factory gate, i.e. inclusive of an assumed freight and handling margin.",
+            "assumptions": "Assumes typical road-freight distance and dealer margin for MSME-scale lots (as opposed to bulk rail-linked large-industry procurement).",
+            "limitations": "This figure is NOT reconcilable with the ex-mine grade prices above via a stated freight assumption -- treat as an independently sourced delivered-cost estimate, not (ex-mine price + known transport cost)."
+          }
+        },
+        "price_escalation_rate": {
+          "value": 6,
+          "unit": "%_per_year",
+          "status": "estimated",
+          "confidence": 0.4,
+          "source_id": "SRC_COAL_INDIA_NOTIFIED",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Assumed annual escalation rate for coal price forecasting in payback/NPV calculations.",
+            "assumptions": "Point estimate from a 5-7% per year plausible range, based on historical CIL notified-price revision trends.",
+            "limitations": "Not a published CIL forecast; genuinely an internal planning assumption. Low confidence -- do not present as an official projection."
+          }
+        }
+      },
+      "research": {
+        "summary": "Coal remains the dominant legacy industrial fuel for Indian MSMEs; CIL notified grade prices are the primary-source input, supplemented by a delivered-cost estimate.",
+        "assumptions": "MSME procurement is assumed to occur through dealers/traders rather than direct CIL linkage, which explains the gap between ex-mine and delivered price bases.",
+        "limitations": "State-level and seasonal price variation, and imported coal blending, are not modelled in this dataset."
+      }
+    },
+    "FUEL_DIESEL_HSD": {
+      "id": "FUEL_DIESEL_HSD",
+      "display_name": "Diesel (High Speed Diesel, Industrial Bulk)",
+      "category": "fuel",
+      "status": "estimated",
+      "description": "High-speed diesel (HSD) used for industrial thermal applications and backup generation.",
+      "parameters": {
+        "price_retail_reference": {
+          "value": 137.81,
+          "unit": "INR_per_litre",
+          "status": "estimated",
+          "confidence": 0.7,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Retail reference price for industrial bulk diesel purchase.",
+            "assumptions": "Retail pump-price reference; large-volume industrial buyers may negotiate a discount not captured here.",
+            "limitations": "State-level VAT differences on diesel are significant in India and are not broken out in this single national reference figure."
+          }
+        }
+      },
+      "research": {
+        "summary": "",
+        "assumptions": "",
+        "limitations": ""
+      }
+    },
+    "FUEL_LPG": {
+      "id": "FUEL_LPG",
+      "display_name": "LPG (Industrial)",
+      "category": "fuel",
+      "status": "estimated",
+      "description": "Liquefied petroleum gas used for direct-fired industrial heating, drying, and process applications.",
+      "parameters": {
+        "price_retail_reference": {
+          "value": 151.18,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.7,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Retail/industrial reference price for bulk LPG supply.",
+            "assumptions": "Commercial/industrial LPG rate, distinct from subsidized domestic-cylinder pricing.",
+            "limitations": "Oil marketing company (OMC) commercial LPG prices are revised monthly; treat as indicative and re-verify against the current OMC price list before use."
+          }
+        }
+      },
+      "research": {
+        "summary": "",
+        "assumptions": "",
+        "limitations": ""
+      }
+    },
+    "FUEL_NATURAL_GAS_PNG": {
+      "id": "FUEL_NATURAL_GAS_PNG",
+      "display_name": "Piped Natural Gas (Industrial)",
+      "category": "fuel",
+      "status": "estimated",
+      "description": "Piped natural gas (PNG) supplied to industrial consumers, typically via a city/geographic gas distribution (CGD) network.",
+      "parameters": {
+        "price_retail_reference": {
+          "value": 50,
+          "unit": "INR_per_SCM",
+          "status": "estimated",
+          "confidence": 0.65,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Retail reference price for industrial PNG supply.",
+            "assumptions": "Single national reference; actual industrial PNG price is CGD-entity specific and depends on the underlying gas-source mix (APM, non-APM, spot RLNG).",
+            "limitations": "No state/city-gas-distribution-entity breakdown is available in this dataset."
+          }
+        },
+        "apm_pricing_formula_basis": {
+          "value": null,
+          "unit": "formula_reference",
+          "status": "unavailable",
+          "confidence": 0.85,
+          "source_id": "SRC_PPAC_APM_FORMULA",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Domestic APM gas is priced via a formula benchmarked to a basket of international hub prices (Henry Hub, Alberta, NBP, Russia), reformed on the Kirit Parikh Committee recommendations, with a price ceiling and floor.",
+            "assumptions": "",
+            "limitations": "No single INR/SCM value is published as a fixed number -- the formula output varies monthly with the international benchmark basket, so it is recorded as a policy/formula reference rather than a numeric price here."
+          }
+        }
+      },
+      "research": {
+        "summary": "",
+        "assumptions": "",
+        "limitations": ""
+      }
+    },
+    "FUEL_BIOMASS": {
+      "id": "FUEL_BIOMASS",
+      "display_name": "Biomass (Agro-Residue and Processed)",
+      "category": "fuel",
+      "status": "estimated",
+      "description": "Agricultural-residue and processed biomass fuels used as a coal-substitute in industrial boilers. Prices vary widely by feedstock, processing (loose vs. pelletized/briquetted), and region.",
+      "parameters": {
+        "price_rice_husk_loose": {
+          "value": 8,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.65,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Loose rice husk, a widely available boiler fuel in paddy-growing regions.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_wheat_straw_loose": {
+          "value": 3,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Loose wheat straw, seasonal availability concentrated post-harvest.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_bagasse_wet": {
+          "value": 2.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Wet (as-received) sugarcane bagasse, typically sourced near sugar mills.",
+            "assumptions": "",
+            "limitations": "Often captive to sugar mills for their own cogeneration; open-market availability to third-party MSMEs may be limited."
+          }
+        },
+        "price_bagasse_dry": {
+          "value": 3.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Dried sugarcane bagasse, higher calorific value than wet bagasse.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_wood_chips_industrial": {
+          "value": 5.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Industrial wood chips from forestry/sawmill residue.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_briquettes_industrial": {
+          "value": 12.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Densified biomass briquettes, higher cost than loose biomass but easier handling, storage, and combustion control.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_pellets_industrial": {
+          "value": 9,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "General industrial biomass pellets (mixed feedstock).",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_rice_husk_pellets": {
+          "value": 10.5,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Pelletized rice husk.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_paddy_straw_pellets": {
+          "value": 11,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.55,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Pelletized paddy straw (parali), relevant to stubble-burning mitigation policy in north India.",
+            "assumptions": "",
+            "limitations": "Regionally concentrated supply (Punjab, Haryana, western UP); not a pan-India commodity price."
+          }
+        },
+        "price_wood_pellets": {
+          "value": 15.75,
+          "unit": "INR_per_kg",
+          "status": "estimated",
+          "confidence": 0.6,
+          "source_id": "SRC_INDUSTRIAL_FUELS_CSV",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Wood pellets, the highest-cost biomass variant tracked, reflecting processing and feedstock cost.",
+            "assumptions": "",
+            "limitations": ""
+          }
+        },
+        "price_escalation_rate": {
+          "value": 5,
+          "unit": "%_per_year",
+          "status": "estimated",
+          "confidence": 0.4,
+          "source_id": "SRC_MOP_COFIRING_POLICY",
+          "last_verified": "2026-06-01",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Assumed annual escalation rate for biomass price forecasting.",
+            "assumptions": "Point estimate from a 4-6% per year plausible range.",
+            "limitations": "Biomass co-firing mandates for thermal power plants create incremental demand pressure not fully reflected in a simple linear escalation assumption."
+          }
+        }
+      },
+      "research": {
+        "summary": "Biomass prices are the least standardized in this dataset: no single regulator publishes an official biomass price index, so all figures are secondary-source compiled estimates rather than notified/regulated prices.",
+        "assumptions": "Prices assume open-market third-party purchase, not captive/on-site residue.",
+        "limitations": "Significant regional, seasonal, and quality (moisture content, calorific value) variation exists and is not captured by a single national price point per variant."
+      }
+    }
+  },
+  "sources": {
+    "SRC_COAL_INDIA_NOTIFIED": {
+      "title": "Notified prices of coal grades (G1-G17, non-coking)",
+      "publisher": "Coal India Limited / Ministry of Coal, Government of India",
+      "publication_date": "2026-06",
+      "url": "https://www.coalindia.in/",
+      "type": "Government Report / Notified Price List",
+      "pages": ""
+    },
+    "SRC_INDUSTRIAL_FUELS_CSV": {
+      "title": "Industrial fuel price compilation (diesel, LPG, PNG, biomass variants)",
+      "publisher": "Project research compile: Bureau of Energy Efficiency (BEE) fuel data, IPCC emission-factor guidance, and supplier/marketplace quotations",
+      "publication_date": "2026-06",
+      "url": "https://beeindia.gov.in/",
+      "type": "Secondary Compilation",
+      "pages": ""
+    },
+    "SRC_PPAC_APM_FORMULA": {
+      "title": "Administered Price Mechanism (APM) domestic natural gas pricing formula, post Kirit Parikh Committee reform",
+      "publisher": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas",
+      "publication_date": "2023-04",
+      "url": "https://www.ppac.gov.in/",
+      "type": "Government Report",
+      "pages": ""
+    },
+    "SRC_MOP_COFIRING_POLICY": {
+      "title": "Revised policy for biomass co-firing in coal-based thermal power plants",
+      "publisher": "Ministry of Power, Government of India",
+      "publication_date": "2023-11",
+      "url": "https://powermin.gov.in/",
+      "type": "Government Policy Notification",
+      "pages": ""
+    }
+  },
+  "cross_references": {
+    "used_by": [
+      "decision-engine/baseline/fuel_calculator.py",
+      "decision-engine/economics/opex.py"
+    ],
+    "related_entities": {
+      "FUEL_COAL": [
+        "EM_GRID",
+        "TECH_BOILER_GENERIC"
+      ],
+      "FUEL_BIOMASS": [
+        "TECH_BIOMASS_BOILER_1_10TPH",
+        "TECH_BIOMASS_BOILER_ABOVE_10TPH",
+        "SUB_MNRE_NBP_PELLET",
+        "SUB_MNRE_NBP_COGEN"
+      ],
+      "FUEL_NATURAL_GAS_PNG": [
+        "IND_CHEMICAL",
+        "IND_TEXTILE"
+      ]
+    },
+    "note": "Entity IDs referenced under related_entities are expected to exist in knowledge-base/technologies/, knowledge-base/emissions/, knowledge-base/industries/, and knowledge-base/finance/subsidies.json respectively; this file does not duplicate their data, only points to them by ID."
+  }
+}
