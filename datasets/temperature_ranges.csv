@@ -1,0 +1,12 @@
+technology_id,technology_name,min_output_temp_c,max_output_temp_c,source,source_reference
+T001,Industrial Heat Pump,60,150,IEA,IEA Heat Pump Monitor 2026 / Renewables for Industry - commercially established range; higher temps emerging
+T002,Electric Boiler,100,350,IEA,IEA Renewables for Industry - steam benchmark at ~70 bar
+T003,Biomass Boiler,150,450,DOE,DOE Biomass/Biopower Technologies - varies by steam pressure/design; range is representative not universal
+T004,Solar Thermal (Non-Concentrating),60,150,IEA SHC,Solar Heat for Industrial Processes (SHIP) overview
+T005,Solar Thermal (Concentrating),150,400,IEA SHC,SHIP Task 49
+T006,Electric Resistance Heater,100,1000,DOE,Process Heat Basics / Industrial Electrification - broad application-dependent range
+T007,Induction Heating,100,1800,DOE,Process Heating Sourcebook - material/frequency/application dependent
+T008,Electric Arc Furnace,1500,1700,DOE,"Advanced Melting Technologies - steel melt process temperature, not arc temperature"
+T009,Waste Heat Recovery,90,1000,DOE,"Waste Heat Recovery Technology Assessment - represents source stream temperature range, not a generated output temp"
+T010,Thermal Energy Storage,100,1000,IEA / NREL,Renewables for Industry; Industrial Energy Storage Review - varies widely by storage medium
+T011,CHP/Cogeneration,90,500,DOE,CHP Basics - configuration-dependent (gas engine jacket water vs steam turbine)
