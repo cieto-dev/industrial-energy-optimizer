@@ -1,0 +1,278 @@
+Yes, a `policies/` folder is actually a good architectural choice even if it's empty initially. It separates **government rules and incentive policies** from engineering data, making the system easier to maintain as policies change.
+
+For your **Industrial Energy Transition Optimizer**, I would recommend organizing it like this:
+
+```text
+knowledge-base/
+├── constraints/
+├── emissions/
+├── finance/
+├── industries/
+└── policies/
+    ├── central_policies.json
+    ├── state_policies.json
+    ├── carbon_pricing.json
+    ├── renewable_purchase_obligations.json
+    └── eligibility_rules.json
+```
+
+---
+
+# Purpose of the `policies` Folder
+
+Unlike the `finance` folder, which stores **market values** (fuel prices, electricity tariffs, technology costs), the `policies` folder stores **government rules** that influence decision-making.
+
+For example:
+
+* Government subsidies
+* MSME eligibility rules
+* Carbon pricing
+* Renewable energy mandates
+* State-specific incentives
+
+These are **regulatory data**, not engineering data.
+
+---
+
+# 1. central_policies.json
+
+## Purpose
+
+Stores policies applicable across India.
+
+Example:
+
+```json
+{
+    "msme_energy_efficiency": {
+        "eligible": true,
+        "subsidy": 20,
+        "max_amount": 5000000
+    },
+
+    "solar_installation": {
+        "accelerated_depreciation": true
+    }
+}
+```
+
+The optimizer checks:
+
+```text
+Technology Selected
+
+↓
+
+Check Central Policy
+
+↓
+
+Eligible?
+
+↓
+
+Apply Benefit
+```
+
+---
+
+# 2. state_policies.json
+
+## Purpose
+
+Stores state-wise industrial policies.
+
+Example:
+
+```json
+{
+    "Punjab": {
+        "electric_boiler_subsidy": 15,
+        "renewable_incentive": true
+    },
+
+    "Tamil Nadu": {
+        "solar_subsidy": 25
+    }
+}
+```
+
+Now recommendations can vary depending on factory location.
+
+Example:
+
+```text
+Punjab Factory
+
+↓
+
+Electric Boiler
+
+↓
+
+15% State Subsidy
+```
+
+while another state may receive a different incentive.
+
+---
+
+# 3. carbon_pricing.json
+
+## Purpose
+
+Stores carbon pricing or carbon tax assumptions.
+
+Example:
+
+```json
+{
+    "enabled": false,
+    "price_per_ton": 0
+}
+```
+
+In the future, if carbon pricing is introduced, the optimizer can estimate:
+
+```text
+Annual CO₂
+
+↓
+
+Carbon Cost
+
+↓
+
+Updated Operating Cost
+```
+
+This makes the architecture future-ready without changing the optimization logic.
+
+---
+
+# 4. renewable_purchase_obligations.json
+
+## Purpose
+
+Stores Renewable Purchase Obligation (RPO) or similar compliance rules.
+
+Example:
+
+```json
+{
+    "minimum_renewable_share": 0.20
+}
+```
+
+The optimizer can use this to check whether a proposed pathway helps meet renewable energy requirements.
+
+---
+
+# 5. eligibility_rules.json
+
+## Purpose
+
+Defines eligibility conditions for incentives.
+
+Example:
+
+```json
+{
+    "msme": {
+        "max_turnover": 500000000,
+        "eligible_for_subsidy": true
+    },
+
+    "large_industry": {
+        "eligible_for_subsidy": false
+    }
+}
+```
+
+Instead of applying every subsidy to every factory, the backend first checks eligibility.
+
+Flow:
+
+```text
+Factory Profile
+
+↓
+
+Eligibility Rules
+
+↓
+
+Eligible?
+
+↓
+
+Yes → Apply Policy
+
+No → Ignore
+```
+
+---
+
+# How the `policies` folder fits into the architecture
+
+When the optimizer evaluates a feasible pathway:
+
+```text
+Factory Input
+      │
+      ▼
+Engineering Models
+      │
+      ▼
+Constraint Engine
+      │
+      ▼
+Feasible Technology
+      │
+      ▼
+Finance Module
+      │
+      ▼
+Policy Engine
+      │
+      ├── Central Policies
+      ├── State Policies
+      ├── Eligibility Rules
+      └── Carbon Policies
+      │
+      ▼
+Adjusted CapEx
+Adjusted OpEx
+Applicable Incentives
+Compliance Status
+      │
+      ▼
+Optimizer
+      │
+      ▼
+Final Recommendation
+```
+
+---
+
+# Do you need this for the SIH MVP?
+
+Not all of it.
+
+For the **current SIH MVP**, I recommend implementing only:
+
+```text
+policies/
+├── central_policies.json
+├── state_policies.json
+└── eligibility_rules.json
+```
+
+These three are sufficient to demonstrate that your optimizer considers **government support and regulatory eligibility** when comparing transition pathways.
+
+Files like `carbon_pricing.json` and `renewable_purchase_obligations.json` can be kept as placeholders for future expansion. This shows the judges that your architecture is scalable without overcomplicating the MVP.
+
+### Role of the `policies` folder
+
+The `policies` folder serves as the **regulatory knowledge repository** of the Industrial Energy Transition Optimizer. It contains government schemes, state incentives, and eligibility rules that influence the financial evaluation of transition pathways. After a pathway is found to be technically feasible, the finance layer consults these policy files to determine applicable incentives or compliance requirements, ensuring that recommendations reflect not only engineering feasibility but also the current policy environment.
+

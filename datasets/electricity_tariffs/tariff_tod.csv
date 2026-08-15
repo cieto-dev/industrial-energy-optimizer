@@ -1,0 +1,19 @@
+state,discom,consumer_category,band_type,hours,adjustment_type,value,applies_to,notes
+Andhra Pradesh,APEPDCL/APSPDCL/APCPDCL (APERC),HT Industrial (General),peak,06:00-10:00 & 18:00-22:00,absolute_rate_rs_per_kwh,7.8,"HGD season, 11kV",Rate falls as voltage rises to 33/132/220kV
+Andhra Pradesh,APEPDCL/APSPDCL/APCPDCL (APERC),HT Industrial (General),offpeak,10:00-15:00 & 00:00-06:00,absolute_rate_rs_per_kwh,5.55,"HGD season, 11kV",Rate falls as voltage rises to 33/132/220kV
+Assam,APDCL,HT Industries-I,peak,17:00-22:00,addon_rs_per_kwh,2.0,all seasons,Added to base energy charge
+Assam,APDCL,HT Industries-I,offpeak,22:00-06:00,addon_rs_per_kwh,-2.0,all seasons,Subtracted from base energy charge
+Bihar,NBPDCL/SBPDCL,HT Industrial,day,09:00-17:00,multiplier_pct_of_base,80,all seasons,80% of normal energy charge
+Bihar,NBPDCL/SBPDCL,HT Industrial,peak,17:00-23:00,multiplier_pct_of_base,120,all seasons,120% of normal energy charge
+Bihar,NBPDCL/SBPDCL,HT Industrial,normal,23:00-09:00,multiplier_pct_of_base,100,all seasons,Base rate applies
+Chhattisgarh,CSPDCL,"HT Industrial (Other, LF>15%)",peak,17:00-23:00,multiplier_pct_of_base,120,HV-2/3/4 categories,120% of normal energy charge
+Chhattisgarh,CSPDCL,"HT Industrial (Other, LF>15%)",offpeak,09:00-17:00,multiplier_pct_of_base,80,HV-2/3/4 categories,80% of normal energy charge
+Delhi,BYPL/BRPL/TPDDL/NDMC,Industrial (single category),peak,14:00-17:00 & 22:00-01:00,surcharge_pct,20,May-Sep only,+20% surcharge on energy charge
+Delhi,BYPL/BRPL/TPDDL/NDMC,Industrial (single category),offpeak,04:00-10:00,rebate_pct,-20,May-Sep only,-20% rebate on energy charge
+Goa,Goa Electricity Dept.,HT Industrial,peak,18:00-23:00,multiplier_pct_of_base,130,all seasons,130% of normal energy charge
+Goa,Goa Electricity Dept.,HT Industrial,offpeak,23:00-07:00,multiplier_pct_of_base,80,all seasons,80% of normal energy charge
+Gujarat,UGVCL/PGVCL/MGVCL/DGVCL,HT (general incl. Industrial),peak,07:00-11:00 & 18:00-22:00,addon_rs_per_kwh,0.45,demand upto 500kVA,Surcharge added to base energy charge
+Gujarat,"Torrent Power Ltd., Ahmedabad",HT (general incl. Industrial),peak,season-dependent (exact hours not specified in source),addon_rs_per_kwh_range,0.80-1.00,seasonal,TOU surcharge range; exact hours/season split not given in source tariff order
+Gujarat,"Torrent Power Ltd., Surat",HT (general incl. Industrial),peak,season-dependent (exact hours not specified in source),addon_rs_per_kwh_range,0.45-1.00,seasonal,TOU surcharge range; exact hours/season split not given in source tariff order
+Jammu & Kashmir,JPDCL/KPDCL,HT Industrial,peak,06:00-08:00 & 18:00-22:00,multiplier_pct_of_base,120,33kV and above only,Not applicable at 11kV
+Jammu & Kashmir,JPDCL/KPDCL,HT Industrial,offpeak,23:00-05:00,multiplier_pct_of_base,90,33kV and above only,Not applicable at 11kV

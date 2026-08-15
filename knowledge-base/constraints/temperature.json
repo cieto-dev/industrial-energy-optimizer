@@ -1,0 +1,45 @@
+{
+  "constraint_name": "temperature",
+  "version": "1.0",
+  "description": "Defines the rules used to determine whether a technology's useful temperature range can satisfy an industrial process temperature requirement.",
+
+  "units": {
+    "temperature": "°C"
+  },
+
+  "input_fields": {
+    "process_required_temperature": "required_process_temperature_c",
+    "technology_min_temperature": "min_output_temp_c",
+    "technology_max_temperature": "max_output_temp_c",
+    "technology_temperature_type": "temperature_type"
+  },
+
+  "temperature_range_rule": {
+    "operator": "within_range",
+    "lower_bound": "min_output_temp_c",
+    "upper_bound": "max_output_temp_c",
+    "target_value": "required_process_temperature_c",
+    "bounds_inclusive": true,
+    "condition": "min_output_temp_c <= required_process_temperature_c <= max_output_temp_c",
+    "pass_result": "temperature_feasible",
+    "fail_result": "temperature_infeasible"
+  },
+
+  "missing_data": {
+    "behavior": "reject",
+    "reason": "Temperature feasibility cannot be established when the required temperature or technology temperature range is missing."
+  },
+
+  "validation": {
+    "temperature_unit": "°C",
+    "required_temperature_must_be_numeric": true,
+    "min_temperature_must_be_numeric": true,
+    "max_temperature_must_be_numeric": true,
+    "min_cannot_exceed_max": true
+  },
+
+  "decision": {
+    "feasible": "Technology temperature range contains the required process temperature.",
+    "infeasible": "Required process temperature falls outside the technology temperature range."
+  }
+}

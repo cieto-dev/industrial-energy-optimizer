@@ -1,0 +1,376 @@
+This folder is one of the most important parts of your **Knowledge Base** because it makes your optimizer **industry-aware**. Instead of treating every factory the same, the system loads industry-specific characteristics before generating recommendations.
+
+---
+
+# Industries
+
+```text
+knowledge-base/
+└── industries/
+    ├── cement.json
+    ├── chemical.json
+    ├── food_processing.json
+    ├── pharma.json
+    ├── steel.json
+    └── textile.json
+```
+
+The purpose of this folder is to store **technical profiles** of each industrial sector supported by the optimizer.
+
+Each JSON file contains the engineering characteristics of one industry, such as:
+
+* Typical production process
+* Operating temperature range
+* Common fuels
+* Suitable decarbonization technologies
+* Energy consumption characteristics
+
+Instead of writing separate logic for every industry, the system simply loads the appropriate JSON file based on the user's selection.
+
+---
+
+# Why is this folder needed?
+
+Consider two factories:
+
+Factory A
+
+```text
+Textile Dyeing
+```
+
+Factory B
+
+```text
+Steel Manufacturing
+```
+
+Both may consume coal, but their process requirements are completely different.
+
+| Textile                  | Steel                           |
+| ------------------------ | ------------------------------- |
+| Medium-temperature steam | Very high-temperature furnaces  |
+| Biomass may be suitable  | Biomass usually not suitable    |
+| Heat pumps may work      | Heat pumps generally unsuitable |
+| Lower energy intensity   | Extremely high energy intensity |
+
+If the optimizer ignored the industry type, it might recommend a heat pump for a steel furnace—which is technically unrealistic.
+
+The `industries` folder prevents such incorrect recommendations.
+
+---
+
+# How the system uses this folder
+
+When the factory details are submitted:
+
+```text
+User Input
+
+↓
+
+Industry = Textile
+```
+
+The backend loads
+
+```text
+industries/textile.json
+```
+
+That file becomes the reference for the rest of the optimization pipeline.
+
+---
+
+# Example structure
+
+A `textile.json` file might look like this:
+
+```json
+{
+    "industry": "Textile",
+
+    "typical_temperature": {
+        "min": 120,
+        "max": 220
+    },
+
+    "common_fuels": [
+        "Coal",
+        "Biomass",
+        "Natural Gas"
+    ],
+
+    "recommended_technologies": [
+        "Heat Pump",
+        "Electric Boiler",
+        "Solar Thermal"
+    ]
+}
+```
+
+Similarly, `steel.json` might contain:
+
+```json
+{
+    "industry": "Steel",
+
+    "typical_temperature": {
+        "min": 900,
+        "max": 1600
+    },
+
+    "common_fuels": [
+        "Coal",
+        "Coke",
+        "Natural Gas"
+    ],
+
+    "recommended_technologies": [
+        "Electric Arc Furnace",
+        "Hydrogen",
+        "Waste Heat Recovery"
+    ]
+}
+```
+
+Notice that the optimizer is not using the same technologies for every industry.
+
+---
+
+# Individual Files
+
+## 1. textile.json
+
+### Purpose
+
+Stores engineering characteristics of textile manufacturing.
+
+Typical information:
+
+* Steam-based processes
+* Medium-temperature heating
+* Boiler-based operations
+* Suitable technologies such as:
+
+  * Heat Pumps
+  * Electric Boilers
+  * Solar Thermal
+  * Biomass Boilers
+
+When the user selects **Textile**, this file guides technology selection and constraint checking.
+
+---
+
+## 2. steel.json
+
+### Purpose
+
+Defines the characteristics of steel production.
+
+Steel requires:
+
+* Extremely high temperatures
+* Large energy demand
+* Continuous industrial furnaces
+
+Possible technologies:
+
+* Electric Arc Furnace
+* Hydrogen-based heating
+* Waste Heat Recovery
+
+Technologies like heat pumps are generally excluded because they cannot meet these temperature requirements.
+
+---
+
+## 3. cement.json
+
+### Purpose
+
+Contains the process profile for cement manufacturing.
+
+Typical characteristics:
+
+* Rotary kilns
+* Very high process temperatures
+* High fossil-fuel consumption
+* Significant CO₂ emissions
+
+Potential technologies:
+
+* Biomass co-firing
+* Alternative fuels
+* Waste Heat Recovery
+* Carbon Capture (future consideration)
+
+---
+
+## 4. chemical.json
+
+### Purpose
+
+Stores data for chemical manufacturing.
+
+Characteristics include:
+
+* Diverse process temperatures
+* Steam generation
+* Reactors
+* High electricity usage
+
+Suitable technologies depend on the specific chemical process but may include:
+
+* Electric Boilers
+* Heat Pumps
+* Waste Heat Recovery
+* Process electrification
+
+---
+
+## 5. pharma.json
+
+### Purpose
+
+Defines pharmaceutical manufacturing requirements.
+
+Characteristics:
+
+* Moderate-temperature steam
+* Clean and reliable heat supply
+* Strict process control
+
+Common recommendations:
+
+* Electric Boilers
+* Heat Pumps
+* Solar-assisted heating
+
+---
+
+## 6. food_processing.json
+
+### Purpose
+
+Represents food processing industries.
+
+Characteristics:
+
+* Steam generation
+* Drying operations
+* Pasteurization
+* Washing and cleaning
+
+Suitable technologies include:
+
+* Biomass Boilers
+* Heat Pumps
+* Solar Thermal
+* Electric Boilers
+
+---
+
+# How these files work together
+
+Suppose the user enters:
+
+```text
+Industry
+
+↓
+
+Food Processing
+```
+
+The system loads:
+
+```text
+food_processing.json
+```
+
+From this file, it learns:
+
+```text
+Typical Temperature
+
+↓
+
+Steam Requirement
+
+↓
+
+Common Fuels
+
+↓
+
+Suitable Technologies
+```
+
+These values are then used by the technology selection and constraint engine.
+
+---
+
+# Complete Workflow
+
+```text
+User selects Industry
+
+↓
+
+Load Industry Profile
+
+↓
+
+Read Process Characteristics
+
+↓
+
+Identify Suitable Technologies
+
+↓
+
+Apply Constraints
+
+↓
+
+Generate Feasible Pathways
+
+↓
+
+Optimize
+
+↓
+
+Recommend Best Transition Plan
+```
+
+The `industries` folder therefore acts as the **domain knowledge layer** that customizes the optimizer for different industrial sectors.
+
+---
+
+# Why use JSON instead of hardcoding?
+
+Instead of writing:
+
+```python
+if industry == "textile":
+    technologies = [...]
+```
+
+the backend simply loads:
+
+```python
+industry_profile = load_json("industries/textile.json")
+```
+
+This design offers several advantages:
+
+* New industries can be added without changing the program logic.
+* Engineering teams can update industry-specific data independently.
+* The optimizer remains scalable and maintainable as more industrial sectors are supported.
+
+---
+
+# Role of the `industries` folder in your project
+
+The `knowledge-base/industries` folder serves as the **domain-specific knowledge repository** of the Industrial Energy Transition Optimizer. Each JSON file represents the technical profile of an industrial sector, including its process characteristics, operating temperatures, common fuels, and suitable decarbonization technologies. When a user selects an industry, the backend loads the corresponding profile and uses it throughout the engineering pipeline. This ensures that every recommendation is tailored to the operational requirements of that specific industry, rather than applying a generic set of technologies to all factories.

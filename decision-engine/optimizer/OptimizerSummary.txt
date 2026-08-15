@@ -1,0 +1,592 @@
+This is **the heart of your entire SIH project**.
+
+Everything before this module (baseline, technology matching, emissions, economics) is just **collecting information**.
+
+The **optimizer** is where the system actually makes a decision.
+
+Imagine you're the factory owner.
+
+The software has already found 5 possible solutions:
+
+| Option             | Cost  | CO₂   | Payback | Reliable |
+| ------------------ | ----- | ----- | ------- | -------- |
+| Biomass Boiler     | ₹28 L | 500 t | 4 yrs   | 90%      |
+| Electric Boiler    | ₹20 L | 300 t | 6 yrs   | 95%      |
+| Heat Pump          | ₹18 L | 250 t | 8 yrs   | 85%      |
+| Solar + Boiler     | ₹35 L | 180 t | 7 yrs   | 92%      |
+| Efficiency Upgrade | ₹8 L  | 120 t | 2 yrs   | 99%      |
+
+Now the software must answer:
+
+> **Which one should I recommend?**
+
+That is exactly what this folder does.
+
+---
+
+# Overall Flow
+
+```text
+Feasible Scenarios
+        │
+        ▼
+Assign Weights
+        │
+        ▼
+Calculate Scores
+        │
+        ▼
+Rank Scenarios
+        │
+        ▼
+Return Best Recommendation
+```
+
+---
+
+# Folder Structure
+
+```text
+optimizer/
+│
+├── weights.py
+├── mcda.py
+├── ranking.py
+└── optimization_engine.py
+```
+
+Every file has one responsibility.
+
+---
+
+# Before understanding the files...
+
+Let's understand **optimization**.
+
+Suppose these are your options.
+
+| Technology | Cost           | CO₂      |
+| ---------- | -------------- | -------- |
+| Biomass    | Cheap          | Medium   |
+| Electric   | Expensive      | Low      |
+| Solar      | Very Expensive | Very Low |
+
+Which one is best?
+
+There is **no universal answer**.
+
+Some industries care about
+
+* lowest cost
+
+Others care about
+
+* lowest emissions
+
+Others care about
+
+* fastest payback
+
+Therefore we need a scoring system.
+
+---
+
+# 1. weights.py
+
+This is the simplest file.
+
+It stores
+
+> **How important is each criterion?**
+
+Example
+
+```python
+WEIGHTS = {
+    "cost": 0.40,
+    "co2": 0.30,
+    "payback": 0.20,
+    "reliability": 0.10
+}
+```
+
+Meaning
+
+```text
+Cost
+
+40%
+
+CO₂
+
+30%
+
+Payback
+
+20%
+
+Reliability
+
+10%
+```
+
+Total
+
+```text
+40+30+20+10
+
+=
+
+100%
+```
+
+---
+
+## Why?
+
+Suppose a user says
+
+> "I don't care much about emissions."
+
+Now weights become
+
+```text
+Cost
+
+70%
+
+CO₂
+
+10%
+
+Reliability
+
+20%
+```
+
+Different weights
+
+↓
+
+Different winner.
+
+---
+
+# 2. mcda.py
+
+This is probably the **most intelligent file**.
+
+MCDA means
+
+> **Multi-Criteria Decision Analysis**
+
+Instead of judging on one thing,
+
+it judges on **many things simultaneously**.
+
+---
+
+Suppose
+
+### Option A
+
+| Cost | CO₂ | Payback |
+| ---- | --- | ------- |
+| 95   | 40  | 90      |
+
+---
+
+### Option B
+
+| Cost | CO₂ | Payback |
+| ---- | --- | ------- |
+| 70   | 95  | 70      |
+
+Which wins?
+
+Not obvious.
+
+MCDA calculates
+
+```text
+Final Score
+
+=
+
+Cost × Weight
+
++
+
+CO₂ × Weight
+
++
+
+Payback × Weight
+
++
+
+Reliability × Weight
+```
+
+Example
+
+Suppose
+
+Weights
+
+```text
+Cost
+
+40%
+
+CO₂
+
+30%
+
+Payback
+
+20%
+
+Reliability
+
+10%
+```
+
+Option A
+
+```text
+95×0.4
+
++
+
+40×0.3
+
++
+
+90×0.2
+
++
+
+80×0.1
+
+=
+
+76
+```
+
+Option B
+
+```text
+70×0.4
+
++
+
+95×0.3
+
++
+
+70×0.2
+
++
+
+90×0.1
+
+=
+
+79.5
+```
+
+Winner
+
+Option B
+
+---
+
+# 3. ranking.py
+
+Once every scenario has a score,
+
+ranking.py simply sorts them.
+
+Input
+
+```text
+Scenario A
+
+76
+
+Scenario B
+
+79.5
+
+Scenario C
+
+65
+```
+
+Output
+
+```text
+1.
+
+Scenario B
+
+79.5
+
+2.
+
+Scenario A
+
+76
+
+3.
+
+Scenario C
+
+65
+```
+
+Very straightforward.
+
+---
+
+# 4. optimization_engine.py
+
+This is the **manager**.
+
+It coordinates everything.
+
+It does NOT calculate MCDA itself.
+
+Instead it
+
+```text
+Get scenarios
+
+↓
+
+Load weights
+
+↓
+
+Call MCDA
+
+↓
+
+Get scores
+
+↓
+
+Rank them
+
+↓
+
+Return winner
+```
+
+---
+
+# Complete Example
+
+Suppose scenario generator produced
+
+| Technology | Cost | CO₂ | Payback | Reliability |
+| ---------- | ---- | --- | ------- | ----------- |
+| Biomass    | 70   | 75  | 80      | 90          |
+| Electric   | 60   | 95  | 65      | 95          |
+| Heat Pump  | 85   | 90  | 70      | 80          |
+
+---
+
+### Step 1
+
+weights.py
+
+```text
+Cost
+
+40%
+
+CO₂
+
+30%
+
+Payback
+
+20%
+
+Reliability
+
+10%
+```
+
+---
+
+### Step 2
+
+mcda.py
+
+Calculates
+
+```text
+Biomass
+
+76
+
+Electric
+
+75
+
+Heat Pump
+
+82
+```
+
+---
+
+### Step 3
+
+ranking.py
+
+Sorts
+
+```text
+Heat Pump
+
+82
+
+Biomass
+
+76
+
+Electric
+
+75
+```
+
+---
+
+### Step 4
+
+optimization_engine.py
+
+Returns
+
+```json
+{
+    "recommended_technology": "Heat Pump",
+    "score": 82,
+    "rank": 1
+}
+```
+
+---
+
+# Why not just choose the cheapest?
+
+Suppose
+
+| Technology  | Cost     | CO₂      |
+| ----------- | -------- | -------- |
+| Coal Boiler | ₹5 lakh  | 900 tons |
+| Biomass     | ₹25 lakh | 300 tons |
+
+If we only choose based on cost,
+
+Coal always wins.
+
+If we only choose based on CO₂,
+
+Electric always wins.
+
+Industries never make decisions like that.
+
+They consider
+
+* Cost
+* Emissions
+* Payback
+* Reliability
+* Budget
+* Available infrastructure
+
+MCDA balances all of them.
+
+---
+
+# Relationship with Previous Modules
+
+```text
+Baseline
+      │
+      ▼
+Technology Matching
+      │
+      ▼
+Scenario Generation
+      │
+      ▼
+Economics
+      │
+      ▼
+Emissions
+      │
+      ▼
+Reliability
+      │
+      ▼
+Optimizer
+      │
+      ▼
+Best Recommendation
+```
+
+Notice something important:
+
+**The optimizer doesn't calculate costs or emissions.**
+
+It **uses** values calculated by the previous modules.
+
+For example:
+
+* `economics/` gives **CapEx, OpEx, Payback**
+* `emissions/` gives **CO₂ emissions**
+* `reliability/` gives **Reliability score**
+* `scenario/` gives **feasible technology options**
+
+The optimizer combines these into one decision.
+
+---
+
+# Real-world analogy
+
+Imagine you're buying a laptop.
+
+You don't just compare the **price**.
+
+You compare:
+
+* 💰 Price
+* ⚡ Performance
+* 🔋 Battery life
+* 🪶 Weight
+* ⭐ Reviews
+
+Then you mentally give each criterion a priority and pick the best overall.
+
+Your optimizer is doing the same thing for industrial technologies.
+
+---
+
+# Summary
+
+| File                     | Responsibility                             | Input                      | Output              |
+| ------------------------ | ------------------------------------------ | -------------------------- | ------------------- |
+| `weights.py`             | Store importance of each criterion         | Configuration              | Criterion weights   |
+| `mcda.py`                | Calculate weighted score for each scenario | Scenario metrics + weights | Final score         |
+| `ranking.py`             | Sort scenarios by score                    | Scored scenarios           | Ranked list         |
+| `optimization_engine.py` | Coordinate the optimization process        | All feasible scenarios     | Best recommendation |
+
+## One suggestion
+
+Since your project document mentions that the first MVP can use a **transparent rules/scoring engine** and later evolve to solvers like **PuLP or OR-Tools**, keep `optimization_engine.py` independent of the optimization method. Today it can call `mcda.py`; later, if you adopt a mathematical optimizer, you can swap the implementation without changing the rest of your application. This modular approach matches the architecture recommended for your SIH project.

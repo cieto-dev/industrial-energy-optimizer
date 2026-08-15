@@ -1,0 +1,342 @@
+This folder is often ignored in student projects, but for **your SIH project**, it is actually a strong architectural component because your optimizer is built on **research papers, government reports, and technical standards**. Every assumption in your Knowledge Base should be traceable to a source.
+
+---
+
+# References
+
+```text
+knowledge-base/
+└── references/
+    ├── citations.json
+    └── sources.json
+```
+
+Unlike the other folders that contain engineering or financial data, the `references` folder stores **metadata about where your data came from**.
+
+Its purpose is to make the system **transparent, explainable, and trustworthy**.
+
+---
+
+# Why is this folder needed?
+
+Your optimizer uses values such as:
+
+* Biomass boiler efficiency
+* Coal emission factor
+* Grid emission factor
+* Electricity tariff
+* Technology cost
+* Subsidy percentage
+
+A judge may ask:
+
+> **"Where did you get these numbers?"**
+
+Instead of saying,
+
+> "We found them online,"
+
+your system can immediately point to the exact source.
+
+This is especially important because your project is a **decision-support system**, and such systems must explain the basis of their recommendations. The project handbook also emphasizes **transparent assumptions, reproducible calculations, and source provenance** as key requirements for trust and explainability. 
+
+---
+
+# 1. citations.json
+
+## Purpose
+
+Stores references between system parameters and their supporting documents.
+
+Think of it as a **mapping file**.
+
+Example
+
+```json
+{
+    "coal_emission_factor": {
+        "source_id": "SRC001"
+    },
+
+    "electric_boiler_efficiency": {
+        "source_id": "SRC005"
+    },
+
+    "solar_thermal_efficiency": {
+        "source_id": "SRC008"
+    }
+}
+```
+
+Notice that this file **does not store the document itself**.
+
+It only links a parameter to a source.
+
+---
+
+### Example Workflow
+
+The optimizer calculates
+
+```text
+Coal Emissions
+```
+
+↓
+
+It reads
+
+```text
+emission_factors.json
+```
+
+↓
+
+Looks up
+
+```text
+coal_emission_factor
+```
+
+↓
+
+Reads
+
+```text
+citations.json
+```
+
+↓
+
+Finds
+
+```text
+SRC001
+```
+
+↓
+
+Displays the corresponding reference to the user.
+
+---
+
+# 2. sources.json
+
+## Purpose
+
+Stores complete information about every source used in the project.
+
+Example
+
+```json
+{
+    "SRC001": {
+        "title": "IPCC Emission Factor Guidelines",
+        "organization": "IPCC",
+        "year": 2019,
+        "url": "https://..."
+    },
+
+    "SRC002": {
+        "title": "CEA Grid Emission Factor Report",
+        "organization": "Central Electricity Authority",
+        "year": 2024,
+        "url": "https://..."
+    },
+
+    "SRC003": {
+        "title": "MNRE Solar Guidelines",
+        "organization": "MNRE",
+        "year": 2024,
+        "url": "https://..."
+    }
+}
+```
+
+Every source in your system receives a unique identifier.
+
+This prevents duplication because the same source can support multiple parameters.
+
+---
+
+# How both files work together
+
+Suppose the optimizer calculates CO₂ emissions using:
+
+```text
+Coal Emission Factor
+```
+
+The process becomes:
+
+```text
+Read emission_factors.json
+
+↓
+
+Value = 2.42
+
+↓
+
+Read citations.json
+
+↓
+
+Source ID = SRC001
+
+↓
+
+Read sources.json
+
+↓
+
+Display
+
+IPCC Emission Factor Guidelines (2019)
+```
+
+The dashboard can then show:
+
+```text
+Coal Emission Factor
+
+2.42 kg CO₂/kg
+
+Source:
+IPCC Emission Factor Guidelines (2019)
+```
+
+This makes every important value in the system traceable.
+
+---
+
+# Why separate citations and sources?
+
+Imagine 30 different parameters all use the same government report.
+
+Without separation:
+
+```text
+Parameter A
+
+↓
+
+Stores full report details
+
+Parameter B
+
+↓
+
+Stores full report details
+
+Parameter C
+
+↓
+
+Stores full report details
+```
+
+The same information is duplicated many times.
+
+With two files:
+
+```text
+citations.json
+
+↓
+
+Points to
+
+↓
+
+SRC001
+
+↓
+
+sources.json
+
+↓
+
+Stores the report details only once
+```
+
+This follows a normalized design where data is stored once and referenced wherever needed.
+
+---
+
+# Where is this folder used?
+
+The `references` folder supports almost every part of the Knowledge Base.
+
+```text
+constraints/
+
+↓
+
+references/
+
+emissions/
+
+↓
+
+references/
+
+finance/
+
+↓
+
+references/
+
+industries/
+
+↓
+
+references/
+```
+
+Whenever a parameter is loaded, its reference can also be retrieved if needed.
+
+---
+
+# Example in your project
+
+Suppose the user receives this recommendation:
+
+```text
+Recommended Technology
+
+Electric Boiler
+```
+
+The dashboard may also show:
+
+```text
+Estimated Efficiency
+
+95%
+
+Source:
+BEE Industrial Electrification Report
+
+Estimated CO₂ Reduction
+
+42%
+
+Source:
+CEA Grid Emission Factor Report
+
+Electricity Tariff
+
+₹8/kWh
+
+Source:
+Punjab State Electricity Regulatory Commission
+```
+
+This increases the credibility of the recommendation and allows judges or users to verify every major assumption.
+
+---
+
+# Role of the `references` folder in your project
+
+The `knowledge-base/references` folder acts as the **evidence and provenance repository** of the Industrial Energy Transition Optimizer. While the other knowledge-base folders store engineering, financial, and policy data, this folder records **where those values originate**. By linking every important parameter to an authoritative document, the system ensures transparency, explainability, and traceability. This enables the dashboard to justify recommendations with supporting evidence, making the optimizer a trustworthy decision-support system rather than a black-box calculator.

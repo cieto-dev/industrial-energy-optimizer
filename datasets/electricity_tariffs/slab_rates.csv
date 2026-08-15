@@ -1,0 +1,6 @@
+state,discom,consumer_category,slab_from_kwh,slab_to_kwh,rate_rs_per_kwh,notes
+Andaman & Nicobar Islands,A&N Electricity Dept.,LT Industrial,0,500,8.75,"First slab, confirmed rate"
+Andaman & Nicobar Islands,A&N Electricity Dept.,LT Industrial,501,NA (not specified),13.5,Source only states higher slabs 'go up to' this rate; exact breakpoints/number of slabs not given in tariff order excerpt
+Andaman & Nicobar Islands,A&N Electricity Dept.,HT Industrial,0,500,8.5,"First slab, confirmed rate"
+Andaman & Nicobar Islands,A&N Electricity Dept.,HT Industrial,501,NA (not specified),13.0,Source only states higher slabs 'go up to' this rate; exact breakpoints/number of slabs not given in tariff order excerpt
+Goa,Goa Electricity Dept.,LT Industrial,0,500,4.0,Only slab specified in source (0-500 units); no higher-slab rate given in tariff order excerpt

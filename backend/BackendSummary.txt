@@ -1,0 +1,395 @@
+These files form the **backend infrastructure layer** of your project. Unlike the `apis/` folder, which exposes endpoints, these files provide the backend with configuration, database connectivity, logging, utilities, dependencies, and the application entry point.
+
+In your architecture, they belong to the **Application Layer**, whose role is to orchestrate the flow between the frontend and the engineering/decision modules without containing the core optimization logic itself. 
+
+---
+
+# Backend Infrastructure Files
+
+```text
+backend/
+│── .env.example
+│── config.py
+│── database.py
+│── logger.py
+│── main.py
+│── requirements.txt
+└── utils.py
+```
+
+---
+
+# 1. .env.example
+
+## Responsibility
+
+The `.env.example` file provides a template for all environment variables required by the backend.
+
+Instead of hardcoding sensitive information such as database credentials or API keys inside the source code, these values are stored as environment variables.
+
+This approach improves security and allows the application to run in different environments (development, testing, production) without modifying the code.
+
+---
+
+### Example
+
+```text
+DATABASE_URL=sqlite:///optimizer.db
+SECRET_KEY=your-secret-key
+DEBUG=True
+PORT=8000
+```
+
+---
+
+### Why it exists
+
+Suppose another team member clones the repository.
+
+They simply copy
+
+```text
+.env.example
+```
+
+to
+
+```text
+.env
+```
+
+and fill in their local configuration.
+
+No source code changes are required.
+
+---
+
+# 2. config.py
+
+## Responsibility
+
+`config.py` acts as the centralized configuration manager for the backend.
+
+It reads values from the environment and makes them available throughout the application.
+
+Instead of writing
+
+```python
+os.getenv(...)
+```
+
+inside every file,
+
+all modules import configuration from one place.
+
+---
+
+### Example Responsibilities
+
+* Database URL
+* Debug mode
+* Server port
+* API settings
+* Application constants
+
+---
+
+### Flow
+
+```text
+.env
+    │
+    ▼
+config.py
+    │
+    ▼
+Entire Backend
+```
+
+---
+
+### Benefit
+
+A configuration change affects only one file instead of multiple modules.
+
+---
+
+# 3. database.py
+
+## Responsibility
+
+This module manages all communication with the project's database.
+
+It is responsible for
+
+* establishing database connections
+* creating sessions
+* executing queries
+* managing transactions
+* closing connections safely
+
+The business logic never communicates directly with SQLite or PostgreSQL.
+
+Instead,
+
+```text
+Models
+      │
+      ▼
+database.py
+      │
+      ▼
+Database
+```
+
+---
+
+### Example Responsibilities
+
+* Store factory information
+* Save optimization results
+* Retrieve historical reports
+* Cache assumptions
+
+---
+
+### Why separate it?
+
+If the project upgrades from
+
+```text
+SQLite
+```
+
+to
+
+```text
+PostgreSQL
+```
+
+only this module requires significant modification.
+
+---
+
+# 4. logger.py
+
+## Responsibility
+
+This module records backend events while the application is running.
+
+Instead of printing messages to the console,
+
+all modules use a centralized logger.
+
+---
+
+### Example Logs
+
+```text
+INFO
+Factory submitted successfully
+
+INFO
+Optimization started
+
+WARNING
+Temperature exceeds technology limit
+
+ERROR
+Database connection failed
+```
+
+---
+
+### Flow
+
+```text
+Backend Module
+        │
+        ▼
+logger.py
+        │
+        ▼
+Console / Log File
+```
+
+---
+
+### Why important?
+
+During debugging or deployment,
+
+developers can trace exactly where an error occurred without searching through the codebase.
+
+---
+
+# 5. main.py
+
+## Responsibility
+
+This is the **entry point of the backend application**.
+
+Whenever the backend starts,
+
+this file initializes the server and registers all API routes.
+
+It acts as the central coordinator of the backend.
+
+---
+
+### Startup Flow
+
+```text
+Application Starts
+        │
+        ▼
+main.py
+        │
+        ├── Load Configuration
+        ├── Initialize Logger
+        ├── Connect Database
+        ├── Register APIs
+        └── Start Server
+```
+
+---
+
+### Why is it important?
+
+Without `main.py`, none of the backend components would be exposed to the frontend.
+
+It is the first file executed when the backend service starts.
+
+---
+
+# 6. requirements.txt
+
+## Responsibility
+
+This file lists every Python package required to run the backend.
+
+Instead of manually installing dependencies one by one,
+
+developers install everything using a single command.
+
+---
+
+### Example
+
+```text
+fastapi
+uvicorn
+sqlalchemy
+pandas
+numpy
+pydantic
+python-dotenv
+```
+
+---
+
+### Installation
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### Benefit
+
+Every team member works with the same software versions, ensuring consistent behavior across development environments.
+
+---
+
+# 7. utils.py
+
+## Responsibility
+
+`utils.py` contains reusable helper functions that are shared across multiple backend modules.
+
+These functions are not part of the core business logic but eliminate duplicate code.
+
+---
+
+### Typical Utility Functions
+
+* Unit conversions
+* Date formatting
+* Input validation helpers
+* Numerical rounding
+* Common calculations
+* File handling
+
+---
+
+### Example Flow
+
+```text
+industry_api.py
+        │
+        ▼
+utils.py
+        │
+        ▼
+Shared Helper Function
+```
+
+---
+
+### Why separate it?
+
+Imagine several APIs need to convert energy values from MJ to kWh.
+
+Instead of writing the conversion formula repeatedly,
+
+every module simply imports a single utility function.
+
+This keeps the codebase cleaner, easier to maintain, and reduces duplication.
+
+---
+
+# Overall Backend Infrastructure Flow
+
+```text
+                 Frontend
+                     │
+                     ▼
+                API Endpoints
+                     │
+                     ▼
+                 main.py
+                     │
+     ┌───────────────┼───────────────┐
+     ▼               ▼               ▼
+ config.py      logger.py      database.py
+     │               │               │
+     └───────────────┼───────────────┘
+                     ▼
+               Models & Services
+                     │
+                     ▼
+              Optimization Engine
+                     │
+                     ▼
+               JSON Response
+                     │
+                     ▼
+                 Frontend
+```
+
+---
+
+# Summary
+
+| File                   | Responsibility                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| **`.env.example`**     | Template for environment variables and sensitive configuration.                |
+| **`config.py`**        | Centralized configuration loader used across the backend.                      |
+| **`database.py`**      | Handles database connections, queries, and transaction management.             |
+| **`logger.py`**        | Records application events, warnings, and errors for monitoring and debugging. |
+| **`main.py`**          | Backend entry point that initializes the application and registers API routes. |
+| **`requirements.txt`** | Lists all Python dependencies required to run the backend.                     |
+| **`utils.py`**         | Provides reusable helper functions shared across different backend modules.    |
+
+Together, these files form the **backend infrastructure layer**. They don't implement the optimization algorithms themselves; instead, they provide the configuration, execution environment, communication, persistence, and shared utilities that allow the engineering and decision models to run reliably.

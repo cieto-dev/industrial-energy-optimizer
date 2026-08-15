@@ -1,0 +1,399 @@
+{
+  "schema_version": "1.0",
+  "constraint_type": "space",
+  "description": "Physical-site and installation-area constraints used by the Industrial Energy Transition Optimizer to screen technically feasible technology pathways.",
+  "unit_system": "SI",
+  "default_area_unit": "m2",
+  "default_capacity_unit": "kW",
+  "screening_policy": {
+    "hard_constraints": "Use only values explicitly supported by authoritative or project-specific engineering evidence.",
+    "site_specific_constraints": "Where equipment footprint depends strongly on vendor design, capacity, layout, safety clearances or storage configuration, do not use an invented universal minimum. Require site/vendor engineering assessment.",
+    "available_area_rule": "A technology is spatially feasible when its required installation area is less than or equal to the corresponding usable site area.",
+    "usable_area_rule": "Use usable, unobstructed area rather than gross land or gross roof area.",
+    "safety_clearance_rule": "Equipment footprint must not be interpreted as the entire required site area. Access routes, maintenance clearances, fire separation, structural restrictions and auxiliary equipment must be considered during detailed engineering."
+  },
+  "site_area_inputs": {
+    "rooftop_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Total physically available rooftop area."
+    },
+    "usable_rooftop_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Shadow-free and structurally usable rooftop area available for solar installation."
+    },
+    "land_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Total land area potentially available for ground-mounted equipment or energy infrastructure."
+    },
+    "usable_land_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Land area remaining after excluding buildings, roads, restricted zones and other unavailable areas."
+    },
+    "process_equipment_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Area available near the process for heating equipment, heat exchangers, electric boilers, heat pumps or related equipment."
+    },
+    "fuel_storage_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Area available for biomass or other fuel storage."
+    },
+    "electrical_equipment_area_m2": {
+      "type": "numeric",
+      "unit": "m2",
+      "description": "Area available for transformers, switchgear, power electronics and related electrical infrastructure."
+    }
+  },
+  "technologies": {
+    "solar_pv_rooftop": {
+      "technology_type": "solar_pv",
+      "installation_type": "rooftop",
+      "area_metric": "shadow_free_rooftop_area",
+      "area_requirement": {
+        "value": 10.0,
+        "unit": "m2_per_kWp",
+        "basis": "1 kWp requires approximately 10 m2 of shadow-free rooftop area",
+        "range": {
+          "minimum": 10.0,
+          "maximum": 10.0,
+          "unit": "m2_per_kWp"
+        }
+      },
+      "calculation": {
+        "required_area_formula": "installed_capacity_kWp * 10.0",
+        "example_10_kWp": {
+          "capacity_kWp": 10,
+          "required_area_m2": 100
+        },
+        "example_50_kWp": {
+          "capacity_kWp": 50,
+          "required_area_m2": 500
+        },
+        "example_100_kWp": {
+          "capacity_kWp": 100,
+          "required_area_m2": 1000
+        },
+        "example_500_kWp": {
+          "capacity_kWp": 500,
+          "required_area_m2": 5000
+        },
+        "example_1000_kWp": {
+          "capacity_kWp": 1000,
+          "required_area_m2": 10000
+        }
+      },
+      "constraint": {
+        "available_area_field": "usable_rooftop_area_m2",
+        "condition": "required_area_m2 <= usable_rooftop_area_m2"
+      },
+      "additional_site_requirements": [
+        "Area must be substantially shadow-free.",
+        "Roof structural suitability must be verified.",
+        "Obstacles and access/maintenance zones reduce usable area.",
+        "Actual area can vary with module efficiency, mounting arrangement and site layout."
+      ],
+      "constraint_strength": "hard_screening_constraint",
+      "source_basis": "Indian government rooftop-solar FAQ states that a 1 kW rooftop system generally requires 10 square metres (100 square feet) of shadow-free area; actual requirement varies with module efficiency and placement.",
+      "source_quality": "high"
+    },
+    "solar_pv_ground_mounted": {
+      "technology_type": "solar_pv",
+      "installation_type": "ground_mounted",
+      "area_metric": "site_land_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2_per_kW",
+        "basis": "No single universal footprint should be hard-coded for industrial screening because land requirement depends on plant design, module technology, row spacing, terrain, setbacks and site geometry."
+      },
+      "constraint": {
+        "available_area_field": "usable_land_area_m2",
+        "condition": "Use project-specific layout calculation before final feasibility decision."
+      },
+      "additional_site_requirements": [
+        "Detailed site layout required.",
+        "Inter-row spacing depends on module geometry and shading design.",
+        "Land-use restrictions and setbacks must be considered.",
+        "Roads, inverter stations, transformers and maintenance access reduce net usable area."
+      ],
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "biomass_cogeneration": {
+      "technology_type": "biomass_power_or_cogeneration",
+      "installation_type": "ground_based",
+      "area_metric": "land_area",
+      "screening_benchmark": {
+        "median_land_requirement_acres_per_MW": 6.0,
+        "lower_estimate_acres_per_MW": 5.0,
+        "upper_estimate_acres_per_MW": 7.0,
+        "conversion_m2_per_kW": {
+          "lower_estimate": 20.235,
+          "median_estimate": 24.282,
+          "upper_estimate": 28.329
+        }
+      },
+      "calculation": {
+        "median_required_area_formula": "installed_capacity_kW * 24.282",
+        "example_1_MW": {
+          "capacity_MW": 1,
+          "median_area_m2": 24282
+        },
+        "example_5_MW": {
+          "capacity_MW": 5,
+          "median_area_m2": 121410
+        },
+        "example_10_MW": {
+          "capacity_MW": 10,
+          "median_area_m2": 242820
+        }
+      },
+      "important_scope_note": "This benchmark is for biomass power-generation land requirement and includes fuel storage. It must not be interpreted as the footprint of an industrial biomass boiler. Industrial boiler footprint and biomass storage requirements should be determined from equipment capacity, fuel consumption, storage duration and vendor layout.",
+      "constraint": {
+        "available_area_field": "usable_land_area_m2",
+        "condition": "Use only as preliminary screening for biomass generation/cogeneration; detailed engineering required before final acceptance."
+      },
+      "constraint_strength": "screening_only",
+      "source_quality": "high"
+    },
+    "biomass_boiler": {
+      "technology_type": "biomass_boiler",
+      "installation_type": "ground_based",
+      "area_metric": "equipment_plus_fuel_storage_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2",
+        "basis": "No universal industrial-boiler footprint is imposed because boiler dimensions, auxiliary equipment, fuel type, fuel moisture, storage duration and handling system vary substantially."
+      },
+      "required_area_components": [
+        "boiler_equipment",
+        "fuel_handling",
+        "fuel_storage",
+        "ash_handling",
+        "maintenance_access",
+        "safety_clearance"
+      ],
+      "constraint": {
+        "available_area_fields": [
+          "process_equipment_area_m2",
+          "fuel_storage_area_m2",
+          "usable_land_area_m2"
+        ],
+        "condition": "Detailed equipment layout must fit within available process and fuel-storage areas."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "electric_boiler": {
+      "technology_type": "electric_boiler",
+      "installation_type": "indoor_or_outdoor",
+      "area_metric": "equipment_and_auxiliary_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2",
+        "basis": "No universal m2/kW value is imposed because electric-boiler footprint depends on steam capacity, pressure, configuration, feedwater system, transformer/switchgear arrangement and installation layout."
+      },
+      "required_area_components": [
+        "electric_boiler",
+        "feedwater_system",
+        "steam_distribution_connection",
+        "transformer_or_switchgear_if_required",
+        "maintenance_access"
+      ],
+      "constraint": {
+        "available_area_fields": [
+          "process_equipment_area_m2",
+          "electrical_equipment_area_m2"
+        ],
+        "condition": "Vendor equipment footprint plus required electrical and maintenance areas must fit the available site."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "industrial_heat_pump": {
+      "technology_type": "industrial_heat_pump",
+      "installation_type": "indoor_or_outdoor",
+      "area_metric": "equipment_and_auxiliary_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2",
+        "basis": "Footprint depends on heat-pump capacity, source/sink temperatures, refrigerant cycle, heat exchangers, compressors, pumps and system configuration."
+      },
+      "required_area_components": [
+        "heat_pump_unit",
+        "source_side_equipment",
+        "heat_exchangers",
+        "pumps",
+        "controls",
+        "maintenance_access"
+      ],
+      "constraint": {
+        "available_area_field": "process_equipment_area_m2",
+        "condition": "Vendor layout and required service clearances must fit available process-equipment area."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "thermal_energy_storage": {
+      "technology_type": "thermal_energy_storage",
+      "installation_type": "ground_based",
+      "area_metric": "configuration_specific_footprint",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2_per_MWh",
+        "basis": "No universal footprint factor is imposed. Thermal-storage footprint varies strongly with storage medium, temperature, tank geometry, insulation, power rating and duration."
+      },
+      "reference_benchmarks": [
+        {
+          "storage_capacity_MWh": 800,
+          "reported_footprint_m2": 25000,
+          "derived_m2_per_MWh": 31.25,
+          "note": "Large-scale thermal-energy-storage technical assumption; use as a reference configuration, not a universal rule."
+        },
+        {
+          "storage_capacity_MWh": 6600,
+          "reported_footprint_m2": 20000,
+          "derived_m2_per_MWh": 3.03,
+          "note": "High-temperature thermal-storage study; demonstrates that footprint is highly design-dependent."
+        }
+      ],
+      "constraint": {
+        "available_area_field": "usable_land_area_m2",
+        "condition": "Require project-specific storage configuration and footprint before final feasibility."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "battery_energy_storage": {
+      "technology_type": "battery_energy_storage",
+      "installation_type": "containerized_or_indoor",
+      "area_metric": "project_specific_footprint",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2",
+        "basis": "Battery footprint depends on energy capacity, power rating, chemistry, enclosure design, fire-safety spacing, HVAC and site configuration."
+      },
+      "constraint": {
+        "available_area_fields": [
+          "usable_land_area_m2",
+          "electrical_equipment_area_m2"
+        ],
+        "condition": "Use vendor/container layout and applicable fire/electrical safety clearances."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "waste_heat_recovery": {
+      "technology_type": "waste_heat_recovery",
+      "installation_type": "process_integrated",
+      "area_metric": "equipment_specific_footprint",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2",
+        "basis": "Heat-exchanger area and equipment footprint depend on waste-heat source temperature, heat duty, flow rate, pressure, heat-transfer coefficient and integration arrangement."
+      },
+      "required_area_components": [
+        "heat_exchanger",
+        "ducting_or_piping",
+        "fans_or_pumps_if_required",
+        "controls",
+        "maintenance_access"
+      ],
+      "constraint": {
+        "available_area_field": "process_equipment_area_m2",
+        "condition": "Equipment and piping/ducting layout must fit available process area."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    },
+    "solar_thermal": {
+      "technology_type": "solar_thermal",
+      "installation_type": "rooftop_or_ground_based",
+      "area_metric": "collector_field_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2_per_kWth",
+        "basis": "Collector area depends on collector technology, solar resource, operating temperature, collector efficiency, incidence angle, thermal losses and required solar fraction."
+      },
+      "constraint": {
+        "available_area_fields": [
+          "usable_rooftop_area_m2",
+          "usable_land_area_m2"
+        ],
+        "condition": "Calculate collector field from the selected collector technology and required thermal output."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "medium_high"
+    },
+    "wind_power": {
+      "technology_type": "wind_power",
+      "installation_type": "ground_based",
+      "area_metric": "project_land_and_setback_area",
+      "area_requirement": {
+        "value": null,
+        "unit": "m2_per_kW",
+        "basis": "Wind projects require site-specific turbine spacing, setbacks, access roads and land-use assessment; a generic industrial-site footprint factor would be misleading."
+      },
+      "constraint": {
+        "available_area_field": "usable_land_area_m2",
+        "condition": "Require wind-resource assessment, turbine layout and applicable setbacks."
+      },
+      "constraint_strength": "site_specific",
+      "source_quality": "high"
+    }
+  },
+  "conversion_factors": {
+    "acre_to_m2": 4046.8564224,
+    "hectare_to_m2": 10000,
+    "m2_to_sqft": 10.7639104167,
+    "sqft_to_m2": 0.09290304,
+    "MW_to_kW": 1000,
+    "MWh_to_kWh": 1000
+  },
+  "validation_rules": {
+    "solar_pv_rooftop": [
+      "usable_rooftop_area_m2 must be >= 0",
+      "required_area_m2 = installed_capacity_kWp * 10.0",
+      "reject if required_area_m2 > usable_rooftop_area_m2"
+    ],
+    "biomass_cogeneration": [
+      "Use 20.235-28.329 m2/kW only as a preliminary generation-plant screening range.",
+      "Do not apply this value to biomass boilers.",
+      "Final land requirement must include project-specific plant and fuel-storage layout."
+    ],
+    "biomass_boiler": [
+      "Do not assign a universal m2/kW value.",
+      "Require equipment and fuel-storage layout.",
+      "Fuel storage duration must be evaluated separately."
+    ],
+    "electric_boiler": [
+      "Do not assign a universal m2/kW value.",
+      "Require equipment and electrical-infrastructure layout."
+    ],
+    "industrial_heat_pump": [
+      "Do not assign a universal m2/kW value.",
+      "Require vendor footprint and maintenance-clearance data."
+    ],
+    "thermal_energy_storage": [
+      "Do not use the reference m2/MWh values as universal hard constraints.",
+      "Require storage technology, capacity, duration and vendor/design footprint."
+    ],
+    "battery_energy_storage": [
+      "Require project-specific container/equipment footprint.",
+      "Include fire-safety and access clearances in final site-area assessment."
+    ]
+  },
+  "data_provenance": {
+    "primary_indian_source": "Government of India rooftop solar guidance",
+    "primary_biomass_land_source": "Ministry of New and Renewable Energy",
+    "thermal_storage_sources": [
+      "UK Government BEIS storage technical assumptions",
+      "US Department of Energy / OSTI high-temperature thermal-storage research"
+    ],
+    "research_policy": "Use authoritative Indian sources for Indian deployment constraints where available. Use international technical literature for technology-specific engineering benchmarks where Indian standards do not provide a suitable universal value."
+  }
+}
