@@ -1,0 +1,2205 @@
+{
+  "industry": "Food Processing",
+  "industry_id": "food_processing",
+  "country": "India",
+  "sector": "Food Products and Beverages",
+  "subsector": "Food Processing",
+  "description": "Industry profile for Indian food-processing manufacturing, covering cereal and rice milling, ready-to-eat and ready-to-cook foods, bakery, seafood, dairy, fruit and vegetable processing, beverages, edible oils, confectionery and related food products. The sector is heterogeneous; energy demand and suitable decarbonization technologies must therefore be selected according to the product, process temperature, refrigeration requirement, steam demand, production scale and operating profile.",
+
+  "project_role": {
+    "purpose": "Provide industry-specific engineering characteristics to the industrial energy transition optimizer.",
+    "primary_inputs_to_optimizer": [
+      "food_subsector",
+      "production_volume",
+      "production_unit",
+      "process_temperature_c",
+      "steam_requirement",
+      "refrigeration_requirement",
+      "drying_requirement",
+      "current_fuel",
+      "electricity_consumption",
+      "operating_hours",
+      "available_biomass",
+      "available_roof_area",
+      "grid_capacity",
+      "process_load_profile"
+    ],
+    "selection_principle": "Do not apply one generic food-processing technology set. Match the technology to the actual food process and energy duty."
+  },
+
+  "sector_statistics_india": {
+    "latest_registered_food_processing_factories": {
+      "value": 42801,
+      "unit": "factories",
+      "reference_year": "2022-23",
+      "source": "MoFPI Annual Report 2024-25 using ASI 2022-23"
+    },
+    "registered_food_processing_employment": {
+      "value": 22.96,
+      "unit": "lakh_persons",
+      "reference_year": "2022-23",
+      "source": "MoFPI Annual Report 2024-25"
+    },
+    "unincorporated_food_processing_employment": {
+      "value": 46.57,
+      "unit": "lakh_persons",
+      "reference_year": "2022-23",
+      "share_of_unregistered_manufacturing_employment_percent": 15.21,
+      "source": "MoFPI Annual Report 2024-25 using ASUSE 2022-23"
+    },
+    "food_processing_sector_gva": {
+      "value": 2.24,
+      "unit": "lakh_crore_inr_at_2011_12_constant_prices",
+      "reference_year": "2023-24",
+      "source": "MoFPI Annual Report 2024-25"
+    },
+    "food_processing_share_of_manufacturing_gva_percent": {
+      "value": 7.93,
+      "reference_year": "2023-24",
+      "source": "MoFPI Annual Report 2024-25"
+    },
+    "food_processing_growth_rate_percent": {
+      "value": 7.55,
+      "reference_year": "2023-24",
+      "basis": "GVA growth at constant 2011-12 prices",
+      "source": "MoFPI Annual Report 2024-25"
+    },
+    "nine_year_average_growth_rate_percent": {
+      "value": 6.55,
+      "period": "2014-15_to_2023-24",
+      "basis": "Food Processing sector growth at 2011-12 constant prices",
+      "source": "MoFPI Annual Report 2024-25"
+    },
+    "state_distribution_registered_units": {
+      "reference_year": "2022-23",
+      "top_states": [
+        {
+          "state": "Andhra Pradesh",
+          "share_percent": 12.68
+        },
+        {
+          "state": "Tamil Nadu",
+          "share_percent": 11.67
+        },
+        {
+          "state": "Telangana",
+          "share_percent": 8.65
+        },
+        {
+          "state": "Punjab",
+          "share_percent": 8.08
+        },
+        {
+          "state": "Maharashtra",
+          "share_percent": 6.59
+        }
+      ],
+      "source": "MoFPI Annual Report 2024-25 using ASI 2022-23"
+    }
+  },
+
+  "subsectors": [
+    "Rice Mills",
+    "Other Cereal Products",
+    "Dal Mills",
+    "Prepared Foods",
+    "Ready-to-Eat Foods",
+    "Ready-to-Cook Foods",
+    "Bakery Products",
+    "Confectionery",
+    "Seafood Processing",
+    "Dairy Products",
+    "Fruit and Vegetable Products",
+    "Meat Products",
+    "Beverages",
+    "Edible Oils and Fat Emulsions",
+    "Spices and Condiments",
+    "Sweeteners and Honey",
+    "Nutritional Food Products",
+    "Frozen Foods",
+    "Cold Chain and Food Storage"
+  ],
+
+  "typical_temperature": {
+    "min": 50,
+    "max": 210,
+    "unit": "C",
+    "scope": "Representative thermal process range for major food-processing applications covered by BEE and Indian industrial heat studies.",
+    "engineering_note": "Food processing has no single universal process temperature. Drying, cooking, pasteurization, baking, frying and refrigeration operate at substantially different temperatures.",
+    "heat_pump_relevance": "A large share of food-processing heat demand is below 200 C, making low- and medium-temperature electrification particularly relevant.",
+    "source_basis": [
+      "BEE Food Processing Sector Energy Mapping",
+      "IEA industrial heat-pump analysis",
+      "Indian industrial heat electrification research"
+    ]
+  },
+
+  "process_temperature_ranges": {
+    "washing_and_cleaning": {
+      "min": 40,
+      "max": 90,
+      "unit": "C",
+      "applications": [
+        "equipment cleaning",
+        "CIP hot water",
+        "washing",
+        "sanitation"
+      ],
+      "technology_relevance": [
+        "industrial_heat_pump",
+        "solar_thermal",
+        "electric_water_heater",
+        "electric_boiler",
+        "waste_heat_recovery",
+        "thermal_storage"
+      ]
+    },
+
+    "milk_batch_pasteurization": {
+      "temperature": 63,
+      "unit": "C",
+      "holding_time_minutes": 30,
+      "application": "Milk pasteurization",
+      "source": "FSSAI milk processing guidance"
+    },
+
+    "milk_HTST_pasteurization": {
+      "temperature": 72,
+      "unit": "C",
+      "holding_time_seconds": 15,
+      "post_process_cooling_max": 4,
+      "post_process_cooling_unit": "C",
+      "application": "High-temperature short-time milk pasteurization",
+      "source": "FSSAI milk processing guidance"
+    },
+
+    "milk_UHT_processing": {
+      "min": 135,
+      "max": 135,
+      "unit": "C",
+      "holding_time_seconds": {
+        "min": 1,
+        "max": 2
+      },
+      "application": "Ultra-high-temperature milk processing",
+      "source": "FSSAI milk processing guidance"
+    },
+
+    "blanching": {
+      "typical_min": 80,
+      "typical_max": 100,
+      "unit": "C",
+      "representative_indian_example": {
+        "temperature": 90,
+        "unit": "C",
+        "holding_time_minutes": 5,
+        "application": "Green-pod blanching",
+        "source": "ICAR"
+      },
+      "technology_relevance": [
+        "electric_boiler",
+        "industrial_heat_pump",
+        "solar_thermal",
+        "biomass_boiler",
+        "waste_heat_recovery"
+      ]
+    },
+
+    "boiling_and_cooking": {
+      "min": 80,
+      "max": 120,
+      "unit": "C",
+      "applications": [
+        "prepared foods",
+        "sauces",
+        "jams",
+        "pulp processing",
+        "ready-to-eat foods",
+        "ready-to-cook foods"
+      ],
+      "common_heat_sources": [
+        "steam",
+        "hot_water",
+        "thermic_fluid",
+        "direct_fired_heating"
+      ]
+    },
+
+    "drying_and_dehydration": {
+      "min": 50,
+      "max": 120,
+      "unit": "C",
+      "applications": [
+        "fruit drying",
+        "vegetable drying",
+        "spice drying",
+        "grain drying",
+        "paddy drying",
+        "food dehydration"
+      ],
+      "technology_relevance": [
+        "industrial_heat_pump",
+        "heat_recovery",
+        "solar_thermal",
+        "electric_air_heater",
+        "biomass_hot_air_generator",
+        "thermal_storage"
+      ]
+    },
+
+    "bakery_oven": {
+      "min": 65,
+      "max": 210,
+      "unit": "C",
+      "cycle_time_minutes": {
+        "min": 12,
+        "max": 50
+      },
+      "applications": [
+        "bread",
+        "biscuits",
+        "cookies",
+        "rusk",
+        "cake",
+        "bakery_products"
+      ],
+      "common_fuels": [
+        "LPG",
+        "Diesel",
+        "Electricity"
+      ],
+      "source": "BEE RTC-RTE food processing energy mapping"
+    },
+
+    "frying": {
+      "min": 160,
+      "max": 190,
+      "unit": "C",
+      "applications": [
+        "snacks",
+        "namkeen",
+        "chips",
+        "fried ready-to-eat foods"
+      ],
+      "source_basis": "ICAR food-processing examples"
+    },
+
+    "thermic_fluid_heating": {
+      "min": 100,
+      "max": 250,
+      "unit": "C",
+      "applications": [
+        "food heating",
+        "baking support",
+        "drying",
+        "process heating"
+      ],
+      "technology_relevance": [
+        "thermic_fluid_heater",
+        "electric_thermic_fluid_heater",
+        "waste_heat_recovery",
+        "thermal_storage"
+      ],
+      "engineering_note": "The 100-250 C range describes the heating-medium/application envelope rather than a universal food-product temperature."
+    },
+
+    "cold_storage_and_refrigeration": {
+      "min": -30,
+      "max": 4,
+      "unit": "C",
+      "applications": [
+        "frozen food storage",
+        "chilled food storage",
+        "seafood storage",
+        "dairy cooling",
+        "fruit and vegetable cold storage"
+      ],
+      "major_energy_system": "refrigeration"
+    },
+
+    "frozen_food_storage": {
+      "representative_storage_temperature": -18,
+      "unit": "C",
+      "source": "ICAR frozen food processing example"
+    },
+
+    "specialized_high_temperature_roasting": {
+      "min": 250,
+      "max": 320,
+      "unit": "C",
+      "application": "Selected specialized food roasting processes such as traditional makhana roasting",
+      "status": "specialized_process_not_sector_average",
+      "source": "ICAR"
+    }
+  },
+
+  "production_process": [
+    {
+      "stage": 1,
+      "name": "Raw material receiving and preparation",
+      "operations": [
+        "receiving",
+        "cleaning",
+        "washing",
+        "sorting",
+        "grading",
+        "destoning",
+        "inspection"
+      ],
+      "main_energy_forms": [
+        "electricity",
+        "low_temperature_heat_where_required"
+      ],
+      "major_energy_equipment": [
+        "cleaners",
+        "graders",
+        "destoners",
+        "conveyors",
+        "washers",
+        "pumps"
+      ]
+    },
+    {
+      "stage": 2,
+      "name": "Size reduction and primary processing",
+      "operations": [
+        "milling",
+        "dehusking",
+        "shelling",
+        "cutting",
+        "peeling",
+        "grinding",
+        "polishing"
+      ],
+      "main_energy_form": "electricity",
+      "major_energy_equipment": [
+        "mills",
+        "dehuskers",
+        "shellers",
+        "cutters",
+        "grinders",
+        "polishers",
+        "motors"
+      ]
+    },
+    {
+      "stage": 3,
+      "name": "Thermal preparation",
+      "operations": [
+        "blanching",
+        "pasteurization",
+        "boiling",
+        "cooking",
+        "sterilization",
+        "evaporation"
+      ],
+      "main_energy_forms": [
+        "steam",
+        "thermal_energy",
+        "hot_water"
+      ],
+      "major_energy_equipment": [
+        "boilers",
+        "electric_boilers",
+        "heat_exchangers",
+        "thermic_fluid_heaters",
+        "steam_jacketed_vessels",
+        "pasteurizers"
+      ]
+    },
+    {
+      "stage": 4,
+      "name": "Drying and concentration",
+      "operations": [
+        "hot_air_drying",
+        "dehydration",
+        "spray_drying",
+        "evaporation",
+        "concentration"
+      ],
+      "main_energy_forms": [
+        "thermal_energy",
+        "electricity"
+      ],
+      "major_energy_equipment": [
+        "dryers",
+        "hot_air_generators",
+        "steam_heaters",
+        "thermic_fluid_heaters",
+        "fans",
+        "blowers"
+      ]
+    },
+    {
+      "stage": 5,
+      "name": "Baking and frying",
+      "operations": [
+        "baking",
+        "roasting",
+        "frying",
+        "toasting"
+      ],
+      "main_energy_forms": [
+        "thermal_energy",
+        "electricity"
+      ],
+      "major_energy_equipment": [
+        "baking_ovens",
+        "fryers",
+        "roasters",
+        "electric_heaters",
+        "gas_burners"
+      ]
+    },
+    {
+      "stage": 6,
+      "name": "Cooling and refrigeration",
+      "operations": [
+        "product_cooling",
+        "chilling",
+        "freezing",
+        "cold_storage",
+        "blast_freezing",
+        "IQF_freezing"
+      ],
+      "main_energy_form": "electricity",
+      "major_energy_equipment": [
+        "refrigeration_compressors",
+        "condensers",
+        "evaporators",
+        "blast_freezers",
+        "plate_freezers",
+        "IQF_freezers",
+        "cold_rooms",
+        "cooling_towers"
+      ]
+    },
+    {
+      "stage": 7,
+      "name": "Packaging and dispatch",
+      "operations": [
+        "filling",
+        "sealing",
+        "labelling",
+        "packaging",
+        "material_handling"
+      ],
+      "main_energy_form": "electricity",
+      "major_energy_equipment": [
+        "packaging_machines",
+        "compressors",
+        "conveyors",
+        "motors"
+      ]
+    },
+    {
+      "stage": 8,
+      "name": "Cleaning and utilities",
+      "operations": [
+        "CIP",
+        "equipment_cleaning",
+        "water_treatment",
+        "compressed_air",
+        "wastewater_treatment"
+      ],
+      "main_energy_forms": [
+        "electricity",
+        "steam",
+        "hot_water"
+      ],
+      "major_energy_equipment": [
+        "pumps",
+        "compressors",
+        "boilers",
+        "water_heaters",
+        "ETP_pumps"
+      ]
+    }
+  ],
+
+  "common_fuels": [
+    "Electricity",
+    "Rice Husk",
+    "Wood",
+    "Agro-residue",
+    "LPG",
+    "Diesel",
+    "Biomass Briquettes",
+    "Biomass Pellets",
+    "Natural Gas",
+    "Biogas",
+    "Furnace Oil"
+  ],
+
+  "fuel_application_map": {
+    "electricity": {
+      "common_uses": [
+        "motors",
+        "pumps",
+        "fans",
+        "compressors",
+        "refrigeration",
+        "freezing",
+        "packaging",
+        "electric_heaters"
+      ],
+      "priority_for_decarbonization": "high"
+    },
+    "rice_husk": {
+      "common_uses": [
+        "rice_mill_boilers",
+        "parboiling",
+        "paddy_drying",
+        "steam_generation"
+      ],
+      "evidence": "BEE rice-mill cluster energy mapping",
+      "priority_for_transition": "retain_and_optimize_or_replace_fossil_fuels_where_supply_is_verified"
+    },
+    "wood": {
+      "common_uses": [
+        "boilers",
+        "thermic_fluid_heaters",
+        "food_cooking",
+        "process_heating"
+      ],
+      "evidence": "BEE RTC-RTE and food-processing cluster audits",
+      "priority_for_transition": "case_specific"
+    },
+    "LPG": {
+      "common_uses": [
+        "bakery_ovens",
+        "thermic_fluid_heaters",
+        "direct_food_heating"
+      ],
+      "evidence": "BEE RTC-RTE cluster mapping",
+      "priority_for_transition": "evaluate_electrification_where_technically_feasible"
+    },
+    "diesel": {
+      "common_uses": [
+        "backup_generators",
+        "ovens",
+        "small_heaters"
+      ],
+      "evidence": "BEE RTC-RTE food-processing mapping",
+      "priority_for_transition": "high"
+    },
+    "agro_residue": {
+      "common_uses": [
+        "boilers",
+        "thermal_heating",
+        "hot_air_generation"
+      ],
+      "priority_for_transition": "site_specific"
+    },
+    "biomass_briquettes": {
+      "common_uses": [
+        "boilers",
+        "hot_air_generation",
+        "low_and_medium_temperature_heat"
+      ],
+      "priority_for_transition": "site_specific"
+    },
+    "natural_gas": {
+      "common_uses": [
+        "boilers",
+        "direct_fired_heating",
+        "food_ovens"
+      ],
+      "priority_for_transition": "evaluate_electrification_and_efficiency"
+    },
+    "biogas": {
+      "common_uses": [
+        "boilers",
+        "cooking",
+        "thermal_processes"
+      ],
+      "priority_for_transition": "high_where_organic_waste_feedstock_is_available"
+    },
+    "furnace_oil": {
+      "common_uses": [
+        "industrial_boilers",
+        "food_and_beverage_process_heat"
+      ],
+      "priority_for_transition": "high"
+    }
+  },
+
+  "energy_characteristics": {
+    "primary_energy_forms": [
+      "thermal_energy",
+      "electricity",
+      "steam",
+      "refrigeration"
+    ],
+    "thermal_energy_applications": [
+      "pasteurization",
+      "cooking",
+      "boiling",
+      "drying",
+      "baking",
+      "frying",
+      "sterilization",
+      "evaporation"
+    ],
+    "electricity_applications": [
+      "motors",
+      "pumps",
+      "compressors",
+      "refrigeration",
+      "fans",
+      "packaging",
+      "material_handling"
+    ],
+    "critical_energy_systems": [
+      "boilers",
+      "thermic_fluid_heaters",
+      "ovens",
+      "dryers",
+      "refrigeration_systems",
+      "compressed_air",
+      "motors",
+      "pumps"
+    ],
+    "energy_intensity_principle": "Use product-specific SEC rather than one sector-wide SEC.",
+    "recommended_enpi_unit": "kgoe_per_tonne_final_product"
+  },
+
+  "subsector_energy_benchmarks": {
+    "source": "BEE Food Processing Sector Energy Mapping",
+    "unit": "toe_per_tonne_final_product",
+    "conversion": {
+      "toe_to_gj": 41.868,
+      "note": "GJ/t values below are mathematical conversions of BEE's reported toe/t values."
+    },
+    "benchmarks": [
+      {
+        "subsector": "RTC/RTE excluding bakery",
+        "product": "Biscuits",
+        "energy_intensity_toe_per_tonne": 0.523,
+        "energy_intensity_gj_per_tonne": 21.899964,
+        "replicability": "High"
+      },
+      {
+        "subsector": "RTC/RTE excluding bakery",
+        "product": "Savoury Snacks",
+        "energy_intensity_toe_per_tonne": 0.4,
+        "energy_intensity_gj_per_tonne": 16.7472,
+        "replicability": "High"
+      },
+      {
+        "subsector": "RTC/RTE excluding bakery",
+        "product": "Jams/Ketchup",
+        "energy_intensity_toe_per_tonne": 0.06,
+        "energy_intensity_gj_per_tonne": 2.51208,
+        "replicability": "High"
+      },
+      {
+        "subsector": "Rice Mills",
+        "energy_intensity_toe_per_tonne": 0.061,
+        "energy_intensity_gj_per_tonne": 2.554008,
+        "industry_count_reference": 17600,
+        "replicability": "High"
+      },
+      {
+        "subsector": "Seafood",
+        "energy_intensity_toe_per_tonne": 0.095,
+        "energy_intensity_gj_per_tonne": 3.97746,
+        "industry_count_reference": 883,
+        "replicability": "High"
+      },
+      {
+        "subsector": "Bakery Products",
+        "energy_intensity_toe_per_tonne": 0.09,
+        "energy_intensity_gj_per_tonne": 3.76812,
+        "industry_count_reference": 24163,
+        "replicability": "Low"
+      },
+      {
+        "subsector": "Fats, Oils and Fat Emulsion",
+        "energy_intensity_toe_per_tonne": 0.011,
+        "energy_intensity_gj_per_tonne": 0.460548,
+        "industry_count_reference": 19019,
+        "replicability": "High"
+      },
+      {
+        "subsector": "Beverages excluding dairy",
+        "energy_intensity_toe_per_tonne": 0.0122,
+        "energy_intensity_gj_per_tonne": 0.5107896,
+        "industry_count_reference": 22474,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Dairy Products",
+        "energy_intensity_toe_per_tonne": 0.012,
+        "energy_intensity_gj_per_tonne": 0.502416,
+        "industry_count_reference": 21282,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Sweeteners including Honey",
+        "energy_intensity_toe_per_tonne": 0.038,
+        "energy_intensity_gj_per_tonne": 1.590984,
+        "industry_count_reference": 9183,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Salts, Spices, Soups and Protein Products",
+        "energy_intensity_toe_per_tonne": 0.037,
+        "energy_intensity_gj_per_tonne": 1.549116,
+        "industry_count_reference": 24277,
+        "replicability": "Low"
+      },
+      {
+        "subsector": "Confectionery",
+        "energy_intensity_toe_per_tonne": 0.037,
+        "energy_intensity_gj_per_tonne": 1.549116,
+        "industry_count_reference": 8495,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Foodstuffs for nutritional uses",
+        "energy_intensity_toe_per_tonne": 0.03,
+        "energy_intensity_gj_per_tonne": 1.25604,
+        "industry_count_reference": 4217,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Meat Products",
+        "energy_intensity_toe_per_tonne": 0.1,
+        "energy_intensity_gj_per_tonne": 4.1868,
+        "industry_count_reference": 1976,
+        "replicability": "Medium"
+      },
+      {
+        "subsector": "Fruit and Vegetable Products",
+        "energy_intensity_toe_per_tonne": 0.011,
+        "energy_intensity_gj_per_tonne": 0.460548,
+        "industry_count_reference": 16930,
+        "replicability": "Low"
+      },
+      {
+        "subsector": "Edible Ices",
+        "energy_intensity_toe_per_tonne": 0.01,
+        "energy_intensity_gj_per_tonne": 0.41868,
+        "industry_count_reference": 2548,
+        "replicability": "Low"
+      }
+    ],
+    "benchmarking_rule": "These values come from BEE mapping and audit/reference datasets. They are not universal plant guarantees. Product type, production level, mechanization and best operating practices materially affect SEC."
+  },
+
+  "rtc_rte_sec_benchmarks": {
+    "source": "BEE Energy Mapping of MSME Food Processing Sector",
+    "unit": "kgoe_per_tonne_final_product",
+    "benchmarks": [
+      {
+        "product": "Bakery items",
+        "sec": 316
+      },
+      {
+        "product": "Sweets",
+        "sec": 296
+      },
+      {
+        "product": "Bakery items, sweets and namkeen",
+        "sec": 304
+      },
+      {
+        "product": "Pickles, sauce, murabba",
+        "sec": 268
+      },
+      {
+        "product": "Namkeen",
+        "sec": 44
+      },
+      {
+        "product": "Candies and jellies",
+        "sec": 20
+      },
+      {
+        "product": "Frozen foods",
+        "sec_min": 40,
+        "sec_max": 420,
+        "variation_note": "Large variation attributed by BEE to differences in production levels."
+      }
+    ],
+    "sector_level_projection": {
+      "fy_2022_23": 245,
+      "fy_2027_28": 232,
+      "fy_2032_33": 220,
+      "unit": "kgoe_per_tonne",
+      "scenario": "Actual energy-efficiency adoption scenario",
+      "source": "BEE"
+    }
+  },
+
+  "rice_mill_sec_benchmarks": {
+    "source": "BEE Energy Mapping of MSME Food Processing Sector",
+    "unit": "kgoe_per_tonne_final_product",
+    "products": [
+      {
+        "product": "Raw Rice",
+        "minimum": 1.52,
+        "maximum": 3.53,
+        "median": 1.99
+      },
+      {
+        "product": "Parboiled Rice",
+        "minimum": 81.6,
+        "maximum": 124.7,
+        "median": 92.6
+      }
+    ],
+    "engineering_note": "Parboiled rice has substantially higher SEC because parboiling and drying require significant thermal energy, while raw rice milling is dominated more by electrical milling operations."
+  },
+
+  "seafood_sec_benchmarks": {
+    "source": "BEE Energy Mapping of MSME Food Processing Sector",
+    "unit": "kgoe_per_tonne_final_product",
+    "products": [
+      {
+        "product": "Wet Seafood",
+        "minimum": 27,
+        "maximum": 76,
+        "median": 45.3
+      },
+      {
+        "product": "Dry Seafood",
+        "minimum": 2922,
+        "maximum": 2922,
+        "median": 2922,
+        "note": "BEE reports approximately 2922 kgoe/t for dried seafood."
+      }
+    ],
+    "major_energy_consumer": {
+      "wet_seafood": "refrigeration_and_freezing",
+      "dry_seafood": "drying"
+    }
+  },
+
+  "cluster_energy_profiles": {
+    "rice_mill_clusters": [
+      {
+        "cluster": "Kaithal",
+        "state": "Haryana",
+        "rice_mill_units": 146,
+        "annual_production_tonnes": 1368010,
+        "major_products": [
+          "raw rice",
+          "parboiled rice"
+        ],
+        "energy_mix": {
+          "rice_husk_and_other_thermal_energy_share_percent": 90,
+          "electricity_share_percent": 10
+        },
+        "major_fuels": [
+          "rice_husk",
+          "cane_straw",
+          "electricity",
+          "small_diesel_share"
+        ],
+        "major_equipment": [
+          "rice_husk_boilers",
+          "air_compressors",
+          "paddy_cleaners",
+          "destoners",
+          "fans",
+          "elevators",
+          "motors"
+        ]
+      },
+      {
+        "cluster": "Vellore",
+        "state": "Tamil Nadu",
+        "rice_mill_units": 340,
+        "major_product": "Ponni rice",
+        "major_fuels": [
+          "electricity",
+          "wood",
+          "GN_husk",
+          "rice_husk"
+        ],
+        "major_equipment": [
+          "boilers",
+          "hot_air_dryers",
+          "elevators",
+          "paddy_cleaners",
+          "hullers",
+          "whiteners",
+          "sorters",
+          "air_compressors"
+        ]
+      },
+      {
+        "cluster": "Warangal",
+        "state": "Telangana",
+        "rice_mill_units": 110,
+        "annual_production_tonnes": 600000,
+        "major_products": [
+          "raw rice",
+          "parboiled rice",
+          "kalam rice"
+        ],
+        "major_fuels": [
+          "rice_husk",
+          "agro_residue",
+          "electricity"
+        ]
+      },
+      {
+        "cluster": "Ganjam-Nayagarh",
+        "state": "Odisha",
+        "rice_mill_units": 270,
+        "annual_production_tonnes": 1111949,
+        "major_products": [
+          "raw rice",
+          "parboiled rice"
+        ],
+        "energy_mix_reference": {
+          "rice_husk_share_percent": 89.6,
+          "electricity_share_percent": 10.3,
+          "diesel_share_percent": 0.1
+        }
+      }
+    ],
+
+    "rtc_rte_clusters": [
+      {
+        "cluster": "Ludhiana",
+        "estimated_units": 200,
+        "estimated_annual_production_tonnes": 164835,
+        "major_products": [
+          "bakery products",
+          "savoury snacks",
+          "ready-to-eat foods",
+          "jam",
+          "pickle"
+        ],
+        "fuel_mix_toe": {
+          "electricity": 2461,
+          "LPG": 6636,
+          "diesel": 3841,
+          "wood": 7230,
+          "total": 20168
+        },
+        "fuel_mix_percent": {
+          "electricity": 12,
+          "LPG": 33,
+          "diesel": 19,
+          "wood": 36
+        },
+        "thermal_energy_share_percent": 87
+      },
+      {
+        "cluster": "Pune",
+        "fuel_mix_toe": {
+          "electricity": 1245,
+          "LPG": 67,
+          "diesel": 12,
+          "wood": 416,
+          "total": 1740
+        },
+        "fuel_mix_percent": {
+          "electricity": 72,
+          "LPG": 4,
+          "diesel": 1,
+          "wood": 24
+        }
+      }
+    ]
+  },
+
+  "equipment_benchmarks": {
+    "source": "BEE food-processing energy audits",
+    "thermic_fluid_heater": {
+      "best_efficiency_percent": 81,
+      "fuel_air_ratio_lpg": {
+        "min": 1.12,
+        "max": 1.15
+      },
+      "fuel_air_ratio_wood": {
+        "min": 1.32,
+        "max": 1.39
+      },
+      "recommended_stack_or_surface_controls": [
+        "fine_tune_burner",
+        "recover_waste_heat",
+        "insulate_Thermopac_surface",
+        "insulate_reserve_oil_tanks"
+      ]
+    },
+    "wood_fired_boiler": {
+      "best_efficiency_percent": 74,
+      "recommended_stack_temperature_c": {
+        "min": 120,
+        "max": 130
+      },
+      "recommended_air_ratio": {
+        "min": 1.32,
+        "max": 1.39
+      },
+      "recommended_operating_load_fraction": 0.67,
+      "measures": [
+        "combustion_optimization",
+        "boiler_insulation",
+        "condensate_line_insulation",
+        "feedwater_preheating",
+        "combustion_air_preheating",
+        "automatic_blowdown_control",
+        "steam_pressure_optimization",
+        "VFD_for_variable_load_fans"
+      ]
+    },
+    "compressed_air": {
+      "best_specific_power": {
+        "reciprocating": 0.22,
+        "screw_single_stage": 0.19,
+        "screw_multistage": 0.25
+      },
+      "unit": "kWh_per_cfm",
+      "recommended_leakage_range_percent": {
+        "min": 3,
+        "max": 10
+      },
+      "measures": [
+        "reduce_compressor_pressure_to_actual_requirement",
+        "replace_old_reciprocating_compressor_with_VSD_screw",
+        "proper_piping",
+        "periodic_suction_filter_cleaning"
+      ]
+    },
+    "refrigeration_RTC_RTE": {
+      "best_COP": 1.47,
+      "applications": [
+        "cold_storage",
+        "frozen_food",
+        "blast_freezing",
+        "chilling"
+      ],
+      "measures": [
+        "air_curtains",
+        "evaporator_FCU_temperature_control",
+        "condenser_cleaning",
+        "pipe_insulation",
+        "cold_room_sealing",
+        "seasonal_parameter_optimization"
+      ]
+    },
+    "seafood_refrigeration": {
+      "water_cooled_refrigeration_compressor_COP": 2.042,
+      "air_cooled_refrigeration_compressor_COP": 1.638,
+      "major_energy_consumer": "freezing_and_refrigeration"
+    },
+    "seafood_electric_motors": {
+      "best_efficiency_percent": 96
+    },
+    "seafood_pumps": {
+      "best_efficiency_percent": 68
+    }
+  },
+
+  "common_energy_consumers": [
+    {
+      "equipment": "Boiler",
+      "energy_type": "thermal",
+      "importance": "very_high",
+      "applications": [
+        "steam_generation",
+        "cooking",
+        "parboiling",
+        "pasteurization",
+        "drying"
+      ]
+    },
+    {
+      "equipment": "Thermic Fluid Heater",
+      "energy_type": "thermal",
+      "importance": "high",
+      "applications": [
+        "process_heating",
+        "drying",
+        "baking_support"
+      ]
+    },
+    {
+      "equipment": "Bakery Oven",
+      "energy_type": "thermal",
+      "importance": "very_high",
+      "applications": [
+        "baking"
+      ]
+    },
+    {
+      "equipment": "Refrigeration Compressor",
+      "energy_type": "electricity",
+      "importance": "very_high",
+      "applications": [
+        "freezing",
+        "cold_storage",
+        "chilling"
+      ]
+    },
+    {
+      "equipment": "Dryer",
+      "energy_type": "thermal_and_electricity",
+      "importance": "high",
+      "applications": [
+        "dehydration",
+        "paddy_drying",
+        "food_drying"
+      ]
+    },
+    {
+      "equipment": "Electric Motors",
+      "energy_type": "electricity",
+      "importance": "high",
+      "applications": [
+        "pumps",
+        "fans",
+        "conveyors",
+        "mills",
+        "mixers",
+        "processing_equipment"
+      ]
+    },
+    {
+      "equipment": "Air Compressor",
+      "energy_type": "electricity",
+      "importance": "medium_to_high",
+      "applications": [
+        "instrumentation",
+        "pneumatic_utilities",
+        "service_air"
+      ]
+    },
+    {
+      "equipment": "Pumps",
+      "energy_type": "electricity",
+      "importance": "medium_to_high",
+      "applications": [
+        "water",
+        "process_liquids",
+        "ETP",
+        "CIP"
+      ]
+    }
+  ],
+
+  "recommended_technologies": [
+    "Energy Management System",
+    "Boiler Efficiency Improvement",
+    "Electric Boiler",
+    "Electrode Boiler",
+    "Industrial Heat Pump",
+    "Electric Water Heating",
+    "Electric Thermic Fluid Heater",
+    "Electric Resistance Heating",
+    "Solar Thermal",
+    "Solar PV",
+    "Biomass Boiler",
+    "Biomass Hot Air Generator",
+    "Biogas Generation",
+    "Waste Heat Recovery",
+    "Heat Exchanger",
+    "Thermal Energy Storage",
+    "Refrigeration System Optimization",
+    "VFD Refrigeration Compressor",
+    "VSD Screw Compressor",
+    "IE4 Motors",
+    "Efficient Pumps",
+    "Air Curtains",
+    "Automatic Evaporator Control",
+    "Advanced Process Control",
+    "AI Paddy Dryer",
+    "Rooftop Solar"
+  ],
+
+  "technology_profiles": {
+    "industrial_heat_pump": {
+      "priority": "very_high_for_low_and_medium_temperature_heat",
+      "best_applications": [
+        "hot_water",
+        "washing",
+        "cleaning",
+        "pasteurization_preheating",
+        "low_temperature_drying",
+        "selected_food_process_heat",
+        "waste_heat_upgrade"
+      ],
+      "preferred_output_temperature_max_c": 165,
+      "pilot_high_temperature_output_max_c": 200,
+      "typical_COP_range": {
+        "min": 3,
+        "max": 5,
+        "note": "Representative range for suitable low-temperature applications; COP falls as temperature lift increases."
+      },
+      "selection_rule": "Evaluate only when the required process temperature and available heat source are compatible.",
+      "exclusion_rule": "Do not recommend a conventional industrial heat pump as the primary source for food processes requiring temperatures well above 200 C.",
+      "source_basis": [
+        "IEA industrial heat-pump analysis",
+        "Indian industrial heat electrification research"
+      ]
+    },
+
+    "electric_boiler": {
+      "priority": "very_high",
+      "best_applications": [
+        "process_steam",
+        "pasteurization",
+        "cooking",
+        "cleaning",
+        "sterilization",
+        "low_pressure_steam"
+      ],
+      "advantages": [
+        "precise_temperature_control",
+        "rapid_modulation",
+        "no_on_site_combustion",
+        "compatible_with_renewable_electricity"
+      ],
+      "constraints": [
+        "available_grid_capacity",
+        "electricity_tariff",
+        "steam_pressure",
+        "steam_flow",
+        "production_profile"
+      ]
+    },
+
+    "electrode_boiler": {
+      "priority": "high",
+      "applications": [
+        "steam_generation",
+        "renewable_power_to_steam",
+        "flexible_process_heat"
+      ],
+      "constraints": [
+        "electrical_capacity",
+        "power_quality",
+        "steam_demand_profile",
+        "electricity_cost"
+      ]
+    },
+
+    "electric_thermic_fluid_heater": {
+      "priority": "high",
+      "applications": [
+        "thermic_fluid_heating",
+        "drying",
+        "food heating",
+        "selected baking processes"
+      ],
+      "temperature_selection": "Use only where required thermal-fluid temperature is within equipment capability.",
+      "advantages": [
+        "precise_temperature_control",
+        "zero_on_site_combustion",
+        "renewable_electricity_compatibility"
+      ]
+    },
+
+    "solar_thermal": {
+      "priority": "high_for_low_temperature_loads",
+      "best_applications": [
+        "hot_water",
+        "preheating",
+        "washing",
+        "cleaning",
+        "low_temperature_process_heat"
+      ],
+      "constraints": [
+        "solar_resource",
+        "roof_or_land_area",
+        "process_load_profile",
+        "thermal_storage",
+        "backup_heat_source"
+      ],
+      "selection_rule": "Do not assume solar thermal can directly supply high-temperature baking or specialized roasting."
+    },
+
+    "solar_pv": {
+      "priority": "high",
+      "best_applications": [
+        "refrigeration",
+        "motors",
+        "pumps",
+        "compressors",
+        "electric_boilers",
+        "heat_pumps",
+        "electric_heaters"
+      ],
+      "constraints": [
+        "available_roof_area",
+        "roof_structural_capacity",
+        "grid_connection",
+        "state_net_metering_or_open_access_rules",
+        "load_profile"
+      ],
+      "BEE_reference_module_efficiency_percent": {
+        "min": 15,
+        "max": 22
+      }
+    },
+
+    "biomass_boiler": {
+      "priority": "high_where_local_biomass_is_verified",
+      "best_applications": [
+        "steam_generation",
+        "boiling",
+        "cooking",
+        "drying",
+        "thermic_fluid_heating"
+      ],
+      "potential_fuels": [
+        "rice_husk",
+        "agricultural_residue",
+        "biomass_briquettes",
+        "biomass_pellets",
+        "wood_residue"
+      ],
+      "constraints": [
+        "local_feedstock_availability",
+        "moisture",
+        "ash",
+        "calorific_value",
+        "storage_area",
+        "transport_cost",
+        "emission_compliance",
+        "seasonality"
+      ],
+      "optimizer_rule": "Biomass must be treated as a locally constrained resource. Do not assume unlimited or year-round biomass availability."
+    },
+
+    "biomass_hot_air_generator": {
+      "priority": "medium_to_high",
+      "best_applications": [
+        "drying",
+        "paddy_drying",
+        "low_and_medium_temperature_hot_air"
+      ],
+      "constraints": [
+        "biomass_quality",
+        "moisture",
+        "air_temperature_requirement",
+        "product_quality_requirement"
+      ]
+    },
+
+    "biogas_generation": {
+      "priority": "conditional",
+      "feedstocks": [
+        "food_waste",
+        "organic_process_waste",
+        "wastewater_sludge_where_suitable"
+      ],
+      "applications": [
+        "boiler_fuel",
+        "cooking",
+        "thermal_processes"
+      ],
+      "optimizer_rule": "Calculate biogas yield from measured organic waste quantity and composition before recommending replacement of LPG or diesel."
+    },
+
+    "waste_heat_recovery": {
+      "priority": "very_high",
+      "candidate_sources": [
+        "boiler_flue_gas",
+        "oven_flue_gas",
+        "thermic_fluid_heater_exhaust",
+        "refrigeration_compressor_heat",
+        "hot_process_liquids",
+        "steam_condensate"
+      ],
+      "candidate_sinks": [
+        "boiler_feedwater",
+        "combustion_air",
+        "process_water",
+        "washing_water",
+        "preheating",
+        "drying_air"
+      ],
+      "BEE_reference_measures": [
+        "oven_flue_gas_recovery",
+        "thermopac_waste_heat_recovery",
+        "boiler_flue_gas_recovery",
+        "condensate_heat_recovery"
+      ],
+      "selection_rule": "Require measured source temperature, mass flow, operating hours and a technically compatible heat sink."
+    },
+
+    "thermal_energy_storage": {
+      "priority": "medium_to_high",
+      "applications": [
+        "hot_water",
+        "steam",
+        "electrified_boiler_load_shifting",
+        "solar_thermal_integration",
+        "heat_pump_integration"
+      ],
+      "benefit": "Decouples heat generation from heat demand and can allow renewable electricity or solar energy to serve later production periods.",
+      "constraints": [
+        "required_storage_temperature",
+        "storage_duration",
+        "heat_demand_profile",
+        "space",
+        "cycling_frequency"
+      ]
+    },
+
+    "refrigeration_optimization": {
+      "priority": "very_high_for_frozen_and_seafood_processing",
+      "measures": [
+        "VFD_screw_compressor",
+        "condenser_cleaning",
+        "evaporator_temperature_control",
+        "air_curtains",
+        "cold_room_sealing",
+        "pipe_insulation",
+        "defrost_optimization",
+        "seasonal_control"
+      ],
+      "BEE_reference": {
+        "water_cooled_seafood_refrigeration_COP": 2.042,
+        "air_cooled_seafood_refrigeration_COP": 1.638
+      }
+    },
+
+    "VSD_screw_compressor": {
+      "priority": "high",
+      "applications": [
+        "compressed_air",
+        "instrumentation",
+        "pneumatic_utilities"
+      ],
+      "BEE_RTE_RTC_reference_energy_saving_percent": 20,
+      "selection_rule": "Evaluate when existing reciprocating compressors have variable loading and significant unload operation."
+    },
+
+    "IE4_motors": {
+      "priority": "high",
+      "applications": [
+        "pumps",
+        "fans",
+        "blowers",
+        "mills",
+        "mixers",
+        "conveyors",
+        "refrigeration_auxiliaries"
+      ],
+      "BEE_reference_power_reduction_percent": {
+        "min": 5,
+        "max": 8
+      }
+    },
+
+    "efficient_pumps": {
+      "priority": "medium_to_high",
+      "applications": [
+        "process_water",
+        "CIP",
+        "ETP",
+        "cooling_water",
+        "food_liquid_transfer"
+      ],
+      "measures": [
+        "operate_near_BEP",
+        "VFD_for_variable_load",
+        "replace_worn_pumps",
+        "online_monitoring_for_large_systems"
+      ]
+    },
+
+    "AI_paddy_dryer": {
+      "priority": "high_for_rice_mills",
+      "applications": [
+        "paddy_drying"
+      ],
+      "control_features": [
+        "grain_temperature_sensor",
+        "moisture_sensor",
+        "humidity_sensor",
+        "automatic_hot_air_control",
+        "automatic_blower_control",
+        "automatic_burner_heat_control"
+      ],
+      "benefits": [
+        "moisture_uniformity",
+        "reduced_kernel_cracking",
+        "quality_control",
+        "optimized_airflow",
+        "optimized_heat_input"
+      ],
+      "source": "BEE food-processing state-of-the-art technology compendium"
+    },
+
+    "rooftop_solar": {
+      "priority": "high",
+      "applications": [
+        "electricity_supply",
+        "refrigeration",
+        "motors",
+        "pumps",
+        "compressors",
+        "electric_heat"
+      ],
+      "constraints": [
+        "roof_area",
+        "structural_capacity",
+        "dust",
+        "vibration",
+        "cleaning_requirements",
+        "state_grid_policy"
+      ]
+    }
+  },
+
+  "food_specific_efficiency_measures": [
+    {
+      "measure": "Recuperative burner for ovens",
+      "application": "Bakery and RTE/RTE oven systems",
+      "reference_energy_saving_percent": 3,
+      "source": "BEE"
+    },
+    {
+      "measure": "Thyristor control for electric ovens",
+      "application": "Electric food ovens",
+      "reference_energy_saving_percent": 10,
+      "source": "BEE"
+    },
+    {
+      "measure": "Reduction of baking fixture weight",
+      "application": "Bakery ovens",
+      "reference_energy_saving_percent": 7,
+      "source": "BEE"
+    },
+    {
+      "measure": "Individual Quick Freezer",
+      "application": "Frozen food",
+      "reference_energy_saving_percent": 30,
+      "source": "BEE"
+    },
+    {
+      "measure": "Rotary rack baking oven",
+      "application": "Bakery",
+      "reference_energy_saving_percent": 5,
+      "source": "BEE"
+    },
+    {
+      "measure": "VSD screw compressor replacement",
+      "application": "Compressed air",
+      "reference_energy_saving_percent": 20,
+      "source": "BEE"
+    },
+    {
+      "measure": "IE4 motor replacement",
+      "application": "Motors",
+      "reference_energy_saving_percent": 5,
+      "source": "BEE"
+    },
+    {
+      "measure": "ETP pump replacement",
+      "application": "Wastewater treatment",
+      "reference_energy_saving_percent": 20,
+      "source": "BEE"
+    },
+    {
+      "measure": "IoT energy monitoring",
+      "application": "Plant-wide energy management",
+      "reference_energy_saving_percent": 1,
+      "source": "BEE"
+    },
+    {
+      "measure": "Biogas generation",
+      "application": "Food waste",
+      "reference_energy_saving": "site_specific",
+      "replication_potential": {
+        "micro": "Low",
+        "small": "Low",
+        "medium": "Medium"
+      },
+      "source": "BEE"
+    },
+    {
+      "measure": "Rooftop solar",
+      "application": "Plant electricity",
+      "reference": "High relevance across MSME size classes in BEE RTC-RTE assessment",
+      "source": "BEE"
+    },
+    {
+      "measure": "Oven insulation",
+      "application": "Bakery and RTE/RTE ovens",
+      "reference_energy_saving_percent": 12,
+      "source": "BEE"
+    },
+    {
+      "measure": "Oven excess-air optimization",
+      "application": "Fuel-fired ovens",
+      "reference_energy_saving_percent": 1.5,
+      "source": "BEE"
+    },
+    {
+      "measure": "Thermopac excess-air optimization",
+      "application": "Thermic-fluid heating",
+      "reference_energy_saving_percent": 4,
+      "source": "BEE"
+    },
+    {
+      "measure": "Thermopac surface insulation",
+      "application": "Thermic-fluid heater",
+      "reference_energy_saving_percent": 6,
+      "source": "BEE"
+    },
+    {
+      "measure": "Electric heater insulation",
+      "application": "Electric process heater",
+      "reference_energy_saving_percent": 10,
+      "source": "BEE"
+    },
+    {
+      "measure": "Diesel heater insulation",
+      "application": "Diesel process heater",
+      "reference_energy_saving_percent": 10,
+      "source": "BEE"
+    },
+    {
+      "measure": "Boiler and steam-drum insulation",
+      "application": "Steam system",
+      "reference_energy_saving_percent": 6,
+      "source": "BEE"
+    },
+    {
+      "measure": "Condensate-return-line insulation",
+      "application": "Steam system",
+      "reference_energy_saving_percent": 3,
+      "source": "BEE"
+    },
+    {
+      "measure": "Compressor pressure optimization",
+      "application": "Compressed air",
+      "reference_energy_saving_percent": 10,
+      "source": "BEE"
+    },
+    {
+      "measure": "Direct-drive conversion from flat V-belt",
+      "application": "Motors and fans",
+      "reference_energy_saving_percent": 4,
+      "source": "BEE"
+    },
+    {
+      "measure": "Air curtains",
+      "application": "Cold storage and freezer entrances",
+      "reference_energy_saving_percent": 3,
+      "source": "BEE"
+    },
+    {
+      "measure": "Automatic evaporator fan ON/OFF control",
+      "application": "Cold rooms and refrigeration",
+      "reference_energy_saving_percent": 3,
+      "source": "BEE"
+    },
+    {
+      "measure": "Condenser tube cleaning",
+      "application": "Refrigeration",
+      "reference_energy_saving_percent": 4,
+      "source": "BEE"
+    }
+  ],
+
+  "verified_audit_examples": {
+    "seafood_VFD_compressor": {
+      "energy_saving_toe_per_year": 34,
+      "monetary_saving_inr_lakh_per_year": 29,
+      "investment_inr_lakh": 63,
+      "simple_payback_years": 2.2,
+      "estimated_annual_ghg_reduction_tCO2": 300,
+      "technology": "VFD based screw compressor replacing ammonia reciprocating compressor",
+      "source": "BEE seafood processing energy audit"
+    },
+    "seafood_hot_gas_defrost": {
+      "energy_saving_toe_per_year": 0.3,
+      "monetary_saving_inr_lakh_per_year": 0.35,
+      "investment_inr_lakh": 0.5,
+      "simple_payback_years": 1.4,
+      "technology": "Hot-gas defrost instead of electric defrost",
+      "source": "BEE seafood processing energy audit"
+    },
+    "seafood_FRP_fan_blades": {
+      "energy_saving_toe_per_year": 4,
+      "monetary_saving_inr_lakh_per_year": 3.5,
+      "investment_inr_lakh": 2.1,
+      "simple_payback_years": 0.6,
+      "estimated_annual_ghg_reduction_tCO2": 37,
+      "technology": "FRP blades for evaporator-side FCU",
+      "source": "BEE seafood processing energy audit"
+    },
+    "refrigeration_air_curtain": {
+      "energy_saving_toe_per_year": 3.5,
+      "monetary_saving_inr_lakh_per_year": 3.25,
+      "investment_inr_lakh": 0.65,
+      "simple_payback_years": 0.2,
+      "estimated_annual_ghg_reduction_tCO2": 34,
+      "source": "BEE RTE-RTE and seafood processing energy audit"
+    },
+    "refrigeration_FCU_control": {
+      "energy_saving_toe_per_year": 4.8,
+      "monetary_saving_inr_lakh_per_year": 4.4,
+      "investment_inr_lakh": 3.5,
+      "simple_payback_years": 0.8,
+      "estimated_annual_ghg_reduction_tCO2": 46,
+      "source": "BEE RTE-RTE and seafood processing energy audit"
+    },
+    "rice_mill_compressed_air_VFD": {
+      "electricity_reduction_percent": 35,
+      "energy_saving_toe_per_year": 3.9,
+      "monetary_saving_inr_lakh_per_year": 3.8,
+      "investment_inr_lakh": 6.1,
+      "simple_payback_years": 1.6,
+      "source": "BEE rice/seafood energy audit"
+    },
+    "rice_mill_direct_drive": {
+      "electricity_reduction_percent": 8,
+      "energy_saving_toe_per_year": 2,
+      "monetary_saving_inr_lakh_per_year": 1.9,
+      "investment_inr_lakh": 3.1,
+      "simple_payback_years": 1.6,
+      "source": "BEE rice mill energy audit"
+    }
+  },
+
+  "decarbonization_pathways": [
+    {
+      "pathway_id": "food_efficiency_first",
+      "priority": 1,
+      "sequence": [
+        "energy_audit",
+        "submetering",
+        "SEC_baseline",
+        "boiler_optimization",
+        "thermic_fluid_heater_optimization",
+        "oven_insulation",
+        "refrigeration_optimization",
+        "compressed_air_optimization",
+        "motor_efficiency",
+        "pump_efficiency"
+      ],
+      "objective": "Reduce energy demand before fuel switching or electrification."
+    },
+    {
+      "pathway_id": "food_waste_heat_integration",
+      "priority": 2,
+      "sequence": [
+        "identify_hot_exhausts",
+        "measure_source_temperature",
+        "measure_source_flow",
+        "identify_heat_sink",
+        "install_heat_exchanger",
+        "recover_boiler_or_oven_heat",
+        "reuse_condensate"
+      ],
+      "objective": "Recover thermal energy that is currently rejected."
+    },
+    {
+      "pathway_id": "food_low_temperature_electrification",
+      "priority": 3,
+      "sequence": [
+        "identify_loads_below_165C",
+        "evaluate_heat_pump",
+        "evaluate_electric_water_heating",
+        "evaluate_electric_boiler",
+        "evaluate_solar_thermal",
+        "evaluate_thermal_storage"
+      ],
+      "objective": "Electrify technically suitable low-temperature heat."
+    },
+    {
+      "pathway_id": "food_medium_temperature_electrification",
+      "priority": 4,
+      "sequence": [
+        "identify_165_to_210C_loads",
+        "evaluate_high_temperature_heat_pump_if_validated",
+        "evaluate_electric_boiler",
+        "evaluate_electric_resistance",
+        "evaluate_electric_thermic_fluid_heater",
+        "evaluate_thermal_storage"
+      ],
+      "objective": "Reduce fossil fuel use in medium-temperature food processes."
+    },
+    {
+      "pathway_id": "food_renewable_steam",
+      "priority": 5,
+      "sequence": [
+        "measure_steam_demand",
+        "optimize_existing_boiler",
+        "evaluate_biomass_boiler",
+        "evaluate_electric_boiler",
+        "evaluate_electrode_boiler",
+        "evaluate_solar_PV_powered_electric_boiler",
+        "evaluate_thermal_storage"
+      ],
+      "objective": "Transition steam production away from fossil fuels while maintaining production reliability."
+    },
+    {
+      "pathway_id": "food_refrigeration_decarbonization",
+      "priority": 6,
+      "sequence": [
+        "measure_refrigeration_load",
+        "measure_COP",
+        "optimize_compressors",
+        "clean_condensers",
+        "optimize_evaporator_controls",
+        "reduce_air_infiltration",
+        "install_VFD_compressor",
+        "supply_electricity_with_solar_or_green_power"
+      ],
+      "objective": "Reduce electricity consumption and emissions from cold-chain operations."
+    },
+    {
+      "pathway_id": "food_biomass_and_biogas",
+      "priority": 7,
+      "sequence": [
+        "measure_organic_waste",
+        "measure_local_biomass_availability",
+        "verify_fuel_quality",
+        "calculate_delivered_biomass_cost",
+        "evaluate_biomass_boiler",
+        "evaluate_biogas_generation",
+        "compare_against_electrification"
+      ],
+      "objective": "Use locally available renewable thermal fuels where they are technically and economically justified."
+    }
+  ],
+
+  "technology_exclusions": {
+    "generic_heat_pump_for_all_food_processes": {
+      "status": "reject",
+      "reason": "Food processing contains both low-temperature processes and higher-temperature baking, roasting and specialized thermal processes.",
+      "rule": "Match heat pump output temperature to the actual process requirement."
+    },
+    "solar_thermal_for_all_food_heat": {
+      "status": "reject",
+      "reason": "Solar thermal is intermittent and temperature-dependent.",
+      "rule": "Use for suitable low-temperature heat or preheating and evaluate thermal storage/backup."
+    },
+    "biomass_without_supply_verification": {
+      "status": "reject",
+      "reason": "Biomass availability, moisture, calorific value, transport, storage and seasonality can determine feasibility.",
+      "rule": "Require a local biomass resource assessment."
+    },
+    "electricity_only_for_fossil_boiler_replacement": {
+      "status": "conditional",
+      "reason": "Electrification can be technically attractive but may require additional electrical capacity and can have high operating cost under certain industrial tariffs.",
+      "rule": "Check grid capacity, tariff, load factor and renewable electricity availability."
+    },
+    "one_sector_wide_SEC": {
+      "status": "reject",
+      "reason": "BEE data show major differences between raw rice, parboiled rice, bakery, frozen food, wet seafood and dry seafood.",
+      "rule": "Use product/subsector-specific SEC."
+    }
+  },
+
+  "decision_rules": {
+    "heat_pump_low_temperature": {
+      "condition": "process_temperature_c <= 165",
+      "action": "evaluate_industrial_heat_pump"
+    },
+    "heat_pump_high_temperature": {
+      "condition": "165 < process_temperature_c <= 200",
+      "action": "evaluate_only_with_verified_high_temperature_heat_pump"
+    },
+    "heat_pump_exclusion": {
+      "condition": "process_temperature_c > 200",
+      "action": "exclude_conventional_heat_pump_as_primary_heat_source"
+    },
+    "electric_boiler": {
+      "condition": "steam_required == true AND sufficient_electric_capacity == true",
+      "action": "evaluate_electric_boiler"
+    },
+    "biomass_boiler": {
+      "condition": "biomass_available == true AND biomass_quality_verified == true",
+      "action": "evaluate_biomass_boiler"
+    },
+    "biogas": {
+      "condition": "organic_waste_available == true AND viable_biogas_yield == true",
+      "action": "evaluate_biogas_generation"
+    },
+    "refrigeration": {
+      "condition": "refrigeration_load_present == true",
+      "action": "evaluate_refrigeration_efficiency_before_capacity_expansion"
+    },
+    "waste_heat": {
+      "condition": "recoverable_waste_heat_available == true AND compatible_heat_sink_exists == true",
+      "action": "evaluate_waste_heat_recovery_before_new_heat_generation"
+    },
+    "solar_pv": {
+      "condition": "electric_load_present == true AND suitable_roof_or_land_available == true",
+      "action": "evaluate_solar_pv"
+    },
+    "solar_thermal": {
+      "condition": "thermal_load_temperature_c <= 120 AND solar_resource_sufficient == true",
+      "action": "evaluate_solar_thermal"
+    },
+    "thermal_storage": {
+      "condition": "heat_generation_and_heat_use_can_be_temporally_decoupled == true",
+      "action": "evaluate_thermal_storage"
+    },
+    "rice_husk": {
+      "condition": "food_subsector == rice_mill AND rice_husk_available == true",
+      "action": "evaluate_husk_boiler_and_husk_utilization_before_external_fuel_purchase"
+    }
+  },
+
+  "required_optimizer_inputs": [
+    "food_subsector",
+    "specific_product",
+    "annual_production_tonnes",
+    "daily_production_tonnes",
+    "production_unit",
+    "operating_hours_per_day",
+    "operating_days_per_year",
+    "process_temperature_c",
+    "steam_required",
+    "steam_demand_tph",
+    "steam_pressure_bar",
+    "hot_water_demand_m3_per_day",
+    "drying_required",
+    "drying_temperature_c",
+    "refrigeration_required",
+    "refrigeration_capacity_TR",
+    "cold_storage_temperature_c",
+    "current_fuel",
+    "daily_fuel_consumption",
+    "annual_fuel_consumption",
+    "fuel_calorific_value",
+    "fuel_cost",
+    "electricity_consumption_kwh_per_day",
+    "electricity_tariff",
+    "grid_capacity_kw",
+    "grid_reliability_percent",
+    "boiler_capacity_tph",
+    "boiler_efficiency_percent",
+    "thermic_fluid_heater_capacity_kcal_per_hr",
+    "compressor_capacity_cfm",
+    "refrigeration_COP",
+    "pump_capacity_kw",
+    "motor_capacity_kw",
+    "waste_heat_source_temperature_c",
+    "waste_heat_source_flow",
+    "waste_heat_available_hours_per_year",
+    "available_roof_area_m2",
+    "available_land_area_m2",
+    "solar_resource",
+    "biomass_type",
+    "biomass_availability_tonnes_per_year",
+    "biomass_moisture_percent",
+    "biomass_calorific_value",
+    "organic_waste_tonnes_per_day",
+    "thermal_storage_space",
+    "budget_inr",
+    "financing_available",
+    "required_payback_years",
+    "production_reliability_requirement"
+  ],
+
+  "benchmarking_rules": {
+    "primary_metric": "Specific Energy Consumption",
+    "primary_unit": "kgoe_per_tonne_final_product",
+    "secondary_metrics": [
+      "kWh_per_tonne_product",
+      "kg_steam_per_tonne_product",
+      "kgoe_per_tonne_product_for_boiler",
+      "kW_per_CFM_for_compressed_air",
+      "COP_for_refrigeration",
+      "thermal_efficiency_percent"
+    ],
+    "rule": "Compare the factory against the most appropriate product/subsector benchmark rather than the generic food-processing sector.",
+    "source": "BEE food processing energy mapping"
+  },
+
+  "energy_saving_potential": {
+    "rtc_rte": {
+      "actual_scenario_saving_percent": 10.5,
+      "reference_energy_consumption_2022_23_ktoe": 47.79,
+      "projected_BAU_energy_consumption_2032_33_ktoe": 145.59,
+      "estimated_energy_saving_2032_33_ktoe": 15.26,
+      "source": "BEE"
+    },
+    "rte": {
+      "actual_scenario_saving_percent": 10.6,
+      "reference_energy_consumption_2022_23_ktoe": 43.73,
+      "projected_BAU_energy_consumption_2032_33_ktoe": 133.22,
+      "estimated_energy_saving_2032_33_ktoe": 14.12,
+      "source": "BEE"
+    },
+    "rtc": {
+      "actual_scenario_saving_percent": 9.2,
+      "reference_energy_consumption_2022_23_ktoe": 4.06,
+      "projected_BAU_energy_consumption_2032_33_ktoe": 12.37,
+      "estimated_energy_saving_2032_33_ktoe": 1.14,
+      "source": "BEE"
+    },
+    "rice_mill": {
+      "actual_scenario_2033_energy_reduction_mtoe": 1.062,
+      "actual_scenario_2033_CO2_reduction_mt": 1.185,
+      "projected_SEC_reduction_percent": 14,
+      "source": "BEE"
+    }
+  },
+
+  "msme_relevance": {
+    "priority": "very_high",
+    "reason": "BEE's dedicated energy mapping focuses specifically on MSME food-processing clusters and identifies energy-efficiency technologies, field-audit opportunities and implementation barriers.",
+    "important_msmse_characteristics": [
+      "small_and_medium_production_units",
+      "heterogeneous_equipment",
+      "older_boilers_and_motors_in_some_units",
+      "limited_energy_monitoring",
+      "variable_production_levels",
+      "seasonality_for_selected_products",
+      "limited_capital_for_energy_efficiency_projects"
+    ],
+    "optimizer_implication": "Recommendations should include low-capex operational measures before large capital-intensive electrification projects."
+  },
+
+  "priority_order_for_optimizer": [
+    {
+      "priority": 1,
+      "action": "Establish product-specific SEC baseline"
+    },
+    {
+      "priority": 2,
+      "action": "Identify boiler, oven, thermic-fluid and refrigeration losses"
+    },
+    {
+      "priority": 3,
+      "action": "Apply low-cost efficiency measures"
+    },
+    {
+      "priority": 4,
+      "action": "Evaluate waste heat recovery"
+    },
+    {
+      "priority": 5,
+      "action": "Evaluate low-temperature electrification"
+    },
+    {
+      "priority": 6,
+      "action": "Evaluate biomass or biogas where locally available"
+    },
+    {
+      "priority": 7,
+      "action": "Evaluate solar PV and solar thermal"
+    },
+    {
+      "priority": 8,
+      "action": "Evaluate thermal storage for flexible heat loads"
+    },
+    {
+      "priority": 9,
+      "action": "Generate financially feasible transition pathways"
+    }
+  ],
+
+  "data_quality": {
+    "profile_type": "engineering_knowledge_base",
+    "geographic_scope": "India",
+    "last_verified": "2026-08-16",
+    "primary_sources": [
+      "Bureau of Energy Efficiency",
+      "Ministry of Food Processing Industries",
+      "Food Safety and Standards Authority of India",
+      "International Energy Agency",
+      "Indian Council of Agricultural Research",
+      "Indian industrial heat electrification research"
+    ],
+    "quality_rules": [
+      "Do not use a single generic SEC for all food processing.",
+      "Do not use a single process temperature for all food products.",
+      "Do not assume all food factories use biomass.",
+      "Do not assume all food factories require steam.",
+      "Do not assume all food factories require refrigeration.",
+      "Do not recommend heat pumps for processes beyond their validated temperature range.",
+      "Use measured plant-specific SEC whenever available.",
+      "Use product-specific production data when calculating energy intensity.",
+      "Use audited BEE savings as reference values rather than guaranteed savings.",
+      "Biomass availability must be verified locally before recommending a biomass pathway.",
+      "Electric-heating recommendations must check grid capacity and tariff.",
+      "Refrigeration should be modeled separately from thermal process heat."
+    ]
+  },
+
+  "source_registry": [
+    {
+      "publisher": "Bureau of Energy Efficiency",
+      "document": "Energy Mapping of MSME Food Processing Sector in India / Food Processing Sector Energy Mapping",
+      "primary_use": [
+        "food-processing subsectors",
+        "SEC benchmarks",
+        "cluster data",
+        "fuel mix",
+        "boiler performance",
+        "thermic fluid heater performance",
+        "refrigeration",
+        "compressed air",
+        "energy efficiency measures",
+        "technology savings"
+      ]
+    },
+    {
+      "publisher": "Ministry of Food Processing Industries",
+      "document": "Annual Report 2024-25",
+      "primary_use": [
+        "registered food-processing units",
+        "employment",
+        "GVA",
+        "state distribution",
+        "sector growth"
+      ]
+    },
+    {
+      "publisher": "Food Safety and Standards Authority of India",
+      "document": "Milk and Milk Product Processing Guidance",
+      "primary_use": [
+        "milk pasteurization temperature",
+        "milk UHT temperature",
+        "post-pasteurization cooling"
+      ]
+    },
+    {
+      "publisher": "International Energy Agency",
+      "document": "Heat Pump Monitor 2026",
+      "primary_use": [
+        "industrial heat-pump temperature suitability",
+        "low-and-medium-temperature industrial heat"
+      ]
+    },
+    {
+      "publisher": "Indian Council of Agricultural Research",
+      "document": "Food processing and post-harvest technology references",
+      "primary_use": [
+        "blanching",
+        "drying",
+        "freezing",
+        "food-processing temperature examples"
+      ]
+    },
+    {
+      "publisher": "Energy Innovation",
+      "document": "Electrifying Industrial Heat in India",
+      "primary_use": [
+        "food and beverage low-to-medium-temperature electrification",
+        "industrial heat-pump suitability",
+        "thermal storage",
+        "electric heating"
+      ]
+    },
+    {
+      "publisher": "MNRE and GIZ",
+      "document": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Application",
+      "primary_use": [
+        "biomass-based industrial heat",
+        "green steam",
+        "food-processing biomass relevance",
+        "MSME biomass supply-chain considerations"
+      ]
+    }
+  ]
+}
