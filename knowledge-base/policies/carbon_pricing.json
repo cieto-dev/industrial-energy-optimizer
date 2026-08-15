@@ -1,0 +1,374 @@
+{
+  "schema_version": "2.0",
+  "policy_id": "india_carbon_pricing_icm_ccts",
+  "policy_name": "Indian Carbon Market and Carbon Credit Pricing",
+  "country": "India",
+  "currency": "INR",
+  "primary_unit": "INR_per_tCO2e",
+  "status": "active_policy_framework",
+  "last_verified": "2026-08-15",
+
+  "purpose": {
+    "description": "Stores India's current carbon-market policy framework and configurable carbon-price assumptions for use by the Industrial Energy Transition Optimizer.",
+    "optimizer_use": [
+      "Estimate potential carbon compliance costs where the factory is an obligated entity under the Indian Carbon Market.",
+      "Estimate the economic value of verified emission reductions where applicable.",
+      "Perform carbon-price sensitivity analysis for transition pathways.",
+      "Compare fossil-fuel-intensive and low-carbon pathways under different carbon-cost assumptions.",
+      "Keep regulatory carbon pricing separate from engineering emission factors and ordinary fuel prices."
+    ],
+    "important_policy_rule": "India does not have a single universal carbon tax rate in INR per tCO2e that should be applied to every industrial facility."
+  },
+
+  "indian_carbon_market": {
+    "name": "Indian Carbon Market",
+    "abbreviation": "ICM",
+    "legal_framework": "Carbon Credit Trading Scheme, 2023",
+    "notified_date": "2023-06-28",
+    "administered_by": "Bureau of Energy Efficiency",
+    "registry_operator": "Grid Controller of India Limited",
+    "trading_regulator": "Central Electricity Regulatory Commission",
+    "governance_body": "National Steering Committee for Indian Carbon Market",
+    "certificate_unit": "tCO2e",
+    "one_carbon_credit_certificate": {
+      "quantity": 1.0,
+      "unit": "tCO2e",
+      "meaning": "One Carbon Credit Certificate represents one tonne of carbon dioxide equivalent reduction, removal or avoidance as defined under the applicable framework."
+    },
+    "trading_platform": "Power Exchanges or other modes permitted by CERC under the applicable regulations",
+    "trading_frequency": "monthly or other periodicity approved by the Commission",
+    "source_quality": "official_government"
+  },
+
+  "pricing_framework": {
+    "pricing_method": "market_based_price_discovery",
+    "fixed_national_carbon_tax": false,
+    "fixed_national_price_inr_per_tCO2e": null,
+    "official_price_status": "No single universal INR_per_tCO2e carbon tax should be hard-coded for all Indian industries.",
+    "price_discovery": {
+      "method": "bidding_and_market_price_discovery",
+      "venue": "Power Exchanges or other permitted trading mechanism",
+      "regulated_by": "Central Electricity Regulatory Commission",
+      "description": "CCC prices are discovered through the applicable market mechanism rather than being assigned one universal statutory carbon-tax rate."
+    },
+    "floor_price": {
+      "defined_in_regulations": true,
+      "current_numeric_value_inr_per_tCO2e": null,
+      "reason": "The regulations define the concept of a floor price but a universal numeric value should not be invented or treated as a permanent national carbon price.",
+      "definition": "Minimum price at which Carbon Credit Certificates may be traded."
+    },
+    "forbearance_price": {
+      "defined_in_regulations": true,
+      "current_numeric_value_inr_per_tCO2e": null,
+      "reason": "The regulations define the concept of a forbearance price but a universal numeric value should not be invented or treated as a permanent national carbon price.",
+      "definition": "Maximum price at which Carbon Credit Certificates may be traded."
+    },
+    "optimizer_rule": {
+      "default_price": null,
+      "price_required_for_compliance_calculation": true,
+      "price_source_priority": [
+        "Latest verified CCC market price",
+        "Official market-price dataset",
+        "User-provided contractual carbon price",
+        "Scenario carbon price selected by user"
+      ],
+      "fallback_behavior": "If no verified market price is available, do not silently assume a carbon price. Run the optimization without carbon-cost monetization or use explicitly labelled scenario assumptions."
+    }
+  },
+
+  "ccts_mechanisms": {
+    "compliance_mechanism": {
+      "enabled": true,
+      "target_type": "greenhouse_gas_emission_intensity",
+      "target_unit": "tCO2e_per_unit_of_equivalent_output",
+      "applicability": "Only entities notified as obligated entities under the applicable CCTS compliance framework.",
+      "underperformance_rule": "An obligated entity that fails to achieve its prescribed GEI target may need to purchase or surrender the equivalent number of CCCs corresponding to the shortfall.",
+      "overperformance_rule": "An obligated entity that reduces its GEI below its prescribed target may become eligible for issuance of CCCs subject to the applicable rules and verification.",
+      "banking": true,
+      "compliance_cycle": "Annual compliance against notified targets within the applicable trajectory period"
+    },
+    "offset_mechanism": {
+      "enabled": true,
+      "applicability": "Non-obligated entities and eligible project activities subject to the detailed offset procedure.",
+      "purpose": "Create carbon credits from eligible greenhouse-gas emission reduction, removal or avoidance activities.",
+      "project_based": true,
+      "baseline_and_credit": true,
+      "verification_required": true
+    }
+  },
+
+  "obligated_entity_scope": {
+    "current_framework": {
+      "initial_sectors": [
+        "Aluminium",
+        "Cement",
+        "Chlor-Alkali",
+        "Pulp and Paper"
+      ],
+      "additional_sectors_added_by_2026_amendment": [
+        "Secondary Aluminium",
+        "Petroleum Refinery",
+        "Petrochemicals",
+        "Textile"
+      ],
+      "sector_count_in_current_compliance_framework": 8,
+      "important_note": "The list of sectors and obligated entities can change through government notifications. The optimizer must therefore check the latest official notification rather than assuming every MSME is automatically subject to CCTS."
+    },
+    "notified_entities": {
+      "first_2025_notification": {
+        "number_of_entities": 282,
+        "baseline_financial_year": "2023-24",
+        "notification_date": "2025-10-08"
+      },
+      "2026_amendment": {
+        "additional_entities": 208,
+        "notification_date": "2026-01-13"
+      },
+      "combined_reference_count": 490,
+      "important_note": "490 is a reference count derived from the two government-reported groups and must not be interpreted as a permanent total because the obligated-entity list can be amended."
+    }
+  },
+
+  "greenhouse_gas_emission_intensity": {
+    "metric": "GEI",
+    "full_name": "Greenhouse Gas Emission Intensity",
+    "unit": "tCO2e_per_equivalent_output",
+    "baseline_concept": "Entity-specific baseline emission intensity",
+    "target_concept": "Notified target emission intensity",
+    "compliance_calculation": {
+      "target_emissions": "GEI_target * equivalent_output",
+      "actual_emissions": "GEI_achieved * equivalent_output",
+      "shortfall_tCO2e": "max(0, actual_emissions - target_emissions)",
+      "surplus_tCO2e": "max(0, target_emissions - actual_emissions)"
+    },
+    "carbon_credit_requirement": {
+      "formula": "shortfall_tCO2e",
+      "unit": "tCO2e",
+      "ccc_requirement": "1 CCC per 1 tCO2e of applicable compliance shortfall, subject to the detailed procedure."
+    },
+    "carbon_credit_generation": {
+      "formula": "surplus_tCO2e",
+      "unit": "tCO2e",
+      "ccc_generation": "1 CCC per 1 tCO2e of eligible verified surplus, subject to the applicable rules and issuance procedure."
+    }
+  },
+
+  "environmental_compensation": {
+    "enabled": true,
+    "applies_to": "Applicable non-compliance under the Greenhouse Gases Emission Intensity Target Rules",
+    "penalty_basis": "average_CCC_market_price",
+    "multiplier": 2.0,
+    "formula": "environmental_compensation = 2.0 * average_CCC_market_price_inr_per_tCO2e * applicable_shortfall_tCO2e",
+    "unit": "INR",
+    "important_note": "This is an environmental-compensation mechanism for applicable non-compliance, not a universal carbon tax.",
+    "optimizer_treatment": "Apply only when the factory is confirmed to be an obligated entity and the applicable non-compliance condition is modelled."
+  },
+
+  "carbon_cost_model": {
+    "enabled": true,
+    "model_type": "conditional_market_price",
+    "base_formula": {
+      "annual_carbon_cost": "annual_CCC_requirement_tCO2e * carbon_price_inr_per_tCO2e"
+    },
+    "net_carbon_value_formula": {
+      "annual_net_carbon_value": "(eligible_CCC_generation_tCO2e - CCC_requirement_tCO2e) * carbon_price_inr_per_tCO2e"
+    },
+    "compliance_case": {
+      "if_shortfall_positive": "Carbon cost is incurred for required CCC purchases or surrender obligations.",
+      "if_surplus_positive": "Potential carbon-credit value may be recognized subject to eligibility, issuance, verification and marketability."
+    },
+    "non_obligated_entity_case": {
+      "default_compliance_carbon_cost": 0,
+      "offset_credit_value": "Only recognize if the project qualifies under the applicable offset mechanism and credits are actually issued."
+    }
+  },
+
+  "scenario_pricing": {
+    "purpose": "Sensitivity analysis when a verified current CCC market price is unavailable or when the user wants to evaluate investment robustness against future carbon-price conditions.",
+    "official_status": "MODEL_ASSUMPTION_NOT_GOVERNMENT_PRICE",
+    "recommended_configuration": {
+      "enabled": true,
+      "scenarios": [
+        {
+          "name": "no_carbon_cost",
+          "carbon_price_inr_per_tCO2e": 0,
+          "interpretation": "Ignore monetized carbon cost; useful as a conservative baseline for projects where carbon pricing is not currently applicable."
+        },
+        {
+          "name": "user_defined_low",
+          "carbon_price_inr_per_tCO2e": null,
+          "interpretation": "User or analyst supplies a low carbon-price assumption."
+        },
+        {
+          "name": "user_defined_medium",
+          "carbon_price_inr_per_tCO2e": null,
+          "interpretation": "User or analyst supplies a central carbon-price assumption."
+        },
+        {
+          "name": "user_defined_high",
+          "carbon_price_inr_per_tCO2e": null,
+          "interpretation": "User or analyst supplies a high carbon-price assumption for transition-risk analysis."
+        }
+      ]
+    },
+    "hard_rule": "Scenario values must never be presented to the user as official Indian government carbon prices."
+  },
+
+  "optimizer_integration": {
+    "economic_effects": [
+      "Carbon compliance expenditure",
+      "Potential value of eligible CCC generation",
+      "Potential environmental compensation exposure",
+      "Sensitivity of project economics to future carbon prices"
+    ],
+    "ranking_effect": {
+      "enabled": true,
+      "recommended_use": "Use carbon cost/value as one economic criterion rather than allowing it to override technical feasibility, reliability or production constraints."
+    },
+    "scenario_comparison": {
+      "recommended_metrics": [
+        "Annual carbon cost",
+        "Annual carbon value",
+        "Net carbon-related cash flow",
+        "CO2e reduction",
+        "Carbon-cost-adjusted OPEX",
+        "Carbon-price sensitivity of payback",
+        "Carbon-price sensitivity of NPV",
+        "Carbon-price sensitivity of ROI"
+      ]
+    }
+  },
+
+  "worked_examples": {
+    "example_1_compliance_shortfall": {
+      "factory_status": "Obligated entity",
+      "annual_equivalent_output": 100000,
+      "target_gei_tCO2e_per_output": 0.80,
+      "achieved_gei_tCO2e_per_output": 0.90,
+      "target_emissions_tCO2e": 80000,
+      "actual_emissions_tCO2e": 90000,
+      "shortfall_tCO2e": 10000,
+      "ccc_requirement": 10000,
+      "carbon_price_inr_per_tCO2e": 1500,
+      "illustrative_carbon_cost_inr": 15000000,
+      "illustrative_carbon_cost_note": "The INR 1,500/tCO2e price in this example is a modelling input only and is NOT an official Indian CCC price."
+    },
+    "example_2_emission_reduction": {
+      "baseline_emissions_tCO2e_per_year": 12000,
+      "transition_pathway_emissions_tCO2e_per_year": 7000,
+      "annual_reduction_tCO2e": 5000,
+      "carbon_price_inr_per_tCO2e": 1500,
+      "illustrative_carbon_value_inr_per_year": 7500000,
+      "eligibility_warning": "A reduction of 5,000 tCO2e does not automatically create 5,000 tradable CCCs. Eligibility, baseline methodology, monitoring, verification and issuance requirements must be satisfied."
+    },
+    "example_3_penalty_exposure": {
+      "applicable_shortfall_tCO2e": 5000,
+      "average_CCC_market_price_inr_per_tCO2e": 1800,
+      "environmental_compensation_multiplier": 2.0,
+      "illustrative_environmental_compensation_inr": 18000000,
+      "calculation": "5000 * 1800 * 2.0",
+      "warning": "This example illustrates the statutory multiplier mechanism; it is not a prediction of the actual market price."
+    }
+  },
+
+  "data_validation_rules": {
+    "rule_1": "Never treat a user-entered or analyst-selected carbon price as an official Government of India carbon tax.",
+    "rule_2": "Never assign CCTS compliance obligations to a factory solely because it is an MSME or because it operates in an energy-intensive industry.",
+    "rule_3": "Confirm obligated-entity status against the latest official notification.",
+    "rule_4": "Use tCO2e consistently for carbon-credit quantities.",
+    "rule_5": "Separate carbon-credit price from fuel price, electricity tariff and emission factor.",
+    "rule_6": "Do not count theoretical emission reductions as tradable carbon credits without applicable eligibility and verification.",
+    "rule_7": "Do not use an outdated CCC market price without recording its observation date.",
+    "rule_8": "If no verified CCC market price exists, use sensitivity analysis instead of silently inserting a price.",
+    "rule_9": "Environmental compensation must not be modelled as an ordinary recurring carbon tax.",
+    "rule_10": "Carbon pricing must never override hard engineering constraints."
+  },
+
+  "data_freshness": {
+    "policy_update_required": true,
+    "recommended_update_frequency": "quarterly",
+    "immediate_update_triggers": [
+      "CCTS amendment",
+      "New obligated-entity notification",
+      "New GEI target notification",
+      "New CERC CCC trading regulation",
+      "New CCC price-discovery mechanism",
+      "Change in environmental-compensation rule",
+      "Change in compliance or offset methodology"
+    ],
+    "stale_data_threshold_days": 180
+  },
+
+  "source_provenance": {
+    "primary_sources": [
+      {
+        "organization": "Bureau of Energy Efficiency",
+        "document": "Indian Carbon Market Framework / Carbon Credit Trading Scheme information",
+        "source_type": "official_government",
+        "used_for": [
+          "ICM structure",
+          "Compliance mechanism",
+          "Offset mechanism",
+          "CCC definition",
+          "Institutional framework",
+          "Covered-sector framework"
+        ]
+      },
+      {
+        "organization": "Ministry of Power",
+        "document": "Carbon Credit Trading Scheme, 2023",
+        "notification_date": "2023-06-28",
+        "source_type": "official_government",
+        "used_for": [
+          "Legal foundation of CCTS",
+          "Definition of carbon credit",
+          "Indian carbon market framework"
+        ]
+      },
+      {
+        "organization": "Ministry of Environment, Forest and Climate Change",
+        "document": "Greenhouse Gases Emission Intensity Target Rules, 2025",
+        "notification_date": "2025-10-08",
+        "source_type": "official_government",
+        "used_for": [
+          "GEI target framework",
+          "Compliance obligations",
+          "Environmental compensation mechanism"
+        ]
+      },
+      {
+        "organization": "Ministry of Environment, Forest and Climate Change",
+        "document": "Greenhouse Gases Emission Intensity Target Amendment Rules, 2025",
+        "notification_date": "2026-01-13",
+        "source_type": "official_government",
+        "used_for": [
+          "Additional obligated sectors and entities"
+        ]
+      },
+      {
+        "organization": "Central Electricity Regulatory Commission",
+        "document": "CERC Terms and Conditions for Purchase and Sale of Carbon Credit Certificates Regulations, 2026",
+        "notification_date": "2026-02-27",
+        "source_type": "official_regulator",
+        "used_for": [
+          "CCC trading framework",
+          "Price discovery",
+          "Floor-price definition",
+          "Forbearance-price definition",
+          "Power-exchange trading",
+          "Registry and administrator roles"
+        ]
+      }
+    ]
+  },
+
+  "implementation_status": {
+    "current_indian_policy_framework": "implemented",
+    "fixed_carbon_tax": "not_applicable",
+    "live_CCC_price_feed": "not_configured",
+    "scenario_carbon_pricing": "supported",
+    "compliance_calculation": "supported",
+    "offset_mechanism": "supported_as_policy_reference",
+    "future_live_market_integration": "recommended"
+  }
+}
