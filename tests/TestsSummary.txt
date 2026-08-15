@@ -1,0 +1,344 @@
+The **`tests/`** folder is responsible for **verification and validation**. Unlike the `models/` folder that performs calculations or the `backend/` that exposes APIs, the `tests/` folder ensures that every component of the Industrial Energy Transition Optimizer behaves correctly under different conditions.
+
+This directly supports the **Validation, Explainability and Trust** principle in your project architecture, where the system must be validated through baseline calculations, infeasible scenarios, sensitivity checks, and reproducible outputs before deployment. 
+
+---
+
+# tests/
+
+## Purpose
+
+The `tests` folder contains automated test cases for validating the correctness, reliability, and stability of the Industrial Energy Transition Optimizer.
+
+Its primary objectives are to:
+
+* verify engineering calculations
+* validate optimization results
+* detect software bugs
+* ensure consistent outputs after code updates
+* prevent regressions during development
+
+These tests are executed during development and before deployment to ensure that modifications do not break existing functionality.
+
+---
+
+# Overall Testing Workflow
+
+```text
+                Source Code
+                     │
+                     ▼
+            Execute Test Suite
+                     │
+     ┌───────────────┼───────────────┐
+     ▼               ▼               ▼
+ Baseline Tests  API Tests   Optimizer Tests
+     │               │               │
+     └───────────────┼───────────────┘
+                     ▼
+              Pass / Fail Report
+```
+
+---
+
+# 1. api.py
+
+## Responsibility
+
+This file tests the backend API endpoints.
+
+Its purpose is to ensure that every API
+
+* accepts valid requests
+* rejects invalid requests
+* returns the expected HTTP status codes
+* produces correctly structured JSON responses
+
+---
+
+### Example Tests
+
+```text
+GET /health
+
+Expected
+
+200 OK
+```
+
+```text
+POST /industry
+
+Valid Input
+
+Expected
+
+Industry Profile Returned
+```
+
+---
+
+### Why important?
+
+Even if the optimization engine works correctly,
+
+the application becomes unusable if the APIs fail.
+
+---
+
+# 2. test_baseline.py
+
+## Responsibility
+
+This module verifies the correctness of baseline energy calculations.
+
+It tests whether
+
+* energy demand calculations
+* heat demand estimation
+* baseline cost
+* baseline emissions
+
+match expected engineering values.
+
+---
+
+### Example
+
+Input
+
+```text
+Coal = 1000 kg/day
+```
+
+Expected
+
+```text
+Energy Demand = Calculated Value
+```
+
+If the returned value differs significantly,
+
+the test fails.
+
+---
+
+### Why important?
+
+Every optimization begins with the baseline.
+
+An incorrect baseline produces incorrect recommendations.
+
+---
+
+# 3. test_constraints.py
+
+## Responsibility
+
+This file verifies the technical constraint engine.
+
+It checks whether infeasible technologies are correctly rejected.
+
+Typical constraints include
+
+* temperature limits
+* grid capacity
+* roof area
+* biomass availability
+* infrastructure compatibility
+
+---
+
+### Example
+
+Factory Requirement
+
+```text
+Temperature = 850°C
+```
+
+Technology
+
+```text
+Solar Thermal
+
+Maximum = 300°C
+```
+
+Expected Result
+
+```text
+Rejected
+```
+
+---
+
+### Why important?
+
+The optimizer should never recommend a technically impossible solution.
+
+---
+
+# 4. test_optimizer.py
+
+## Responsibility
+
+This module validates the optimization engine.
+
+It ensures that
+
+* feasible scenarios are ranked correctly
+* optimization objectives are respected
+* scores are calculated consistently
+* the best pathway is selected according to the defined criteria
+
+---
+
+### Example
+
+Input Scenarios
+
+```text
+Scenario A
+
+Cost = Low
+
+Emission = High
+```
+
+```text
+Scenario B
+
+Cost = Medium
+
+Emission = Very Low
+```
+
+Expected
+
+```text
+Scenario B
+
+Higher Overall Score
+```
+
+---
+
+### Why important?
+
+The optimizer is the project's decision-making core.
+
+Incorrect ranking leads to poor recommendations.
+
+---
+
+# 5. test_recommendations.py
+
+## Responsibility
+
+This file validates the recommendation engine.
+
+It confirms that the system returns
+
+* the correct recommended pathway
+* accurate financial metrics
+* correct emission reductions
+* valid explanations
+
+---
+
+### Example
+
+Optimization Result
+
+```text
+Best Score
+
+Scenario 3
+```
+
+Expected Recommendation
+
+```text
+Scenario 3
+```
+
+---
+
+### Why important?
+
+Users rely on the recommendation to make investment decisions.
+
+Incorrect recommendations reduce confidence in the system.
+
+---
+
+# 6. test (folder)
+
+## Responsibility
+
+The `test` folder stores additional testing resources that support the automated test suite.
+
+Depending on the implementation, it may include:
+
+* sample input datasets
+* expected output files
+* mock API responses
+* reusable test utilities
+* integration test data
+
+These resources help keep the test scripts organized by separating the test logic from the supporting data.
+
+---
+
+# Relationship with the Architecture
+
+```text
+              Models
+                 │
+                 ▼
+            Backend APIs
+                 │
+                 ▼
+          Execute Tests
+                 │
+      ┌──────────┼──────────┐
+      ▼          ▼          ▼
+ Baseline   Constraints  Optimizer
+      │          │          │
+      └──────────┼──────────┘
+                 ▼
+         Recommendation Tests
+                 │
+                 ▼
+          Validation Report
+```
+
+---
+
+# Why a Separate Testing Layer?
+
+The project architecture emphasizes **validation and explainability**. Before presenting a recommendation to the user, every stage—from baseline calculations to optimization and final recommendations—must be verified against known test cases and engineering assumptions. 
+
+Keeping tests in a dedicated folder provides several advantages:
+
+* **Reliability:** Detects errors before deployment.
+* **Regression Prevention:** Ensures new code doesn't break existing functionality.
+* **Engineering Validation:** Confirms calculations match expected values.
+* **Maintainability:** Each module has its own focused test cases.
+* **Deployment Confidence:** The application is released only after all tests pass.
+
+---
+
+# Summary
+
+| File                          | Responsibility                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------- |
+| **`api.py`**                  | Tests backend API endpoints, request validation, and response formats.                 |
+| **`test_baseline.py`**        | Verifies baseline energy, cost, and emission calculations.                             |
+| **`test_constraints.py`**     | Confirms that technical constraints correctly accept or reject technologies.           |
+| **`test_optimizer.py`**       | Validates scenario ranking and optimization logic.                                     |
+| **`test_recommendations.py`** | Ensures the recommendation engine returns the correct pathway with accurate metrics.   |
+| **`test/`**                   | Stores supporting test data, fixtures, mock responses, and reusable testing resources. |
+
+Overall, the `tests/` folder acts as the **quality assurance layer** of your project. It does not contribute directly to the optimization process but guarantees that every engineering calculation, constraint check, optimization decision, API endpoint, and recommendation remains accurate, reproducible, and trustworthy throughout the software lifecycle.

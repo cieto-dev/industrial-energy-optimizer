@@ -1,0 +1,367 @@
+Perfect. The **`backend/apis/`** folder is the **communication layer** of your backend. It **does not perform calculations**; instead, it exposes endpoints that receive requests from the frontend, invoke the appropriate model/service, and return structured responses.
+
+This aligns with your architecture where the **Application Layer** sits between the UI and the core calculation modules, orchestrating the flow while the engineering and decision logic remain in separate modules. 
+
+---
+
+# backend/apis/
+
+## Purpose
+
+The `apis` folder contains all REST API endpoints exposed by the backend. Each file represents a specific functional area of the Industrial Energy Transition Optimizer.
+
+Its primary responsibility is to:
+
+* Receive HTTP requests from the frontend.
+* Validate incoming data.
+* Call the appropriate business logic from the models/services.
+* Return structured JSON responses.
+* Handle request-specific errors.
+
+The APIs act as the **bridge between the user interface and the optimization engine**, ensuring that the frontend never interacts directly with the internal models.
+
+---
+
+## Overall API Flow
+
+```text
+                Frontend (React/Streamlit)
+                        │
+                 HTTP Request
+                        │
+                        ▼
+             backend/apis/*.py
+                        │
+         Validate & Parse Request
+                        │
+                        ▼
+          Models / Services Layer
+                        │
+       Engineering & Decision Logic
+                        │
+                        ▼
+            JSON Response Returned
+                        │
+                        ▼
+                  Frontend Dashboard
+```
+
+---
+
+# 1. health_api.py
+
+## Responsibility
+
+This API is used to verify that the backend service is running correctly.
+
+It provides a lightweight endpoint that monitoring tools, developers, or deployment platforms can use to confirm that the application is available.
+
+It performs **no optimization or business logic**.
+
+---
+
+### Typical Endpoint
+
+```text
+GET /health
+```
+
+---
+
+### Example Response
+
+```json
+{
+    "status": "healthy",
+    "service": "Industrial Energy Transition Optimizer",
+    "version": "1.0"
+}
+```
+
+---
+
+### Why it exists
+
+During deployment, the frontend or cloud platform can periodically call this endpoint.
+
+If it returns
+
+```text
+200 OK
+```
+
+the backend is operational.
+
+Otherwise,
+
+deployment tools know that the service has failed.
+
+---
+
+# 2. industry_api.py
+
+## Responsibility
+
+This API receives factory information from the frontend.
+
+It is the entry point of the engineering pipeline.
+
+Its responsibilities include
+
+* accepting factory details
+* validating required fields
+* creating an Industry Profile
+* forwarding the data to the Industry Model
+
+---
+
+### Example Request
+
+```json
+{
+    "industry": "Textile",
+    "production": 12,
+    "fuel": "Coal",
+    "temperature": 180
+}
+```
+
+---
+
+### Processing
+
+```text
+Frontend
+      │
+      ▼
+industry_api.py
+      │
+      ▼
+industry.py
+```
+
+---
+
+### Response
+
+```json
+{
+    "baseline_energy": "...",
+    "baseline_emission": "...",
+    "status": "success"
+}
+```
+
+---
+
+# 3. technology_api.py
+
+## Responsibility
+
+This endpoint evaluates feasible technologies for the submitted industrial profile.
+
+Rather than exposing technology calculations directly to the frontend, this API communicates with the Technology Model and returns all technically feasible alternatives.
+
+---
+
+### Flow
+
+```text
+Industry Profile
+        │
+        ▼
+technology_api.py
+        │
+        ▼
+technology.py
+        │
+        ▼
+Feasible Technologies
+```
+
+---
+
+### Example Response
+
+```json
+{
+    "technologies": [
+        "Biomass Boiler",
+        "Waste Heat Recovery",
+        "Solar Thermal"
+    ]
+}
+```
+
+---
+
+### Why separate API?
+
+Technology evaluation may later require
+
+* filtering
+* pagination
+* technology details
+* search
+* future integrations
+
+Keeping it independent improves maintainability.
+
+---
+
+# 4. optimization_api.py
+
+## Responsibility
+
+This endpoint starts the optimization process.
+
+It takes the feasible technologies and generates optimized transition pathways.
+
+Internally it coordinates
+
+* scenario generation
+* optimization
+* ranking
+
+before returning candidate solutions.
+
+---
+
+### Flow
+
+```text
+Feasible Technologies
+          │
+          ▼
+optimization_api.py
+          │
+          ▼
+scenario.py
+          │
+          ▼
+Optimizer
+```
+
+---
+
+### Response
+
+```json
+{
+    "pathways": [
+        "...",
+        "...",
+        "..."
+    ]
+}
+```
+
+---
+
+# 5. recommendation_api.py
+
+## Responsibility
+
+This API provides the final recommendation to the user.
+
+It combines
+
+* technical feasibility
+* financial analysis
+* emission analysis
+* optimization score
+
+and returns the best pathway.
+
+This endpoint corresponds to the final **Recommendation + Explanation** stage in your architecture, where feasible pathways are ranked and presented with supporting reasons. 
+
+---
+
+### Flow
+
+```text
+Optimization Result
+         │
+         ▼
+recommendation_api.py
+         │
+         ▼
+recommendation.py
+         │
+         ▼
+Best Recommendation
+```
+
+---
+
+### Example Response
+
+```json
+{
+    "recommended_option": "Biomass + Waste Heat Recovery",
+    "payback": 4.2,
+    "co2_reduction": 62,
+    "score": 91
+}
+```
+
+---
+
+# 6. report_api.py
+
+## Responsibility
+
+This API generates the final report after optimization is complete.
+
+It converts calculated results into a structured format suitable for downloading or sharing.
+
+Possible outputs include
+
+* PDF report
+* Summary report
+* Comparative analysis
+* Recommendation sheet
+
+---
+
+### Flow
+
+```text
+Optimization Results
+         │
+         ▼
+report_api.py
+         │
+         ▼
+Report Generator
+         │
+         ▼
+PDF / JSON / Excel
+```
+
+---
+
+### Example Response
+
+```json
+{
+    "report_url": "/reports/factory_101.pdf"
+}
+```
+
+---
+
+# Why separate APIs?
+
+Each API represents a **single functional capability** of the backend.
+
+| API                     | Responsibility                                 |
+| ----------------------- | ---------------------------------------------- |
+| `health_api.py`         | Check backend availability                     |
+| `industry_api.py`       | Receive and validate factory inputs            |
+| `technology_api.py`     | Evaluate technically feasible technologies     |
+| `optimization_api.py`   | Generate and optimize transition pathways      |
+| `recommendation_api.py` | Return the best-ranked solution with reasoning |
+| `report_api.py`         | Generate downloadable reports                  |
+
+This modular API design follows the **Single Responsibility Principle**, making each endpoint focused, independently testable, and easier to extend. For example, adding authentication to report downloads or introducing new optimization parameters can be done within the relevant API without affecting the others.

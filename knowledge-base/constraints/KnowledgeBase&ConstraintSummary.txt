@@ -1,0 +1,482 @@
+Perfect. This is exactly the right place to discuss because the **Knowledge Base** is the backbone of your optimizer. It is **not a database** and **not AI training data**. It is simply the collection of engineering rules and constraints that the optimizer consults before recommending any technology.
+
+From the architecture we've already discussed, this folder belongs to the **Constraint Engine (Layer 4)**, whose responsibility is to reject technically impossible solutions before optimization happens. 
+
+---
+
+# Knowledge Base
+
+```
+knowledge-base/
+└── constraints/
+    ├── budget.json
+    ├── fuel.json
+    ├── grid.json
+    ├── space.json
+    └── temperature.json
+```
+
+Think of this folder as the **rulebook** of the system.
+
+The optimizer does **not** hardcode engineering rules inside Python files. Instead, it loads these JSON files and checks every proposed technology against them.
+
+Flow:
+
+```
+Factory Input
+      │
+      ▼
+Technology Candidate
+      │
+      ▼
+Knowledge Base Constraints
+      │
+      ├── temperature.json
+      ├── fuel.json
+      ├── grid.json
+      ├── space.json
+      └── budget.json
+      │
+      ▼
+Feasible?
+   │
+   ├── Yes → Optimizer
+   └── No → Reject
+```
+
+---
+
+# Why create separate JSON files?
+
+Each constraint represents a different engineering aspect.
+
+Instead of writing
+
+```python
+if temperature > 500:
+    ...
+```
+
+inside multiple files,
+
+we store
+
+```json
+{
+  "max_temperature": 500
+}
+```
+
+in one place.
+
+Advantages:
+
+* Easy to update
+* Easier to validate
+* No duplicated logic
+* Domain experts can modify constraints without changing code
+
+---
+
+# 1. temperature.json
+
+## Purpose
+
+Checks whether a technology can provide the required process temperature.
+
+This is usually the **first technical filter**.
+
+Example:
+
+Factory requires
+
+```
+Steam Temperature = 650°C
+```
+
+Solar thermal
+
+```
+Maximum Temperature = 400°C
+```
+
+Constraint fails.
+
+The technology is rejected immediately.
+
+Example structure
+
+```json
+{
+    "solar_thermal": {
+        "max_temperature": 400
+    },
+
+    "heat_pump": {
+        "max_temperature": 180
+    },
+
+    "electric_boiler": {
+        "max_temperature": 1000
+    },
+
+    "biomass_boiler": {
+        "max_temperature": 900
+    }
+}
+```
+
+During optimization:
+
+```
+Factory needs
+
+650°C
+
+↓
+
+Read temperature.json
+
+↓
+
+Compare
+
+↓
+
+Reject heat pump
+Reject solar thermal
+
+↓
+
+Keep biomass boiler
+Keep electric boiler
+```
+
+---
+
+# 2. fuel.json
+
+## Purpose
+
+Defines fuel compatibility.
+
+Every technology cannot replace every fuel.
+
+Example:
+
+Current fuel
+
+```
+Coal
+```
+
+Possible replacements
+
+```
+Electric Boiler
+Biomass Boiler
+Hydrogen
+```
+
+Not possible
+
+```
+Solar PV directly replacing furnace fuel
+```
+
+Example
+
+```json
+{
+    "coal": [
+        "electric_boiler",
+        "biomass_boiler",
+        "hydrogen"
+    ],
+
+    "diesel": [
+        "electric_heater",
+        "biogas"
+    ]
+}
+```
+
+Optimizer asks
+
+```
+Current fuel?
+
+↓
+
+Coal
+
+↓
+
+Read fuel.json
+
+↓
+
+Allowed technologies
+
+↓
+
+Continue
+```
+
+---
+
+# 3. grid.json
+
+## Purpose
+
+Checks electrical infrastructure.
+
+Many electrification technologies need significant electrical power.
+
+Suppose factory has
+
+```
+Grid Capacity
+
+200 kW
+```
+
+Electric boiler needs
+
+```
+600 kW
+```
+
+Impossible.
+
+Reject.
+
+Example
+
+```json
+{
+    "electric_boiler": {
+        "minimum_grid_kw": 500
+    },
+
+    "heat_pump": {
+        "minimum_grid_kw": 150
+    }
+}
+```
+
+Constraint
+
+```
+Grid Available?
+
+↓
+
+Read grid.json
+
+↓
+
+Enough?
+
+↓
+
+Yes → Continue
+
+No → Reject
+```
+
+---
+
+# 4. space.json
+
+## Purpose
+
+Checks installation area.
+
+Many renewable technologies require physical space.
+
+Examples
+
+Solar PV
+
+Needs roof area.
+
+Biomass storage
+
+Needs storage yard.
+
+Thermal storage tank
+
+Needs installation area.
+
+Example
+
+```json
+{
+    "solar_pv": {
+        "roof_area_per_kw": 8
+    },
+
+    "biomass_storage": {
+        "minimum_area": 300
+    }
+}
+```
+
+Example
+
+Factory roof
+
+```
+400 m²
+```
+
+Solar system requires
+
+```
+700 m²
+```
+
+Rejected.
+
+---
+
+# 5. budget.json
+
+## Purpose
+
+Financial feasibility.
+
+Even if technically possible,
+
+the factory may not afford it.
+
+Example
+
+Factory Budget
+
+```
+₹30 lakh
+```
+
+Technology Cost
+
+```
+₹55 lakh
+```
+
+Reject.
+
+Example
+
+```json
+{
+    "electric_boiler": {
+        "minimum_budget": 2500000
+    },
+
+    "waste_heat_recovery": {
+        "minimum_budget": 6000000
+    }
+}
+```
+
+---
+
+# How these files work together
+
+Suppose user enters
+
+```
+Temperature : 650°C
+
+Fuel : Coal
+
+Grid : 400 kW
+
+Roof : 500 m²
+
+Budget : ₹30 lakh
+```
+
+Technology under evaluation
+
+```
+Electric Boiler
+```
+
+The system checks sequentially:
+
+### Step 1
+
+```
+temperature.json
+
+650°C supported?
+
+Yes
+```
+
+↓
+
+### Step 2
+
+```
+fuel.json
+
+Coal compatible?
+
+Yes
+```
+
+↓
+
+### Step 3
+
+```
+grid.json
+
+Needs 500 kW
+
+Available 400 kW
+
+No
+```
+
+↓
+
+Technology rejected.
+
+The optimizer never evaluates its cost or ranking because it is already infeasible.
+
+This follows the architecture where the **Constraint Engine removes technically infeasible pathways before the optimization stage**. 
+
+---
+
+# Why keep constraints in JSON instead of code?
+
+Instead of:
+
+```python
+if grid_capacity < 500:
+    reject()
+```
+
+you write generic code:
+
+```python
+rules = load_json("grid.json")
+
+required = rules["electric_boiler"]["minimum_grid_kw"]
+
+if grid_capacity < required:
+    reject()
+```
+
+Now, if the engineering team updates the required grid capacity from 500 kW to 450 kW, they only edit `grid.json`. No Python logic changes, making the system easier to maintain and more transparent.
+
+---
+
+## Role of the `constraints` folder in your project
+
+In your Industrial Energy Transition Optimizer, the `knowledge-base/constraints` folder acts as the **central repository of engineering decision rules**. Every technology generated by the baseline and technology models must satisfy these constraints before it is passed to the scenario generator and optimizer. This separation keeps engineering knowledge independent from business logic, making the system easier to update, test, and justify during evaluation.

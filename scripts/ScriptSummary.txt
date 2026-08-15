@@ -1,0 +1,320 @@
+Perfect. The **`scripts/`** folder is different from both the **backend** and the **models**.
+
+* **Models** contain the core engineering and optimization logic.
+* **Backend** exposes that logic through APIs.
+* **Scripts** are **automation utilities** that prepare data, initialize the system, or execute complete workflows. They are usually run manually or during deployment and are **not called directly by users**.
+
+---
+
+# scripts/
+
+## Purpose
+
+The `scripts` folder contains standalone automation programs that perform one-time or scheduled tasks required by the Industrial Energy Transition Optimizer.
+
+These scripts are responsible for preparing datasets, loading domain knowledge, preprocessing information, initializing the database, and executing the complete optimization pipeline.
+
+Unlike APIs, these scripts are executed from the command line and support development, testing, and deployment activities.
+
+---
+
+# Overall Workflow
+
+```text
+          Raw Datasets
+                │
+                ▼
+convert_datasets.py
+                │
+                ▼
+pre_process.py
+                │
+                ▼
+load_knowledge.py
+                │
+                ▼
+seed_database.py
+                │
+                ▼
+ Database Ready
+                │
+                ▼
+run_pipeline.py
+                │
+                ▼
+ Optimization Results
+```
+
+---
+
+# 1. convert_datasets.py
+
+## Responsibility
+
+This script converts datasets collected from different sources into a standardized format that can be used by the application.
+
+Industrial datasets may arrive in formats such as
+
+* Excel
+* CSV
+* JSON
+* Government datasets
+* Research tables
+
+This script transforms them into a consistent internal structure.
+
+---
+
+### Example
+
+Input
+
+```text
+Technology_Data.xlsx
+```
+
+↓
+
+Output
+
+```text
+technology_dataset.csv
+```
+
+or
+
+```text
+technology.json
+```
+
+---
+
+### Why is it needed?
+
+Different organizations publish data using different formats.
+
+The optimizer should always work with one standardized dataset.
+
+---
+
+### Example Flow
+
+```text
+Raw Dataset
+      │
+      ▼
+convert_datasets.py
+      │
+      ▼
+Standardized Dataset
+```
+
+---
+
+# 2. pre_process.py
+
+## Responsibility
+
+Once datasets are converted, they still require cleaning before being used.
+
+This script performs data preprocessing.
+
+Typical operations include
+
+* removing duplicate records
+* handling missing values
+* standardizing units
+* validating numerical ranges
+* correcting inconsistent formatting
+* normalizing field names
+
+---
+
+### Example
+
+Input
+
+```text
+Temperature
+
+180 C
+180°C
+180 Degree
+```
+
+↓
+
+Output
+
+```text
+180 °C
+```
+
+---
+
+### Benefit
+
+All downstream calculations receive clean and consistent data.
+
+---
+
+# 3. load_knowledge.py
+
+## Responsibility
+
+This script imports validated industrial knowledge into the application's knowledge base or database.
+
+Examples include
+
+* technology specifications
+* emission factors
+* biomass characteristics
+* industrial assumptions
+* efficiency values
+* financial parameters
+
+Instead of embedding these values inside the source code, they are loaded from structured datasets.
+
+---
+
+### Flow
+
+```text
+Knowledge Files
+       │
+       ▼
+load_knowledge.py
+       │
+       ▼
+Knowledge Base
+```
+
+---
+
+### Why separate it?
+
+When new technologies or updated emission factors become available, only the knowledge source needs updating, and this script reloads the latest information without requiring changes to the application logic.
+
+---
+
+# 4. seed_database.py
+
+## Responsibility
+
+This script initializes the database with default records required by the application.
+
+It is generally executed only during the first deployment or when resetting the database.
+
+Typical seeded data includes
+
+* supported industries
+* available technologies
+* default emission factors
+* configuration settings
+* lookup tables
+* default optimization parameters
+
+---
+
+### Flow
+
+```text
+Seed Data
+     │
+     ▼
+seed_database.py
+     │
+     ▼
+Database
+```
+
+---
+
+### Benefit
+
+Every new installation starts with the same verified reference data.
+
+---
+
+# 5. run_pipeline.py
+
+## Responsibility
+
+This script executes the complete optimization workflow from start to finish.
+
+Instead of calling each module individually, it orchestrates the entire sequence.
+
+---
+
+### Execution Flow
+
+```text
+Factory Input
+      │
+      ▼
+Industry Model
+      │
+      ▼
+Technology Model
+      │
+      ▼
+Scenario Generator
+      │
+      ▼
+Financial Analysis
+      │
+      ▼
+Emission Analysis
+      │
+      ▼
+Recommendation Engine
+      │
+      ▼
+Final Output
+```
+
+---
+
+### Why useful?
+
+During development or testing, engineers can validate the complete optimization process without launching the frontend or making API calls.
+
+It is also valuable for automated testing and demonstration runs.
+
+---
+
+# Relationship with the Rest of the Architecture
+
+```text
+                    scripts/
+                        │
+     ┌──────────────────┼──────────────────┐
+     ▼                  ▼                  ▼
+Prepare Data      Initialize System    Execute Workflow
+     │                  │                  │
+     └──────────────────┼──────────────────┘
+                        ▼
+                  Database & Models
+                        │
+                        ▼
+                 Backend APIs
+                        │
+                        ▼
+                   Frontend UI
+```
+
+---
+
+# Summary
+
+| Script                    | Responsibility                                                                                |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| **`convert_datasets.py`** | Converts raw datasets from multiple formats into a standardized structure.                    |
+| **`pre_process.py`**      | Cleans, validates, and normalizes datasets before they are used.                              |
+| **`load_knowledge.py`**   | Loads validated industrial knowledge, technology data, and assumptions into the system.       |
+| **`seed_database.py`**    | Populates the database with initial reference data and default records.                       |
+| **`run_pipeline.py`**     | Executes the complete optimization pipeline from baseline generation to final recommendation. |
+
+### Why this folder is important
+
+The `scripts/` folder supports the **operational lifecycle** of your Industrial Energy Transition Optimizer. Rather than serving user requests, these programs automate data preparation, system initialization, and end-to-end execution. This separation keeps the backend focused on handling requests, the models focused on calculations, and the scripts focused on setup and maintenance, resulting in a cleaner, more maintainable architecture.
