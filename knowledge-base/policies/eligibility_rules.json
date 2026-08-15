@@ -1,0 +1,761 @@
+{
+  "schema_version": "2.0",
+  "file": "knowledge-base/policies/eligibility_rules.json",
+  "purpose": "Machine-checkable eligibility rules used by the policy engine before applying central or state MSME incentives to an industrial energy-transition pathway.",
+  "country": "India",
+  "scope": "MSME energy transition, energy efficiency, green investment, circular economy and financing eligibility",
+  "last_verified": "2026-08-15",
+
+  "architecture_role": {
+    "position": "policy_engine_gatekeeper",
+    "flow": [
+      "factory_profile",
+      "msme_classification",
+      "registration_check",
+      "scheme_specific_eligibility",
+      "project_eligibility",
+      "benefit_calculation"
+    ],
+    "decision_rule": {
+      "eligible": "apply_policy",
+      "not_eligible": "ignore_policy",
+      "uncertain": "do_not_apply_as_guaranteed_benefit"
+    },
+    "important_rule": "Eligibility must be evaluated before any subsidy, interest subvention, guarantee or other policy benefit is included in project economics."
+  },
+
+  "factory_profile_requirements": {
+    "required_fields": {
+      "udyam_registration": {
+        "type": "boolean",
+        "required": true
+      },
+      "enterprise_category": {
+        "allowed": [
+          "micro",
+          "small",
+          "medium",
+          "large",
+          "unknown"
+        ],
+        "required": true
+      },
+      "plant_and_machinery_or_equipment_investment_inr": {
+        "type": "number",
+        "required": true
+      },
+      "annual_turnover_inr": {
+        "type": "number",
+        "required": true
+      },
+      "industry_sector": {
+        "type": "string",
+        "required": true
+      },
+      "project_type": {
+        "allowed": [
+          "energy_efficiency",
+          "electrification",
+          "renewable_energy",
+          "alternative_fuel",
+          "biomass",
+          "waste_heat_recovery",
+          "energy_storage",
+          "waste_management",
+          "circular_economy",
+          "clean_transport",
+          "pollution_control",
+          "green_infrastructure",
+          "other"
+        ],
+        "required": true
+      },
+      "project_cost_inr": {
+        "type": "number",
+        "required": true
+      },
+      "loan_amount_inr": {
+        "type": "number",
+        "required": false
+      },
+      "existing_or_new_project": {
+        "allowed": [
+          "existing",
+          "new"
+        ],
+        "required": true
+      },
+      "brownfield_or_greenfield": {
+        "allowed": [
+          "brownfield",
+          "greenfield",
+          "not_applicable"
+        ],
+        "required": false
+      },
+      "location_state": {
+        "type": "string",
+        "required": true
+      },
+      "district": {
+        "type": "string",
+        "required": true
+      },
+      "udyam_number": {
+        "type": "string_or_null",
+        "required": false
+      },
+      "annual_energy_savings_percent": {
+        "type": "number_or_null",
+        "required": false
+      },
+      "cluster_name": {
+        "type": "string_or_null",
+        "required": false
+      },
+      "cluster_is_adeetie_identified": {
+        "type": "boolean_or_null",
+        "required": false
+      },
+      "special_category": {
+        "women_owned": "boolean",
+        "sc_st_owned": "boolean",
+        "pwd_owned": "boolean",
+        "agniveer_owned": "boolean",
+        "transgender_owned": "boolean",
+        "north_east_region": "boolean",
+        "jammu_kashmir": "boolean",
+        "ladakh": "boolean",
+        "aspirational_district": "boolean",
+        "identified_credit_deficient_district": "boolean"
+      }
+    }
+  },
+
+  "msme_classification": {
+    "effective_from": "2025-04-01",
+    "classification_basis": [
+      "investment_in_plant_and_machinery_or_equipment",
+      "annual_turnover"
+    ],
+    "rules": {
+      "micro": {
+        "max_investment_inr": 25000000,
+        "max_turnover_inr": 100000000,
+        "condition": "investment <= 25000000 AND turnover <= 100000000"
+      },
+      "small": {
+        "max_investment_inr": 250000000,
+        "max_turnover_inr": 1000000000,
+        "condition": "investment <= 250000000 AND turnover <= 1000000000"
+      },
+      "medium": {
+        "max_investment_inr": 1250000000,
+        "max_turnover_inr": 5000000000,
+        "condition": "investment <= 1250000000 AND turnover <= 5000000000"
+      }
+    },
+    "classification_logic": "Both investment and turnover thresholds must be satisfied for the corresponding category.",
+    "source": "Ministry of MSME / Udyam Registration",
+    "source_verified": true
+  },
+
+  "registration_rules": {
+    "udyam": {
+      "required_for": [
+        "ADEETIE",
+        "MSE_GIFT",
+        "MSE_SPICE",
+        "ZED",
+        "CGTMSE_related_MSE_benefit"
+      ],
+      "condition": "udyam_registration == true",
+      "registration_cost_inr": 0,
+      "renewal_required": false,
+      "source": "Udyam Registration Portal"
+    },
+    "registration_failure": {
+      "action": "do_not_apply_scheme_benefit",
+      "reason": "Scheme-specific eligibility requiring Udyam registration has not been established."
+    }
+  },
+
+  "scheme_rules": {
+
+    "ADEETIE": {
+      "scheme_type": "energy_efficiency_financing",
+      "priority": "very_high",
+      "eligibility": {
+        "udyam_required": true,
+        "enterprise_categories": [
+          "micro",
+          "small",
+          "medium"
+        ],
+        "identified_cluster_required": true,
+        "minimum_energy_savings_percent": 10,
+        "loan_min_inr": 1000000,
+        "loan_max_inr": 150000000,
+        "maximum_debt_funding_percent": 75
+      },
+      "eligible_sectors": [
+        "brass",
+        "bricks",
+        "ceramics",
+        "chemicals",
+        "fisheries",
+        "food_processing",
+        "forging",
+        "foundry",
+        "glass_and_refractory",
+        "leather",
+        "paper",
+        "pharmaceutical",
+        "steel_re_rolling",
+        "textiles"
+      ],
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "udyam_registration == true",
+          "enterprise_category IN [micro, small, medium]",
+          "cluster_is_adeetie_identified == true",
+          "industry_sector IN eligible_sectors",
+          "loan_amount_inr >= 1000000",
+          "loan_amount_inr <= 150000000",
+          "eligible_debt_amount_inr <= 0.75 * project_cost_inr",
+          "annual_energy_savings_percent >= 10"
+        ]
+      },
+      "benefit_type": "interest_subvention",
+      "benefit_must_not_be_treated_as": [
+        "capital_subsidy",
+        "cash_grant"
+      ],
+      "failure_conditions": [
+        "not_udyam_registered",
+        "outside_identified_cluster",
+        "outside_supported_sector",
+        "loan_below_minimum",
+        "loan_above_maximum",
+        "energy_savings_below_10_percent"
+      ]
+    },
+
+    "MSE_GIFT": {
+      "scheme_type": "green_finance",
+      "priority": "very_high",
+      "eligibility": {
+        "udyam_required": true,
+        "eligible_enterprise_categories": [
+          "micro",
+          "small"
+        ],
+        "term_loan_max_inr": 20000000,
+        "green_project_required": true,
+        "member_lending_institution_required": true
+      },
+      "eligible_project_categories": [
+        "resource_efficiency",
+        "waste_management",
+        "water_management",
+        "water_efficiency",
+        "wastewater_treatment",
+        "green_buildings",
+        "pollution_control",
+        "pollution_prevention",
+        "electric_transport",
+        "hybrid_transport",
+        "ev_charging",
+        "compressed_biogas",
+        "bio_ethanol",
+        "e_waste",
+        "waste_to_energy",
+        "lng",
+        "smart_grids",
+        "carbon_credit",
+        "carbon_capture_and_storage",
+        "other_approved_high_climate_impact_projects"
+      ],
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "udyam_registration == true",
+          "enterprise_category IN [micro, small]",
+          "green_project_category == true",
+          "loan_amount_inr <= 20000000",
+          "loan_is_from_or_through_eligible_member_lending_institution == true"
+        ]
+      },
+      "benefit_type": [
+        "interest_subvention",
+        "risk_sharing"
+      ],
+      "interest_subvention_percent": 2,
+      "risk_sharing_percent": 75,
+      "important_rule": "MSE-GIFT is for Micro and Small Enterprises; Medium Enterprises must not receive this benefit through this rule.",
+      "failure_conditions": [
+        "not_udyam_registered",
+        "medium_or_large_enterprise",
+        "project_not_in_eligible_green_category",
+        "loan_above_2_crore",
+        "ineligible_lending_channel"
+      ]
+    },
+
+    "MSE_SPICE": {
+      "scheme_type": "circular_economy_capital_subsidy",
+      "priority": "high",
+      "eligibility": {
+        "udyam_required": true,
+        "enterprise_categories": [
+          "micro",
+          "small"
+        ],
+        "project_must_be_circular_economy": true,
+        "brownfield_required_for_25_percent_rule": true
+      },
+      "project_characteristics": [
+        "recycling",
+        "reuse",
+        "resource_recovery",
+        "waste_processing",
+        "circular_material_flow",
+        "eligible_waste_management",
+        "other_approved_circular_economy_activity"
+      ],
+      "brownfield_rule": {
+        "subsidy_rate_percent": 25,
+        "maximum_subsidy_inr": 1250000,
+        "condition": "brownfield_project == true"
+      },
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "udyam_registration == true",
+          "enterprise_category IN [micro, small]",
+          "project_type IN [circular_economy, waste_management]",
+          "brownfield_or_greenfield == brownfield"
+        ]
+      },
+      "benefit_type": "capital_subsidy",
+      "important_rule": "Do not apply SPICE to an ordinary solar, electrification or energy-efficiency project unless it also satisfies the circular-economy eligibility requirements.",
+      "failure_conditions": [
+        "not_udyam_registered",
+        "medium_or_large_enterprise",
+        "non_circular_project",
+        "ineligible_project_cost_or_component"
+      ]
+    },
+
+    "ZED": {
+      "scheme_type": "sustainability_certification_and_support",
+      "priority": "high",
+      "eligibility": {
+        "udyam_required": true,
+        "eligible_enterprise_categories": [
+          "micro",
+          "small",
+          "medium"
+        ]
+      },
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "udyam_registration == true",
+          "enterprise_category IN [micro, small, medium]"
+        ]
+      },
+      "benefit_type": [
+        "certification_support",
+        "testing_and_quality_support",
+        "handholding",
+        "technology_upgradation_support"
+      ],
+      "technology_support_relevance": [
+        "cleaner_production",
+        "zero_effect_technology",
+        "pollution_reduction",
+        "process_efficiency",
+        "environmental_improvement"
+      ],
+      "important_rule": "ZED eligibility does not mean that the entire energy-transition CAPEX receives a subsidy.",
+      "failure_conditions": [
+        "not_udyam_registered",
+        "non_msm_e"
+      ]
+    },
+
+    "CGTMSE": {
+      "scheme_type": "credit_guarantee",
+      "priority": "very_high",
+      "eligibility": {
+        "enterprise_categories": [
+          "micro",
+          "small"
+        ],
+        "collateral_free_credit": true,
+        "third_party_guarantee_free": true,
+        "maximum_guarantee_coverage_per_borrower_inr": 100000000
+      },
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "enterprise_category IN [micro, small]",
+          "credit_facility_is_eligible == true",
+          "lending_institution_is_member_or_eligible_under_cgtmse == true"
+        ]
+      },
+      "benefit_type": "credit_guarantee",
+      "guarantee_coverage_range_percent": {
+        "minimum": 75,
+        "maximum": 90
+      },
+      "special_category_flags": [
+        "women_owned",
+        "sc_st_owned",
+        "pwd_owned",
+        "agniveer_owned",
+        "transgender_owned",
+        "north_east_region",
+        "jammu_kashmir",
+        "ladakh",
+        "aspirational_district",
+        "identified_credit_deficient_district",
+        "zed_certified"
+      ],
+      "important_rule": "CGTMSE guarantee coverage is not a cash subsidy and must not be subtracted directly from project CAPEX.",
+      "financial_model_treatment": {
+        "capex_reduction": 0,
+        "financing_risk_reduction": true,
+        "collateral_requirement_reduction": true
+      },
+      "failure_conditions": [
+        "medium_or_large_enterprise",
+        "ineligible_credit_facility",
+        "ineligible_lender"
+      ]
+    },
+
+    "PMEGP": {
+      "scheme_type": "credit_linked_margin_money_subsidy",
+      "priority": "conditional",
+      "primary_use": "new_micro_enterprise_creation",
+      "eligibility": {
+        "new_project_required": true,
+        "minimum_applicant_age_years": 18,
+        "manufacturing_project_cost_max_inr": 5000000,
+        "service_business_project_cost_max_inr": 2000000
+      },
+      "beneficiary_contribution_percent": {
+        "general": 10,
+        "special_category": 5
+      },
+      "subsidy_percent": {
+        "general_urban": 15,
+        "general_rural": 25,
+        "special_urban": 25,
+        "special_rural": 35
+      },
+      "condition_logic": {
+        "operator": "AND",
+        "conditions": [
+          "new_project == true",
+          "applicant_age_years >= 18",
+          "enterprise_type == micro",
+          "project_cost_within_pmeg_p_limit == true",
+          "not_an_existing_unit_already_subsidized_under_excluded_schemes == true"
+        ]
+      },
+      "optimizer_application": {
+        "existing_factory_retrofit": "generally_not_eligible",
+        "new_micro_enterprise": "potentially_eligible"
+      },
+      "important_rule": "Do not use PMEGP as a generic subsidy for an existing MSME's energy retrofit.",
+      "failure_conditions": [
+        "existing_project",
+        "non_micro_enterprise",
+        "project_cost_above_limit",
+        "previous_excluded_government_subsidy"
+      ]
+    },
+
+    "RAMP_GENERAL": {
+      "scheme_type": "umbrella_central_sector_programme",
+      "priority": "supporting",
+      "eligibility": {
+        "udyam_or_uap_registered_msm_e_required": true
+      },
+      "condition_logic": {
+        "operator": "OR",
+        "conditions": [
+          "udyam_registration == true",
+          "uap_registration == true"
+        ]
+      },
+      "important_rule": "RAMP itself is not one universal subsidy. Specific RAMP interventions and sub-schemes have their own eligibility conditions.",
+      "optimizer_treatment": "Use RAMP only to discover or route the factory toward an eligible intervention. Do not apply a generic RAMP subsidy percentage."
+    }
+  },
+
+  "special_category_rules": {
+    "women_owned": {
+      "type": "boolean",
+      "use_for": [
+        "CGTMSE",
+        "ZED_related_incentives",
+        "other_scheme_specific_concessions"
+      ]
+    },
+    "sc_st_owned": {
+      "type": "boolean",
+      "use_for": [
+        "CGTMSE",
+        "ZED_related_incentives",
+        "other_scheme_specific_concessions"
+      ]
+    },
+    "pwd_owned": {
+      "type": "boolean",
+      "use_for": [
+        "CGTMSE"
+      ]
+    },
+    "agniveer_owned": {
+      "type": "boolean",
+      "use_for": [
+        "CGTMSE"
+      ]
+    },
+    "transgender_owned": {
+      "type": "boolean",
+      "use_for": [
+        "CGTMSE"
+      ]
+    },
+    "geographic_special_category": {
+      "north_east_region": true,
+      "jammu_kashmir": true,
+      "ladakh": true,
+      "aspirational_district": true,
+      "identified_credit_deficient_district": true
+    },
+    "important_rule": "Special-category status changes eligibility, guarantee fee or incentive treatment only where the underlying scheme explicitly provides such treatment."
+  },
+
+  "project_eligibility_rules": {
+    "energy_efficiency": {
+      "preferred_policy_checks": [
+        "ADEETIE",
+        "MSE_GIFT",
+        "ZED"
+      ],
+      "required_inputs": [
+        "annual_energy_savings_percent",
+        "project_cost_inr",
+        "loan_amount_inr",
+        "enterprise_category",
+        "industry_sector",
+        "cluster_name"
+      ]
+    },
+    "electrification": {
+      "preferred_policy_checks": [
+        "MSE_GIFT",
+        "CGTMSE",
+        "ADEETIE_if_energy_efficiency_component_exists"
+      ],
+      "important_rule": "Electrification alone does not automatically make a project eligible for every green or energy-efficiency scheme."
+    },
+    "solar_pv": {
+      "preferred_policy_checks": [
+        "MSE_GIFT",
+        "CGTMSE"
+      ],
+      "important_rule": "Do not invent a universal central MSME solar capital subsidy."
+    },
+    "biomass": {
+      "preferred_policy_checks": [
+        "MSE_GIFT",
+        "ADEETIE_if_energy_efficiency_criteria_are_met",
+        "CGTMSE"
+      ],
+      "important_rule": "Biomass availability and technical feasibility belong to the engineering/resource layers; this file only checks policy eligibility."
+    },
+    "waste_heat_recovery": {
+      "preferred_policy_checks": [
+        "ADEETIE",
+        "MSE_GIFT",
+        "ZED"
+      ]
+    },
+    "waste_to_energy": {
+      "preferred_policy_checks": [
+        "MSE_GIFT",
+        "MSE_SPICE_if_circular_economy_criteria_are_met"
+      ]
+    },
+    "circular_economy": {
+      "preferred_policy_checks": [
+        "MSE_SPICE",
+        "MSE_GIFT",
+        "ZED"
+      ]
+    }
+  },
+
+  "eligibility_evaluation": {
+    "algorithm": [
+      "Load factory profile",
+      "Validate required fields",
+      "Classify MSME using current investment and turnover thresholds",
+      "Check Udyam/UAP status",
+      "Identify applicable schemes",
+      "Evaluate scheme-specific conditions",
+      "Evaluate project-specific conditions",
+      "Evaluate loan/project cost limits",
+      "Evaluate special-category conditions",
+      "Check scheme convergence and double-counting",
+      "Return eligibility status and reason"
+    ],
+    "status_values": [
+      "eligible",
+      "not_eligible",
+      "conditionally_eligible",
+      "insufficient_data"
+    ],
+    "confidence_values": [
+      "confirmed",
+      "high",
+      "medium",
+      "low"
+    ],
+    "output_fields": {
+      "scheme_id": "string",
+      "status": "eligible | not_eligible | conditionally_eligible | insufficient_data",
+      "reason": "string",
+      "failed_conditions": "array",
+      "missing_inputs": "array",
+      "benefit_can_be_applied": "boolean",
+      "verification_required": "boolean"
+    }
+  },
+
+  "financial_safety_rules": {
+    "no_double_counting": true,
+    "do_not_apply_unknown_eligibility": true,
+    "do_not_apply_scheme_if_required_field_missing": true,
+    "do_not_treat_credit_guarantee_as_capex_subsidy": true,
+    "do_not_treat_interest_subvention_as_capex_subsidy": true,
+    "do_not_treat_policy_potential_as_guaranteed_cashflow": true,
+    "do_not_apply_state_policy_here": true,
+    "do_not_apply_carbon_pricing_here": true,
+    "do_not_apply_engineering_constraints_here": true,
+    "do_not_apply_policy_benefit_before_technical_feasibility": true
+  },
+
+  "policy_engine_response_example": {
+    "factory": {
+      "udyam_registration": true,
+      "enterprise_category": "small",
+      "industry_sector": "textiles",
+      "project_type": "energy_efficiency",
+      "project_cost_inr": 20000000,
+      "loan_amount_inr": 15000000,
+      "annual_energy_savings_percent": 14,
+      "cluster_is_adeetie_identified": true
+    },
+    "result": {
+      "ADEETIE": {
+        "status": "eligible",
+        "reason": "Udyam-registered Small textile enterprise in an identified ADEETIE cluster with qualifying loan size and at least 10% energy savings."
+      },
+      "MSE_GIFT": {
+        "status": "conditionally_eligible",
+        "reason": "Small Udyam-registered enterprise and project financing may qualify if the project falls within an approved green activity category."
+      },
+      "MSE_SPICE": {
+        "status": "not_eligible",
+        "reason": "Energy-efficiency project does not by itself satisfy circular-economy project requirements."
+      },
+      "ZED": {
+        "status": "eligible",
+        "reason": "Udyam-registered MSME."
+      },
+      "CGTMSE": {
+        "status": "conditionally_eligible",
+        "reason": "Small enterprise may qualify subject to eligible credit facility and participating lender."
+      },
+      "PMEGP": {
+        "status": "not_eligible",
+        "reason": "Existing industrial transition project is not a new micro-enterprise setup."
+      }
+    }
+  },
+
+  "source_provenance": {
+    "primary_sources": [
+      {
+        "authority": "Ministry of MSME",
+        "data": [
+          "MSME classification",
+          "ZED eligibility",
+          "PMEGP eligibility",
+          "CGTMSE policy framework"
+        ]
+      },
+      {
+        "authority": "Udyam Registration Portal",
+        "data": [
+          "current MSME classification",
+          "Udyam registration rules"
+        ]
+      },
+      {
+        "authority": "Bureau of Energy Efficiency",
+        "data": [
+          "ADEETIE eligibility",
+          "ADEETIE sector and cluster conditions",
+          "ADEETIE energy-saving threshold",
+          "ADEETIE financing limits"
+        ]
+      },
+      {
+        "authority": "MSME RAMP Portal",
+        "data": [
+          "MSE-GIFT eligibility",
+          "MSE-GIFT green project categories",
+          "MSE-SPICE framework",
+          "RAMP participation rules"
+        ]
+      },
+      {
+        "authority": "CGTMSE",
+        "data": [
+          "credit guarantee eligibility",
+          "guarantee coverage",
+          "special-category treatment"
+        ]
+      }
+    ]
+  },
+
+  "maintenance": {
+    "recommended_review_frequency": "quarterly",
+    "mandatory_review_triggers": [
+      "Union Budget",
+      "new MSME classification notification",
+      "scheme guideline amendment",
+      "subsidy revision",
+      "loan ceiling revision",
+      "scheme extension",
+      "scheme closure",
+      "new central MSME scheme",
+      "new ADEETIE guideline",
+      "new RAMP guideline",
+      "CGTMSE guarantee framework revision"
+    ],
+    "stale_after_days": 180,
+    "rule": "If a scheme's latest official guideline cannot be verified, mark its eligibility as conditionally_eligible or insufficient_data rather than assuming the previous rule remains valid."
+  }
+}
