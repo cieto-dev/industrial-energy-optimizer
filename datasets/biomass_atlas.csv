@@ -1,0 +1,52 @@
+state	district	biomass_type	crop	annual_+F46+E1:E38+E1:E40+F4+E1:F40	availability_type	year	moisture_percent	calorific_value_mj_kg	cost_rs_per_ton	latitude	longitude	source			
+Punjab	Ludhiana	Rice residue	Rice	576480.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	30.90726	75.8492	TIFAC-IARI / National Biomass Atlas of India			
+Punjab	Sangrur	Wheat residue	Wheat	664570.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	30.25108	75.83437	TIFAC-IARI / National Biomass Atlas of India			
+Punjab	Bathinda	Wheat residue	Wheat	549260.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	30.20747	74.93893	TIFAC-IARI / National Biomass Atlas of India			
+Haryana	Karnal	Rice residue	Rice	1080000.00	gross	2010-11 to 2015-16	12.71	16.02	1275	29.69197	76.98448	TIFAC-IARI / National Biomass Atlas of India			
+Haryana	Sirsa	Wheat residue	Wheat	1570000.00	gross	2010-11 to 2015-16	7.5	15.76	3150	29.53957	75.03103	TIFAC-IARI / National Biomass Atlas of India			
+Haryana	Hisar	Wheat residue	Wheat	2220000.00	gross	2010-11 to 2015-16	7.5	15.76	3150	29.15394	75.72294	TIFAC-IARI / National Biomass Atlas of India			
+Himachal Pradesh	Kangra	Maize residue	Maize	81600.00	surplus	2010-11 to 2015-16	12	14.7	2250	32.10136	76.27312	TIFAC-IARI / National Biomass Atlas of India			
+Himachal Pradesh	Mandi	Maize residue	Maize	110100.00	surplus	2010-11 to 2015-16	12	14.7	2250	31.70922	76.93197	TIFAC-IARI / National Biomass Atlas of India			
+Himachal Pradesh	Una	Wheat residue	Wheat	19100.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	31.58008186	76.21121914	TIFAC-IARI / National Biomass Atlas of India			
+Uttar Pradesh	Muzaffarnagar	Sugarcane residue	Sugarcane	159600.00	surplus	2023-24	50	15.81	1850	29.47046	77.70766	TIFAC-IARI / National Biomass Atlas of India			
+Uttar Pradesh	Meerut	Wheat residue	Wheat	93775.00	surplus	2019-20	7.5	15.76	3150	28.99862	77.70459	TIFAC-IARI / National Biomass Atlas of India			
+Uttar Pradesh	Lakhimpur Kheri	Rice residue	Rice	184000.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	27.90539	80.79879	TIFAC-IARI / National Biomass Atlas of India			
+Uttar Pradesh	Sitapur	Wheat residue	Wheat	20761.23	surplus	2019-20	7.5	15.76	3150	27.56192	80.68265	TIFAC-IARI / National Biomass Atlas of India			
+Rajasthan	Sri Ganganagar	Wheat residue	Wheat	366000.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	29.92009	73.87496	TIFAC-IARI / National Biomass Atlas of India			
+Rajasthan	Hanumangarh	Wheat residue	Wheat	344000.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	29.58182	74.32938	TIFAC-IARI / National Biomass Atlas of India			
+Rajasthan	Kota	Wheat residue	Wheat	145000.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	25.16531	75.85126	TIFAC-IARI / National Biomass Atlas of India			
+Madhya Pradesh	Indore	Wheat residue	Wheat	118606.00	surplus	2016-17 to 2018-19	7.5	15.76	3150	22.71622	75.86512	TIFAC-IARI / National Biomass Atlas of India			
+Madhya Pradesh	Ujjain	Wheat residue	Wheat	35190.00	surplus	2016-17 to 2018-19	7.5	15.76	3150	23.18088	75.78813	TIFAC-IARI / National Biomass Atlas of India			
+Maharashtra	Kolhapur	Sugarcane residue	Sugarcane	1114500.00	surplus	2010-11 to 2015-16	50	15.81	1850	16.70448	74.24142	TIFAC-IARI / National Biomass Atlas of India			
+Maharashtra	Pune	Sugarcane residue	Sugarcane	1474500.00	surplus	2010-11 to 2015-16	50	15.81	1850	18.50419	73.85286	TIFAC-IARI / National Biomass Atlas of India			
+Gujarat	Surat	Rice residue	Rice	38800.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	21.18584	72.83667	TIFAC-IARI / National Biomass Atlas of India			
+Gujarat	Bharuch	Wheat residue	Wheat	3600.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	21.69482	72.9805	TIFAC-IARI / National Biomass Atlas of India			
+Karnataka	Belagavi	Sugarcane residue	Sugarcane	491577.00	surplus	2010-11 to 2015-16	50	15.81	1850	15.86704	74.51162	TIFAC-IARI / National Biomass Atlas of India			
+Karnataka	Davanagere	Maize residue	Maize	124000.00	surplus	2010-11 to 2015-16	12	14.7	2250	14.4593	75.91528	TIFAC-IARI / National Biomass Atlas of India			
+Tamil Nadu	Thanjavur	Rice residue	Rice	53200.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	10.76864	79.12901	TIFAC-IARI / National Biomass Atlas of India			
+Tamil Nadu	Erode	Sugarcane residue	Sugarcane	17400.00	surplus	2010-11 to 2015-16	50	15.81	1850	11.34065	77.71723	TIFAC-IARI / National Biomass Atlas of India			
+Telangana	Nizamabad	Rice residue	Rice	50500.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	18.67154	78.0988	TIFAC-IARI / National Biomass Atlas of India			
+Telangana	Karimnagar	Rice residue	Rice	359954.00	surplus	2021-22	12.71	16.02	1275	18.43915	79.12856	TIFAC-IARI / National Biomass Atlas of India			
+Andhra Pradesh	Guntur	Rice residue	Rice	131900.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	16.29974	80.45729	TIFAC-IARI / National Biomass Atlas of India			
+Andhra Pradesh	Krishna	Rice residue	Rice	95400.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	16.18747	81.13888	TIFAC-IARI / National Biomass Atlas of India			
+Odisha	Bargarh	Rice residue	Rice	97300.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	21.33767	83.62123	TIFAC-IARI / National Biomass Atlas of India			
+Odisha	Cuttack	Rice residue	Rice	51500.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	20.46653	85.89615	TIFAC-IARI / National Biomass Atlas of India			
+Chhattisgarh	Raipur	Rice residue	Rice	105900.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	21.24402	81.6348	TIFAC-IARI / National Biomass Atlas of India			
+Chhattisgarh	Dhamtari	Rice residue	Rice	38800.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	20.70647	81.5494	TIFAC-IARI / National Biomass Atlas of India			
+Bihar	Rohtas	Wheat residue	Wheat	51600.00	surplus	2010-11 to 2015-16	7.5	15.76	3150	24.69323	84.00265	TIFAC-IARI / National Biomass Atlas of India			
+Bihar	Purnia	Rice residue	Rice	108568.00	surplus	2023-24	12.71	16.02	1275	25.77687	87.47435	TIFAC-IARI / National Biomass Atlas of India			
+West Bengal	Bardhaman	Rice residue	Rice	722916.00	surplus	2013-14	12.71	16.02	1275	23.35721277	87.95205357	TIFAC-IARI / National Biomass Atlas of India			
+West Bengal	Murshidabad	Rice residue	Rice	402012.00	surplus	2013-14	12.71	16.02	1275	24.17609	88.27296	TIFAC-IARI / National Biomass Atlas of India			
+Assam	Nagaon	Rice residue	Rice	231733.00	surplus	2023-24	12.71	16.02	1275	26.34949	92.68462	TIFAC-IARI / National Biomass Atlas of India			
+Uttarakhand	Udham Singh Nagar	Rice residue	Rice	144245.00	surplus	2023-24	12.71	16.02	1275	29.03757377	79.48406367	TIFAC-IARI / National Biomass Atlas of India			
+Jammu & Kashmir	Jammu	Rice residue	Rice	1400.00	surplus	2010-11 to 2015-16	12.71	16.02	1275	32.70267	74.87843	TIFAC-IARI / National Biomass Atlas of India			
+Jammu & Kashmir	Anantnag	Maize residue	Maize	7500.00	surplus	2010-11 to 2015-16	12	14.7	2250	33.72988	75.15084	TIFAC-IARI / National Biomass Atlas of India			
+Jharkhand	Ranchi	Maize residue	Maize	1124.00	surplus	2018-19	12	14.7	2250	23.3507	85.31377	TIFAC-IARI / National Biomass Atlas of India			
+Karnataka	Dharwad	Maize residue	Maize	35500.00	surplus	2010-11 to 2015-16	12	14.7	2250	15.45111	75.00517	TIFAC-IARI / National Biomass Atlas of India			
+Maharashtra	Ahmednagar	Sugarcane residue	Sugarcane	68400.00	surplus	2024-25	50	15.81	1850	19.09211	74.73842	TIFAC-IARI / National Biomass Atlas of India			
+															
+															
+															
+															
+															
+															
