@@ -1,0 +1,430 @@
+ **`technology_rules.json` is one of the most important constraint files**, and it's different from the individual technology profiles stored in `knowledge-base/technologies/`.
+
+Many people confuse the two, but they serve different purposes.
+
+| technologies/*.json    | technology_rules.json                      |
+| ---------------------- | ------------------------------------------ |
+| Describes a technology | Decides whether that technology is allowed |
+| Stores specifications  | Stores decision rules                      |
+| "What is a heat pump?" | "When can a heat pump be used?"            |
+| Engineering data       | Constraint logic                           |
+
+---
+
+# Purpose of technology_rules.json
+
+This file stores **generic eligibility rules** for each technology.
+
+It answers questions like:
+
+* Is this technology suitable for this industry?
+* Can it replace the existing fuel?
+* Does it require another technology?
+* Can it be combined with another technology?
+* Is it only applicable above a certain energy demand?
+* Is it prohibited under certain conditions?
+
+Think of it as the **master rulebook** for technology selection.
+
+---
+
+# Why do we need it?
+
+Suppose your optimizer evaluates a **Heat Pump**.
+
+The `heat_pump.json` file tells us:
+
+```text
+Maximum Temperature
+
+180°C
+
+Efficiency
+
+COP = 4
+
+Electricity Requirement
+```
+
+But it **does not tell us** whether it is appropriate for a cement plant or whether it requires low-temperature heat.
+
+Those decision rules belong in:
+
+```text
+technology_rules.json
+```
+
+---
+
+# Example Structure
+
+```json
+{
+  "heat_pump": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "pharma"
+    ],
+
+    "maximum_process_temperature": 180,
+
+    "requires_grid": true,
+
+    "minimum_grid_kw": 150,
+
+    "compatible_with": [
+      "solar_thermal",
+      "thermal_storage"
+    ]
+  },
+
+  "solar_thermal": {
+
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "chemical"
+    ],
+
+    "requires_roof": true,
+
+    "minimum_roof_area": 400,
+
+    "requires_solar_resource": true
+  }
+}
+```
+
+Notice that these are **rules**, not technical specifications.
+
+---
+
+# Example 1
+
+Factory
+
+```text
+Industry
+
+Steel
+```
+
+Technology
+
+```text
+Heat Pump
+```
+
+System reads
+
+```text
+technology_rules.json
+```
+
+Rule
+
+```text
+Allowed Industries
+
+↓
+
+Textile
+
+Food
+
+Pharma
+```
+
+Steel is absent.
+
+↓
+
+Reject immediately.
+
+---
+
+# Example 2
+
+Factory
+
+```text
+Roof Area
+
+150 m²
+```
+
+Technology
+
+```text
+Solar Thermal
+```
+
+Rule
+
+```text
+Minimum Roof Area
+
+400 m²
+```
+
+↓
+
+Reject
+
+No need to calculate costs or emissions.
+
+---
+
+# Example 3
+
+Factory
+
+```text
+Grid Capacity
+
+100 kW
+```
+
+Technology
+
+```text
+Electric Boiler
+```
+
+Rule
+
+```text
+Minimum Grid
+
+500 kW
+```
+
+↓
+
+Reject
+
+---
+
+# What should be stored here?
+
+For your SIH project, I recommend storing rules such as:
+
+## Industry Compatibility
+
+```json
+"allowed_industries": [
+   "textile",
+   "food_processing"
+]
+```
+
+---
+
+## Fuel Replacement Rules
+
+```json
+"replaces_fuels": [
+   "coal",
+   "diesel"
+]
+```
+
+---
+
+## Technology Dependencies
+
+Example
+
+Thermal Storage
+
+```json
+"requires": [
+   "solar_thermal"
+]
+```
+
+Meaning:
+
+Thermal storage cannot be installed alone.
+
+---
+
+## Technology Combinations
+
+Example
+
+```json
+"compatible_with": [
+   "solar_thermal",
+   "biomass"
+]
+```
+
+---
+
+## Infrastructure Requirements
+
+```json
+"requires_grid": true,
+
+"requires_roof": false,
+
+"requires_biomass_supply": true
+```
+
+---
+
+## Minimum Plant Size
+
+Example
+
+```json
+"minimum_energy_demand_kwh_day": 5000
+```
+
+Small factories won't be recommended this technology.
+
+---
+
+## Operational Constraints
+
+```json
+"continuous_operation_required": true
+```
+
+Useful for waste heat recovery.
+
+---
+
+## Retrofit Compatibility
+
+```json
+"retrofit_supported": true
+```
+
+Some technologies may require complete plant replacement.
+
+---
+
+# How does it work with the other constraint files?
+
+```text
+                technology_rules.json
+                         │
+                         ▼
+      Is this technology generally applicable?
+                         │
+          Yes                     No
+           │                      │
+           ▼                      ▼
+temperature.json             Reject
+fuel.json
+grid.json
+space.json
+budget.json
+           │
+           ▼
+      Constraint Passed
+```
+
+Notice the sequence.
+
+`technology_rules.json` is usually checked **before** detailed constraints because it eliminates obviously unsuitable technologies early.
+
+---
+
+# Difference from technologies folder
+
+This is the biggest confusion.
+
+## technologies/heat_pump.json
+
+Contains
+
+```text
+Efficiency
+
+COP
+
+Temperature
+
+Advantages
+
+Disadvantages
+
+Typical Cost
+```
+
+It answers:
+
+> **What is a Heat Pump?**
+
+---
+
+## constraints/technology_rules.json
+
+Contains
+
+```text
+Allowed Industries
+
+Required Grid
+
+Dependencies
+
+Compatibility
+
+Minimum Plant Size
+
+Required Resources
+```
+
+It answers:
+
+> **When should the optimizer consider a Heat Pump?**
+
+---
+
+# Workflow in your project
+
+```text
+User selects Factory
+          │
+          ▼
+Load Industry Profile
+          │
+          ▼
+Load Technology Profile
+          │
+          ▼
+Read technology_rules.json
+          │
+          ▼
+Technology Applicable?
+      │
+ ┌────┴────┐
+ │         │
+No        Yes
+ │         │
+Reject     ▼
+      Check Temperature
+             ▼
+        Check Fuel
+             ▼
+        Check Grid
+             ▼
+        Check Space
+             ▼
+       Check Budget
+             ▼
+      Generate Pathway
+             ▼
+         Optimization
+```
+
+---
+
+# Role of `technology_rules.json` in your project
+
+The `technology_rules.json` file acts as the **technology eligibility engine** of the Industrial Energy Transition Optimizer. Unlike the files in `knowledge-base/technologies`, which describe the engineering characteristics of each technology, this file defines the conditions under which a technology is allowed to participate in the optimization process. It stores rules such as industry compatibility, fuel replacement capability, infrastructure prerequisites, technology dependencies, and operational requirements. During pathway generation, the backend consults this file first to eliminate technologies that are fundamentally unsuitable for the selected factory, ensuring that only valid candidates proceed to detailed constraint checks and optimization. This keeps the decision pipeline efficient, modular, and easy to extend as new technologies are added.
