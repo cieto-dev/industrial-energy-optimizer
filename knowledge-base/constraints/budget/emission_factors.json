@@ -1,0 +1,214 @@
+{
+  "_meta": {
+    "description": "CO2 (and now CH4/N2O) emission factors for fuel combustion and grid electricity.",
+    "compiled_from_steps": [
+      13,
+      14
+    ],
+    "critical_caveat": "CPCB does NOT publish CO2/GHG emission factors -- its mandate is criteria pollutants (PM, SOx, NOx, CO) and compliance, not carbon accounting. IPCC is the source for fuel-combustion CO2/CH4/N2O factors used here. GRID ELECTRICITY emission factor -- previously the single biggest gap in this file -- has now been filled directly from CEA's primary published database (see grid_electricity below).",
+    "last_verified": "2026-08-16 -- grid electricity factor fetched directly from CEA CO2 Baseline Database User Guide Version 21.0 (published November 2025, PDF); CH4/N2O Tier 1 factors fetched directly from the IPCC 2006 Guidelines Vol.2 Ch.2 primary PDF, Table 2.3 (Manufacturing Industries and Construction category, the correct one for MSME factory combustion)"
+  },
+  "fuel_combustion_tier1_ipcc": {
+    "source": "IPCC 2006 Guidelines for National GHG Inventories, Vol.2 Ch.2 (Stationary Combustion), Table 2.3 (Manufacturing Industries and Construction) for CH4/N2O, and Table 1.4 for CO2 -- global Tier 1 defaults, fetched directly from the primary PDF this pass",
+    "raw_energy_basis_factors": {
+      "biomass_wood": {
+        "ncv_gj_per_tonne": 15.6,
+        "carbon_content_kg_per_gj": 30.5,
+        "co2_ef_kg_per_tj": 112000,
+        "ch4_ef_kg_per_tj": 30,
+        "n2o_ef_kg_per_tj": 4,
+        "note": "IPCC 'Wood/Wood Waste' row, Table 2.3. is_biogenic=true for the CO2 component (see biogenic_co2_treatment); CH4/N2O are NOT excluded from totals even for biomass."
+      },
+      "peat": {
+        "ncv_gj_per_tonne": 9.76,
+        "carbon_content_kg_per_gj": 28.9,
+        "co2_ef_kg_per_tj": 106000,
+        "ch4_ef_kg_per_tj": 2,
+        "n2o_ef_kg_per_tj": 1.5,
+        "note": "Table 2.3 'Peat' row. Not a typical MSME fuel in India -- included only for completeness of the original compile."
+      },
+      "lignite": {
+        "ncv_gj_per_tonne": 8.9,
+        "carbon_content_kg_per_gj": 27.6,
+        "co2_ef_kg_per_tj": 101000,
+        "ch4_ef_kg_per_tj": 10,
+        "n2o_ef_kg_per_tj": 1.5,
+        "note": "Table 2.3 'Lignite' row."
+      },
+      "anthracite": {
+        "ncv_gj_per_tonne": 26.7,
+        "carbon_content_kg_per_gj": 26.8,
+        "co2_ef_kg_per_tj": 98300,
+        "ch4_ef_kg_per_tj": 10,
+        "n2o_ef_kg_per_tj": 1.5,
+        "note": "Table 2.3 'Anthracite' row."
+      },
+      "coking_coal": {
+        "ncv_gj_per_tonne": 28.2,
+        "carbon_content_kg_per_gj": 25.8,
+        "co2_ef_kg_per_tj": 94600,
+        "ch4_ef_kg_per_tj": 10,
+        "n2o_ef_kg_per_tj": 1.5,
+        "note": "Table 2.3 'Coking Coal' row. 'Other Bituminous Coal' (best proxy for most Indian non-coking industrial coal) has an identical CH4/N2O factor (10 / 1.5 kg/TJ) even though its CO2 factor differs slightly (94,600 for coking vs 94,600-99,700 range for other bituminous) -- see india_specific_coal_caveat below."
+      },
+      "residual_fuel_oil": {
+        "ncv_gj_per_tonne": 40.4,
+        "carbon_content_kg_per_gj": 21.1,
+        "co2_ef_kg_per_tj": 77400,
+        "ch4_ef_kg_per_tj": 3,
+        "n2o_ef_kg_per_tj": 0.6,
+        "note": "Table 2.3 'Residual Fuel Oil' row."
+      },
+      "diesel_oil": {
+        "ncv_gj_per_tonne": 43.0,
+        "carbon_content_kg_per_gj": 20.2,
+        "co2_ef_kg_per_tj": 74100,
+        "ch4_ef_kg_per_tj": 3,
+        "n2o_ef_kg_per_tj": 0.6,
+        "note": "Table 2.3 'Gas/Diesel Oil' row."
+      },
+      "motor_gasoline": {
+        "ncv_gj_per_tonne": 44.3,
+        "carbon_content_kg_per_gj": 18.9,
+        "co2_ef_kg_per_tj": 69300,
+        "ch4_ef_kg_per_tj": 3,
+        "n2o_ef_kg_per_tj": 0.6,
+        "note": "Table 2.3 'Motor Gasoline' row."
+      },
+      "natural_gas": {
+        "ncv_gj_per_tonne": 48.0,
+        "carbon_content_kg_per_gj": 15.3,
+        "co2_ef_kg_per_tj": 56100,
+        "ch4_ef_kg_per_tj": 1,
+        "n2o_ef_kg_per_tj": 0.1,
+        "note": "Table 2.3 'Natural Gas' row."
+      },
+      "lpg": {
+        "co2_ef_kg_per_tj": 63100,
+        "ch4_ef_kg_per_tj": 1,
+        "n2o_ef_kg_per_tj": 0.1,
+        "note": "Table 2.3 'Liquefied Petroleum Gases' row -- added this pass since energy_prices.json now has commercial LPG pricing but this file previously had no LPG emission factor at all."
+      }
+    },
+    "converted_practical_units": {
+      "conversion_method": "kg CO2/tonne fuel = NCV x CO2_EF / 1000, then converted to per-kg/per-litre/per-Nm3 using standard reference densities (diesel 0.832 kg/L, petrol 0.74 kg/L, natural gas 0.717 kg/Nm3)",
+      "conversion_status": "Derived by the researcher, not directly IPCC-published -- good enough as a model default, should be cross-checked (e.g. against India GHG Program fuel factor sheet) before treating as citation-grade. NOT re-derived for CH4/N2O this pass -- the kg/TJ figures above are the primary-sourced values; per-litre/per-kg CH4/N2O conversions would need the same density-based derivation applied to CO2 below, not yet done.",
+      "diesel": {
+        "kgco2_per_litre": 2.65,
+        "is_biogenic": false
+      },
+      "petrol_motor_gasoline": {
+        "kgco2_per_litre": 2.27,
+        "is_biogenic": false
+      },
+      "natural_gas": {
+        "kgco2_per_nm3": 1.93,
+        "is_biogenic": false
+      },
+      "coal_lignite_proxy_low_grade_indian_coal": {
+        "kgco2_per_kg": 0.9,
+        "is_biogenic": false
+      },
+      "coal_anthracite_proxy_higher_grade_coal": {
+        "kgco2_per_kg": 2.62,
+        "is_biogenic": false
+      },
+      "biomass_wood": {
+        "kgco2_per_kg": 1.75,
+        "is_biogenic": true,
+        "accounting_note": "Excluded from net totals under IPCC methodology (see biogenic_co2_treatment below) -- treat as ~0 net CO2 for decarbonization-benefit calculations. CH4/N2O from biomass combustion are NOT excluded -- see ch4_n2o_factors below, now filled with real values (30 kg CH4/TJ, 4 kg N2O/TJ), notably higher than fossil fuels' CH4/N2O factors."
+      }
+    },
+    "india_specific_coal_caveat": "Indian industrial coal does not map cleanly to 'Anthracite' or 'Lignite' -- most MSME boiler coal is a lower/mid-grade blend. The two coal rows above should be treated as bracketing bounds, not a precise match, unless a BEE/CEA India-specific figure is available. NOTE: the CEA CO2 Baseline Database (see grid_electricity below) DOES contain an India-specific, measured coal emission factor for power-sector coal -- 0.969 tCO2/MWh net generation for coal-fired stations (FY2024-25) -- but this is expressed per unit of ELECTRICITY OUTPUT (i.e. already reflects the plant's heat rate/efficiency), not per unit of fuel INPUT, so it is not directly substitutable for the IPCC per-tonne-of-coal figures above without a heat-rate conversion. Still no direct India-specific INR-fuel-input-basis coal CO2 factor for industrial boiler use."
+  },
+  "biogenic_co2_treatment": {
+    "rule": "Per IPCC methodology, CO2 from biomass combustion is reported as a memo item, not counted in national/sectoral totals -- it is assumed to be part of the natural carbon cycle (recaptured by regrowth). Counting it as a straight emission would double-count against the AFOLU (land use) sector.",
+    "modeling_implication": "When a lever recommends switching coal to biomass, the CO2 benefit is larger than a naive fuel-swap calculation suggests, because the biomass leg approaches near-zero net CO2 in standard accounting (CH4/N2O still count, CO2 largely does not). This should be encoded as an is_biogenic boolean flag per fuel, not silently applied. Now that real biomass CH4 (30 kg/TJ) and N2O (4 kg/TJ) factors are available -- both notably higher than fossil fuel factors -- the CH4/N2O side of a coal-to-biomass switch is not negligible and should be included in the model, not treated as a rounding error."
+  },
+  "grid_electricity": {
+    "status": "FILLED -- fetched directly from the primary CEA source this pass",
+    "source": "Central Electricity Authority, 'CO2 Baseline Database for the Indian Power Sector', User Guide Version 21.0, published November 2025, covering FY 2024-25 data. Fetched directly from the CEA-hosted PDF (cea.nic.in).",
+    "fy_2024_25_factors_tco2_per_mwh_including_cross_border_transfers": {
+      "weighted_average": 0.71,
+      "simple_operating_margin_om": 0.961,
+      "build_margin_bm": 0.512,
+      "combined_margin_cm": 0.736
+    },
+    "which_variant_to_use": "For a straightforward 'how much CO2 does this MSME's grid electricity use represent' calculation -- the kind this whole model needs -- use the WEIGHTED AVERAGE (0.71 tCO2/MWh). This is confirmed by the CEA guide's own worked example (Section 6.2): 'An industry consuming 100 MUs of power from the grid... Total CO2 Emissions = 70,000 MWh x 0.710 tCO2/MWh'. The other three variants (OM, BM, CM) are for CDM/carbon-credit project accounting (calculating emissions AVOIDED by a new renewable energy project displacing grid power) -- not the right variant for a straightforward consumption-based footprint calculation. Do not substitute OM/BM/CM for a simple consumption emissions figure.",
+    "worked_example_formula": "Total CO2 Emissions (tCO2) = Grid electricity consumed (MWh) x 0.710. E.g. 100,000 kWh/year consumption = 100 MWh x 0.710 = 71 tCO2/year.",
+    "ten_year_trend_tco2_per_mwh": {
+      "2013_14": 0.774,
+      "2014_15": 0.779,
+      "2015_16": 0.774,
+      "2016_17": 0.77,
+      "2017_18": 0.754,
+      "2018_19": 0.744,
+      "2019_20": 0.713,
+      "2020_21": 0.703,
+      "2021_22": 0.715,
+      "2022_23": 0.716,
+      "2023_24": 0.727,
+      "2024_25": 0.71
+    },
+    "trend_note": "Grid factor has declined from 0.774 (FY2013-14) to 0.710 (FY2024-25), reflecting rising renewable generation share -- useful if the model projects future-year emissions savings and wants a declining-grid-factor assumption rather than a flat one. FY2023-24 (0.727) was a local peak/anomaly year.",
+    "fossil_fuel_specific_factors_tco2_per_mwh_net_generation_fy2024_25": {
+      "coal": 0.969,
+      "gas": 0.452,
+      "lignite": 1.32,
+      "note": "These are per unit of ELECTRICITY OUTPUT from that fuel type's power stations (already reflect real Indian plant heat rates/efficiency), not per unit of fuel input -- useful if the model needs to distinguish 'displacing coal power' vs 'displacing gas power' scenarios, e.g. for open-access/green-tariff modeling, but not a substitute for the IPCC per-tonne fuel-input factors used elsewhere in this file."
+    },
+    "green_tariff_open_access_note": "Per the CEA guide's own example: electricity procured through green open access or a green tariff mechanism 'may be considered as zero' emission factor -- relevant if the model ever needs to handle an MSME that has signed a renewable PPA or green tariff rather than drawing standard grid power.",
+    "version_currency_note": "CEA updates this database annually. Version 21.0 (Nov 2025, FY2024-25 data) is current as of this pass (Aug 2026). Check cea.nic.in for a newer version (V22.0, expected ~Nov 2026) if this file is used after that point -- the trend above shows the factor moves by roughly 0.01-0.02 tCO2/MWh per year, so a one-year-stale figure is a small but non-zero error."
+  },
+  "ch4_n2o_factors": {
+    "status": "FILLED -- fetched directly from the primary IPCC PDF this pass (Table 2.3, Manufacturing Industries and Construction category -- the correct category for MSME factory combustion, as opposed to Table 2.2 Energy Industries/power generation or Table 2.4/2.5 commercial/residential)",
+    "note": "Values below are duplicated for convenience from fuel_combustion_tier1_ipcc.raw_energy_basis_factors above -- same source, same table.",
+    "kg_per_tj_net_calorific_basis": {
+      "anthracite": {
+        "ch4": 10,
+        "n2o": 1.5
+      },
+      "coking_coal": {
+        "ch4": 10,
+        "n2o": 1.5
+      },
+      "lignite": {
+        "ch4": 10,
+        "n2o": 1.5
+      },
+      "natural_gas": {
+        "ch4": 1,
+        "n2o": 0.1
+      },
+      "diesel_gas_oil": {
+        "ch4": 3,
+        "n2o": 0.6
+      },
+      "motor_gasoline": {
+        "ch4": 3,
+        "n2o": 0.6
+      },
+      "lpg": {
+        "ch4": 1,
+        "n2o": 0.1
+      },
+      "wood_wood_waste_biomass": {
+        "ch4": 30,
+        "n2o": 4
+      }
+    },
+    "gwp_note": "To convert to CO2e, apply Global Warming Potential (GWP) multipliers: CH4 and N2O factors above are NOT yet GWP-weighted. Common values: CH4 GWP-100 = 28-30 (AR5/AR6), N2O GWP-100 = 265-273 (AR5/AR6) -- exact multiplier depends which IPCC Assessment Report the model wants to align with. This file does not currently specify which AR the model should use -- flagging as a decision the model owner needs to make, not a research gap.",
+    "biomass_significance_note": "Biomass CH4 (30 kg/TJ) and N2O (4 kg/TJ) factors are 3-10x higher than fossil fuel factors for the same gases. Since biomass CO2 is excluded from net accounting but CH4/N2O are not, a coal-to-biomass switch's true net CO2e benefit is smaller than a 'CO2 only' calculation would suggest -- this is exactly the modeling risk flagged in biogenic_co2_treatment above, and it is now quantifiable rather than just a qualitative warning."
+  },
+  "cpcb_note": {
+    "role": "Compliance/regulatory only -- criteria pollutants (PM, SOx, NOx, CO), not GHG accounting. See industry_defaults.json for CPCB's boiler PM limits and Red/Orange/Green/White/Blue categorization, which are compliance-cost inputs, not emission-factor inputs."
+  },
+  "gaps_and_flags": [
+    "GRID ELECTRICITY emission factor: RESOLVED this pass. 0.710 tCO2/MWh (weighted average, FY2024-25, CEA Version 21.0) is the figure to use for standard consumption-based footprint calculations -- fetched directly from the primary CEA PDF, including the CEA's own worked example confirming this is the right variant to use.",
+    "CH4 and N2O Tier 1 factors: RESOLVED this pass. Fetched directly from the primary IPCC PDF, Table 2.3 (Manufacturing Industries and Construction -- the correct category). Not yet GWP-weighted into CO2e -- see gwp_note above, which flags this as a modeling decision (which IPCC Assessment Report's GWP values to use) rather than a data gap.",
+    "LPG emission factor: RESOLVED this pass (was entirely absent before) -- CO2 63,100 kg/TJ, CH4 1 kg/TJ, N2O 0.1 kg/TJ, matching the LPG pricing now available in energy_prices.json.",
+    "Tier 2 (India-specific) coal factors on a FUEL-INPUT basis are still missing -- Tier 1 global defaults (Anthracite/Lignite) remain the bracketing proxies for Indian industrial boiler coal. Note: CEA's database DOES have an India-specific coal factor, but it's expressed per unit of electricity OUTPUT (0.969 tCO2/MWh, already reflecting power-plant heat rate), not per unit of coal INPUT -- not directly usable for an industrial boiler calculation without a heat-rate conversion. This remains a genuine, narrower gap.",
+    "Litre/Nm3 unit conversions for CO2 are researcher-derived, not IPCC-published directly -- worth a second-source cross-check before being cited as authoritative. The equivalent litre/Nm3 conversions for the newly-added CH4/N2O factors have NOT been derived this pass -- only the kg/TJ figures are filled; a follow-up pass would need to apply the same density-based conversion method used for CO2.",
+    "Grid electricity factor will need an annual refresh -- CEA typically publishes a new version each November/December. This file's 0.710 tCO2/MWh figure is current for FY2024-25 (Version 21.0, Nov 2025) as of this update; check for Version 22.0 if used after ~November 2026."
+  ]
+}

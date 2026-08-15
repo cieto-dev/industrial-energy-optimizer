@@ -1,0 +1,259 @@
+{
+  "_meta": {
+    "description": "Electricity tariffs (state-wise), and fuel prices (coal, biomass, diesel, PNG, LPG, natural gas) for MSME factory energy modeling.",
+    "compiled_from_steps": [
+      1,
+      2,
+      5,
+      8,
+      12,
+      14
+    ],
+    "critical_caveat": "India does not have a single national electricity tariff. Rates are set state-by-state by each State Electricity Regulatory Commission (SERC). Karnataka and Tamil Nadu figures below are now verified against primary/official-order-derived sources (see reconciliation notes). Gujarat and Uttar Pradesh remain as originally compiled. Fuel commodity prices (coal, PNG, diesel, petrol, LPG) were GAPS in the original compile and have now been filled from primary/near-primary sources as of August 2026 -- see each fuel entry for source and date.",
+    "last_verified": "2026-08-16 -- fuel prices and KA/TN electricity tariffs verified against sources below; UP/Gujarat electricity tariffs and remaining fuel gaps (biomass, hydrogen) still not independently re-verified this pass"
+  },
+  "electricity": {
+    "structural_notes": {
+      "lt_vs_ht": {
+        "LT": "Low Tension -- 230V single-phase / 415V three-phase. Applies to small industries, connected load below ~112 kW (threshold varies by state; 112kW is the Tamil Nadu TNEB cutoff).",
+        "HT": "High Tension -- 11kV/22kV/33kV/110kV+. Applies to heavy industries and loads above the state LT threshold. Billing demand typically in kVA. Micro/small MSMEs are usually LT; medium+ factories or those installing electric boilers/heat pumps often cross into HT."
+      },
+      "demand_charges": "Billed per kVA of contracted/billing demand, fixed monthly regardless of energy consumed. Range roughly INR 150-608+/kVA/month depending on state and category. Overrun penalties apply if actual demand exceeds contracted demand.",
+      "power_factor_penalty": "Utilities penalize PF below ~0.85 lag with a surcharge (e.g. Karnataka: 2 paise/unit per 0.01 PF shortfall below 0.85; a plant at 0.84 PF can see 2-3% monthly surcharges).",
+      "fuel_power_purchase_cost_adjustment_fca_ppac_inr_per_kwh": [
+        0.28,
+        0.55
+      ],
+      "electricity_duty_pct_range_by_state": [
+        6,
+        20
+      ],
+      "tod_peak_surcharge_pct_typical": 25,
+      "tod_offpeak_discount_pct_range": [
+        15,
+        25
+      ],
+      "tariff_revision_cycle": "Most SERCs revise annually aligned to the financial year (April); Gujarat is a notable exception (revises in November)."
+    },
+    "state_tariffs": {
+      "tamil_nadu": {
+        "authority": "TNERC / TANGEDCO",
+        "lt_ct_commercial": {
+          "energy_charge_inr_per_kwh": 8.2,
+          "demand_charge_inr_per_kw_month": 75
+        },
+        "ht_industrial_hv3_1": {
+          "energy_charge_inr_per_kwh": 7.5,
+          "source": "TNERC Order No. 6 of 2025, dated 30-06-2025, effective 01.07.2025 -- official one-page tariff statement confirms Rs 7.50/unit for HV-3.1 (Industrial) HT category",
+          "note": "This is the RECONCILED figure. The previously-flagged conflicting figure of 9.5 INR/kWh (attributed to a Step 12 vendor blog, labelled 'HT-IIA') is now understood to be outdated or a misattributed sub-category; the TNERC-order-sourced 7.5 INR/kWh should be used going forward.",
+          "sanctioned_load_threshold_kw": 112
+        },
+        "reconciliation_note": "RESOLVED as of this update: the earlier 'ht_iia_industrial' (9.5 INR/kWh, vendor blog) vs 'fy26_generic_industrial_hike_figure' (7.5 INR/kWh, Mercom) conflict is resolved in favor of 7.5 INR/kWh, which matches the official TNERC T.O. No. 6 of 2025 one-page tariff statement (Rs 7.50/unit for industries). Use 7.5 INR/kWh as the current HT industrial energy charge.",
+        "demand_charge_inr_per_kva_month": 608,
+        "peak_hour_surcharge_pct": 25,
+        "night_rebate_pct": 5,
+        "night_rebate_hours": "22:00-05:00",
+        "peak_hours": [
+          "06:00-10:00",
+          "18:00-22:00"
+        ],
+        "cross_subsidy_surcharge_inr_per_kwh_industrial_ht": 1.99,
+        "cross_subsidy_surcharge_source": "TNERC multi-year tariff order (FY2025-26 figure), corroborated across sources -- unchanged from prior compile, now double-confirmed",
+        "state_electricity_tax_pct": 5,
+        "state_electricity_tax_applies_to": [
+          "commercial",
+          "industrial",
+          "HT"
+        ],
+        "state_electricity_tax_exempt": [
+          "domestic"
+        ],
+        "typical_msme_ht_50kva_monthly_bill_inr_range": [
+          80000,
+          150000
+        ],
+        "typical_msme_ht_50kva_monthly_units_range": [
+          5000,
+          15000
+        ],
+        "wheeling_charge_inr_per_kwh_ht": 1.03,
+        "wheeling_charge_source": "TNERC multi-year order, FY2026-27 figure"
+      },
+      "uttar_pradesh": {
+        "authority": "UPERC",
+        "energy_charge_inr_per_kvah": {
+          "11kv": 7.1,
+          "11_to_66kv": 6.8,
+          "66_to_132kv": 6.4,
+          "above_132kv": 6.1
+        },
+        "wheeling_charge_inr_per_kwh": 1.0,
+        "transmission_charge_inr_per_kwh": 0.27,
+        "note": "Tariffs held flat for FY26 (no hike); rates decrease as voltage level rises. Not independently re-verified in this update pass."
+      },
+      "gujarat": {
+        "authority": "GERC",
+        "note": "Tariffs unchanged from FY25 across LT/HT/EHT categories. Not independently re-verified in this update pass.",
+        "contract_demand_overrun_penalty_inr_per_kva_month": 360,
+        "tod_peak_charge_inr_per_kwh": {
+          "upto_500kva": 0.45,
+          "above_500kva": 0.85
+        },
+        "smart_prepaid_metering_rebate_pct": 2,
+        "tariff_revision_month": "November (exception to the usual April cycle)"
+      },
+      "karnataka": {
+        "authority": "KERC / BESCOM",
+        "status": "RESOLVED -- reconciled against KERC's official March 2025 tariff order (effective FY2025-26)",
+        "industrial_lt5": {
+          "energy_charge_inr_per_kwh": 5.2,
+          "fixed_charge_inr_per_hp_month": 165,
+          "note": "LT-5 is the low-tension INDUSTRIAL category. This resolves the previously-flagged 'figure_a' (~3.0 INR/kWh, vague vendor note about a 30-paise March 2025 cut) -- that cut was applied to bring the LT-5 rate to roughly this level from a higher base."
+        },
+        "industrial_ht2a": {
+          "energy_charge_inr_per_kwh": 6.7,
+          "demand_charge_inr_per_kva_month": 365
+        },
+        "reconciliation_note": "RESOLVED as of this update: the two previously-conflicting figures were not actually the same category. 'figure_b' (8.92 INR/kWh) was LT-3 COMMERCIAL, not industrial -- confirmed by a KERC-tariff-based bill calculator (LT-3 Commercial = Rs 8.92/unit, effective May 2026 including true-up surcharge). The correct industrial figures are LT-5 (small/LT industrial) = Rs 5.20/unit and HT-2a (large/HT industrial) = Rs 6.70/unit, per KERC's order dated ~March 2025 for FY2025-26. Source: PTI/theprint.in report on the KERC order.",
+        "fixed_charges_inr_per_kw": {
+          "lt1": 120,
+          "lt3_commercial_upto_50kw": 210
+        },
+        "true_up_surcharge_inr_per_kwh": 0.56,
+        "true_up_effective": "May 2026",
+        "true_up_source": "KERC-approved FY25 True-Up Charge, recovering a Rs 2,068 crore revenue deficit from FY2024-25, applied in 12 equal monthly instalments May 2026-April 2027 -- applies across categories including industrial, confirmed via BESCOM bill-calculator citing official KERC rates",
+        "pension_gratuity_surcharge_inr_per_kwh": {
+          "fy2025_26": 0.36,
+          "fy2026_27": 0.35,
+          "fy2027_28": 0.34
+        },
+        "pension_gratuity_note": "P&G surcharge applies on top of base energy charge across categories, declining scale through FY2027-28. Confirmed via KERC-rate-based bill calculator.",
+        "multi_year_trajectory_energy_charge_hike_inr_per_kwh": {
+          "fy2025_26": 0.67,
+          "fy2026_27": 0.75,
+          "fy2027_28": 0.91
+        },
+        "trajectory_note": "This was the ESCOMs' proposed multi-year hike request (Nov 2024 filing), not necessarily the amount approved -- KERC's actual March 2025 order approved a 10 paise DECREASE in energy charge (to Rs 5.80 for LT-1 residential) while raising fixed charges instead. Treat the multi_year_trajectory figures as the utilities' ask, not confirmed approved values; the industrial_lt5/industrial_ht2a figures above are the approved rates.",
+        "additional_charges": [
+          "state electricity duty (9% ad valorem per Karnataka Notification No. 24, dated 19-07-2018)",
+          "Pension & Gratuity (P&G) surcharge -- see pension_gratuity_surcharge_inr_per_kwh above",
+          "FY25 True-Up Charge -- see true_up_surcharge_inr_per_kwh above"
+        ]
+      },
+      "national_reference": {
+        "note": "No single national industrial tariff exists by design -- Ministry of Power/CEA only publish aggregated statistics, not per-unit tariffs.",
+        "domestic_reference_avg_inr_per_unit": 5.5,
+        "caveat": "Domestic reference point only; industrial typically runs higher (INR 5.2-9.5/kWh range observed across states above, LT industrial to HT industrial with surcharges). Use state-specific figures for real modeling."
+      }
+    },
+    "coverage_gap": "Only 4 states have tariff data (Tamil Nadu, Uttar Pradesh, Gujarat, Karnataka researched; national reference). No data collected yet for Haryana, Maharashtra, Rajasthan, Madhya Pradesh, West Bengal, or other major MSME-dense states -- still flagged as incomplete."
+  },
+  "fuels": {
+    "coal": {
+      "global_reference_usd_per_gj": [
+        3,
+        10
+      ],
+      "india_notified_price_by_grade_inr_per_tonne": {
+        "G3_high_grade": 5987,
+        "G11_mid_grade": 1881,
+        "G13_mid_low_grade": 1849,
+        "G15_low_grade": 972,
+        "as_of": "March-June 2026, varies by grade",
+        "source": "Coal India Ltd notified prices, via Ministry of Coal / CEIC data series"
+      },
+      "note_on_use": "Non-coking coal used in small/medium industrial boilers is typically mid-to-lower grade (roughly G9-G15); G3 is a premium low-ash grade shown for reference/range context, not a typical MSME boiler input. These are EX-MINE NOTIFIED prices, not delivered prices -- road/rail transport from the coalfield to the factory can add substantially to landed cost, especially for MSMEs in non-coal-bearing states (Tamil Nadu, Gujarat, etc.).",
+      "qualitative_note": "Coal and petcoke remain more price-competitive than natural gas on a delivered-cost basis in India (TERI NCR fuel-switching study) -- delivered cost, not headline commodity price, is what should drive the model.",
+      "status": "PARTIALLY FILLED -- ex-mine notified price by grade now available; delivered/landed price (including transport) still not sourced and would need a state-specific freight assumption"
+    },
+    "natural_gas_png": {
+      "global_reference_usd_per_gj": [
+        4,
+        25
+      ],
+      "india_market_share_of_energy_mix_pct_2018": 6.17,
+      "india_projected_share_pct_2030": 15,
+      "india_note": "MSMEs in NCR were reluctant to switch to natural gas due to high up-front costs (gas connection + security deposit) and limited infrastructure access in some areas (TERI study).",
+      "domestic_png_price_inr_per_scm": {
+        "delhi": 49.59,
+        "gurugram": 47.4,
+        "noida_greater_noida_ghaziabad": 49.46,
+        "mumbai": 51.5,
+        "as_of": "April-August 2026",
+        "source": "IGL/MGL retail price announcements and Goodreturns tracker"
+      },
+      "status": "PARTIALLY FILLED -- only DOMESTIC (household) PNG rates were found and are shown above as a directional reference. Non-domestic (commercial/industrial) PNG is billed on a separate, usually higher, tariff slab by CGD companies (IGL, MGL, Gujarat Gas, etc.) tied to APM/non-APM gas pool pricing, and that industrial-specific rate was NOT found in this pass -- remains a genuine gap. Do not use the domestic figure directly as an industrial input without a markup adjustment; flag uncertainty if used."
+    },
+    "biomass": {
+      "global_reference_note": "No direct global $/GJ figure captured; biomass NCV = 15.6 GJ/tonne per IPCC",
+      "transport_cost_share_of_delivered_cost_pct_max": 70,
+      "transport_note": "Road transport can account for up to 70% of total delivered biomass fuel cost (general engineering literature, not India-specific). Sourcing biomass from closer locations reduces delivered cost significantly. Processed products (pellets/briquettes) are cheaper to transport than raw biomass.",
+      "central_financial_assistance_available": true,
+      "cfa_reference": "see subsidies.json -> mnre.biomass for CFA rates on pellet/briquette plants and cogeneration",
+      "status": "GAP (unchanged this pass) -- no India-specific INR/tonne or INR/kg delivered biomass price found; only cost-structure qualitative findings. Not chased in this update (out of scope per revised source-priority plan)."
+    },
+    "diesel_oil": {
+      "emission_factor_kgco2_per_litre": 2.65,
+      "price_inr_per_litre": {
+        "delhi": 95.2,
+        "mumbai": 97.83,
+        "hyderabad": 103.65,
+        "chennai": 99.74,
+        "kolkata": 99.82,
+        "national_avg_reference": 97.83
+      },
+      "as_of": "9-15 August 2026",
+      "source": "Goodreturns / CarDekho daily retail fuel price trackers (OMC-published pump prices)",
+      "note": "Retail pump price includes central excise + state VAT (VAT varies significantly by state, e.g. ~16.75% Delhi vs ~24% Maharashtra), so it is not a single national figure. Bulk/industrial diesel bought directly from OMC depots (not retail pumps) can differ from retail pump price -- this figure is retail, use with that caveat for a factory's genset/backup diesel modeling.",
+      "status": "FILLED (retail reference)"
+    },
+    "motor_gasoline_petrol": {
+      "emission_factor_kgco2_per_litre": 2.27,
+      "price_inr_per_litre": {
+        "delhi": 102.12,
+        "mumbai": 111.21,
+        "bangalore": 111.68,
+        "hyderabad": 115.69,
+        "chennai": 107.78,
+        "ahmedabad": 101.81,
+        "kolkata": 113.51
+      },
+      "as_of": "14-15 August 2026",
+      "source": "Goodreturns / CarDekho daily retail fuel price trackers",
+      "note": "Petrol is a minor input for MSME factory energy modeling (mostly relevant for light vehicles, small gensets) rather than a core process fuel -- included for completeness.",
+      "status": "FILLED (retail reference)"
+    },
+    "lpg": {
+      "domestic_14_2kg_cylinder_inr": {
+        "delhi": 942,
+        "as_of": "August 2026",
+        "source": "Goodreturns LPG price tracker"
+      },
+      "commercial_19kg_cylinder_inr": {
+        "delhi": 2738,
+        "mumbai": 2691.5,
+        "kolkata": 2872,
+        "chennai": 2906,
+        "bengaluru": 2821,
+        "hyderabad": 2985,
+        "as_of": "1 August 2026 (post-revision)",
+        "source": "ANI/Goodreturns/Outlook India reporting on OMC commercial LPG price revision, effective 1 August 2026"
+      },
+      "derived_commercial_inr_per_kg_delhi": 144.1,
+      "note": "Commercial (19kg) cylinders are the relevant category for MSME/industrial LPG use (vs domestic 14.2kg for households). Prices are revised monthly by OMCs and are volatile -- the August 2026 figures reflect a recent ~Rs 200/cylinder cut; treat as a snapshot, not a stable input.",
+      "status": "FILLED"
+    },
+    "hydrogen": {
+      "note": "Not a near-term MSME fuel-price input -- see technology_costs.json -> hydrogen_electrolysis for capex/opex context. LCOH (levelized cost of hydrogen) 2020-era average USD 4.5-6.3/kg; 2050 projected USD 2.6-3.2/kg (IEA, global). Flag with high uncertainty margin if used at all. Not chased in this update."
+    }
+  },
+  "gaps_and_flags": [
+    "Non-domestic (commercial/industrial) PNG price in INR/SCM was not found -- only domestic/household PNG rates are available as a directional proxy. This is now the single biggest remaining gap for fuels.",
+    "Coal delivered/landed price (ex-mine notified price + transport) was not found -- only ex-mine notified prices by grade are available. Transport cost is state-dependent and can be a large share of delivered cost for MSMEs outside coal-bearing states.",
+    "Biomass delivered price (INR/tonne or INR/kg) remains a gap -- not chased in this pass.",
+    "Karnataka electricity tariff conflict is RESOLVED: LT-5 industrial = Rs 5.20/kWh, HT-2a industrial = Rs 6.70/kWh (KERC order, effective FY2025-26). The previously conflicting 8.92 INR/kWh figure was LT-3 Commercial, not industrial.",
+    "Tamil Nadu electricity tariff conflict is RESOLVED: HT industrial (HV-3.1) = Rs 7.50/kWh per TNERC Order No. 6 of 2025 (effective 01.07.2025). The 9.5 INR/kWh 'HT-IIA' vendor-blog figure should no longer be used.",
+    "Only 4 states have tariff data; broader state coverage (Haryana, Maharashtra, Rajasthan, MP, West Bengal) is still outstanding.",
+    "Uttar Pradesh and Gujarat electricity tariffs were not independently re-verified in this update pass -- carried over from the original compile."
+  ]
+}

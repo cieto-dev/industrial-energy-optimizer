@@ -1,0 +1,267 @@
+{
+  "_meta": {
+    "description": "CapEx, installation, O&M, and replacement costs for decarbonization technologies relevant to MSME factories.",
+    "compiled_from_steps": [
+      3,
+      4,
+      8,
+      15
+    ],
+    "critical_caveat": "Solar PV remains the only category with convergent, India-specific, multi-source pricing. In this update pass, real (non-guessed) figures were located for WHR, VFDs, biomass boilers, thermal storage, battery storage, and the IE3->IE4 motor premium -- but several of these are GLOBAL/non-India-specific academic or vendor-marketing sources, not verified India MSME quotes. Each entry below is explicitly labeled with its source type and confidence. Where no usable figure could be found at all, the field is marked research_pending rather than backfilled with a guess -- do not treat research_pending fields as zero or default cost.",
+    "last_verified": "2026-08-16 -- WHR, VFD, biomass boiler, thermal storage, battery storage, and IE3/IE4 premium updated with sourced figures this pass; solar PV section unchanged/not re-verified this pass"
+  },
+  "solar_pv_industrial": {
+    "capex_inr_per_kw_range": [
+      35000,
+      50000
+    ],
+    "trend": "decreasing per-kW cost as system size increases (economy of scale)",
+    "by_system_size": {
+      "25kw_small_commercial": {
+        "total_inr_lakh": 12,
+        "per_kw_inr": 48000
+      },
+      "100kw_mid_commercial_industrial": {
+        "total_inr_lakh_range": [
+          40,
+          60
+        ],
+        "per_kw_inr_range": [
+          40000,
+          60000
+        ]
+      },
+      "500kw_large_industrial": {
+        "total_inr_crore_range": [
+          1.8,
+          2.5
+        ],
+        "per_kw_inr_range": [
+          36000,
+          50000
+        ]
+      },
+      "1mw_utility_scale": {
+        "total_inr_crore_range": [
+          4,
+          5
+        ],
+        "per_kw_inr_range": [
+          40000,
+          50000
+        ]
+      }
+    },
+    "price_shock_flag": "ALMM (Approved List of Models and Manufacturers) enforcement plus China's revised export policy reportedly pushed commercial/industrial solar costs up ~25% year-on-year as of 2026 (single source, unverified) -- if the model uses a 2024/2025 benchmark, costs may be stale.",
+    "payback_years_vendor_claimed": [
+      3,
+      5
+    ],
+    "payback_caveat": "Vendor-claimed figure -- treat as an optimistic upper bound, not a typical outcome.",
+    "source_confidence": "moderate-to-good -- 8+ independent vendor sources converge reasonably well despite vendor bias",
+    "not_reverified_this_pass": true
+  },
+  "waste_heat_recovery_whr": {
+    "capex_status": "PARTIALLY FILLED -- global (non-India) benchmark located this pass; still no India-specific quote",
+    "capex_usd_per_kw_recovered_thermal": [
+      300,
+      900
+    ],
+    "capex_source": "Industrial/cogeneration WHRB cost-range compilation (coalbiomassboiler.com), itself aggregating industrial boiler market pricing -- NOT an India-specific source and NOT independently cross-checked against a second source. Treat as an order-of-magnitude reference only.",
+    "capex_confidence": "low -- single non-India source, directional only",
+    "system_scale_reference": "Same source cites $1 million-$20 million for full industrial-scale systems, i.e. this is for larger installations, not necessarily MSME-scale retrofits.",
+    "payback_years_claims_by_source": {
+      "condensate_blowdown_heat_recovery_high_pressure_boilers": "<12 months (manufacturer claim)",
+      "whrb_general": "<1 year (marketing claim, unverified)",
+      "general_industrial_non_india": [
+        2,
+        5
+      ]
+    },
+    "feasibility_threshold_flue_gas_temp_c": 500,
+    "feasibility_threshold_note": "One manufacturer spec: WHR applicable to flue gases >500C (furnace/incinerator exhaust) -- usable as a feasibility gate even without a cost figure.",
+    "applicable_sectors": [
+      "food_beverage",
+      "chemicals",
+      "pulp_paper",
+      "textiles",
+      "steel"
+    ],
+    "cross_reference": "BEE Pali Textile Cluster DPR (technology_parameters.json -> waste_heat_recovery) gives a real payback (1.8 years) and IRR (37.45%) for a stenter WHR retrofit -- STILL the better cost/benefit reference for MSME-scale modeling than either this step's vendor claims or the new global $/kW figure above.",
+    "recommended_action": "Request quotes directly from 2-3 Indian WHR manufacturers (Thermax, Cheema Boilers, Energypack) for an India-specific per-kW figure. The $300-900/kW global reference can be used as a sanity-check ceiling/floor, not as the primary model input."
+  },
+  "vfd_variable_frequency_drives": {
+    "capex_status": "PARTIALLY FILLED -- real India retail listing prices found this pass, with capacity specified (previous compile's data was capacity-unspecified and unusable)",
+    "india_retail_price_points": [
+      {
+        "capacity_kw": 1.5,
+        "price_inr": 12250,
+        "price_inr_per_kw": 8167,
+        "model": "CG Vsx48-004 20ceb, 2HP",
+        "source": "IndiaMART listing"
+      },
+      {
+        "capacity_kw": 5.5,
+        "price_inr": 7340,
+        "price_inr_per_kw": 1335,
+        "model": "Delta Series M, 7.5HP",
+        "source": "IndiaMART listing, Hyderabad dealer"
+      },
+      {
+        "capacity_kw": 18.5,
+        "price_inr": 41135,
+        "price_inr_per_kw": 2224,
+        "model": "CG Emotron VSX48-038-20CEB",
+        "source": "IndiaMART listing"
+      },
+      {
+        "capacity_kw": 132,
+        "price_inr": 510200,
+        "price_inr_per_kw": 3865,
+        "model": "VFAS3-4132KPC, heavy duty",
+        "source": "IndiaMART listing"
+      }
+    ],
+    "confidence_note": "These are individual marketplace retail listing prices (IndiaMART/Moglix), not averaged vendor quotes or a fitted cost curve -- useful as real reference points but do not treat as a smooth per-kW function. Small-capacity units show a notably higher per-kW cost (economy of scale is visible but not linear across this range); the 132kW figure is a heavy-duty unit and may not be representative of standard-duty units at that size. Recommend getting 2-3 direct vendor quotes at the specific capacities your model actually needs (likely 5-50kW range for MSME motors) before finalizing.",
+    "marketplace_sources_checked": [
+      "Moglix",
+      "IndiaMART",
+      "TradeIndia",
+      "Eleczo"
+    ],
+    "recommendation": "Usable as a rough per-kW curve for MSME-scale (1.5-20kW) VFDs now; still needs real vendor quotes to firm up for a judged deliverable."
+  },
+  "motors_ie3_ie4": {
+    "baseline_note": "IE3 (Premium Efficiency) is the mandatory minimum standard in India for motors 0.75-1000kW, effective July 2023 -- treat IE3 as the purchase floor, not the upgrade target.",
+    "real_upgrade_lever": "IE3 -> IE4 (not IE1/IE2 -> IE3, which is now simply mandated).",
+    "ie3_to_ie4_efficiency_gap_pct_points": [
+      1,
+      2
+    ],
+    "ie3_to_ie4_price_premium_pct": [
+      20,
+      30
+    ],
+    "price_premium_source": "Global motor-manufacturer technical comparison (iecmotores.com) -- NOT an India-specific quote, but a commonly-cited industry figure attributing the premium to increased copper/lamination material cost, which is a material-cost driver that should transfer reasonably well to the India market. Treat as directional, not a verified India quote.",
+    "price_premium_confidence": "low-to-moderate -- single non-India source, but the underlying material-cost logic is generic/global and plausible",
+    "evaluation_context": "Small percentage efficiency gap but material at continuous-duty MSME load factors given 10+ year typical motor lifetime.",
+    "recommended_action": "Cross-check the 20-30% premium against an India motor manufacturer price list (e.g. Crompton, Havells, ABB India, Siemens India) before finalizing -- not done in this pass."
+  },
+  "biomass_boiler_conversion": {
+    "capex_status": "PARTIALLY FILLED -- real India new-installation boiler capex found; true retrofit/conversion-of-existing-coal-boiler capex remains a distinct, narrower gap",
+    "new_biomass_boiler_capex_inr": {
+      "industrial_1_to_10_tph": {
+        "range_inr_lakh": [
+          15,
+          50
+        ],
+        "source": "Cheema Boilers industrial biomass boiler pricing guide"
+      },
+      "above_10_tph": {
+        "range_inr_lakh_min": 60,
+        "source": "Cheema Boilers industrial biomass boiler pricing guide"
+      },
+      "5_tph_fbc_specific_example": {
+        "range_inr_lakh": [
+          85,
+          120
+        ],
+        "source": "parboiler.com FBC biomass boiler guide -- NOTE this is notably higher than the Cheema 1-10 TPH range above for a boiler within that same band; likely reflects FBC (fluidized bed combustion, higher-spec) vs simpler grate-fired designs. Do not average -- the two ranges reflect different boiler technology tiers, both real vendor-facing figures."
+      },
+      "large_case_study_example": {
+        "capex_inr_lakh": 500,
+        "context": "Pharma company, Baddi HP, 30,000 kg/day steam demand, switching from FO/HSD (not coal) to biomass -- larger and different fuel-switch context than a typical MSME coal-boiler conversion, included for scale reference only",
+        "source": "boilerworldupdate.com case study"
+      }
+    },
+    "retrofit_vs_new_distinction": "IMPORTANT: the figures above are for NEW biomass boiler purchase/installation, not for converting/retrofitting an existing coal-fired boiler. A separate lower-cost retrofit path exists (e.g. Steamax's 'OBR Kit' burner retrofit, described as 'a fraction of the price of a new system' with no number given) for boilers that can be adapted rather than replaced -- this narrower retrofit-specific capex is STILL a genuine gap.",
+    "capex_still_gap": "Coal-to-biomass CONVERSION/retrofit capex specifically (as opposed to new biomass boiler purchase) -- not found this pass.",
+    "financing_context": "SIDBI RAMP/MSE-GIFT green technology list explicitly includes replacing old coal boilers with biomass systems, qualifying for 2% interest subvention -- see subsidies.json -> sidbi.mse_gift",
+    "multi_fuel_boiler_note": "Multi-fuel boiler technology recommended to hedge against seasonal biomass availability gaps -- likely different (higher) capex than single-fuel biomass boiler, but lower downtime risk. Not quantified in research.",
+    "payback_note": "Multiple India vendor sources independently cite 2-5 year (some claim 12-24 month) payback for coal-to-biomass switching due to fuel cost differential -- directionally consistent across sources even though capex figures vary by boiler tier."
+  },
+  "hydrogen_electrolysis": {
+    "scope_note": "Global/IEA figures only -- not India-specific. Use as a wide-uncertainty-band reference, not a primary MSME input.",
+    "electrolyser_capex_usd_per_kw_iea_2030_projection": [
+      620,
+      960
+    ],
+    "electrolyser_capex_usd_per_kw_real_world_installed_caution": 1900,
+    "electrolyser_capex_usd_per_kw_advertised_chinese_range": [
+      300,
+      700
+    ],
+    "electrolyser_capex_usd_per_kw_advertised_chinese_advanced": 1300,
+    "real_vs_advertised_cost_gap_multiplier": 3,
+    "electrolyser_opex_usd_per_kw_year": [
+      19,
+      30
+    ],
+    "stack_lifetime_hours_economic_optimum": 50000,
+    "stack_lifetime_hours_technical_max": 95000,
+    "smr_without_ccus_usd_per_kw_h2": [
+      500,
+      900
+    ],
+    "smr_with_ccus_usd_per_kw_h2": [
+      900,
+      1600
+    ],
+    "lcoh_usd_per_kg_current": [
+      4.5,
+      6.3
+    ],
+    "lcoh_usd_per_kg_2050_projected": [
+      2.6,
+      3.2
+    ],
+    "maturity_flag": "High cost uncertainty. Not yet MSME-viable near-term -- model with a wide uncertainty band if included at all.",
+    "not_reverified_this_pass": true
+  },
+  "thermal_storage": {
+    "capex_status": "PARTIALLY FILLED -- global academic benchmark found this pass; no India-specific figure",
+    "capex_usd_per_kwh_thermal": 4.55,
+    "capex_usd_per_kw_charge": 20.67,
+    "capex_usd_per_kw_discharge": 6.47,
+    "capex_source": "Firebrick Resistance-heated Energy Storage (FIRES-type) system modeled in a peer-reviewed benchmarking study (ScienceDirect, 'Benchmarking thermal energy storage cost for industrial process heat') -- academic techno-economic model, NOT an India vendor quote. A hypothetical 50%-cost-reduction scenario in the same study gives $2.54/kWh-th + $13.60/kW as a lower bound if future cost declines are assumed.",
+    "capex_confidence": "moderate for a directional figure (peer-reviewed, transparent methodology) but low for India-specific accuracy -- material and labor costs in India likely differ from the US-centric cost basis of the source study",
+    "materials": [
+      "sand",
+      "cement",
+      "brick"
+    ],
+    "note": "IEA flags this as low-cost by construction (using cheap bulk materials) and as the key enabling technology for pairing variable renewable electricity with continuous industrial heat demand. Max storage temperature 1000C.",
+    "cross_reference": "see FlexiHeat DST document already in the project for more detail",
+    "recommended_action": "Treat the $4.55/kWh-th figure as a rough order-of-magnitude placeholder; genuinely needs an India-specific quote or a cross-check against the FlexiHeat DST reference before use in a judged deliverable."
+  },
+  "battery_storage": {
+    "capex_status": "PARTIALLY FILLED -- India-specific C&I/industrial figure found this pass",
+    "capex_inr_per_kwh_range": [
+      37000,
+      62000
+    ],
+    "capex_usd_per_kwh_range": [
+      420,
+      700
+    ],
+    "capex_source": "India-specific industrial/C&I BESS capex range, citing batteries as ~65% of total capex (ornatesolar.com, 2025-dated) -- this is a solar/storage integrator's market-reference figure, not a certified vendor quote, but it is explicitly India-market and explicitly the C&I (commercial & industrial) segment rather than utility-scale.",
+    "utility_scale_reference_for_context": {
+      "capex_usd_per_kwh": [
+        114,
+        126
+      ],
+      "note": "Reverse-engineered from recent India solar+storage auction bids (SECI/NHPC-type projects) -- notably cheaper per kWh than the C&I figure above due to project scale; NOT representative of MSME-scale battery storage, included only to show the scale effect."
+    },
+    "note": "No mature MNRE capital subsidy exists for industrial battery storage (see subsidies.json). Recommend continuing to model thermal storage as the primary MNRE-aligned storage pathway, with battery storage as a secondary/comparison option using the capex range above."
+  },
+  "gaps_and_flags": [
+    "WHR: India-specific capex still a genuine gap -- only a non-India $300-900/kW reference found. BEE Pali case-study economics remain the best available India-anchored proxy.",
+    "VFD: real India retail price points now available for 1.5/5.5/18.5/132 kW units, but not a smooth cost curve or averaged vendor quotes -- get 2-3 direct quotes at the capacities the model actually needs.",
+    "IE3->IE4 motor premium: 20-30% figure found but from a non-India source -- needs cross-check against an India motor manufacturer (Crompton/Havells/ABB India/Siemens India) price list.",
+    "Coal-to-biomass CONVERSION/retrofit capex (as distinct from new biomass boiler purchase) remains a genuine gap -- new boiler capex is now filled (Rs 15-120 lakh depending on TPH and technology tier), but the cheaper retrofit-only path (e.g. burner-kit conversion) has no number attached.",
+    "Thermal storage: only a non-India academic benchmark found ($4.55/kWh-th) -- needs India-specific quote or FlexiHeat DST cross-check.",
+    "Battery storage: India C&I figure found (Rs 37,000-62,000/kWh) and is the most solid new addition this pass, but still sourced from a market-integrator estimate rather than a certified vendor quote.",
+    "Solar PV section was not re-verified in this update pass -- carried over as-is from the prior compile.",
+    "General pattern across this update: several 'PARTIALLY FILLED' fields rest on a single global/non-India source. Before using this file in a judged deliverable, prioritize getting real Indian vendor quotes for whichever 2-3 technologies matter most to the model's core recommendations -- do not present single-source global benchmarks as India-verified figures."
+  ]
+}

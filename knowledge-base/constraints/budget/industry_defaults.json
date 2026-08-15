@@ -1,0 +1,247 @@
+{
+  "_meta": {
+    "description": "Default values by industry sector (textile, food, paper, chemical, foundry, etc.) and MSME-sector-wide baseline figures.",
+    "compiled_from_steps": [
+      1,
+      3,
+      5,
+      6,
+      7,
+      9,
+      13
+    ]
+  },
+  "msme_classification": {
+    "governing_act": "MSMED Act, 2006, administered via Udyam Registration portal",
+    "current_thresholds_effective_2025_04_01": {
+      "micro": {
+        "investment_inr_crore_max": 2.5,
+        "turnover_inr_crore_max": 10
+      },
+      "small": {
+        "investment_inr_crore_max": 25,
+        "turnover_inr_crore_max": 100
+      },
+      "medium": {
+        "investment_inr_crore_max": 125,
+        "turnover_inr_crore_max": 500
+      }
+    },
+    "previous_thresholds_2020_to_2025_03_31": {
+      "micro": {
+        "investment_inr_crore_max": 1,
+        "turnover_inr_crore_max": 5
+      },
+      "small": {
+        "investment_inr_crore_max": 10,
+        "turnover_inr_crore_max": 50
+      },
+      "medium": {
+        "investment_inr_crore_max": 50,
+        "turnover_inr_crore_max": 250
+      }
+    },
+    "classification_rule": "Composite criterion -- a business must satisfy BOTH the investment and turnover condition to fall in a category. Same thresholds apply to manufacturing and service enterprises (only the investment measure's name changes: 'plant and machinery' for manufacturing vs 'equipment' for services).",
+    "note_for_existing_factories": "Since the optimizer likely deals with existing factories (not new registrations), consider keeping both old and new thresholds with an effective_date field, in case a factory's self-reported figures predate the 2025 revision."
+  },
+  "factory_size_by_category": {
+    "micro": {
+      "investment_inr_crore_max": 2.5,
+      "description": "very small workshops, artisan units, limited machinery"
+    },
+    "small": {
+      "investment_inr_crore_range": [
+        2.5,
+        25
+      ],
+      "description": "established manufacturing units, often dedicated production lines"
+    },
+    "medium": {
+      "investment_inr_crore_range": [
+        25,
+        125
+      ],
+      "description": "larger factories, sometimes multi-line or multi-shift operations"
+    },
+    "floor_area_m2": "GAP -- no official average factory floor area by MSME category found at national level; would need state Industrial Estate / DIC data or sector-specific industry association data."
+  },
+  "sectors": {
+    "list": [
+      "Textiles & Apparel",
+      "Food Processing",
+      "Leather & Leather Products",
+      "Chemicals & Allied Products",
+      "Pharmaceuticals",
+      "Engineering Goods (incl. foundries/fabrication)",
+      "Rubber & Plastic Products",
+      "Electrical & Electronics",
+      "Ceramics",
+      "Paper",
+      "Dairy",
+      "Metals and artisan-based industries"
+    ],
+    "ceramics_note": "Not separately broken out in Ministry of MSME national data (Step 1) but explicitly confirmed as a biomass-relevant MSME sector by the MNRE-GIZ biomass report (Step 5) -- closes that gap.",
+    "biomass_process_heat_applicability": {
+      "sectors": [
+        "textiles",
+        "food processing",
+        "pharmaceuticals",
+        "paper",
+        "chemicals",
+        "dairy",
+        "ceramics",
+        "rubber",
+        "leather",
+        "metals and artisan-based industries"
+      ],
+      "finding": "Biomass can technically replace up to 100% of fossil fuels currently used for steam/heat generation in these MSME-dominated sectors.",
+      "current_fossil_fuels_displaced": [
+        "coal",
+        "pet-coke",
+        "natural gas"
+      ]
+    },
+    "whr_applicable_sectors": [
+      "food_beverage",
+      "chemicals",
+      "pulp_paper",
+      "textiles",
+      "steel"
+    ],
+    "distribution_by_activity_note": "Trade-sector MSMEs hold roughly a third of all units; manufacturing MSMEs a slightly smaller share (NSS 2015-16 round) -- not all MSMEs are industrial/energy-consuming; the optimizer's target subset is manufacturing MSMEs only."
+  },
+  "msme_sector_macro_stats": {
+    "gdp_contribution_pct": 30,
+    "export_contribution_pct": 46,
+    "industrial_energy_consumption_share_pct": {
+      "central_estimate": 25,
+      "world_bank_range_sector_dependent": [
+        33,
+        75
+      ],
+      "reconciliation_note": "Use the World Bank FEEMP range (33-75%, sector-dependent) as the authoritative envelope; treat 25% as a commonly-cited average/rounding within that range."
+    },
+    "electricity_vs_thermal_energy_split_pct": {
+      "electricity": 15,
+      "thermal": 85,
+      "source": "TERI, citing MSME-sector-wide data -- confirms process heat dominates MSME energy use"
+    },
+    "manufacturing_share_of_total_industrial_energy_use_pct": {
+      "value": "~25 (nearly a quarter)",
+      "source": "CSTEP"
+    },
+    "process_heat_share_of_msme_manufacturing_energy_demand_pct": 80,
+    "process_heat_share_note": "Over 80% of MSME manufacturing sector energy demand comes from process heat (boilers, furnaces, dryers).",
+    "total_msme_count": 69000000,
+    "employment": {
+      "figure_2026_niti_aayog_pib": 250000000,
+      "figure_2015_world_bank": 60000000,
+      "discrepancy_note": "The two figures differ by over 4x -- likely different methodologies (direct employment vs total including informal/indirect). Flag rather than silently pick one."
+    },
+    "baseline_msme_emissions_mtco2e": 135,
+    "formal_finance_access_pct": 16,
+    "credit_gap_usd_billion": 240
+  },
+  "decarbonization_targets_niti_aayog_roadmap": {
+    "report": "Roadmap for Green Transition of MSMEs (NITI Aayog, 21 Jan 2026)",
+    "three_levers": [
+      "Energy Efficiency",
+      "Green Electricity integration",
+      "Alternative Fuels adoption"
+    ],
+    "target_specific_energy_consumption_reduction_pct_min": 20,
+    "co2_reduction_potential_million_tonnes": {
+      "electricity_and_cleaner_fuels_only_over_decade": [
+        30,
+        35
+      ],
+      "full_roadmap_broader_measures": [
+        75,
+        87
+      ]
+    },
+    "long_run_context": "Fossil fuels projected to still account for roughly one-fourth of industry energy consumption even by 2070 (NITI Aayog Feb 2026 follow-up), to be managed via carbon capture and other technologies -- the optimizer should not assume 100% fossil-fuel elimination as the realistic long-run end-state.",
+    "implementation_approach": "Cluster-based (validated across NITI Aayog and CEEW sources) rather than treating each factory in isolation.",
+    "external_pressure_driver": "EU Carbon Border Adjustment Mechanism (CBAM) -- adds competitive pressure for export-oriented MSMEs (e.g. textiles) to decarbonize regardless of domestic subsidy availability."
+  },
+  "financing_barriers": {
+    "list": [
+      "high_risk_perception",
+      "information_asymmetry",
+      "high_transaction_costs",
+      "lack_of_collateral",
+      "green_premium",
+      "no_domestic_carbon_market",
+      "disproportionately high cost of capital for MSMEs specifically"
+    ],
+    "behavioral_barrier": "42% of smaller manufacturing enterprises avoid third-party sustainability audits due to limited budgets and lack of direct financial incentive -- relevant to why MSMEs under-adopt even cost-effective measures.",
+    "structural_finding": "Cost is often the binding constraint on MSME decarbonisation more than technical/organizational readiness (CEEW steel cluster study, 2026) -- readiness is not always the bottleneck."
+  },
+  "foundry_dri_sector_case_study": {
+    "source": "CEEW, 'Advancing India's Green Steel Transition' (2026)",
+    "sub_sector": "Coal-based Direct Reduced Iron (C-DRI)",
+    "share_of_india_crude_steel_production_pct": 30,
+    "emission_intensity_tco2_per_tonne_steel_range": [
+      2.7,
+      3.1
+    ],
+    "key_clusters_india": [
+      "Chhattisgarh",
+      "Odisha",
+      "Karnataka"
+    ],
+    "clusters_studied": [
+      "Raigarh",
+      "Raipur",
+      "Sundargarh",
+      "Bellary",
+      "Jharsuguda"
+    ],
+    "dri_emissions_share_of_cluster_total_pct_range": [
+      78,
+      86
+    ],
+    "baseline_emissions_by_cluster_mtpa": {
+      "raigarh": 10.66,
+      "raipur": 7.75,
+      "sundargarh": 7.29,
+      "bellary": 4.96,
+      "jharsuguda": 1.4
+    },
+    "cost_structure_finding": "Initial capital required is highest for CCUS and Renewable Energy deployment; CCUS and imported-coal-use switching have the highest operating expenses -- capex-heavy and opex-heavy levers should be modeled distinctly."
+  },
+  "cpcb_compliance_context": {
+    "boiler_pm_limits_mg_per_nm3": {
+      "category_I_lt_2_tph": {
+        "current": 500,
+        "original": 1600
+      },
+      "category_II_2_to_15_tph": {
+        "value": 1200,
+        "confidence": "not confirmed current -- may also have been revised"
+      },
+      "category_III_gt_15_tph": 150,
+      "delhi_ncr_caqm_uniform_feb_2026": 50,
+      "general_industrial_stack_limit": 150,
+      "so2_limit": 400,
+      "min_stack_height_m": 11
+    },
+    "categorization_pollution_index": {
+      "categories": [
+        "Red (highly polluting, ~70+ sectors, mandatory CTE+CTO, often EIA/CEMS)",
+        "Orange (moderate, EMP + periodic reporting)",
+        "Green (low, lighter consent)",
+        "White (non-polluting, no consent required, e.g. solar generation, electric motor repair)",
+        "Blue (2025, essential environmental services infrastructure designation)"
+      ],
+      "scoring_basis": "0-100 Pollution Index combining air/water/waste pollution potential, equal weighting since a 2025 revision. Fuel type is a direct scoring input -- coal/liquid fuel scores higher (more polluting) than PNG/LPG/CNG/electricity.",
+      "modeling_opportunity": "A fuel-switch or efficiency lever that lowers Pollution Index score can shift an MSME to a lighter CPCB category, reducing monitoring/consent costs -- a second-order financial benefit not otherwise captured. See subsidies.json -> cpcb_compliance_downgrade_benefit."
+    }
+  },
+  "gaps_and_flags": [
+    "No official average factory floor area (m2) by MSME category found nationally -- would need state Industrial Estate / DIC data.",
+    "Employment figure discrepancy (250M vs 60M) unresolved -- flag both rather than picking one.",
+    "CPCB Category II PM limit (1200 mg/Nm3) not confirmed as current.",
+    "No Ministry of MSME dataset directly stating typical kWh consumption per MSME category -- use the World Bank/TERI figures above instead."
+  ]
+}

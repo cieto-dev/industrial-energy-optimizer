@@ -1,0 +1,184 @@
+{
+  "_meta": {
+    "description": "Discount rate, inflation, fuel escalation, electricity escalation, and payback assumptions.",
+    "compiled_from_steps": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      9,
+      11,
+      12
+    ],
+    "critical_caveat": "The discount-rate/cost-of-capital layer is now traceable to an actual dated RBI policy rate (Step 11) rather than an assumed figure -- this should anchor the whole file."
+  },
+  "discount_rate": {
+    "base_rate_pct": 5.25,
+    "base_rate_source": "RBI repo rate, held unchanged at the 3-5 August 2026 MPC meeting (6-0 unanimous); last moved by a cut from 5.5% to 5.25% in December 2025.",
+    "transmission_mechanism": "Since October 2019, all floating-rate bank loans to micro and small enterprises must be linked to this External Benchmark Lending Rate (EBLR), not an internal bank rate -- so the repo rate is a direct input, not an approximation.",
+    "effective_msme_borrowing_rate_formula": "repo rate + lender spread"
+  },
+  "msme_lending_rates": {
+    "spread_over_repo_pct_range": [
+      4,
+      11
+    ],
+    "effective_rate_pct_range_recommended_default": [
+      9,
+      16
+    ],
+    "point_estimate_if_needed_pct": 12.5,
+    "point_estimate_note": "Midpoint of the bank-reported range -- recommended over an unverified 7-12% claim seen on some aggregator sites.",
+    "rate_source_conflict": {
+      "bank_industry_reported": {
+        "public_sector_banks_pct": [
+          12,
+          16
+        ],
+        "private_banks_pct": [
+          14,
+          20
+        ],
+        "nbfc_fintech_pct": [
+          15,
+          24
+        ],
+        "general_business_loans_pct": [
+          9,
+          16
+        ]
+      },
+      "seo_aggregator_claims_pct": [
+        7,
+        12
+      ],
+      "resolution": "Treat 9-16% (EBLR + spread) as the working default for unsubsidized MSME term loans. Rates quoted below ~9% almost certainly reflect a specific concessional scheme (SIDBI Green Finance, KVIC ISEC, etc.) and should be tagged with that scheme's name, not used as a general market rate."
+    },
+    "concessional_scheme_examples": {
+      "sidbi_mse_gift_interest_subvention_pct": 2.0,
+      "psl_solar_msme_rate_pct_range": [
+        8,
+        10
+      ]
+    }
+  },
+  "financing_access_context": {
+    "formal_finance_access_pct_of_msmes": 16,
+    "credit_gap_usd_billion": 240,
+    "historical_self_financed_pct_2006_07_census": 87,
+    "micro_small_share_of_fi_portfolio_pct_range": [
+      13,
+      15
+    ],
+    "structural_barriers": [
+      "higher risk perception",
+      "information asymmetry",
+      "high transaction costs",
+      "lack of collateral"
+    ],
+    "note": "Justifies modeling a distinct 'MSME accessible financing' scenario vs a 'theoretical optimal financing' scenario -- actual capital access is a real constraint layer separate from technology economics."
+  },
+  "credit_enhancement": {
+    "cgtmse_guarantee_coverage_pct_range": [
+      75,
+      90
+    ],
+    "cgtmse_micro_enterprise_coverage_pct_upto_5l": 85,
+    "cgtmse_collateral_free_loan_cap_inr_crore": 2
+  },
+  "decarbonization_financing_barriers_wef": {
+    "list": [
+      "Traditional finance channels insufficient in scale",
+      "Green premium -- clean technology costs more upfront than incumbent fossil alternatives",
+      "Cost of capital disproportionately high for MSMEs specifically",
+      "No domestic carbon market in India (removes a potential revenue/incentive channel)",
+      "Lack of investor confidence in the space"
+    ],
+    "macro_context": "IEA estimates India needs USD 160 billion/year in investment across its energy economy through 2030 to hit net-zero goals -- roughly 3x current investment levels (not MSME-specific, but useful top-line framing)."
+  },
+  "niti_aayog_financing_proposals": {
+    "viability_gap_funding_inr_crore": 6000,
+    "status": "proposed, sector-wide fund, not yet allocated/disbursed -- do not treat as a per-project subsidy amount"
+  },
+  "payback_and_savings_benchmarks": {
+    "aggregate_msme_cluster_retrofit": {
+      "investment_inr_crore": 90,
+      "annual_savings_inr_crore": 37,
+      "implied_simple_payback_years": 2.4,
+      "co2_reduction_tonnes": 136581,
+      "source": "7-cluster CSTEP-aligned study, cited via Drishti IAS -- usable as a sanity-check default if technology-specific payback data is unavailable",
+      "attribution_caveat": "Could not fully confirm whether this is the CSTEP study directly or a related study referenced in the same reporting wave -- verify against primary TERI/CSTEP source documents before final citation."
+    },
+    "waste_heat_recovery_bee_pali_case": {
+      "payback_years": 1.8,
+      "irr_pct": 37.45,
+      "savings_potential_pct_range": [
+        20,
+        30
+      ],
+      "source": "BEE-run DPR for a textile cluster (Pali, Rajasthan) stenter WHR installation"
+    },
+    "solar_pv_vendor_claimed": {
+      "payback_years_range": [
+        3,
+        5
+      ],
+      "caveat": "Vendor-claimed -- treat as optimistic upper bound, not typical."
+    },
+    "esco_pay_as_you_save_model": {
+      "repayment_years_range": [
+        2,
+        4
+      ]
+    }
+  },
+  "escalation_assumptions": {
+    "electricity_tariff_escalation": {
+      "signal_source": "Karnataka KERC multi-year filings show a confirmed rising trajectory: +0.67 INR/kWh (FY25-26), +0.75 (FY26-27), +0.91 (FY27-28), plus fixed-charge hikes stacked on top.",
+      "note": "Use as an escalation-RATE signal (rising trend confirmed), not as a precise national point estimate -- only one state's trajectory is documented in detail."
+    },
+    "fuel_price_escalation": {
+      "coal": {
+        "escalation_pct_per_year_recommended_default": [5, 7],
+        "point_estimate_if_needed_pct": 6,
+        "evidence": "Coal India (CIL) notified non-coking coal price revisions are step-changes, not a smooth annual curve -- e.g. an ~10% board-approved hike effective 9 Jan 2018. Ministry of Coal representative-price series (via CEIC) shows individual grades moving sharply within single months in 2026 (e.g. Grade G13 rose from INR 1,716/t in May 2026 to INR 1,849/t in June 2026, ~7.8% in one month), confirming volatility rather than a stable trend.",
+        "confidence": "Low-Medium -- no official CIL or Ministry of Coal multi-year escalation *rate* is published; the 5-7%/yr figure is an analyst-style planning assumption derived from the historical pattern of periodic step hikes, not a quoted government projection.",
+        "source": "Ministry of Coal representative price data (via CEIC); Coal India price-revision press coverage (Business Standard, Jan 2018)."
+      },
+      "natural_gas": {
+        "escalation_pct_per_year_recommended_default": [3.5, 4],
+        "point_estimate_if_needed_pct": 4,
+        "evidence": "Domestic (APM) gas price is formula-based and its escalation is directly documented: post the 2023 Kirit Parikh Committee reform, the APM ceiling was held at USD 6.5/mmBtu for FY24 and FY25, then legislated to rise by USD 0.25/mmBtu per year -- taking the ceiling to USD 6.75/mmBtu (Apr 2025) and USD 7.00/mmBtu (Apr 2026). On a ~USD 6.75-7.00 base this is roughly a 3.5-4% annual step. The floor is fixed at USD 4/mmBtu.",
+        "confidence": "High for the regulated/APM segment (~60-70% of domestic gas supply) -- this is a codified government formula, not an estimate. Market-priced gas (deepwater/HPHT fields, e.g. KG-D6) and imported LNG move with global benchmarks and are materially more volatile; the 3.5-4%/yr figure applies to APM-priced gas only.",
+        "source": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum & Natural Gas -- monthly domestic natural gas price notifications; Kirit Parikh Committee gas-pricing reform (2023)."
+      },
+      "biomass": {
+        "escalation_pct_per_year_recommended_default": [4, 6],
+        "point_estimate_if_needed_pct": 5,
+        "evidence": "No official multi-year biomass price escalation series exists, but a rising-demand trend is documented: the Ministry of Power's mandatory coal co-firing policy required a minimum 5% biomass-pellet blend from FY2024-25, rising to 7% from FY2025-26 (25-year policy horizon), creating structural demand growth against a large but logistically constrained ~230 million tonne/year surplus. Market pellet prices reported in early 2026 (~INR 7,500-10,500/tonne) sit above earlier-reported ranges (~INR 6,500-9,500/tonne), consistent with upward pressure, though these are not a controlled like-for-like series.",
+        "confidence": "Low -- this is a directional/qualitative trend (rising blend mandate + limited pellet-processing capacity vs. raw-residue surplus), not a quoted escalation rate. The 4-6%/yr figure is a working planning assumption, not a cited government or CSTEP/TERI projection.",
+        "source": "Ministry of Power biomass co-firing policy and benchmark pellet price notification (Nov 2023, revised policy effective FY2024-25); market pellet-price reporting (PelletRates, early 2026) -- cross-check against TERI/CEEW biomass economics reports before final citation."
+      },
+      "overall_note": "Coal and biomass escalation figures are working planning assumptions inferred from documented step-changes and demand trends, not quoted official escalation rates -- flag as such (Medium/Low confidence) in the evidence register. Natural gas (APM segment) is the one fuel with a directly codified, high-confidence annual escalation formula."
+    },
+    "general_inflation": {
+      "cpi_target_pct": 4.0,
+      "cpi_target_band_pct": [2, 6],
+      "cpi_target_source": "RBI Flexible Inflation Targeting (FIT) framework, retained at 4% +/-2% for the 5-year period 1 April 2026 - 31 March 2031, under Section 45-ZA of the RBI Act, 1934.",
+      "near_term_cpi_projection_fy2026_27_pct": 5.0,
+      "near_term_cpi_projection_source": "RBI August 2026 MPC statement: headline CPI inflation for FY2026-27 projected at 5.0% (Q2 ~4.7%, Q3 ~5.9%, Q4 ~5.5%), after headline CPI rose to 4.4% in June 2026 -- above the 4% target after 16 consecutive months below it.",
+      "core_inflation_fy2026_27_pct": 4.3,
+      "recommended_default_pct": 5.0,
+      "recommended_default_rationale": "Use the RBI's own FY2026-27 headline CPI projection (5.0%) as the working escalation/inflation input for near-term (1-3 year) cash-flow modeling, since it is the most current, officially sourced figure. For longer-horizon (10-25 year) project lifetimes, the mid-point of the RBI's statutory long-run target band (4%) is the more defensible anchor, since MPC point projections are only issued 1-2 years out.",
+      "confidence": "High -- both figures are directly sourced from RBI's own statutory target and its most recent (Aug 2026) MPC statement, not third-party estimates."
+    }
+  },
+  "gaps_and_flags": [
+    "General inflation is now sourced (RBI FIT target 4% +/-2% for 2026-2031; RBI's own FY2026-27 CPI projection of 5.0%) -- no longer a gap. Recommend 5.0% for near-term modeling, 4.0% for long-run/terminal-value modeling.",
+    "Fuel price escalation is now populated for all three fuels, but confidence differs sharply: natural gas (APM segment) has a High-confidence, formula-based ~3.5-4%/yr rate; coal (~5-7%/yr) and biomass (~4-6%/yr) are Low/Medium-confidence planning assumptions inferred from historical step-changes and demand-mandate trends, not quoted official escalation series -- do not present these three with equal confidence in the deliverable.",
+    "The aggregate 2.4-year payback benchmark has an unresolved attribution question (CSTEP vs. a related study) -- verify against primary TERI/CSTEP source documents before final citation.",
+    "RBI data confirms the financing-COST and general-inflation layers well; it does not and cannot provide MSME energy-consumption or sector data -- that remains sourced from BEE/World Bank/NITI Aayog/CEEW.",
+    "Coal and biomass escalation rates should be re-verified against a primary CIL/Ministry of Coal multi-year price series and a TERI/CEEW biomass economics report respectively before being cited as anything more than working assumptions in a judged deliverable."
+  ]
+}
