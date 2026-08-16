@@ -16,9 +16,7 @@
     "Billet and bloom production",
     "Steel forging and heat treatment"
   ],
-
   "description": "Industry profile for Indian iron and steel manufacturing. Steel is a highly energy-intensive sector with fundamentally different energy profiles depending on the production route. The optimizer must distinguish integrated BF-BOF, DRI-EAF/IF, scrap-EAF, induction-furnace and rerolling operations before recommending technologies. High-temperature ironmaking and steelmaking should not be treated as ordinary low-temperature process heat.",
-
   "india_sector_context": {
     "crude_steel_production": {
       "fy_2021_22_mt": 120.293,
@@ -36,7 +34,6 @@
     "source": "Ministry of Steel, Government of India, Annual Report 2025-26 / Joint Plant Committee",
     "data_scope_warning": "National production and capacity figures describe the Indian steel sector and must not be used as an individual plant production benchmark."
   },
-
   "msme_steel_rerolling_context": {
     "reference_year": 2022,
     "sector_definition": "Steel Rerolling",
@@ -53,7 +50,6 @@
     "source": "NITI Aayog, Roadmap for Green Transition of MSMEs, January 2026; values derived from BEE energy and resource mapping.",
     "scope_warning": "These values describe the steel rerolling MSME sector, not all Indian steel production."
   },
-
   "energy_intensity_benchmarks": {
     "unit": "Gcal/tcs",
     "bf_bof_route": {
@@ -73,7 +69,6 @@
     "interpretation": "These are route-level benchmark values. The optimizer should use plant-specific audited SEC where available.",
     "important_rule": "Do not compare the SEC of different steel routes without accounting for raw-material route, product boundary, purchased energy, process boundary and normalization methodology."
   },
-
   "carbon_intensity_reference": {
     "india_average_steel_emissions_intensity_tco2_per_tcs": 2.54,
     "unit": "tCO2/tcs",
@@ -81,7 +76,6 @@
     "interpretation": "Sector-level reference for Indian steel production.",
     "optimizer_rule": "Use plant-specific verified emissions data when calculating project-level carbon savings."
   },
-
   "process_routes": {
     "bf_bof": {
       "name": "Blast Furnace - Basic Oxygen Furnace",
@@ -133,7 +127,6 @@
         "Long-term process transition"
       ]
     },
-
     "coal_dri_eaf_if": {
       "name": "Coal-based Direct Reduced Iron - Electric Arc Furnace / Induction Furnace",
       "raw_materials": [
@@ -174,7 +167,6 @@
         "Scrap utilization"
       ]
     },
-
     "gas_dri_eaf": {
       "name": "Natural Gas Direct Reduced Iron - Electric Arc Furnace",
       "raw_materials": [
@@ -205,7 +197,6 @@
       ],
       "hydrogen_transition_status": "Pilot and demonstration stage for large-scale Indian deployment."
     },
-
     "scrap_eaf": {
       "name": "Scrap-based Electric Arc Furnace",
       "raw_materials": [
@@ -246,7 +237,6 @@
         "Scrap quality optimization"
       ]
     },
-
     "steel_rerolling": {
       "name": "Steel Rerolling",
       "raw_materials": [
@@ -291,7 +281,6 @@
       ]
     }
   },
-
   "production_process": [
     {
       "stage": 1,
@@ -470,7 +459,6 @@
       ]
     }
   ],
-
   "process_temperature_ranges": {
     "hot_blast_stove": {
       "min": 1000,
@@ -479,7 +467,6 @@
       "application": "Preheating blast air before admission to blast furnace",
       "source": "Ministry of Steel process-based safety guideline"
     },
-
     "reheating_furnace": {
       "min": 1100,
       "max": 1250,
@@ -492,7 +479,6 @@
       ],
       "source": "BEE Steel Re-rolling sector report and Ministry of Steel hot-rolling safety guidance"
     },
-
     "forging_and_heat_treatment": {
       "min": 1150,
       "max": 1250,
@@ -504,7 +490,6 @@
       ],
       "source": "BEE furnace technology material"
     },
-
     "steel_melting": {
       "min": 1500,
       "max": 1700,
@@ -516,7 +501,6 @@
       ],
       "thermodynamic_reference": "Pure iron melting point is approximately 1530 C; actual steelmaking temperatures depend on grade, chemistry, slag practice and process control."
     },
-
     "eaf_arc_zone": {
       "maximum_reference": 2000,
       "unit": "C",
@@ -527,7 +511,6 @@
       ],
       "source": "FlexiHeat-DST steel case study"
     },
-
     "plasma_specialized_heating": {
       "minimum_reference": 2000,
       "unit": "C",
@@ -539,7 +522,6 @@
       "status": "emerging_or_specialized"
     }
   },
-
   "common_fuels": [
     "Coking Coal",
     "Non-coking Coal",
@@ -559,7 +541,6 @@
     "Renewable Electricity",
     "Hydrogen"
   ],
-
   "fuel_application_map": {
     "coking_coal": {
       "common_uses": [
@@ -568,7 +549,6 @@
       ],
       "transition_priority": "very_high"
     },
-
     "non_coking_coal": {
       "common_uses": [
         "Coal-based DRI",
@@ -577,7 +557,6 @@
       ],
       "transition_priority": "very_high"
     },
-
     "pet_coke": {
       "common_uses": [
         "Selected reheating furnaces",
@@ -586,7 +565,6 @@
       "transition_priority": "very_high",
       "warning": "Pet coke use is plant-specific and must be obtained from actual fuel records."
     },
-
     "natural_gas": {
       "common_uses": [
         "Gas-based DRI",
@@ -597,7 +575,6 @@
       ],
       "transition_priority": "high"
     },
-
     "process_gases": {
       "common_uses": [
         "Coke oven gas for heating",
@@ -608,7 +585,6 @@
       "transition_priority": "optimize_before_replacing",
       "optimizer_rule": "Recover and utilize usable process gases before introducing additional purchased fuel, subject to gas quality, safety and process requirements."
     },
-
     "biomass": {
       "common_uses": [
         "Selected reheating systems",
@@ -624,7 +600,6 @@
         "Emission compliance"
       ]
     },
-
     "biochar": {
       "common_uses": [
         "Potential partial substitution for fossil carbon in selected metallurgical processes"
@@ -632,7 +607,6 @@
       "transition_priority": "emerging",
       "warning": "Biochar substitution must be validated for grade chemistry, furnace operation, reductant performance and supply sustainability."
     },
-
     "hydrogen": {
       "common_uses": [
         "DRI reduction gas",
@@ -642,7 +616,6 @@
       "transition_priority": "long_term_high",
       "current_status": "India is supporting pilot projects; commercial 100% hydrogen steelmaking is not yet a general retrofit option."
     },
-
     "electricity": {
       "common_uses": [
         "EAF",
@@ -656,7 +629,6 @@
       "transition_priority": "very_high"
     }
   },
-
   "energy_characteristics": {
     "thermal_energy": {
       "importance": "very_high",
@@ -668,7 +640,6 @@
         "Heat treatment furnaces"
       ]
     },
-
     "electricity": {
       "importance": "very_high",
       "major_systems": [
@@ -683,7 +654,6 @@
       ],
       "optimizer_rule": "High instantaneous EAF/IF demand requires electrical-capacity, demand-charge and power-quality checks before recommending additional electrification."
     },
-
     "process_gases": {
       "importance": "very_high",
       "major_sources": [
@@ -700,7 +670,6 @@
         "Waste heat recovery"
       ]
     },
-
     "waste_heat": {
       "importance": "very_high",
       "major_sources": [
@@ -716,7 +685,6 @@
         "Cooling systems"
       ]
     },
-
     "cooling": {
       "importance": "high",
       "major_systems": [
@@ -729,7 +697,6 @@
       ]
     }
   },
-
   "msme_rerolling_energy_profile": {
     "primary_energy_source": "Coal",
     "coal_share_percent": 60,
@@ -758,7 +725,6 @@
     ],
     "source": "NITI Aayog Roadmap for Green Transition of MSMEs, 2026"
   },
-
   "recommended_technologies": [
     "Energy Management System",
     "Energy Audit and Sub-metering",
@@ -795,7 +761,6 @@
     "Process Optimization",
     "CCUS"
   ],
-
   "technology_profiles": {
     "energy_management_system": {
       "priority": "very_high",
@@ -824,7 +789,6 @@
         "Process route"
       ]
     },
-
     "reheating_furnace_efficiency": {
       "priority": "very_high",
       "temperature_fit_min_c": 1100,
@@ -846,7 +810,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "warning": "The 15-45% range is a technology-database reference and not a guaranteed saving for every furnace."
     },
-
     "waste_heat_recovery": {
       "priority": "very_high",
       "applications": [
@@ -870,7 +833,6 @@
         "Economically justified heat exchanger"
       ]
     },
-
     "regenerative_burner": {
       "priority": "very_high",
       "applications": [
@@ -886,7 +848,6 @@
       ],
       "selection_rule": "Evaluate furnace cycling, exhaust temperature, burner arrangement and required temperature uniformity before recommendation."
     },
-
     "oxy_fuel_combustion": {
       "priority": "high",
       "applications": [
@@ -905,7 +866,6 @@
         "Process atmosphere"
       ]
     },
-
     "induction_reheating": {
       "priority": "very_high",
       "temperature_fit_min_c": 1000,
@@ -931,7 +891,6 @@
         "Electricity tariff"
       ]
     },
-
     "electric_arc_furnace": {
       "priority": "very_high",
       "application": "Steel melting from scrap, DRI, HBI, pig iron or combinations",
@@ -952,7 +911,6 @@
       ],
       "source": "Ministry of Steel EAF safety guideline and FlexiHeat-DST case study"
     },
-
     "renewable_electricity": {
       "priority": "very_high",
       "applications": [
@@ -980,7 +938,6 @@
         "Time-of-day load profile"
       ]
     },
-
     "solar_pv": {
       "priority": "high",
       "best_fit": [
@@ -997,7 +954,6 @@
         "Renewable procurement rules"
       ]
     },
-
     "thermal_energy_storage": {
       "priority": "medium_high",
       "best_fit": [
@@ -1020,7 +976,6 @@
       ],
       "source": "Energy Innovation industrial heat analysis and FlexiHeat-DST research"
     },
-
     "hydrogen_dri": {
       "priority": "long_term",
       "application": "Direct reduction of iron ore using hydrogen",
@@ -1038,7 +993,6 @@
       },
       "source": "Ministry of Steel, National Green Hydrogen Mission"
     },
-
     "biochar": {
       "priority": "emerging",
       "applications": [
@@ -1055,7 +1009,6 @@
       ],
       "source": "Ministry of Steel Green Steel Roadmap"
     },
-
     "high_efficiency_motors_and_vfd": {
       "priority": "high",
       "applications": [
@@ -1067,7 +1020,6 @@
       ],
       "optimizer_rule": "Check motor loading and duty cycle before replacing equipment; VFDs are most useful for variable-torque loads where speed reduction is operationally possible."
     },
-
     "power_factor_correction": {
       "priority": "high",
       "applications": [
@@ -1083,7 +1035,6 @@
       ],
       "warning": "EAF and induction-furnace electrical systems can require specialized harmonic and power-quality analysis; generic capacitor installation should not be recommended automatically."
     },
-
     "ccus": {
       "priority": "long_term",
       "applications": [
@@ -1095,7 +1046,6 @@
       "optimizer_rule": "Treat CCUS as a residual-emissions strategy after energy efficiency, fuel/process substitution and renewable-electricity options have been evaluated."
     }
   },
-
   "documented_energy_efficiency_opportunities": {
     "boiler_and_thermal_systems": [
       "Combustion optimization",
@@ -1145,7 +1095,6 @@
       "Reheating furnace optimization"
     ]
   },
-
   "documented_bee_technology_references": {
     "gas_fired_reheating_furnace_with_whr": {
       "sector": "Iron and Steel / Cross-sector thermal",
@@ -1156,13 +1105,11 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "interpretation_warning": "The temperature values in the BEE technology database are technology-list parameters and should not be interpreted as the steel stock temperature."
     },
-
     "waste_heat_recovery_boiler": {
       "documented_energy_saving_percent_min": 10,
       "documented_energy_saving_percent_max": 15,
       "source": "BEE ADEETIE"
     },
-
     "boF_gas_and_sensible_heat_recovery": {
       "boF_gas_temperature_c": 1200,
       "gas_flow_nm3_per_t_steel_min": 50,
@@ -1175,7 +1122,6 @@
       "documented_energy_saving_percent_max": 5,
       "source": "BEE ADEETIE technology database"
     },
-
     "oxy_fuel_reheating": {
       "documented_energy_saving_percent_min": 10,
       "documented_energy_saving_percent_max": 12,
@@ -1183,7 +1129,6 @@
       "source": "BEE ADEETIE technology database"
     }
   },
-
   "steel_rerolling_case_reference": {
     "induction_furnace": {
       "typical_power_rating_kw_min": 3000,
@@ -1194,7 +1139,6 @@
       "typical_batch_duration_hours_max": 3,
       "source": "BEE Steel Re-rolling Sector Energy and Resource Mapping"
     },
-
     "reheating_furnace": {
       "typical_capacity_tph_min": 2,
       "typical_capacity_tph_max": 20,
@@ -1207,7 +1151,6 @@
       "source": "BEE Steel Re-rolling Sector Energy and Resource Mapping"
     }
   },
-
   "india_decarbonization_policy_context": {
     "green_steel_roadmap": {
       "title": "Greening the Steel Sector in India: Roadmap and Action Plan",
@@ -1223,14 +1166,12 @@
       ],
       "source": "Ministry of Steel"
     },
-
     "green_steel_taxonomy": {
       "released_date": "2024-12-12",
       "notified_date": "2024-12-23",
       "purpose": "Framework for classifying and promoting lower-emission steel in India",
       "source": "Ministry of Steel"
     },
-
     "national_green_hydrogen_mission": {
       "steel_pilot_allocation_inr_crore": 455,
       "pilot_projects_awarded": 7,
@@ -1242,7 +1183,6 @@
       "source": "Ministry of Steel"
     }
   },
-
   "recommendation_rules": {
     "route_identification": {
       "priority": "mandatory",
@@ -1257,7 +1197,6 @@
         "Rerolling"
       ]
     },
-
     "rerolling_rule": {
       "condition": "If plant is a steel rerolling mill",
       "first_priority": [
@@ -1270,7 +1209,6 @@
         "VFDs"
       ]
     },
-
     "eaf_rule": {
       "condition": "If plant uses EAF",
       "priority_checks": [
@@ -1285,7 +1223,6 @@
       ],
       "warning": "Do not recommend additional EAF capacity or electrification without checking grid and transformer constraints."
     },
-
     "bf_bof_rule": {
       "condition": "If plant uses BF-BOF",
       "priority_checks": [
@@ -1300,7 +1237,6 @@
       ],
       "transition_rule": "Treat direct electrification of primary ironmaking as a long-term transformation rather than a simple equipment replacement."
     },
-
     "dri_rule": {
       "condition": "If plant uses DRI",
       "priority_checks": [
@@ -1313,7 +1249,6 @@
         "Renewable electricity availability"
       ]
     },
-
     "hydrogen_rule": {
       "condition": "Hydrogen option selected",
       "required_checks": [
@@ -1328,7 +1263,6 @@
       ],
       "status": "pilot_and_emerging_for_major_Indian_steel_applications"
     },
-
     "thermal_storage_rule": {
       "condition": "High-temperature thermal load with variable renewable electricity",
       "required_checks": [
@@ -1340,7 +1274,6 @@
         "Backup system"
       ]
     },
-
     "biomass_rule": {
       "condition": "Biomass or biochar considered",
       "required_checks": [
@@ -1356,7 +1289,6 @@
       ],
       "warning": "Biomass is not a universal replacement for metallurgical coal or coke."
     },
-
     "renewable_electricity_rule": {
       "priority": "very_high",
       "applications": [
@@ -1375,12 +1307,10 @@
         "Load profile"
       ]
     },
-
     "benchmark_rule": {
       "rule": "Use national and route-level SEC benchmarks only for comparison and gap identification. Plant-level recommendations must use measured energy and production data wherever available."
     }
   },
-
   "optimizer_required_inputs": {
     "plant_identity": [
       "Industry",
@@ -1435,7 +1365,6 @@
       "Required payback period"
     ]
   },
-
   "data_quality": {
     "primary_sources": [
       "Ministry of Steel, Government of India",
@@ -1466,116 +1395,36 @@
       "Do not recommend EAF or induction electrification without electrical-capacity analysis."
     ]
   },
-
   "sources": [
     {
-      "source_id": "mos_annual_report_2025_26",
-      "title": "Annual Report 2025-26",
-      "publisher": "Ministry of Steel, Government of India",
-      "data_used": [
-        "Crude steel production",
-        "Steel capacity",
-        "Capacity utilization"
-      ]
+      "source_id": "mos_annual_report_2025_26"
     },
     {
-      "source_id": "mos_green_steel_roadmap",
-      "title": "Greening the Steel Sector in India: Roadmap and Action Plan",
-      "publisher": "Ministry of Steel, Government of India",
-      "data_used": [
-        "Route-level SEC",
-        "Indian steel energy intensity",
-        "Decarbonization pathways",
-        "Hydrogen",
-        "Renewable energy",
-        "Biochar",
-        "CCUS"
-      ]
+      "source_id": "mos_green_steel_roadmap"
     },
     {
-      "source_id": "mos_green_steel_taxonomy",
-      "title": "Green Steel Taxonomy for India",
-      "publisher": "Ministry of Steel, Government of India",
-      "data_used": [
-        "Green steel policy context"
-      ]
+      "source_id": "mos_green_steel_taxonomy"
     },
     {
-      "source_id": "bee_steel_rerolling",
-      "title": "Energy and Resource Mapping of Steel Re-rolling Sector",
-      "publisher": "Bureau of Energy Efficiency, Government of India",
-      "data_used": [
-        "Induction furnace characteristics",
-        "Reheating furnace characteristics",
-        "Rerolling energy systems",
-        "1200 C rolling temperature"
-      ]
+      "source_id": "bee_steel_rerolling"
     },
     {
-      "source_id": "bee_adeetie",
-      "title": "List of Energy Efficient Technologies",
-      "publisher": "Bureau of Energy Efficiency, Government of India",
-      "data_used": [
-        "Reheating furnace with WHR",
-        "Waste heat recovery",
-        "BOF gas recovery",
-        "Oxy-fuel combustion",
-        "Steel-sector technology savings"
-      ]
+      "source_id": "bee_adeetie"
     },
     {
-      "source_id": "niti_msme_roadmap",
-      "title": "Roadmap for Green Transition of MSMEs",
-      "publisher": "NITI Aayog, Government of India",
-      "publication_year": 2026,
-      "data_used": [
-        "Steel rerolling MSME energy consumption",
-        "Fuel mix",
-        "SEC",
-        "Emissions"
-      ]
+      "source_id": "niti_msme_roadmap"
     },
     {
-      "source_id": "mos_safety_eaf",
-      "title": "Process Based Safety Guidelines for Iron & Steel Sector - Electric Arc Furnace",
-      "publisher": "Ministry of Steel, Government of India",
-      "data_used": [
-        "EAF process description",
-        "EAF operating context"
-      ]
+      "source_id": "mos_safety_eaf"
     },
     {
-      "source_id": "mos_safety_bf",
-      "title": "Process Based Safety Guidelines for Iron & Steel Sector - Blast Furnace",
-      "publisher": "Ministry of Steel, Government of India",
-      "data_used": [
-        "Hot blast temperature",
-        "Blast furnace process"
-      ]
+      "source_id": "mos_safety_bf"
     },
     {
-      "source_id": "flexiheat_dst",
-      "title": "FlexiHeat-DST Industrial Heating Decision Support Research",
-      "publisher": "Energy Conversion and Management: X",
-      "publication_year": 2026,
-      "data_used": [
-        "Steel process temperature ranges",
-        "EAF",
-        "Ladle furnace",
-        "Reheating furnace",
-        "Electric technology selection"
-      ]
+      "source_id": "flexiheat_dst"
     },
     {
-      "source_id": "iea_heavy_industry",
-      "title": "Driving Energy Efficiency in Heavy Industries",
-      "publisher": "International Energy Agency",
-      "data_used": [
-        "Route-level steel energy intensity benchmarks",
-        "BF-BOF",
-        "DRI-EAF",
-        "Scrap-EAF"
-      ]
+      "source_id": "iea_heavy_industry"
     }
   ]
 }
