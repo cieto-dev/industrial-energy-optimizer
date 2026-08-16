@@ -1,0 +1,1168 @@
+{
+  "industry": "Glass",
+  "industry_id": "glass",
+  "country": "India",
+  "sector": "Glass Manufacturing",
+  "subsector_scope": [
+    "Container Glass",
+    "Tableware Glass",
+    "Flat Glass",
+    "Sheet Glass",
+    "Pressed Glass",
+    "Blown Glass",
+    "Specialty Glass",
+    "Glassware",
+    "Glass Fibre",
+    "Refractory-Related Glass Processing"
+  ],
+
+  "description": "Industry profile for Indian glass manufacturing with emphasis on MSME glass clusters. Glass production is a high-temperature thermal process dominated by batch preparation, melting, refining, forming and annealing. The principal energy burden is furnace melting, while auxiliary electricity is consumed by fans, blowers, compressors, motors, pumps and forming/handling equipment. Technology selection must distinguish furnace-based glass melting from downstream glass-processing operations.",
+
+  "india_sector_context": {
+    "reference_year": 2022,
+    "overall_energy_consumption_mtoe": 0.10,
+    "specific_energy_consumption_toe_per_tonne": 1.1,
+    "overall_emissions_mtco2e": 0.7,
+    "fuel_mix_percent": {
+      "coal": 64,
+      "pet_coke": 35,
+      "hsd": 0.3,
+      "grid_electricity": 0.7
+    },
+    "source": "NITI Aayog, Roadmap for Green Transition of MSMEs, January 2026",
+    "scope": "Indian MSME Glass sector",
+    "warning": "These are sector-level MSME values derived from BEE energy/resource mapping. They must not be treated as the measured energy intensity or fuel mix of an individual glass plant.",
+    "programme_context": {
+      "bee_energy_mapping": true,
+      "source": "BEE Energy and Resource Mapping Study"
+    }
+  },
+
+  "process_route_classification": {
+    "container_glass": {
+      "typical_products": [
+        "Bottles",
+        "Jars",
+        "Food containers",
+        "Pharmaceutical containers"
+      ],
+      "main_process": "Continuous furnace melting followed by forming and annealing",
+      "energy_intensity": "very_high"
+    },
+
+    "tableware_and_glassware": {
+      "typical_products": [
+        "Tableware",
+        "Tumblers",
+        "Decorative glassware",
+        "Household glass"
+      ],
+      "main_process": "Melting followed by pressing, blowing or other forming",
+      "energy_intensity": "very_high"
+    },
+
+    "flat_glass": {
+      "typical_products": [
+        "Sheet glass",
+        "Float glass",
+        "Architectural glass"
+      ],
+      "main_process": "Continuous melting, refining and forming",
+      "energy_intensity": "very_high",
+      "msme_relevance": "lower_than_container_or_glassware_clusters"
+    },
+
+    "specialty_glass": {
+      "typical_products": [
+        "Optical glass",
+        "Technical glass",
+        "Special-purpose glass"
+      ],
+      "main_process": "Process-specific high-temperature melting and controlled forming",
+      "energy_intensity": "very_high"
+    },
+
+    "downstream_glass_processing": {
+      "typical_operations": [
+        "Cutting",
+        "Grinding",
+        "Polishing",
+        "Tempering",
+        "Laminating",
+        "Coating"
+      ],
+      "energy_characteristic": "electricity_and_medium_to_high_temperature_heat"
+    }
+  },
+
+  "production_processes": {
+    "batch_preparation": {
+      "description": "Raw materials are proportioned, mixed and delivered to the furnace batch charging system.",
+      "typical_raw_materials": [
+        "Silica sand",
+        "Soda ash",
+        "Limestone",
+        "Dolomite",
+        "Feldspar",
+        "Alumina-containing materials",
+        "Cullet",
+        "Process-specific additives"
+      ],
+      "major_energy_form": "electricity",
+      "major_energy_consumers": [
+        "Batch mixers",
+        "Crushers",
+        "Screens",
+        "Conveyors",
+        "Batch chargers"
+      ],
+      "optimization_opportunities": [
+        "Efficient motors",
+        "Variable frequency drives",
+        "Correctly sized drives",
+        "Cullet optimization"
+      ]
+    },
+
+    "glass_melting": {
+      "description": "Glass batch is melted, dissolved and transformed into homogeneous molten glass in a high-temperature furnace.",
+      "major_energy_form": "thermal_energy",
+      "major_fuels": [
+        "Coal",
+        "Pet Coke",
+        "Natural Gas",
+        "PNG",
+        "Furnace Oil",
+        "Electricity",
+        "Mixed-fuel systems"
+      ],
+      "major_energy_consumers": [
+        "Glass melting furnace",
+        "Burners",
+        "Combustion air fans",
+        "Batch chargers",
+        "Furnace cooling systems"
+      ],
+      "energy_intensity": "very_high"
+    },
+
+    "refining_and_homogenization": {
+      "description": "Molten glass is conditioned to remove bubbles and achieve required chemical and thermal homogeneity before forming.",
+      "major_energy_form": "thermal_energy",
+      "major_energy_consumers": [
+        "Furnace heating system",
+        "Furnace burners",
+        "Electrical boosting systems where used"
+      ]
+    },
+
+    "forming": {
+      "description": "Molten glass is converted into the desired article using forming equipment.",
+      "typical_operations": [
+        "Blow and blow",
+        "Press and blow",
+        "IS machine forming",
+        "Pressing",
+        "Drawing",
+        "Float forming"
+      ],
+      "major_energy_forms": [
+        "Thermal energy",
+        "Electricity",
+        "Compressed air"
+      ],
+      "major_energy_consumers": [
+        "Forming machines",
+        "Compressed air systems",
+        "Cooling systems",
+        "Motors",
+        "Fans"
+      ]
+    },
+
+    "annealing": {
+      "description": "Controlled cooling of formed glass to remove internal stresses.",
+      "major_energy_forms": [
+        "Thermal energy",
+        "Electricity"
+      ],
+      "major_energy_consumers": [
+        "Annealing lehr",
+        "Burners",
+        "Fans",
+        "Conveyor drives"
+      ],
+      "process_importance": "critical_for_product_quality"
+    },
+
+    "finishing": {
+      "operations": [
+        "Cutting",
+        "Grinding",
+        "Polishing",
+        "Coating",
+        "Tempering",
+        "Inspection",
+        "Packaging"
+      ],
+      "major_energy_form": "electricity",
+      "major_energy_consumers": [
+        "Grinding machines",
+        "Polishers",
+        "Compressors",
+        "Fans",
+        "Conveyors",
+        "Packaging machinery"
+      ]
+    }
+  },
+
+  "temperature_characteristics": {
+    "glass_furnace_melting": {
+      "min_c": 1400,
+      "max_c": 1600,
+      "unit": "C",
+      "process": "Industrial glass melting",
+      "category": "very_high_temperature",
+      "technology_implication": "Conventional industrial heat pumps are not suitable as the primary melting technology.",
+      "warning": "The exact required temperature depends on glass composition, furnace design, furnace atmosphere and production route."
+    },
+
+    "glass_melt_conditioning": {
+      "min_c": 1200,
+      "max_c": 1500,
+      "unit": "C",
+      "process": "Refining/homogenization/conditioning",
+      "category": "very_high_temperature"
+    },
+
+    "forming_temperature": {
+      "min_c": 900,
+      "max_c": 1200,
+      "unit": "C",
+      "process": "Molten-glass forming",
+      "category": "very_high_temperature",
+      "warning": "Actual gob temperature depends on glass composition and forming process."
+    },
+
+    "annealing": {
+      "min_c": 450,
+      "max_c": 600,
+      "unit": "C",
+      "process": "Initial controlled cooling and annealing",
+      "category": "high_temperature",
+      "technology_implication": "High-temperature heat recovery can be relevant; generic heat pumps should not be assumed suitable for the main duty."
+    },
+
+    "downstream_processing": {
+      "min_c": 20,
+      "max_c": 800,
+      "unit": "C",
+      "applications": [
+        "Cutting",
+        "Grinding",
+        "Polishing",
+        "Tempering",
+        "Coating",
+        "Laminating"
+      ],
+      "scope_warning": "This range covers several different downstream processes and must not be treated as one process-temperature requirement."
+    }
+  },
+
+  "common_fuels": [
+    "Coal",
+    "Pet Coke",
+    "Natural Gas",
+    "PNG",
+    "Furnace Oil",
+    "HSD",
+    "LPG",
+    "Electricity",
+    "Renewable Electricity",
+    "Cullet-derived_internal_energy_savings"
+  ],
+
+  "fuel_application_map": {
+    "coal": {
+      "sector_share_percent": 64,
+      "common_uses": [
+        "Glass melting",
+        "Furnace thermal systems",
+        "Boiler/utility heating where applicable"
+      ],
+      "transition_priority": "very_high"
+    },
+
+    "pet_coke": {
+      "sector_share_percent": 35,
+      "common_uses": [
+        "Glass melting",
+        "Furnace thermal systems"
+      ],
+      "transition_priority": "very_high"
+    },
+
+    "natural_gas": {
+      "common_uses": [
+        "Glass melting furnaces",
+        "Annealing systems",
+        "Downstream thermal processes"
+      ],
+      "transition_priority": "high",
+      "benefit": "Lower local particulate and sulfur emissions than solid fossil fuels, but remains a fossil fuel."
+    },
+
+    "png": {
+      "common_uses": [
+        "Glass melting",
+        "Thermal processing",
+        "Annealing"
+      ],
+      "transition_priority": "medium_high"
+    },
+
+    "furnace_oil": {
+      "common_uses": [
+        "Glass furnaces",
+        "Thermal heating"
+      ],
+      "transition_priority": "high"
+    },
+
+    "electricity": {
+      "sector_share_percent": 0.7,
+      "common_uses": [
+        "Motors",
+        "Fans",
+        "Compressors",
+        "Forming equipment",
+        "Cooling systems",
+        "Electrical boosting",
+        "Downstream processing"
+      ],
+      "transition_priority": "very_high_for_auxiliaries"
+    },
+
+    "renewable_electricity": {
+      "common_uses": [
+        "Auxiliary electricity",
+        "Electric furnace boosting",
+        "Downstream glass processing"
+      ],
+      "transition_priority": "high"
+    }
+  },
+
+  "energy_consumption_characteristics": {
+    "overall_sector_sec_toe_per_tonne": 1.1,
+    "overall_energy_consumption_mtoe": 0.10,
+    "thermal_energy_importance": "extreme",
+    "electricity_importance": "medium_for_primary_melting_but_high_for_auxiliary_systems",
+    "major_thermal_consumers": [
+      "Glass melting furnace",
+      "Regenerative/recuperative combustion system",
+      "Annealing",
+      "Downstream thermal processes"
+    ],
+    "major_electrical_consumers": [
+      "Fans",
+      "Compressors",
+      "Motors",
+      "Forming machines",
+      "Cooling systems",
+      "Pumps",
+      "Grinding and polishing equipment"
+    ],
+    "primary_optimization_target": "Glass furnace thermal efficiency",
+    "secondary_optimization_targets": [
+      "Waste heat recovery",
+      "Combustion optimization",
+      "Cullet utilization",
+      "Motor efficiency",
+      "Compressed air",
+      "Fan and pump efficiency",
+      "Renewable electricity for auxiliary loads"
+    ],
+    "source": "NITI Aayog 2026 and BEE Glass & Refractory sector mapping"
+  },
+
+  "cullet_and_material_efficiency": {
+    "importance": "very_high",
+    "description": "Using clean recycled glass cullet reduces the energy required to melt fresh raw materials and can increase furnace productivity.",
+    "optimizer_variables": [
+      "Cullet_fraction_percent",
+      "Cullet_quality",
+      "Cullet_contamination",
+      "Cullet_availability",
+      "Cullet_preparation_cost"
+    ],
+    "technical_constraint": "Maximum useful cullet addition depends on glass product, contamination, colour requirements, raw-material availability and furnace/process design.",
+    "optimizer_rule": "Do not assume that 100% cullet is achievable for every glass product."
+  },
+
+  "furnace_characteristics": {
+    "importance": "very_high",
+    "major_furnace_types": [
+      "Regenerative furnace",
+      "Recuperative furnace",
+      "Electric boosting furnace",
+      "Oil/gas fired furnace",
+      "Coal/pet coke-fired furnace",
+      "Hybrid fuel-electric furnace"
+    ],
+    "major_losses": [
+      "Flue-gas sensible heat",
+      "Radiation losses",
+      "Convection losses",
+      "Air ingress",
+      "Incomplete combustion",
+      "Excess combustion air",
+      "Poor insulation",
+      "Poor batch charging",
+      "Poor furnace-pressure control"
+    ],
+    "high_priority_controls": [
+      "Air-fuel ratio",
+      "Furnace pressure",
+      "Flue-gas oxygen",
+      "Flue-gas temperature",
+      "Furnace insulation",
+      "Burner condition",
+      "Regenerator/recuperator performance",
+      "Batch-to-cullet ratio",
+      "Glass pull rate"
+    ]
+  },
+
+  "common_energy_systems": {
+    "glass_furnace": {
+      "importance": "extreme",
+      "monitoring_parameters": [
+        "Fuel flow",
+        "Glass production rate",
+        "Glass pull rate",
+        "Flue-gas temperature",
+        "Flue-gas O2",
+        "Furnace pressure",
+        "Combustion air flow",
+        "Batch input",
+        "Cullet input",
+        "Glass melt temperature"
+      ]
+    },
+
+    "compressed_air": {
+      "importance": "high",
+      "applications": [
+        "Container-glass forming",
+        "Pneumatic controls",
+        "Actuators",
+        "Instrument air"
+      ],
+      "priority_measures": [
+        "Leak reduction",
+        "Pressure optimization",
+        "VFD compressor",
+        "Compressor sequencing",
+        "Heat recovery"
+      ]
+    },
+
+    "motors_and_fans": {
+      "importance": "high",
+      "applications": [
+        "Combustion fans",
+        "Cooling fans",
+        "Conveyors",
+        "Pumps",
+        "Forming equipment"
+      ],
+      "priority_measures": [
+        "IE3/IE4 motors",
+        "VFD",
+        "Correct motor sizing",
+        "Efficient impellers",
+        "Load matching"
+      ]
+    },
+
+    "water_cooling": {
+      "importance": "medium_high",
+      "applications": [
+        "Furnace equipment cooling",
+        "Forming equipment",
+        "Auxiliary systems"
+      ],
+      "priority_measures": [
+        "Efficient pumps",
+        "Cooling-tower optimization",
+        "VFDs",
+        "Heat recovery where compatible"
+      ]
+    }
+  },
+
+  "recommended_technologies": [
+    "Glass Furnace Efficiency Improvement",
+    "Regenerative Furnace",
+    "Recuperative Furnace",
+    "Regenerator Optimization",
+    "Recuperator Optimization",
+    "Oxy-Fuel Combustion",
+    "Furnace Air-Fuel Ratio Control",
+    "Furnace Pressure Control",
+    "Flue Gas Oxygen Monitoring",
+    "Furnace Insulation",
+    "Waste Heat Recovery",
+    "Air Preheater",
+    "Boiler Economizer where steam utility exists",
+    "Electric Boosting",
+    "Electric Glass Melting",
+    "Renewable Electricity",
+    "Solar PV",
+    "Cullet Optimization",
+    "High Efficiency Motors",
+    "Variable Frequency Drives",
+    "Efficient Pumps",
+    "Efficient Fans",
+    "High Efficiency Compressors",
+    "Compressed Air Optimization",
+    "Thermal Energy Storage",
+    "Advanced Furnace Control",
+    "Process Heat Integration",
+    "Low-carbon Fuel Switching"
+  ],
+
+  "technology_profiles": {
+    "furnace_efficiency_optimization": {
+      "priority": "very_high",
+      "purpose": [
+        "Reduce specific fuel consumption",
+        "Reduce heat loss",
+        "Improve melting stability",
+        "Improve glass quality"
+      ],
+      "key_actions": [
+        "Optimize excess air",
+        "Control furnace pressure",
+        "Improve insulation",
+        "Optimize burner operation",
+        "Reduce air ingress",
+        "Maintain heat-recovery system performance",
+        "Optimize batch charging"
+      ],
+      "selection_rule": "Always evaluate existing furnace performance before proposing complete furnace replacement."
+    },
+
+    "regenerative_furnace": {
+      "priority": "very_high",
+      "best_fit": [
+        "Large continuous glass furnaces",
+        "High thermal-load glass manufacturing"
+      ],
+      "purpose": [
+        "Recover furnace exhaust heat",
+        "Preheat combustion air",
+        "Reduce fuel consumption"
+      ],
+      "constraints": [
+        "High capital cost",
+        "Furnace size",
+        "Continuous operation",
+        "Regenerator maintenance",
+        "Product requirements"
+      ]
+    },
+
+    "recuperative_furnace": {
+      "priority": "high",
+      "purpose": [
+        "Recover flue-gas heat",
+        "Preheat combustion air"
+      ],
+      "best_fit": [
+        "Smaller or medium glass furnaces",
+        "Applications where regenerative systems are not economically justified"
+      ],
+      "selection_rule": "Compare recuperative and regenerative solutions using actual furnace size, flue-gas temperature and production rate."
+    },
+
+    "oxy_fuel_combustion": {
+      "priority": "high",
+      "purpose": [
+        "Reduce nitrogen ballast in combustion air",
+        "Increase flame temperature",
+        "Reduce flue-gas volume",
+        "Improve furnace efficiency"
+      ],
+      "constraints": [
+        "Oxygen supply",
+        "Oxygen cost",
+        "Burner compatibility",
+        "NOx formation",
+        "Furnace refractory",
+        "Glass chemistry"
+      ],
+      "status": "commercially_available_but_site_specific"
+    },
+
+    "waste_heat_recovery": {
+      "priority": "very_high",
+      "candidate_sources": [
+        "Furnace flue gas",
+        "Annealing exhaust",
+        "Compressor discharge",
+        "Hot cooling water"
+      ],
+      "candidate_sinks": [
+        "Combustion-air preheating",
+        "Batch preheating",
+        "Water heating",
+        "Steam generation",
+        "Process-air preheating"
+      ],
+      "selection_rule": "Evaluate waste heat before adding new fuel-based heat generation."
+    },
+
+    "electric_boosting": {
+      "priority": "high",
+      "application": "Partial replacement/support of fossil furnace heat with electrical energy",
+      "advantages": [
+        "Can improve heat-transfer control",
+        "Can reduce direct fossil-fuel use",
+        "Can be supplied by renewable electricity"
+      ],
+      "constraints": [
+        "Grid capacity",
+        "Transformer rating",
+        "Electrode/electrical design",
+        "Power quality",
+        "Electricity cost",
+        "Glass furnace compatibility"
+      ]
+    },
+
+    "electric_glass_melting": {
+      "priority": "case_specific",
+      "application": "Selected glass products and suitable furnace scales",
+      "advantages": [
+        "Eliminates direct combustion in the melting zone",
+        "Potential for very low process emissions with renewable electricity"
+      ],
+      "constraints": [
+        "Furnace size",
+        "Product type",
+        "Electrical infrastructure",
+        "Electrode design",
+        "Electricity price",
+        "Grid reliability"
+      ],
+      "optimizer_rule": "Do not classify total electric melting as a generic MSME retrofit. Evaluate plant size and glass product first."
+    },
+
+    "cullet_optimization": {
+      "priority": "very_high",
+      "purpose": [
+        "Reduce batch melting energy",
+        "Reduce raw-material requirement",
+        "Reduce furnace load"
+      ],
+      "inputs": [
+        "Current cullet percentage",
+        "Available cullet",
+        "Cullet quality",
+        "Contamination",
+        "Product colour"
+      ],
+      "constraint": "Product quality and colour requirements can limit the feasible cullet fraction."
+    },
+
+    "high_efficiency_motors": {
+      "priority": "high",
+      "best_fit": [
+        "Fans",
+        "Pumps",
+        "Compressors",
+        "Conveyors",
+        "Grinding systems"
+      ],
+      "standards": [
+        "IE3",
+        "IE4"
+      ]
+    },
+
+    "variable_frequency_drive": {
+      "priority": "high",
+      "best_fit": [
+        "Combustion fans",
+        "Cooling pumps",
+        "Cooling fans",
+        "Compressed air systems",
+        "Material handling"
+      ],
+      "selection_rule": "Highest value where system flow or pressure requirements vary substantially during operation."
+    },
+
+    "compressed_air_optimization": {
+      "priority": "high",
+      "measures": [
+        "Leak detection",
+        "Pressure optimization",
+        "Efficient compressor",
+        "VFD compressor",
+        "Compressor sequencing",
+        "Waste heat recovery"
+      ]
+    },
+
+    "solar_pv": {
+      "priority": "high_for_auxiliary_loads",
+      "best_fit": [
+        "Fans",
+        "Pumps",
+        "Compressors",
+        "Cooling systems",
+        "Material handling",
+        "Downstream processing"
+      ],
+      "limitation": "Solar PV does not directly replace the high-temperature glass-melting furnace unless paired with suitable electrical furnace/boosting technology."
+    },
+
+    "solar_thermal": {
+      "priority": "low_to_medium_for_primary_glass_melting",
+      "best_fit": [
+        "Auxiliary low-temperature heat",
+        "Hot water",
+        "Preheating",
+        "Selected downstream thermal processes"
+      ],
+      "upper_temperature_reference_c": 400,
+      "source": "MNRE solar thermal technology overview",
+      "optimizer_rule": "Do not propose conventional solar thermal collectors as a direct replacement for a 1400-1600°C glass melting furnace."
+    },
+
+    "thermal_energy_storage": {
+      "priority": "emerging",
+      "best_fit": [
+        "Flexible electric boosting",
+        "Renewable electricity integration",
+        "Selected downstream thermal loads"
+      ],
+      "constraints": [
+        "Required storage temperature",
+        "Charge/discharge rate",
+        "Storage duration",
+        "Thermal losses",
+        "Technology maturity"
+      ]
+    }
+  },
+
+  "temperature_to_technology_mapping": {
+    "below_200_c": {
+      "suitable": [
+        "Industrial Heat Pump",
+        "Solar Thermal",
+        "Waste Heat Recovery",
+        "Electric Water Heating"
+      ],
+      "glass_applications": [
+        "Auxiliary utilities",
+        "Cleaning",
+        "Hot water",
+        "Selected downstream coating processes"
+      ]
+    },
+
+    "200_to_600_c": {
+      "suitable": [
+        "Electric Resistance Heating",
+        "High-temperature heat recovery",
+        "Concentrated Solar Thermal",
+        "Fuel-fired systems",
+        "Thermal Storage"
+      ],
+      "glass_applications": [
+        "Annealing",
+        "Selected downstream thermal treatment"
+      ]
+    },
+
+    "600_to_1200_c": {
+      "suitable": [
+        "Electric Furnace Technologies",
+        "Electric Boosting",
+        "High-temperature Combustion",
+        "Regenerative Combustion",
+        "Waste Heat Recovery"
+      ],
+      "glass_applications": [
+        "Forming-temperature conditioning",
+        "High-temperature glass processing"
+      ],
+      "heat_pump_status": "excluded"
+    },
+
+    "1200_to_1600_c": {
+      "suitable": [
+        "Regenerative Furnace",
+        "Recuperative Furnace",
+        "Electric Boosting",
+        "Electric Glass Melting",
+        "Oxy-Fuel Combustion",
+        "High-efficiency fossil-fuel furnace",
+        "Waste Heat Recovery"
+      ],
+      "glass_applications": [
+        "Glass melting",
+        "Refining"
+      ],
+      "heat_pump_status": "excluded"
+    }
+  },
+
+  "decarbonization_pathways": [
+    {
+      "pathway_id": "glass_efficiency_first",
+      "priority": 1,
+      "sequence": [
+        "Furnace energy audit",
+        "Flue-gas analysis",
+        "Air-fuel ratio optimization",
+        "Furnace pressure control",
+        "Insulation improvement",
+        "Burner optimization",
+        "Regenerator/recuperator maintenance",
+        "Motor/fan optimization"
+      ],
+      "objective": "Reduce specific energy consumption before major fuel switching."
+    },
+
+    {
+      "pathway_id": "glass_waste_heat",
+      "priority": 2,
+      "sequence": [
+        "Identify furnace exhaust heat",
+        "Measure flue-gas temperature and flow",
+        "Heat-sink matching",
+        "Combustion-air preheating",
+        "Batch preheating",
+        "Water/steam generation where feasible"
+      ],
+      "objective": "Recover high-value furnace waste heat."
+    },
+
+    {
+      "pathway_id": "glass_cullet_efficiency",
+      "priority": 3,
+      "sequence": [
+        "Measure current cullet fraction",
+        "Assess cullet quality",
+        "Assess contamination",
+        "Increase compatible cullet fraction",
+        "Optimize batch charging"
+      ],
+      "objective": "Reduce furnace thermal load and virgin raw-material demand."
+    },
+
+    {
+      "pathway_id": "glass_combustion_decarbonization",
+      "priority": 4,
+      "sequence": [
+        "Air-fuel optimization",
+        "Regenerative or recuperative combustion",
+        "Natural-gas transition where coal/pet coke is used",
+        "Oxy-fuel evaluation",
+        "Electric boosting"
+      ],
+      "objective": "Reduce fossil-fuel use while maintaining continuous melting."
+    },
+
+    {
+      "pathway_id": "glass_electrification",
+      "priority": 5,
+      "sequence": [
+        "Electrical capacity assessment",
+        "Electric boosting feasibility",
+        "Electric furnace feasibility",
+        "Renewable electricity assessment",
+        "Thermal storage where applicable"
+      ],
+      "objective": "Move suitable furnace heat from combustion to electricity."
+    },
+
+    {
+      "pathway_id": "glass_renewable_electricity",
+      "priority": 6,
+      "sequence": [
+        "Auxiliary load audit",
+        "Solar PV feasibility",
+        "Open-access renewable electricity evaluation",
+        "Electric boosting",
+        "Electric downstream processing"
+      ],
+      "objective": "Reduce electricity-related emissions."
+    }
+  ],
+
+  "technology_exclusions": {
+    "generic_heat_pump_for_glass_furnace": {
+      "status": "excluded",
+      "reason": "Glass melting requires approximately 1400-1600°C, far beyond conventional industrial heat-pump capability."
+    },
+
+    "conventional_solar_thermal_for_primary_glass_melting": {
+      "status": "excluded",
+      "reason": "Conventional low/medium-temperature solar thermal systems cannot directly supply the main glass-melting duty."
+    },
+
+    "biomass_boiler_for_glass_furnace": {
+      "status": "excluded_as_direct_replacement",
+      "reason": "A biomass boiler generates steam/hot water and does not directly replace the glass-melting furnace. Biomass may be evaluated only in furnace-compatible solid-fuel combustion systems where technically suitable."
+    },
+
+    "electric_boiler_for_melting": {
+      "status": "excluded",
+      "reason": "An electric boiler produces steam and cannot directly supply molten-glass melting temperature."
+    },
+
+    "electric_resistance_for_all_glass_furnaces": {
+      "status": "conditional",
+      "reason": "Direct electric glass melting is highly product-, furnace- and infrastructure-dependent."
+    }
+  },
+
+  "optimization_rules": {
+    "mandatory_route_identification": {
+      "rule": "Identify glass product and furnace type before technology selection.",
+      "required_inputs": [
+        "Glass product",
+        "Production capacity",
+        "Furnace type",
+        "Current fuel",
+        "Cullet percentage",
+        "Furnace age",
+        "Furnace thermal efficiency"
+      ]
+    },
+
+    "furnace_rule": {
+      "priority": "very_high",
+      "required_measurements": [
+        "Fuel consumption",
+        "Glass production",
+        "Flue-gas temperature",
+        "Flue-gas oxygen",
+        "Combustion-air flow",
+        "Furnace pressure",
+        "Glass pull rate",
+        "Cullet percentage"
+      ]
+    },
+
+    "cullet_rule": {
+      "priority": "very_high",
+      "condition": "Suitable cullet available",
+      "action": "Evaluate higher compatible cullet fraction before increasing furnace heat input."
+    },
+
+    "waste_heat_rule": {
+      "priority": "very_high",
+      "action": "Evaluate combustion-air preheating and batch preheating before installing a new standalone heat source."
+    },
+
+    "fuel_switching_rule": {
+      "priority": "high",
+      "condition": "Coal or pet coke is currently used",
+      "sequence": [
+        "Efficiency improvement",
+        "Furnace heat recovery",
+        "Natural gas/PNG feasibility",
+        "Oxy-fuel feasibility",
+        "Electric boosting",
+        "Electric furnace where feasible"
+      ]
+    },
+
+    "electrification_rule": {
+      "condition": "Electric boosting or electric melting considered",
+      "required_checks": [
+        "Transformer capacity",
+        "Maximum demand",
+        "Power quality",
+        "Electricity tariff",
+        "Grid reliability",
+        "Renewable electricity availability",
+        "Furnace compatibility"
+      ]
+    },
+
+    "solar_rule": {
+      "priority": "medium",
+      "application": "Auxiliary electricity and lower-temperature downstream processes",
+      "warning": "Do not count solar PV as direct replacement of fossil furnace energy unless an electric furnace/boosting system is part of the pathway."
+    }
+  },
+
+  "optimizer_required_inputs": {
+    "plant": [
+      "Glass product",
+      "Production capacity",
+      "Annual production",
+      "Daily production",
+      "Operating hours",
+      "Capacity utilization",
+      "Furnace type"
+    ],
+    "furnace": [
+      "Fuel type",
+      "Fuel consumption",
+      "Glass pull rate",
+      "Melting temperature",
+      "Flue-gas temperature",
+      "Flue-gas oxygen",
+      "Combustion-air flow",
+      "Furnace pressure",
+      "Furnace age",
+      "Regenerator condition",
+      "Recuperator condition"
+    ],
+    "material": [
+      "Cullet percentage",
+      "Cullet availability",
+      "Cullet quality",
+      "Raw-material mix"
+    ],
+    "electrical": [
+      "Electricity consumption",
+      "Connected load",
+      "Transformer capacity",
+      "Maximum demand",
+      "Power factor",
+      "Compressor power",
+      "Fan power",
+      "Pump power"
+    ],
+    "thermal": [
+      "Waste-heat temperature",
+      "Waste-heat flow",
+      "Annealing temperature",
+      "Downstream thermal-load temperature"
+    ],
+    "economic": [
+      "Coal price",
+      "Pet coke price",
+      "Natural gas price",
+      "Electricity tariff",
+      "Open-access renewable electricity price",
+      "Available CAPEX",
+      "Financing rate",
+      "Required payback"
+    ]
+  },
+
+  "priority_order": {
+    "priority_1": [
+      "Furnace combustion optimization",
+      "Furnace pressure control",
+      "Furnace insulation",
+      "Flue-gas monitoring",
+      "Regenerator/recuperator optimization",
+      "Cullet optimization"
+    ],
+    "priority_2": [
+      "Waste Heat Recovery",
+      "Efficient fans",
+      "Efficient compressors",
+      "Efficient pumps",
+      "VFDs",
+      "High-efficiency motors"
+    ],
+    "priority_3": [
+      "Natural gas/PNG transition",
+      "Oxy-fuel combustion",
+      "Electric boosting",
+      "Renewable electricity"
+    ],
+    "priority_4": [
+      "Full electric melting",
+      "Thermal energy storage",
+      "Advanced electric furnace technology"
+    ]
+  },
+
+  "data_quality": {
+    "primary_sources": [
+      "Bureau of Energy Efficiency",
+      "NITI Aayog",
+      "Ministry of New and Renewable Energy",
+      "Bureau of Indian Standards"
+    ],
+    "rules": [
+      "Do not use one generic temperature for all glass manufacturing.",
+      "Do not use downstream glass-processing temperature as the furnace melting temperature.",
+      "Do not apply heat pumps to primary glass melting.",
+      "Do not assume electric melting is feasible for every glass plant.",
+      "Do not assume the national coal/pet coke mix applies to every plant.",
+      "Use furnace-specific measured data whenever available.",
+      "Use BEE case-study savings as reference values, not guaranteed project savings.",
+      "Cullet availability and quality must be explicit inputs.",
+      "Check electrical infrastructure before recommending electric boosting or electric melting.",
+      "Treat continuous furnace operation and reliability as hard constraints."
+    ]
+  },
+
+  "sources": [
+    {
+      "source_id": "bee_glass_refractory",
+      "publisher": "Bureau of Energy Efficiency, Ministry of Power",
+      "title": "Achieving Energy and Resource Efficiency in Glass and Refractory Industries",
+      "url": "https://beeindia.gov.in/sites/default/files/Glass_%26_Refractory_sector-Energy_mapping.pdf",
+      "data_used": [
+        "Glass sector process structure",
+        "MSME cluster characteristics",
+        "Energy efficiency opportunities",
+        "Furnace efficiency",
+        "Fuel use",
+        "Resource efficiency",
+        "Technology pathways"
+      ]
+    },
+    {
+      "source_id": "niti_msme_green_transition_2026",
+      "publisher": "NITI Aayog",
+      "title": "Roadmap for Green Transition of MSMEs",
+      "year": 2026,
+      "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf",
+      "data_used": [
+        "Glass MSME energy consumption",
+        "Glass MSME SEC",
+        "Glass MSME emissions",
+        "Glass MSME fuel mix"
+      ]
+    },
+    {
+      "source_id": "mnre_solar_thermal",
+      "publisher": "Ministry of New and Renewable Energy",
+      "title": "Concentrated Solar Thermal",
+      "url": "https://mnre.gov.in/en/concentrated-solar-thermal/",
+      "data_used": [
+        "Industrial solar thermal capability",
+        "CST temperature categories",
+        "Thermal storage"
+      ]
+    },
+    {
+      "source_id": "bee_energy_mapping_program",
+      "publisher": "Bureau of Energy Efficiency",
+      "title": "Energy & Resource Mapping Study",
+      "url": "https://beeindia.gov.in/show_content.php?lang=1&level=2&lid=383&ls_id=235",
+      "data_used": [
+        "MSME glass-cluster energy mapping context",
+        "Energy audit methodology"
+      ]
+    }
+  ]
+}
