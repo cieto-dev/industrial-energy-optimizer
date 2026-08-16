@@ -59,7 +59,6 @@ up_discom = {
     "Rampur": "UP_PVVNL",
     "Amroha": "UP_PVVNL",
     "Sambhal": "UP_PVVNL",
-    "Agra": "UP_DVVNL",
     "Banda": "UP_PUVVNL",
     "Chitrakoot": "UP_PUVVNL",
     "Fatehpur": "UP_PUVVNL",
@@ -98,8 +97,6 @@ up_discom = {
     "Barabanki": "UP_PUVVNL",
     "Rae Bareli": "UP_PUVVNL",
     "Raebareli": "UP_PUVVNL",
-    "Lucknow": "UP_MVVNL",
-    "Varanasi": "UP_PUVVNL",
 }
 
 # J&K district -> DISCOM
