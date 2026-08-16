@@ -536,50 +536,57 @@
       }
     },
     "SUB_CGTMSE": {
-      "id": "SUB_CGTMSE",
-      "display_name": "CGTMSE -- Credit Guarantee Scheme for Micro and Small Enterprises",
-      "category": "subsidy_scheme",
+  "id": "SUB_CGTMSE",
+  "display_name": "CGTMSE -- Credit Guarantee Scheme for Micro and Small Enterprises",
+  "category": "subsidy_scheme",
+  "status": "verified",
+  "description": "Collateral-free credit guarantee mechanism (Ministry of MSME / SIDBI) that backstops lenders, increasing MSE access to institutional credit for financing without conventional collateral or third-party guarantee.",
+  "parameters": {
+    "guarantee_coverage": {
+      "general": {
+        "coverage_pct": 75
+      },
+      "women_entrepreneurs": {
+        "coverage_pct": 90
+      },
+      "micro_enterprise_up_to_5_lakh": {
+        "coverage_pct": 85
+      },
+      "sc_st": {
+        "coverage_pct": 85
+      },
+      "pwd": {
+        "coverage_pct": 85
+      },
+      "transgender": {
+        "coverage_pct": 85
+      },
+      "zed_certified": {
+        "coverage_pct": 85
+      },
+      "aspirational_district": {
+        "coverage_pct": 85
+      },
+      "north_east_jk_ladakh": {
+        "coverage_pct": 80
+      },
+      "unit": "%",
       "status": "verified",
-      "description": "Collateral-free credit guarantee mechanism (Ministry of MSME / SIDBI) that backstops lenders, increasing MSE access to institutional credit for financing without conventional collateral or third-party guarantee.",
-      "parameters": {
-        "guarantee_coverage_min": {
-          "value": 75,
-          "unit": "%",
-          "status": "verified",
-          "confidence": 0.85,
-          "source_id": "SRC_CGTMSE",
-          "last_verified": "2026-08-15",
-          "applicability": {
-            "country": "India",
-            "state": null,
-            "industry": null,
-            "msme_class": null
-          },
-          "research": {
-            "summary": "Minimum guarantee coverage of the credit facility.",
-            "assumptions": "",
-            "limitations": ""
-          }
-        },
-        "guarantee_coverage_max": {
-          "value": 85,
-          "unit": "%",
-          "status": "verified",
-          "confidence": 0.8,
-          "source_id": "SRC_CGTMSE",
-          "last_verified": "2026-08-15",
-          "applicability": {
-            "country": "India",
-            "state": null,
-            "industry": null,
-            "msme_class": null
-          },
-          "research": {
-            "summary": "Maximum guarantee coverage of the credit facility, for eligible micro enterprises and specified priority categories.",
-            "assumptions": "",
-            "limitations": "Exact coverage percentage depends on borrower category and loan conditions; some sources cite coverage up to 90% for specific product variants."
-          }
-        },
+      "confidence": 0.85,
+      "source_id": "SRC_CGTMSE",
+      "last_verified": "2026-08-15",
+      "applicability": {
+        "country": "India",
+        "state": null,
+        "industry": null,
+        "msme_class": null
+      },
+      "research": {
+        "summary": "Credit guarantee coverage varies according to borrower category under the CGTMSE scheme.",
+        "assumptions": "",
+        "limitations": "Applicable coverage depends on borrower eligibility and prevailing CGTMSE guidelines."
+      }
+    },
         "maximum_guarantee_eligible_credit": {
           "value": 50000000,
           "unit": "INR",
