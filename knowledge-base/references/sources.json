@@ -1,0 +1,26 @@
+{
+    "SRC001": {
+        "title": "2006 IPCC Guidelines for National Greenhouse Gas Inventories - Volume 2: Energy",
+        "organization": "Intergovernmental Panel on Climate Change (IPCC)",
+        "year": 2006,
+        "url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html"
+    },
+    "SRC002": {
+        "title": "Biogas Portal",
+        "organization": "Ministry of New and Renewable Energy (MNRE), Government of India",
+        "year": 2026,
+        "url": "https://biogas.mnre.gov.in/"
+    },
+    "SRC003": {
+        "title": "Detailed Procedure for Compliance under Carbon Credit Trading Scheme (CCTS)",
+        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+        "year": 2024,
+        "url": "https://beeindia.gov.in/"
+    },
+    "SRC004": {
+    "title": "India Greenhouse Gas Emissions Inventory",
+    "organization": "Ministry of Environment, Forest and Climate Change (MoEFCC), Government of India",
+    "year": 2019,
+    "url": "https://www.moef.gov.in/"
+}
+}

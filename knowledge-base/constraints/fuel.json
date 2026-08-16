@@ -1,29 +1,34 @@
 {
     "coal": [
         "biomass",
+        "biogas",
         "electrification",
         "heat_pump",
         "solar_thermal"
     ],
     "diesel": [
         "biomass",
+        "biogas",
         "electrification",
         "heat_pump",
         "solar_thermal"
     ],
     "lpg": [
         "biomass",
+        "biogas",
         "electrification",
         "heat_pump",
         "solar_thermal"
     ],
     "natural_gas": [
         "biomass",
+        "biogas",
         "electrification",
         "heat_pump",
         "solar_thermal"
     ],
     "biomass": [
+        "biogas",
         "electrification",
         "heat_pump",
         "solar_thermal"

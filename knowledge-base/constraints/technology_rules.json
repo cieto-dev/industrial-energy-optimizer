@@ -229,5 +229,36 @@
     "incompatible_with": [],
     "continuous_operation_required": true,
     "retrofit_supported": true
+  },
+
+  "biogas": {
+    "allowed_industries": [
+      "textile",
+      "food_processing",
+      "dairy",
+      "chemical",
+      "pharma",
+      "paper",
+      "agro_processing",
+      "cement",
+      "steel"
+    ],
+    "replaces_fuels": [
+      "coal",
+      "diesel",
+      "lpg",
+      "natural_gas",
+      "biomass"
+    ],
+    "requires_biogas_supply": true,
+    "requires_gas_cleaning": true,
+    "requires_gas_storage": true,
+    "compatible_with": [
+      "thermal_storage",
+      "solar_thermal"
+    ],
+    "technology_profile": "biogas",
+    "emission_factor_source": "emission_factors.json",
+    "notes": "Eligibility depends on reliable biogas supply, suitable gas quality, burner/boiler compatibility, required process temperature and applicable safety requirements."
   }
 }
