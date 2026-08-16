@@ -12,9 +12,7 @@
     "Specialty Chemicals",
     "Chemical Intermediates"
   ],
-
   "description": "Industry profile for Indian chemical manufacturing. Chemical production is highly heterogeneous, so technology selection must be based on the specific process, temperature, pressure, steam requirement, reaction chemistry, utility configuration and production scale rather than treating all chemical plants as having one common thermal profile.",
-
   "sector_statistics_india": {
     "reference_year": "FY 2024-25",
     "major_chemical_production": {
@@ -47,7 +45,6 @@
     "data_scope_warning": "Department of Chemicals and Petrochemicals production statistics are based on returns from monitored large and medium-scale chemical manufacturers. They should not be interpreted as the production of every Indian chemical MSME.",
     "source": "Department of Chemicals and Petrochemicals, Government of India, Chemical and Petrochemical Statistics at a Glance 2025"
   },
-
   "typical_temperature": {
     "min": 80,
     "max": 500,
@@ -56,7 +53,6 @@
     "important_warning": "This is not a universal chemical-sector maximum. Individual chemical processes can operate below 80 C or substantially above 500 C.",
     "technology_selection_rule": "Use the factory's measured process temperature for technology matching whenever available."
   },
-
   "process_temperature_ranges": {
     "low_temperature_process_heat": {
       "min": 80,
@@ -78,7 +74,6 @@
         "thermal_storage"
       ]
     },
-
     "low_medium_temperature_process_heat": {
       "min": 140,
       "max": 200,
@@ -100,7 +95,6 @@
         "thermal_energy_storage"
       ]
     },
-
     "medium_temperature_process_heat": {
       "min": 200,
       "max": 350,
@@ -122,7 +116,6 @@
       ],
       "heat_pump_status": "case_specific"
     },
-
     "high_temperature_chemical_processes": {
       "min": 350,
       "max": 1000,
@@ -146,7 +139,6 @@
       "warning": "Do not apply the generic heat-pump recommendation to high-temperature chemical duties."
     }
   },
-
   "production_process": [
     {
       "stage": 1,
@@ -267,7 +259,6 @@
       ]
     }
   ],
-
   "common_fuels": [
     "Natural Gas",
     "Coal",
@@ -280,7 +271,6 @@
     "Refinery Fuel Gas",
     "Process Off-Gases"
   ],
-
   "fuel_application_map": {
     "natural_gas": {
       "common_uses": [
@@ -349,7 +339,6 @@
       "optimizer_rule": "Treat usable process off-gas as an internal energy resource where technically and environmentally feasible."
     }
   },
-
   "energy_characteristics": {
     "thermal_energy": {
       "importance": "high",
@@ -365,7 +354,6 @@
       ],
       "source_basis": "BEE chemical-sector energy mapping"
     },
-
     "electricity": {
       "importance": "high",
       "major_systems": [
@@ -380,7 +368,6 @@
         "material_handling"
       ]
     },
-
     "steam": {
       "importance": "very_high",
       "applications": [
@@ -394,7 +381,6 @@
       ],
       "optimizer_rule": "Model steam demand by pressure and temperature rather than treating all steam as one generic heat load."
     },
-
     "thermic_fluid": {
       "importance": "high",
       "applications": [
@@ -405,7 +391,6 @@
       ],
       "source_basis": "BEE chemical-sector energy mapping identifies thermic fluid heaters as a major energy-consuming system in chemical units."
     },
-
     "compressed_air": {
       "importance": "high",
       "applications": [
@@ -417,7 +402,6 @@
       "optimizer_rule": "Evaluate compressor loading, leakage, pressure setpoint and variable-speed operation before adding generation capacity."
     }
   },
-
   "recommended_technologies": [
     "Energy Management System",
     "Advanced Process Control",
@@ -450,7 +434,6 @@
     "Process Electrification",
     "Biomass Boiler"
   ],
-
   "technology_profiles": {
     "energy_management_system": {
       "priority": "very_high",
@@ -473,7 +456,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "warning": "Reference saving range is technology-database guidance, not a guaranteed plant-level saving."
     },
-
     "boiler_efficiency": {
       "priority": "very_high",
       "applicable_when": "steam_boiler_present",
@@ -500,7 +482,6 @@
       "source": "BEE chemical-sector energy mapping",
       "optimizer_rule": "Do not apply the 2-7% excess-air range blindly; the correct operating value depends on fuel and boiler design and must respect combustion and emission requirements."
     },
-
     "thermic_fluid_heater_optimization": {
       "priority": "very_high",
       "applicable_when": "thermic_fluid_heater_present",
@@ -515,7 +496,6 @@
       ],
       "source": "BEE chemical-sector energy mapping"
     },
-
     "waste_heat_recovery": {
       "priority": "very_high",
       "applicable_sources": [
@@ -546,7 +526,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "optimizer_rule": "Calculate recoverable heat from measured source temperature, mass flow, operating hours and sink temperature before estimating savings."
     },
-
     "industrial_heat_pump": {
       "priority": "high_for_low_medium_temperature_loads",
       "applicable_temperature_range": {
@@ -571,7 +550,6 @@
       ],
       "optimizer_rule": "Require both source-temperature and sink-temperature data. A heat pump should not be selected merely because the industry is labelled Chemical."
     },
-
     "electric_boiler": {
       "priority": "high",
       "applicable_when": [
@@ -595,7 +573,6 @@
       ],
       "source_basis": "IEA and Indian industrial heat electrification research"
     },
-
     "electrode_boiler": {
       "priority": "high",
       "applicable_when": "high_rate_steam_generation_is_required_and_electricity_supply_is_adequate",
@@ -612,7 +589,6 @@
         "electricity_price"
       ]
     },
-
     "mechanical_vapor_recompression": {
       "priority": "high_for_evaporation_and_vapor_recovery",
       "applicable_processes": [
@@ -627,7 +603,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "optimizer_rule": "Only evaluate where a suitable vapor stream exists and pressure/temperature lift is technically feasible."
     },
-
     "electric_dry_vacuum_pump": {
       "priority": "medium_to_high",
       "applicable_processes": [
@@ -643,7 +618,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "warning": "The saving figure is a technology reference and must not be applied universally."
     },
-
     "electric_resistance_heating": {
       "priority": "high_for_selected_medium_temperature_processes",
       "applicable_temperature_range": {
@@ -669,7 +643,6 @@
         "process_heat_transfer_requirements"
       ]
     },
-
     "solar_thermal": {
       "priority": "medium",
       "best_applications": [
@@ -687,7 +660,6 @@
       ],
       "optimizer_rule": "Do not assume solar thermal can directly replace every chemical process heater."
     },
-
     "solar_pv": {
       "priority": "high",
       "applicable_to": [
@@ -707,7 +679,6 @@
         "generation_profile"
       ]
     },
-
     "thermal_energy_storage": {
       "priority": "medium_to_high",
       "applicable_when": [
@@ -725,7 +696,6 @@
       ],
       "optimizer_rule": "Storage must be matched to the actual temperature, duration, cycling frequency and process continuity requirements."
     },
-
     "biomass_boiler": {
       "priority": "conditional",
       "applicable_when": [
@@ -751,7 +721,6 @@
       ],
       "optimizer_rule": "Never assume biomass is carbon-neutral or continuously available without a verified local feedstock assessment."
     },
-
     "process_electrification": {
       "priority": "high_for_low_and_medium_temperature_processes",
       "candidate_loads": [
@@ -773,7 +742,6 @@
       ],
       "selection_rule": "Select technology from actual temperature, pressure, heat-transfer and load-profile requirements."
     },
-
     "green_electricity": {
       "priority": "high",
       "applicable_to": [
@@ -787,7 +755,6 @@
       "limitation": "Green electricity reduces electricity-related emissions but does not automatically eliminate direct thermal fuel emissions."
     }
   },
-
   "chemical_specific_energy_efficiency_measures": [
     {
       "measure": "Boiler combustion control",
@@ -869,7 +836,6 @@
       "source": "BEE ADEETIE chemical-specific technology entry"
     }
   ],
-
   "decarbonization_pathways": [
     {
       "pathway_id": "chemical_efficiency_first",
@@ -950,38 +916,32 @@
       "objective": "Reduce electricity-related emissions while enabling process electrification."
     }
   ],
-
   "technology_exclusions": {
     "generic_heat_pump_for_all_chemical_processes": {
       "status": "reject",
       "reason": "Chemical manufacturing contains high-temperature processes beyond conventional heat-pump capability.",
       "replacement_rule": "Evaluate heat pumps only for measured low/medium-temperature heat duties with a suitable heat source."
     },
-
     "electric_boiler_for_direct_high_temperature_reaction": {
       "status": "reject",
       "reason": "An electric boiler produces steam and cannot automatically replace a direct-fired high-temperature reactor or furnace.",
       "allowed_application": "steam_generation"
     },
-
     "solar_thermal_for_all_process_heat": {
       "status": "reject",
       "reason": "Solar thermal is highly dependent on temperature, solar resource, operating hours and thermal storage.",
       "allowed_application": "selected low-temperature heat and preheating"
     },
-
     "biomass_for_all_chemical_heating": {
       "status": "reject",
       "reason": "Biomass requires verified fuel availability, quality, storage and emission compliance.",
       "allowed_application": "compatible boiler or thermal-heating systems"
     },
-
     "green_electricity_as_direct_fuel_replacement": {
       "status": "reject",
       "reason": "Renewable electricity can reduce emissions from electrical loads but cannot by itself replace a fossil-fuel thermal process unless an electric heating technology is installed."
     }
   },
-
   "constraint_inputs_required": [
     "chemical_subsector",
     "product_type",
@@ -1021,64 +981,52 @@
     "operating_hours_per_year",
     "required_process_reliability"
   ],
-
   "decision_rules": {
     "temperature_based_heat_pump": {
       "condition": "process_temperature_c <= 165",
       "action": "evaluate_heat_pump"
     },
-
     "temperature_based_heat_pump_pilot": {
       "condition": "165 < process_temperature_c <= 200",
       "action": "evaluate_only_if_high_temperature_heat_pump_is_verified"
     },
-
     "temperature_above_heat_pump_range": {
       "condition": "process_temperature_c > 200",
       "action": "exclude_conventional_heat_pump_as_primary_process_heat_source"
     },
-
     "electric_boiler": {
       "condition": "steam_required == true AND sufficient_electric_capacity == true",
       "action": "evaluate_electric_boiler"
     },
-
     "waste_heat_recovery": {
       "condition": "recoverable_waste_heat == true AND heat_sink_exists == true",
       "action": "evaluate_WHR_before_new_heat_generation"
     },
-
     "MVR": {
       "condition": "evaporation_or_vapor_recompression_duty == true",
       "action": "evaluate_MVR"
     },
-
     "electric_resistance": {
       "condition": "200 <= process_temperature_c AND process_temperature_c <= 500",
       "action": "evaluate_electric_resistance_heating"
     },
-
     "solar_thermal": {
       "condition": "process_temperature_c <= 200 AND solar_resource_is_sufficient == true",
       "action": "evaluate_solar_thermal"
     },
-
     "biomass_boiler": {
       "condition": "biomass_available == true AND biomass_quality_verified == true AND storage_available == true",
       "action": "evaluate_biomass_boiler"
     },
-
     "solar_pv": {
       "condition": "electric_load_kw > 0 AND suitable_site_area_available == true",
       "action": "evaluate_solar_pv"
     },
-
     "thermal_storage": {
       "condition": "heat_generation_and_heat_use_can_be_temporally_decoupled == true",
       "action": "evaluate_thermal_storage"
     }
   },
-
   "benchmarking_rules": {
     "sector_average_energy_intensity": {
       "available": false,
@@ -1093,7 +1041,6 @@
     ],
     "priority": "Use measured plant-specific data whenever available."
   },
-
   "pat_and_energy_efficiency_relevance": {
     "pat_relevance": true,
     "relevant_energy_intensive_chemical_subsectors": [
@@ -1105,7 +1052,6 @@
     "energy_audit_relevance": "High",
     "source": "Bureau of Energy Efficiency PAT framework"
   },
-
   "india_specific_transition_context": {
     "industrial_electrification": {
       "relevance": "high",
@@ -1130,7 +1076,6 @@
       ]
     }
   },
-
   "data_quality": {
     "profile_type": "engineering_knowledge_base",
     "geographic_scope": "India",
@@ -1151,59 +1096,18 @@
       "Use technology-specific saving ranges only as reference values unless plant-specific measurements are available."
     ]
   },
-
   "source_registry": [
     {
-      "organization": "Department of Chemicals and Petrochemicals, Government of India",
-      "document": "Chemical and Petrochemical Statistics at a Glance 2025",
-      "reference_year": "FY 2024-25",
-      "data_used": [
-        "major chemical production",
-        "chemical group shares",
-        "alkali chemical production",
-        "organic chemical production",
-        "inorganic chemical production",
-        "pesticide production",
-        "dyes and pigment production"
-      ]
+      "source_id": "dcpc_chemical_statistics_2025"
     },
     {
-      "organization": "Bureau of Energy Efficiency",
-      "document": "Achieving Energy and Resource Efficiency in Chemical Industries",
-      "data_used": [
-        "chemical boiler systems",
-        "thermic fluid heaters",
-        "fuel types",
-        "compressed air",
-        "combustion control",
-        "waste heat recovery",
-        "condensate recovery",
-        "chemical energy-efficiency measures"
-      ]
+      "source_id": "bee_chemical_efficiency"
     },
     {
-      "organization": "Bureau of Energy Efficiency",
-      "document": "ADEETIE List of Energy Efficient Technologies",
-      "data_used": [
-        "energy management system",
-        "efficient compressors",
-        "efficient pumps",
-        "MVR",
-        "heat exchangers",
-        "WHR boilers",
-        "electric dry vacuum pumps",
-        "chemical-specific technologies"
-      ]
+      "source_id": "bee_adeetie"
     },
     {
-      "organization": "International Energy Agency",
-      "document": "Electrification and Renewables for Industry",
-      "data_used": [
-        "industrial heat-pump temperature suitability",
-        "low-temperature chemical process electrification",
-        "electric boilers",
-        "industrial electrification"
-      ]
+      "source_id": "iea_electrification_renewables_industry"
     }
   ]
 }
