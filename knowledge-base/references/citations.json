@@ -1,0 +1,194 @@
+{
+  "coal_emission_factor": {
+    "source_id": "SRC003"
+  },
+  "diesel_emission_factor": {
+    "source_id": "SRC003"
+  },
+  "lpg_emission_factor": {
+    "source_id": "SRC003"
+  },
+  "natural_gas_emission_factor": {
+    "source_id": "SRC003"
+  },
+  "biomass_emission_factor": {
+    "source_id": "SRC001"
+  },
+  "biogas_emission_factor": {
+    "source_id": "SRC001"
+  },
+  "furnace_oil_emission_factor": {
+    "source_id": "SRC003"
+  },
+
+  "coal_ncv": {
+    "source_id": "SRC004"
+  },
+  "diesel_ncv": {
+    "source_id": "SRC004"
+  },
+  "lpg_ncv": {
+    "source_id": "SRC004"
+  },
+  "natural_gas_ncv": {
+    "source_id": "SRC004"
+  },
+  "biogas_ncv": {
+    "source_id": "SRC002"
+  },
+  "furnace_oil_ncv": {
+    "source_id": "SRC004"
+  },
+
+  "india_green_transition_msme_roadmap": {
+    "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
+  },
+
+  "adeetie_programme": {
+    "source_id": "SRC_ADEETIE_BEE"
+  },
+
+  "msme_green_finance": {
+    "source_id": "SRC_MSME_GIFT"
+  },
+
+  "msme_circular_economy_spice": {
+    "source_id": "SRC_MSME_SPICE"
+  },
+
+  "msme_zed_scheme": {
+    "source_id": "SRC_MSME_ZED"
+  },
+
+  "msme_lean_scheme": {
+    "source_id": "SRC_MSME_LEAN"
+  },
+
+  "cgtmse_credit_guarantee": {
+    "source_id": "SRC_CGTMSE"
+  },
+
+  "udyam_msme_classification": {
+    "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
+  },
+
+  "renewable_consumption_obligation_central_framework": {
+    "source_id": "SRC_MOP_RCO_2025"
+  },
+
+  "renewable_purchase_obligation_state_framework": {
+    "source_id": "SRC_SERC_RPO_STATE_RULES"
+  },
+
+  "industrial_electricity_tariff_tamil_nadu": {
+    "source_id": "SRC_TNERC_ORDER6_2025"
+  },
+
+  "industrial_electricity_tariff_uttar_pradesh": {
+    "source_id": "SRC_UPERC_FY26"
+  },
+
+  "industrial_electricity_tariff_haryana": {
+    "source_id": "SRC_HERC_FY26"
+  },
+
+  "industrial_electricity_tariff_himachal_pradesh": {
+    "source_id": "SRC_HPSEBL_TARIFF_2026"
+  },
+
+  "industrial_electricity_tariff_punjab": {
+    "source_id": "SRC_PSPCL_TARIFF_2026"
+  },
+
+  "industrial_electricity_tariff_uttarakhand": {
+    "source_id": "SRC_URERC_TARIFF_2026"
+  },
+
+  "industrial_heat_electrification": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  },
+
+  "biomass_green_steam_heat": {
+    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
+  },
+
+  "biomass_boiler_efficiency": {
+    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
+  },
+
+  "biomass_fuel_availability": {
+    "source_id": "SRC_BIOMASS_ATLAS_INDIA"
+  },
+
+  "biomass_fuel_quality": {
+    "source_id": "SRC_BIOMASS_ATLAS_INDIA"
+  },
+
+  "industrial_fuel_cost_coal": {
+    "source_id": "SRC_BEE_COAL_INDIA"
+  },
+
+  "industrial_fuel_cost_diesel": {
+    "source_id": "SRC_PPAC_DIESEL"
+  },
+
+  "industrial_fuel_cost_lpg": {
+    "source_id": "SRC_PPAC_LPG"
+  },
+
+  "industrial_fuel_cost_natural_gas": {
+    "source_id": "SRC_PPAC_GAIL_NATURAL_GAS"
+  },
+
+  "industrial_fuel_cost_biomass": {
+    "source_id": "SRC_BIOMASS_SUPPLIER_MARKET_DATA"
+  },
+
+  "industrial_fuel_cost_furnace_oil": {
+    "source_id": "SRC_BEE_FURNACE_OIL"
+  },
+
+  "state_policy_himachal_pradesh": {
+    "source_id": "SRC_HP_INDUSTRIAL_POLICY_2019"
+  },
+
+  "state_policy_punjab": {
+    "source_id": "SRC_PUNJAB_INDUSTRIAL_POLICY_2022"
+  },
+
+  "state_policy_gujarat": {
+    "source_id": "SRC_GUJARAT_INDUSTRIAL_POLICY_2020"
+  },
+
+  "technology_temperature_heat_pump": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  },
+
+  "technology_temperature_electric_boiler": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  },
+
+  "technology_temperature_biomass_boiler": {
+    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
+  },
+
+  "technology_temperature_solar_thermal": {
+    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
+  },
+
+  "technology_biomass_boiler_constraints": {
+    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
+  },
+
+  "technology_electric_boiler_efficiency": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  },
+
+  "industrial_electrification_cost_comparison": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  },
+
+  "industrial_electrification_emissions_comparison": {
+    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
+  }
+}
