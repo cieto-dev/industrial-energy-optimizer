@@ -380,7 +380,7 @@
       },
       "credit_limit": {
         "maximum_guarantee_eligible_credit_inr": 50000000,
-        "maximum_guarantee_eligible_credit_crore": 5
+        "maximum_guarantee_eligible_credit_crore": 2
       },
       "collateral": {
         "collateral_required": false,
