@@ -1518,36 +1518,16 @@
   },
   "sources": {
     "SRC_TNERC_ORDER6_2025": {
-      "title": "Tariff Order No. 6 of 2025",
-      "publisher": "Tamil Nadu Electricity Regulatory Commission (TNERC)",
-      "publication_date": "2025-07-01",
-      "url": "https://www.tnerc.gov.in/",
-      "type": "Regulatory Tariff Order",
-      "pages": ""
+      "source_id": "SRC_TNERC_ORDER6_2025"
     },
     "SRC_UPERC_FY26": {
-      "title": "FY2025-26 Tariff Schedule for UPPCL Discoms",
-      "publisher": "Uttar Pradesh Electricity Regulatory Commission (UPERC)",
-      "publication_date": "2025-04-01",
-      "url": "https://www.uperc.org/",
-      "type": "Regulatory Tariff Order",
-      "pages": ""
+      "source_id": "SRC_UPERC_FY26"
     },
     "SRC_KERC_MAR2025_ORDER": {
-      "title": "Tariff Order for FY2025-26 (BESCOM and other Karnataka ESCOMs)",
-      "publisher": "Karnataka Electricity Regulatory Commission (KERC)",
-      "publication_date": "2025-03",
-      "url": "https://kerc.karnataka.gov.in/",
-      "type": "Regulatory Tariff Order",
-      "pages": ""
+      "source_id": "SRC_KERC_MAR2025_ORDER"
     },
     "SRC_TARIFF_MASTER_REPO": {
-      "title": "Compiled state DISCOM industrial tariff master (Gujarat, Haryana, Himachal Pradesh, Jammu & Kashmir)",
-      "publisher": "Project research compile from respective State Electricity Regulatory Commission tariff orders",
-      "publication_date": "2025-06",
-      "url": "",
-      "type": "Secondary Compilation",
-      "pages": ""
+      "source_id": "SRC_TARIFF_MASTER_REPO"
     }
   },
   "cross_references": {
