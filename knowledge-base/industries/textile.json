@@ -4,7 +4,6 @@
   "country": "India",
   "sector": "Textile Manufacturing",
   "description": "Industry profile for Indian textile manufacturing covering spinning, weaving, knitting, wet processing, dyeing, printing, finishing and associated steam, thermal-fluid and electrical utility systems. Textile is not a single-temperature process: spinning and weaving are predominantly electricity-intensive, while wet processing, dyeing, printing, drying and finishing can require substantial thermal energy through steam, hot water, thermic-fluid systems and direct-fired equipment.",
-
   "supported_subsectors": [
     "Spinning",
     "Weaving",
@@ -20,7 +19,6 @@
     "Cotton Textile Processing",
     "Polyester Textile Processing"
   ],
-
   "india_sector_context": {
     "reference_year": 2022,
     "overall_energy_consumption_mtoe": 8.7,
@@ -39,7 +37,6 @@
     "scope": "Indian MSME textile sector",
     "warning": "The sector-level SEC and energy mix are benchmarks for the Indian MSME textile sector and must not be treated as the measured performance of an individual textile factory."
   },
-
   "process_characteristics": {
     "primary_energy_forms": [
       "Electricity",
@@ -74,7 +71,6 @@
       "stentering": "Thermal intensive"
     }
   },
-
   "production_processes": {
     "spinning": {
       "description": "Conversion of fibres into yarn through opening, cleaning, carding, drawing, roving and spinning.",
@@ -112,7 +108,6 @@
         "Improved material feeding"
       ]
     },
-
     "weaving": {
       "description": "Conversion of yarn into fabric using power looms or shuttleless weaving machines.",
       "major_processes": [
@@ -141,7 +136,6 @@
         "Efficient lighting"
       ]
     },
-
     "wet_processing": {
       "description": "Processing of textile fibres, yarns or fabrics using water, chemicals, heat and mechanical operations.",
       "major_processes": [
@@ -176,7 +170,6 @@
         "Fans"
       ]
     },
-
     "dyeing": {
       "description": "Application and fixation of dyes to textile fibres, yarns or fabrics using controlled temperature, liquor ratio, chemical concentration and processing time.",
       "major_processes": [
@@ -203,7 +196,6 @@
         "Thermic-fluid heaters"
       ]
     },
-
     "printing": {
       "description": "Application of dyes, pigments or printing pastes to textile substrates followed by drying and fixation.",
       "major_processes": [
@@ -229,7 +221,6 @@
         "Curing equipment"
       ]
     },
-
     "finishing": {
       "description": "Final mechanical and thermal treatment used to achieve required dimensions, appearance, handle and functional characteristics.",
       "major_processes": [
@@ -260,7 +251,6 @@
       ]
     }
   },
-
   "operating_temperature_ranges": {
     "jigger_cotton_dyeing": {
       "min_c": 60,
@@ -270,7 +260,6 @@
       "energy_medium": "Steam/hot water",
       "source": "BEE National Programme textile case study"
     },
-
     "jigger_dyeing_general": {
       "min_c": 80,
       "max_c": 96,
@@ -279,21 +268,18 @@
       "typical_reactive_dye_temperature_c": 80,
       "source": "BEE SIDHIEE textile cluster detailed project report"
     },
-
     "jigger_direct_sulphur_disperse": {
       "min_c": 95,
       "max_c": 100,
       "process": "Dyeing with direct, sulphur or disperse dyes",
       "source": "BEE SIDHIEE textile energy project report"
     },
-
     "kier_boiling": {
       "temperature_c": 130,
       "process": "Kier boiling",
       "energy_medium": "Hot water/steam",
       "source": "BEE SIDHIEE textile cluster detailed project report"
     },
-
     "jet_dyeing": {
       "min_c": 130,
       "max_c": 140,
@@ -305,7 +291,6 @@
       "air_pressure_kg_cm2_max": 4,
       "source": "BEE Sectoral Report on Energy and Resource Mapping of Textile MSMEs"
     },
-
     "polyester_steaming": {
       "min_c": 100,
       "max_c": 180,
@@ -313,21 +298,18 @@
       "process": "Steamer/ager for polyester fabric fixation",
       "source": "BEE Pali Textile Cluster Manual"
     },
-
     "polyester_steaming_typical": {
       "temperature_c": 170,
       "duration_min": 8,
       "process": "Continuous polyester steaming/fixation",
       "source": "BEE Pali Textile Cluster Manual"
     },
-
     "polymerization_curing": {
       "temperature_c": 170,
       "process": "Hot-air curing/polymerization of printed fabric",
       "energy_medium": "Hot air/thermal fluid",
       "source": "BEE Pali Textile Cluster Manual"
     },
-
     "boiler_feedwater_reference": {
       "typical_preheated_feedwater_temperature_c": 60,
       "application": "Waste heat recovery from textile thermic-fluid heater",
@@ -335,7 +317,6 @@
       "warning": "This is a demonstrated heat-recovery application temperature and not a universal textile process requirement."
     }
   },
-
   "steam_characteristics": {
     "role": "critical",
     "major_applications": [
@@ -353,7 +334,6 @@
     "source": "BEE textile dyeing case study",
     "optimizer_rule": "Steam pressure must be selected from the actual process requirement; do not assume that higher boiler pressure always improves process efficiency."
   },
-
   "fuel_profile": {
     "common_fuels": [
       "Coal",
@@ -425,7 +405,6 @@
       ]
     }
   },
-
   "energy_consumption_characteristics": {
     "sector_sec_toe_per_tonne": 1.1,
     "sector_energy_consumption_mtoe": 8.7,
@@ -449,7 +428,6 @@
     ],
     "source": "NITI Aayog Roadmap for Green Transition of MSMEs, 2026"
   },
-
   "documented_energy_efficiency_opportunities": {
     "spinning": {
       "energy_saving_percent_min": 8,
@@ -464,7 +442,6 @@
       ],
       "source": "TERI study on energy efficiency improvements among small and medium textile units in India"
     },
-
     "weaving": {
       "energy_saving_percent_min": 5,
       "energy_saving_percent_max": 5,
@@ -477,7 +454,6 @@
       ],
       "source": "TERI study on energy efficiency improvements among small and medium textile units in India"
     },
-
     "wet_processing": {
       "energy_saving_percent_min": 10,
       "energy_saving_percent_max": 10,
@@ -494,7 +470,6 @@
       "source": "TERI study on energy efficiency improvements among small and medium textile units in India"
     }
   },
-
   "documented_technology_performance": {
     "pulser_dyeing": {
       "energy_saving_percent_min": 20,
@@ -506,49 +481,42 @@
       "typical_batch_capacity_kg_max": 1500,
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "plc_based_dyeing_machine": {
       "energy_saving_percent_min": 20,
       "energy_saving_percent_max": 25,
       "reference_machine": "23 kW jigger",
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "high_speed_ring_spinning_frame": {
       "energy_saving_percent_min": 10,
       "energy_saving_percent_max": 20,
       "reference_machine": "45 kW conventional ring spinning machine",
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "high_speed_carding_machine": {
       "energy_saving_percent_min": 30,
       "energy_saving_percent_max": 40,
       "reference_power_kw": 27,
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "sit_ra_excel_fans": {
       "energy_saving_percent_min": 15,
       "energy_saving_percent_max": 20,
       "reference_application": "90 ring-frame spinning machines",
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "light_weight_bobbins": {
       "energy_saving_percent_min": 7,
       "energy_saving_percent_max": 20,
       "reference_application": "15000 TPA spinning mill with 90 ring frames",
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "rapier_or_automatic_loom": {
       "energy_saving_percent_min": 15,
       "energy_saving_percent_max": 20,
       "application": "Replacement of conventional power loom",
       "source": "BEE ADEETIE energy-efficient technology database"
     },
-
     "waste_heat_recovery_compressor": {
       "energy_saving_percent_min": 10,
       "energy_saving_percent_max": 20,
@@ -556,7 +524,6 @@
       "source": "BEE ADEETIE energy-efficient technology database"
     }
   },
-
   "boiler_and_thermal_system_characteristics": {
     "steam_boiler": {
       "importance": "very_high",
@@ -597,7 +564,6 @@
         "Waste heat recovery"
       ]
     },
-
     "thermic_fluid_heater": {
       "importance": "high",
       "applications": [
@@ -620,7 +586,6 @@
       "warning": "The 240°C stack temperature is a case-study measurement, not a universal textile benchmark."
     }
   },
-
   "decarbonization_technologies": {
     "electric_boiler": {
       "priority": "high",
@@ -648,7 +613,6 @@
       ],
       "optimizer_rule": "Recommend only after comparing annualized electricity cost against current boiler fuel cost and verifying electrical capacity."
     },
-
     "industrial_heat_pump": {
       "priority": "high",
       "best_fit": [
@@ -675,7 +639,6 @@
       ],
       "optimizer_rule": "Do not recommend heat pumps for high-temperature direct-fired duties merely because the industry is textile."
     },
-
     "solar_thermal": {
       "priority": "high",
       "best_fit": [
@@ -705,7 +668,6 @@
       ],
       "source": "MNRE industrial solar thermal guidance"
     },
-
     "biomass_boiler": {
       "priority": "high",
       "best_fit": [
@@ -734,7 +696,6 @@
       ],
       "optimizer_rule": "Do not assume biomass is carbon-free or universally available; verify sustainable local supply and measured fuel properties."
     },
-
     "natural_gas_or_png_transition": {
       "priority": "medium",
       "best_fit": [
@@ -746,7 +707,6 @@
       "benefit": "Lower local air pollutants and potentially lower direct CO2 intensity than coal or pet coke.",
       "constraint": "Natural gas remains a fossil fuel and should not automatically outrank electrification or sustainable biomass."
     },
-
     "waste_heat_recovery": {
       "priority": "very_high",
       "best_fit": [
@@ -767,7 +727,6 @@
       ],
       "optimizer_rule": "Prioritize recovery when waste heat temperature, flow rate, operating hours and heat sink are sufficient."
     },
-
     "regenerative_or_automatic_stenter": {
       "priority": "high",
       "best_fit": [
@@ -784,7 +743,6 @@
         "Moisture control"
       ]
     },
-
     "co_generation": {
       "priority": "medium",
       "best_fit": [
@@ -806,7 +764,6 @@
       ],
       "source": "TERI textile energy-efficiency study"
     },
-
     "variable_frequency_drive": {
       "priority": "very_high",
       "best_fit": [
@@ -819,7 +776,6 @@
       ],
       "optimizer_rule": "Highest value where motor load varies with production or process demand."
     },
-
     "high_efficiency_motors": {
       "priority": "very_high",
       "best_fit": [
@@ -831,7 +787,6 @@
         "Material handling"
       ]
     },
-
     "efficient_compressed_air": {
       "priority": "high",
       "measures": [
@@ -844,7 +799,6 @@
       "warning": "Compressed air should not be treated as a heat source; its primary relevance is electrical efficiency and recoverable compressor waste heat."
     }
   },
-
   "temperature_to_technology_mapping": {
     "below_80_c": {
       "suitable": [
@@ -859,7 +813,6 @@
         "Selected cotton dyeing"
       ]
     },
-
     "80_to_120_c": {
       "suitable": [
         "Industrial Heat Pump where required temperature is achievable",
@@ -874,7 +827,6 @@
         "Process hot water"
       ]
     },
-
     "120_to_180_c": {
       "suitable": [
         "Electric Boiler",
@@ -893,7 +845,6 @@
       ],
       "warning": "Heat-pump feasibility depends on the actual required supply temperature and temperature lift; do not assume generic heat-pump capability."
     },
-
     "above_180_c": {
       "suitable": [
         "Electric Resistance Heating",
@@ -906,7 +857,6 @@
       "heat_pump_default": "generally_excluded_unless_high_temperature_system_is_verified"
     }
   },
-
   "recommended_technologies": [
     "Waste Heat Recovery",
     "Electric Boiler",
@@ -940,7 +890,6 @@
     "Renewable Electricity",
     "Rooftop Solar PV"
   ],
-
   "excluded_or_conditionally_excluded_technologies": {
     "generic_heat_pump_for_high_temperature_process": {
       "status": "excluded_by_default",
@@ -959,7 +908,6 @@
       "reason": "Electrical capacity, transformer loading and demand charges must be checked before electrifying substantial steam loads."
     }
   },
-
   "optimization_rules": {
     "industry_route_rule": {
       "rule": "Identify the textile subsector before technology selection.",
@@ -973,7 +921,6 @@
         "Integrated Textile"
       ]
     },
-
     "thermal_vs_electrical_rule": {
       "spinning": "Prioritize electrical efficiency.",
       "weaving": "Prioritize electrical efficiency and compressed-air optimization.",
@@ -982,7 +929,6 @@
       "printing": "Prioritize drying, curing and heat-recovery efficiency.",
       "finishing": "Prioritize stenter/dryer efficiency and exhaust heat recovery."
     },
-
     "heat_pump_rule": {
       "recommend_if": [
         "Required process temperature is within verified heat-pump supply range",
@@ -996,7 +942,6 @@
         "Temperature lift makes COP uneconomic"
       ]
     },
-
     "electric_boiler_rule": {
       "recommend_if": [
         "Steam demand is compatible",
@@ -1013,7 +958,6 @@
         "Steam demand profile"
       ]
     },
-
     "solar_thermal_rule": {
       "recommend_if": [
         "Hot-water or medium-temperature thermal demand is available",
@@ -1023,7 +967,6 @@
         "Backup or thermal storage is available where necessary"
       ]
     },
-
     "biomass_rule": {
       "recommend_if": [
         "Sustainable biomass is locally available",
@@ -1032,7 +975,6 @@
         "Emission compliance is achievable"
       ]
     },
-
     "waste_heat_rule": {
       "priority": "very_high",
       "check": [
@@ -1044,7 +986,6 @@
         "Distance between source and sink"
       ]
     },
-
     "process_control_rule": {
       "priority": "very_high",
       "reason": "Textile wet processing often depends on accurate temperature, time, liquor ratio and chemical control.",
@@ -1057,7 +998,6 @@
       ]
     }
   },
-
   "optimizer_required_inputs": {
     "plant": [
       "Textile subsector",
@@ -1117,7 +1057,6 @@
       "Required payback period"
     ]
   },
-
   "technology_selection_priority": {
     "priority_1": [
       "Process optimization",
@@ -1150,7 +1089,6 @@
       "Thermal Energy Storage"
     ]
   },
-
   "msme_specific_reference": {
     "importance": "very_high",
     "reason": "Indian textile MSMEs have heterogeneous process configurations and fuel mixes; cluster-level and sector-level data should be used as priors, while plant-specific measurements should override them.",
@@ -1168,7 +1106,6 @@
       "NITI Aayog MSME green-transition roadmap"
     ]
   },
-
   "data_quality_rules": {
     "primary_sources": [
       "Bureau of Energy Efficiency",
@@ -1194,100 +1131,30 @@
       "Treat case-study temperatures and savings as case-specific unless explicitly identified as a sector benchmark."
     ]
   },
-
   "sources": [
     {
-      "source_id": "niti_mSME_green_transition_2026",
-      "publisher": "NITI Aayog",
-      "title": "Roadmap for Green Transition of MSMEs",
-      "year": 2026,
-      "data_used": [
-        "Textile MSME energy consumption",
-        "Textile SEC",
-        "Fuel mix",
-        "Emissions"
-      ]
+      "source_id": "niti_msme_roadmap"
     },
     {
-      "source_id": "bee_textile_sectoral_report",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "Sectoral Report: Energy and Resource Mapping of MSME Textile Sector",
-      "data_used": [
-        "Jet dyeing",
-        "Dyeing temperature",
-        "Steam pressure",
-        "Textile equipment",
-        "Process characteristics"
-      ]
+      "source_id": "bee_textile_sectoral_report"
     },
     {
-      "source_id": "bee_textile_cluster_manual",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "Manual on Energy Conservation Measures in Textile Cluster",
-      "data_used": [
-        "Jet dyeing",
-        "Dyeing temperature",
-        "Steam-based processing",
-        "Process energy characteristics"
-      ]
+      "source_id": "bee_textile_cluster_manual"
     },
     {
-      "source_id": "bee_pali_textile_cluster",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "Pali Textile Cluster Manual",
-      "data_used": [
-        "Polyester steaming",
-        "Steamer temperature",
-        "Polymerization temperature",
-        "Thermal processing"
-      ]
+      "source_id": "bee_pali_textile_cluster"
     },
     {
-      "source_id": "bee_jigger_project",
-      "publisher": "Bureau of Energy Efficiency / SIDHIEE",
-      "title": "Detailed Project Report - Solar Water Heater for Cotton Dyeing",
-      "data_used": [
-        "Jigger dyeing temperatures",
-        "Steam consumption",
-        "Liquor ratio",
-        "Kier boiling temperature"
-      ]
+      "source_id": "bee_jigger_project"
     },
     {
-      "source_id": "teri_textile_energy_efficiency",
-      "publisher": "The Energy and Resources Institute",
-      "title": "Energy efficiency improvements among small and medium textile units in India",
-      "year": 2023,
-      "data_used": [
-        "Spinning energy-saving potential",
-        "Weaving energy-saving potential",
-        "Wet-processing energy-saving potential",
-        "Priority technologies"
-      ]
+      "source_id": "teri_textile_energy_efficiency"
     },
     {
-      "source_id": "bee_adeetie",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "List of Energy Efficient Technologies",
-      "data_used": [
-        "Pulser dyeing",
-        "PLC dyeing",
-        "High-speed spinning",
-        "High-speed carding",
-        "Rapier loom",
-        "Compressor waste heat recovery"
-      ]
+      "source_id": "bee_adeetie"
     },
     {
-      "source_id": "mnre_solar_thermal",
-      "publisher": "Ministry of New and Renewable Energy",
-      "title": "Concentrated Solar Thermal",
-      "data_used": [
-        "Industrial solar thermal applications",
-        "Textile applicability",
-        "CST technology",
-        "Thermal storage"
-      ]
+      "source_id": "mnre_solar_thermal"
     }
   ]
 }
