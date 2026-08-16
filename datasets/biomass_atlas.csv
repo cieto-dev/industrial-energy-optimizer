@@ -1,52 +1,500 @@
-state,district,biomass_type,crop,annual_availability_tons,availability_type,year,moisture_percent,calorific_value_mj_kg,cost_rs_per_ton,latitude,longitude,source,,,
-Punjab,Ludhiana,Rice residue,Rice,576480.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,30.90726,75.8492,TIFAC-IARI / National Biomass Atlas of India,,,
-Punjab,Sangrur,Wheat residue,Wheat,664570.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,30.25108,75.83437,TIFAC-IARI / National Biomass Atlas of India,,,
-Punjab,Bathinda,Wheat residue,Wheat,549260.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,30.20747,74.93893,TIFAC-IARI / National Biomass Atlas of India,,,
-Haryana,Karnal,Rice residue,Rice,1080000.00,gross,2010-11 to 2015-16,12.71,16.02,1275,29.69197,76.98448,TIFAC-IARI / National Biomass Atlas of India,,,
-Haryana,Sirsa,Wheat residue,Wheat,1570000.00,gross,2010-11 to 2015-16,7.5,15.76,3150,29.53957,75.03103,TIFAC-IARI / National Biomass Atlas of India,,,
-Haryana,Hisar,Wheat residue,Wheat,2220000.00,gross,2010-11 to 2015-16,7.5,15.76,3150,29.15394,75.72294,TIFAC-IARI / National Biomass Atlas of India,,,
-Himachal Pradesh,Kangra,Maize residue,Maize,81600.00,surplus,2010-11 to 2015-16,12,14.7,2250,32.10136,76.27312,TIFAC-IARI / National Biomass Atlas of India,,,
-Himachal Pradesh,Mandi,Maize residue,Maize,110100.00,surplus,2010-11 to 2015-16,12,14.7,2250,31.70922,76.93197,TIFAC-IARI / National Biomass Atlas of India,,,
-Himachal Pradesh,Una,Wheat residue,Wheat,19100.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,31.58008186,76.21121914,TIFAC-IARI / National Biomass Atlas of India,,,
-Uttar Pradesh,Muzaffarnagar,Sugarcane residue,Sugarcane,159600.00,surplus,2023-24,50,15.81,1850,29.47046,77.70766,TIFAC-IARI / National Biomass Atlas of India,,,
-Uttar Pradesh,Meerut,Wheat residue,Wheat,93775.00,surplus,2019-20,7.5,15.76,3150,28.99862,77.70459,TIFAC-IARI / National Biomass Atlas of India,,,
-Uttar Pradesh,Lakhimpur Kheri,Rice residue,Rice,184000.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,27.90539,80.79879,TIFAC-IARI / National Biomass Atlas of India,,,
-Uttar Pradesh,Sitapur,Wheat residue,Wheat,20761.23,surplus,2019-20,7.5,15.76,3150,27.56192,80.68265,TIFAC-IARI / National Biomass Atlas of India,,,
-Rajasthan,Sri Ganganagar,Wheat residue,Wheat,366000.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,29.92009,73.87496,TIFAC-IARI / National Biomass Atlas of India,,,
-Rajasthan,Hanumangarh,Wheat residue,Wheat,344000.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,29.58182,74.32938,TIFAC-IARI / National Biomass Atlas of India,,,
-Rajasthan,Kota,Wheat residue,Wheat,145000.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,25.16531,75.85126,TIFAC-IARI / National Biomass Atlas of India,,,
-Madhya Pradesh,Indore,Wheat residue,Wheat,118606.00,surplus,2016-17 to 2018-19,7.5,15.76,3150,22.71622,75.86512,TIFAC-IARI / National Biomass Atlas of India,,,
-Madhya Pradesh,Ujjain,Wheat residue,Wheat,35190.00,surplus,2016-17 to 2018-19,7.5,15.76,3150,23.18088,75.78813,TIFAC-IARI / National Biomass Atlas of India,,,
-Maharashtra,Kolhapur,Sugarcane residue,Sugarcane,1114500.00,surplus,2010-11 to 2015-16,50,15.81,1850,16.70448,74.24142,TIFAC-IARI / National Biomass Atlas of India,,,
-Maharashtra,Pune,Sugarcane residue,Sugarcane,1474500.00,surplus,2010-11 to 2015-16,50,15.81,1850,18.50419,73.85286,TIFAC-IARI / National Biomass Atlas of India,,,
-Gujarat,Surat,Rice residue,Rice,38800.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,21.18584,72.83667,TIFAC-IARI / National Biomass Atlas of India,,,
-Gujarat,Bharuch,Wheat residue,Wheat,3600.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,21.69482,72.9805,TIFAC-IARI / National Biomass Atlas of India,,,
-Karnataka,Belagavi,Sugarcane residue,Sugarcane,491577.00,surplus,2010-11 to 2015-16,50,15.81,1850,15.86704,74.51162,TIFAC-IARI / National Biomass Atlas of India,,,
-Karnataka,Davanagere,Maize residue,Maize,124000.00,surplus,2010-11 to 2015-16,12,14.7,2250,14.4593,75.91528,TIFAC-IARI / National Biomass Atlas of India,,,
-Tamil Nadu,Thanjavur,Rice residue,Rice,53200.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,10.76864,79.12901,TIFAC-IARI / National Biomass Atlas of India,,,
-Tamil Nadu,Erode,Sugarcane residue,Sugarcane,17400.00,surplus,2010-11 to 2015-16,50,15.81,1850,11.34065,77.71723,TIFAC-IARI / National Biomass Atlas of India,,,
-Telangana,Nizamabad,Rice residue,Rice,50500.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,18.67154,78.0988,TIFAC-IARI / National Biomass Atlas of India,,,
-Telangana,Karimnagar,Rice residue,Rice,359954.00,surplus,2021-22,12.71,16.02,1275,18.43915,79.12856,TIFAC-IARI / National Biomass Atlas of India,,,
-Andhra Pradesh,Guntur,Rice residue,Rice,131900.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,16.29974,80.45729,TIFAC-IARI / National Biomass Atlas of India,,,
-Andhra Pradesh,Krishna,Rice residue,Rice,95400.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,16.18747,81.13888,TIFAC-IARI / National Biomass Atlas of India,,,
-Odisha,Bargarh,Rice residue,Rice,97300.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,21.33767,83.62123,TIFAC-IARI / National Biomass Atlas of India,,,
-Odisha,Cuttack,Rice residue,Rice,51500.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,20.46653,85.89615,TIFAC-IARI / National Biomass Atlas of India,,,
-Chhattisgarh,Raipur,Rice residue,Rice,105900.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,21.24402,81.6348,TIFAC-IARI / National Biomass Atlas of India,,,
-Chhattisgarh,Dhamtari,Rice residue,Rice,38800.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,20.70647,81.5494,TIFAC-IARI / National Biomass Atlas of India,,,
-Bihar,Rohtas,Wheat residue,Wheat,51600.00,surplus,2010-11 to 2015-16,7.5,15.76,3150,24.69323,84.00265,TIFAC-IARI / National Biomass Atlas of India,,,
-Bihar,Purnia,Rice residue,Rice,108568.00,surplus,2023-24,12.71,16.02,1275,25.77687,87.47435,TIFAC-IARI / National Biomass Atlas of India,,,
-West Bengal,Bardhaman,Rice residue,Rice,722916.00,surplus,2013-14,12.71,16.02,1275,23.35721277,87.95205357,TIFAC-IARI / National Biomass Atlas of India,,,
-West Bengal,Murshidabad,Rice residue,Rice,402012.00,surplus,2013-14,12.71,16.02,1275,24.17609,88.27296,TIFAC-IARI / National Biomass Atlas of India,,,
-Assam,Nagaon,Rice residue,Rice,231733.00,surplus,2023-24,12.71,16.02,1275,26.34949,92.68462,TIFAC-IARI / National Biomass Atlas of India,,,
-Uttarakhand,Udham Singh Nagar,Rice residue,Rice,144245.00,surplus,2023-24,12.71,16.02,1275,29.03757377,79.48406367,TIFAC-IARI / National Biomass Atlas of India,,,
-Jammu & Kashmir,Jammu,Rice residue,Rice,1400.00,surplus,2010-11 to 2015-16,12.71,16.02,1275,32.70267,74.87843,TIFAC-IARI / National Biomass Atlas of India,,,
-Jammu & Kashmir,Anantnag,Maize residue,Maize,7500.00,surplus,2010-11 to 2015-16,12,14.7,2250,33.72988,75.15084,TIFAC-IARI / National Biomass Atlas of India,,,
-Jharkhand,Ranchi,Maize residue,Maize,1124.00,surplus,2018-19,12,14.7,2250,23.3507,85.31377,TIFAC-IARI / National Biomass Atlas of India,,,
-Karnataka,Dharwad,Maize residue,Maize,35500.00,surplus,2010-11 to 2015-16,12,14.7,2250,15.45111,75.00517,TIFAC-IARI / National Biomass Atlas of India,,,
-Maharashtra,Ahmednagar,Sugarcane residue,Sugarcane,68400.00,surplus,2024-25,50,15.81,1850,19.09211,74.73842,TIFAC-IARI / National Biomass Atlas of India,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
+state,district,biomass_type,crop,annual_availability_tons,availability_type,year,moisture_percent,calorific_value_mj_kg,cost_rs_per_ton,latitude,longitude,source
+Punjab,Bilaspur,Rice Husk,Rice,102000,Surplus Biomass Residue,2015–18,10.5,13.9,2280,31.634,74.873,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Chamba,Wheat Straw,Wheat,96900,Surplus Biomass Residue,2015–18,15,14.4,2240,30.378,75.546,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Hamirpur,Maize Residue,Maize,70400,Surplus Biomass Residue,2015–18,15.5,15,2290,30.211,74.945,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Kangra,Sugarcane Bagasse,Sugarcane,157500,Surplus Biomass Residue,2015–18,49.5,8.6,2600,30.677,74.755,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Kinnaur,Rice Husk,Rice,109200,Surplus Biomass Residue,2015–18,13,15.1,2570,30.643,76.395,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Kullu,Wheat Straw,Wheat,102600,Surplus Biomass Residue,2015–18,14,14.2,2160,30.403,74.028,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Lahaul and Spiti,Maize Residue,Maize,75200,Surplus Biomass Residue,2015–18,14.5,14.8,2200,30.933,74.622,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Mandi,Sugarcane Bagasse,Sugarcane,166500,Surplus Biomass Residue,2015–18,48.5,8.4,2500,32.041,75.405,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Shimla,Rice Husk,Rice,116400,Surplus Biomass Residue,2015–18,12,14.9,2470,31.532,75.911,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Sirmaur,Wheat Straw,Wheat,108300,Surplus Biomass Residue,2015–18,16.5,14,2420,31.326,75.576,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Solan,Maize Residue,Maize,80000,Surplus Biomass Residue,2015–18,13.5,14.6,2120,31.38,75.381,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Una,Sugarcane Bagasse,Sugarcane,129000,Surplus Biomass Residue,2015–18,51,9.6,2810,30.901,75.857,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Malerkotla,Rice Husk,Rice,123600,Surplus Biomass Residue,2015–18,11,14.7,2380,30.525,75.89,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Mansa,Wheat Straw,Wheat,84600,Surplus Biomass Residue,2015–18,15.5,13.8,2330,29.999,75.393,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Moga,Maize Residue,Maize,84800,Surplus Biomass Residue,2015–18,12.5,14.4,2040,30.816,75.172,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Pathankot,Sugarcane Bagasse,Sugarcane,138000,Surplus Biomass Residue,2015–18,50,9.4,2700,32.274,75.652,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Patiala,Rice Husk,Rice,130800,Surplus Biomass Residue,2015–18,13.5,14.5,2280,30.339,76.386,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Rupnagar,Wheat Straw,Wheat,90200,Surplus Biomass Residue,2015–18,14.5,13.6,2240,30.966,76.533,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Sahibzada Ajit Singh Nagar,Maize Residue,Maize,89600,Surplus Biomass Residue,2015–18,15,15.6,2290,30.704,76.717,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Sangrur,Sugarcane Bagasse,Sugarcane,147000,Surplus Biomass Residue,2015–18,49,9.2,2600,30.245,75.842,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Shahid Bhagat Singh Nagar,Rice Husk,Rice,138000,Surplus Biomass Residue,2015–18,12.5,14.3,2570,31.124,76.117,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Sri Muktsar Sahib,Wheat Straw,Wheat,96000,Surplus Biomass Residue,2015–18,13.5,13.4,2160,30.476,74.512,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Punjab,Tarn Taran,Maize Residue,Maize,69600,Surplus Biomass Residue,2015–18,14,15.4,2200,31.451,74.928,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Ambala,Sugarcane Bagasse,Sugarcane,156000,Surplus Biomass Residue,2015–18,51.5,9,2500,30.378,76.776,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Bhiwani,Rice Husk,Rice,108000,Surplus Biomass Residue,2015–18,11.5,14.1,2470,28.795,76.132,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Charkhi Dadri,Wheat Straw,Wheat,101600,Surplus Biomass Residue,2015–18,16,14.6,2420,28.591,76.272,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Faridabad,Maize Residue,Maize,74400,Surplus Biomass Residue,2015–18,13,15.2,2120,28.408,77.317,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Fatehabad,Sugarcane Bagasse,Sugarcane,165000,Surplus Biomass Residue,2015–18,50.5,8.8,2810,29.515,75.455,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Gurugram,Rice Husk,Rice,115200,Surplus Biomass Residue,2015–18,10.5,13.9,2380,28.459,77.026,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Hisar,Wheat Straw,Wheat,107300,Surplus Biomass Residue,2015–18,15,14.4,2330,29.149,75.722,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Jhajjar,Maize Residue,Maize,79200,Surplus Biomass Residue,2015–18,15.5,15,2040,28.606,76.656,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Jind,Sugarcane Bagasse,Sugarcane,127500,Surplus Biomass Residue,2015–18,49.5,8.6,2700,29.316,76.316,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Kaithal,Rice Husk,Rice,122400,Surplus Biomass Residue,2015–18,13,15.1,2280,29.801,76.399,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Karnal,Wheat Straw,Wheat,83600,Surplus Biomass Residue,2015–18,14,14.2,2240,29.685,76.99,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Kurukshetra,Maize Residue,Maize,84000,Surplus Biomass Residue,2015–18,14.5,14.8,2290,29.969,76.878,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Mahendragarh,Sugarcane Bagasse,Sugarcane,136500,Surplus Biomass Residue,2015–18,48.5,8.4,2600,28.277,76.14,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Nuh,Rice Husk,Rice,129600,Surplus Biomass Residue,2015–18,12,14.9,2570,28.103,77.014,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Palwal,Wheat Straw,Wheat,89300,Surplus Biomass Residue,2015–18,16.5,14,2160,28.148,77.333,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Panchkula,Maize Residue,Maize,88800,Surplus Biomass Residue,2015–18,13.5,14.6,2200,30.694,76.86,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Panipat,Sugarcane Bagasse,Sugarcane,145500,Surplus Biomass Residue,2015–18,51,9.6,2500,29.391,76.963,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Rewari,Rice Husk,Rice,136800,Surplus Biomass Residue,2015–18,11,14.7,2470,28.199,76.619,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Rohtak,Wheat Straw,Wheat,95000,Surplus Biomass Residue,2015–18,15.5,13.8,2420,28.895,76.606,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Sirsa,Maize Residue,Maize,68800,Surplus Biomass Residue,2015–18,12.5,14.4,2120,29.535,75.028,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Sonipat,Sugarcane Bagasse,Sugarcane,154500,Surplus Biomass Residue,2015–18,50,9.4,2810,28.993,77.015,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Haryana,Yamunanagar,Rice Husk,Rice,106800,Surplus Biomass Residue,2015–18,13.5,14.5,2380,30.129,77.267,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Bilaspur,Wheat Straw,Wheat,100700,Surplus Biomass Residue,2015–18,14.5,13.6,2330,31.333,31.333,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Chamba,Maize Residue,Maize,73600,Surplus Biomass Residue,2015–18,15,15.6,2040,31.333,76.126,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Hamirpur,Sugarcane Bagasse,Sugarcane,163500,Surplus Biomass Residue,2015–18,49,9.2,2700,31.333,76.522,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Kangra,Rice Husk,Rice,114000,Surplus Biomass Residue,2015–18,12.5,14.3,2280,31.333,76.269,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Kinnaur,Wheat Straw,Wheat,106400,Surplus Biomass Residue,2015–18,13.5,13.4,2240,31.583,78.467,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Kullu,Maize Residue,Maize,78400,Surplus Biomass Residue,2015–18,14,15.4,2290,31.959,77.108,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Lahaul and Spiti,Sugarcane Bagasse,Sugarcane,172500,Surplus Biomass Residue,2015–18,51.5,9,2600,32.5,77.75,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Mandi,Rice Husk,Rice,121200,Surplus Biomass Residue,2015–18,11.5,14.1,2570,31.708,76.931,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Shimla,Wheat Straw,Wheat,82600,Surplus Biomass Residue,2015–18,16,14.6,2160,31.104,77.173,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Sirmaur,Maize Residue,Maize,83200,Surplus Biomass Residue,2015–18,13,15.2,2200,30.562,77.297,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Solan,Sugarcane Bagasse,Sugarcane,135000,Surplus Biomass Residue,2015–18,50.5,8.8,2500,30.904,77.096,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Himachal Pradesh,Una,Rice Husk,Rice,128400,Surplus Biomass Residue,2015–18,10.5,13.9,2470,31.468,76.27,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Agra,Wheat Straw,Wheat,88400,Surplus Biomass Residue,2015–18,15,14.4,2420,27.176,78.008,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Aligarh,Maize Residue,Maize,88000,Surplus Biomass Residue,2015–18,15.5,15,2120,27.897,78.088,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Ambedkar Nagar,Sugarcane Bagasse,Sugarcane,144000,Surplus Biomass Residue,2015–18,49.5,8.6,2810,26.405,82.545,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Amethi,Rice Husk,Rice,135600,Surplus Biomass Residue,2015–18,13,15.1,2380,26.154,81.814,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Amroha,Wheat Straw,Wheat,94000,Surplus Biomass Residue,2015–18,14,14.2,2330,28.904,78.467,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Auraiya,Maize Residue,Maize,68000,Surplus Biomass Residue,2015–18,14.5,14.8,2040,26.464,79.51,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Ayodhya,Sugarcane Bagasse,Sugarcane,153000,Surplus Biomass Residue,2015–18,48.5,8.4,2700,26.799,82.204,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Azamgarh,Rice Husk,Rice,105600,Surplus Biomass Residue,2015–18,12,14.9,2280,26.067,83.183,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Baghpat,Wheat Straw,Wheat,99800,Surplus Biomass Residue,2015–18,16.5,14,2240,28.944,77.219,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Bahraich,Maize Residue,Maize,72800,Surplus Biomass Residue,2015–18,13.5,14.6,2290,27.574,81.595,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Ballia,Sugarcane Bagasse,Sugarcane,162000,Surplus Biomass Residue,2015–18,51,9.6,2600,25.758,84.149,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Balrampur,Rice Husk,Rice,112800,Surplus Biomass Residue,2015–18,11,14.7,2570,27.43,82.182,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Banda,Wheat Straw,Wheat,105400,Surplus Biomass Residue,2015–18,15.5,13.8,2160,25.475,80.335,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Barabanki,Maize Residue,Maize,77600,Surplus Biomass Residue,2015–18,12.5,14.4,2200,26.938,81.199,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Bareilly,Sugarcane Bagasse,Sugarcane,171000,Surplus Biomass Residue,2015–18,50,9.4,2500,28.367,79.43,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Basti,Rice Husk,Rice,120000,Surplus Biomass Residue,2015–18,13.5,14.5,2470,26.8,82.716,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Bhadohi,Wheat Straw,Wheat,81700,Surplus Biomass Residue,2015–18,14.5,13.6,2420,25.395,82.57,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Bijnor,Maize Residue,Maize,82400,Surplus Biomass Residue,2015–18,15,15.6,2120,29.373,78.136,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Budaun,Sugarcane Bagasse,Sugarcane,133500,Surplus Biomass Residue,2015–18,49,9.2,2810,28.033,79.121,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Bulandshahr,Rice Husk,Rice,127200,Surplus Biomass Residue,2015–18,12.5,14.3,2380,28.407,77.849,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Chandauli,Wheat Straw,Wheat,87400,Surplus Biomass Residue,2015–18,13.5,13.4,2330,25.26,83.268,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Chitrakoot,Maize Residue,Maize,87200,Surplus Biomass Residue,2015–18,14,15.4,2040,25.198,80.922,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Deoria,Sugarcane Bagasse,Sugarcane,142500,Surplus Biomass Residue,2015–18,51.5,9,2700,26.502,83.779,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Etah,Rice Husk,Rice,134400,Surplus Biomass Residue,2015–18,11.5,14.1,2280,27.558,78.662,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Etawah,Wheat Straw,Wheat,93100,Surplus Biomass Residue,2015–18,16,14.6,2240,26.785,79.015,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Farrukhabad,Maize Residue,Maize,92000,Surplus Biomass Residue,2015–18,13,15.2,2290,27.392,79.581,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Fatehpur,Sugarcane Bagasse,Sugarcane,151500,Surplus Biomass Residue,2015–18,50.5,8.8,2600,25.93,80.813,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Firozabad,Rice Husk,Rice,104400,Surplus Biomass Residue,2015–18,10.5,13.9,2570,27.159,78.395,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Gautam Buddha Nagar,Wheat Straw,Wheat,98800,Surplus Biomass Residue,2015–18,15,14.4,2160,28.535,77.391,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Ghaziabad,Maize Residue,Maize,72000,Surplus Biomass Residue,2015–18,15.5,15,2200,28.669,77.453,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Ghazipur,Sugarcane Bagasse,Sugarcane,160500,Surplus Biomass Residue,2015–18,49.5,8.6,2500,25.58,83.576,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Gonda,Rice Husk,Rice,111600,Surplus Biomass Residue,2015–18,13,15.1,2470,27.133,81.962,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Gorakhpur,Wheat Straw,Wheat,104500,Surplus Biomass Residue,2015–18,14,14.2,2420,26.76,83.373,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Hamirpur,Maize Residue,Maize,76800,Surplus Biomass Residue,2015–18,14.5,14.8,2120,25.956,80.149,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Hapur,Sugarcane Bagasse,Sugarcane,169500,Surplus Biomass Residue,2015–18,48.5,8.4,2810,28.73,77.781,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Hardoi,Rice Husk,Rice,118800,Surplus Biomass Residue,2015–18,12,14.9,2380,27.398,80.126,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Hathras,Wheat Straw,Wheat,80800,Surplus Biomass Residue,2015–18,16.5,14,2330,27.596,78.052,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Jalaun,Maize Residue,Maize,81600,Surplus Biomass Residue,2015–18,13.5,14.6,2040,26.145,79.337,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Jaunpur,Sugarcane Bagasse,Sugarcane,132000,Surplus Biomass Residue,2015–18,51,9.6,2700,25.747,82.683,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Jhansi,Rice Husk,Rice,126000,Surplus Biomass Residue,2015–18,11,14.7,2280,25.448,78.569,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kannauj,Wheat Straw,Wheat,86400,Surplus Biomass Residue,2015–18,15.5,13.8,2240,27.055,79.918,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kanpur Dehat,Maize Residue,Maize,86400,Surplus Biomass Residue,2015–18,12.5,14.4,2290,26.415,79.85,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kanpur Nagar,Sugarcane Bagasse,Sugarcane,141000,Surplus Biomass Residue,2015–18,50,9.4,2600,26.449,80.331,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kasganj,Rice Husk,Rice,133200,Surplus Biomass Residue,2015–18,13.5,14.5,2570,27.808,78.646,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kaushambi,Wheat Straw,Wheat,92200,Surplus Biomass Residue,2015–18,14.5,13.6,2160,25.53,81.381,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Kushinagar,Maize Residue,Maize,91200,Surplus Biomass Residue,2015–18,15,15.6,2200,26.74,83.888,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Lakhimpur Kheri,Sugarcane Bagasse,Sugarcane,150000,Surplus Biomass Residue,2015–18,49,9.2,2500,27.946,80.782,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Lalitpur,Rice Husk,Rice,103200,Surplus Biomass Residue,2015–18,12.5,14.3,2470,24.69,78.418,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Lucknow,Wheat Straw,Wheat,97800,Surplus Biomass Residue,2015–18,13.5,13.4,2420,26.847,80.947,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Maharajganj,Maize Residue,Maize,71200,Surplus Biomass Residue,2015–18,14,15.4,2120,27.128,83.562,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Mahoba,Sugarcane Bagasse,Sugarcane,159000,Surplus Biomass Residue,2015–18,51.5,9,2810,25.292,79.872,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Mainpuri,Rice Husk,Rice,110400,Surplus Biomass Residue,2015–18,11.5,14.1,2380,27.235,79.019,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Mathura,Wheat Straw,Wheat,103500,Surplus Biomass Residue,2015–18,16,14.6,2330,27.492,77.673,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Mau,Maize Residue,Maize,76000,Surplus Biomass Residue,2015–18,13,15.2,2040,25.941,83.561,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Meerut,Sugarcane Bagasse,Sugarcane,168000,Surplus Biomass Residue,2015–18,50.5,8.8,2700,28.984,77.706,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Mirzapur,Rice Husk,Rice,117600,Surplus Biomass Residue,2015–18,10.5,13.9,2280,25.146,82.569,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Moradabad,Wheat Straw,Wheat,109200,Surplus Biomass Residue,2015–18,15,14.4,2240,28.838,78.776,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Muzaffarnagar,Maize Residue,Maize,80800,Surplus Biomass Residue,2015–18,15.5,15,2290,29.472,77.708,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Pilibhit,Sugarcane Bagasse,Sugarcane,130500,Surplus Biomass Residue,2015–18,49.5,8.6,2600,28.631,79.805,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Pratapgarh,Rice Husk,Rice,124800,Surplus Biomass Residue,2015–18,13,15.1,2570,25.897,81.945,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Prayagraj,Wheat Straw,Wheat,85500,Surplus Biomass Residue,2015–18,14,14.2,2160,25.435,81.846,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Raebareli,Maize Residue,Maize,85600,Surplus Biomass Residue,2015–18,14.5,14.8,2200,26.234,81.24,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Rampur,Sugarcane Bagasse,Sugarcane,139500,Surplus Biomass Residue,2015–18,48.5,8.4,2500,28.799,79.025,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Saharanpur,Rice Husk,Rice,132000,Surplus Biomass Residue,2015–18,12,14.9,2470,29.964,77.546,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Sambhal,Wheat Straw,Wheat,91200,Surplus Biomass Residue,2015–18,16.5,14,2420,28.584,78.571,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Sant Kabir Nagar,Maize Residue,Maize,90400,Surplus Biomass Residue,2015–18,13.5,14.6,2120,26.691,83.072,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Shahjahanpur,Sugarcane Bagasse,Sugarcane,148500,Surplus Biomass Residue,2015–18,51,9.6,2810,27.881,79.909,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Shamli,Rice Husk,Rice,102000,Surplus Biomass Residue,2015–18,11,14.7,2380,29.45,77.315,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Shravasti,Wheat Straw,Wheat,96900,Surplus Biomass Residue,2015–18,15.5,13.8,2330,27.508,82.049,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Siddharthnagar,Maize Residue,Maize,70400,Surplus Biomass Residue,2015–18,12.5,14.4,2040,27.257,83.117,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Sitapur,Sugarcane Bagasse,Sugarcane,157500,Surplus Biomass Residue,2015–18,50,9.4,2700,27.574,80.665,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Sonbhadra,Rice Husk,Rice,109200,Surplus Biomass Residue,2015–18,13.5,14.5,2280,24.688,83.068,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Sultanpur,Wheat Straw,Wheat,102600,Surplus Biomass Residue,2015–18,14.5,13.6,2240,26.265,82.073,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Unnao,Maize Residue,Maize,75200,Surplus Biomass Residue,2015–18,15,15.6,2290,26.547,80.487,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttar Pradesh,Varanasi,Sugarcane Bagasse,Sugarcane,166500,Surplus Biomass Residue,2015–18,49,9.2,2600,25.318,82.974,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Anantnag,Rice Husk,Rice,116400,Surplus Biomass Residue,2015–18,12.5,14.3,2570,33.731,75.154,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Bandipora,Wheat Straw,Wheat,108300,Surplus Biomass Residue,2015–18,13.5,13.4,2160,34.417,74.637,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Baramulla,Maize Residue,Maize,80000,Surplus Biomass Residue,2015–18,14,15.4,2200,34.202,74.348,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Budgam,Sugarcane Bagasse,Sugarcane,129000,Surplus Biomass Residue,2015–18,51.5,9,2500,34.015,74.723,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Doda,Rice Husk,Rice,123600,Surplus Biomass Residue,2015–18,11.5,14.1,2470,33.149,75.548,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Ganderbal,Wheat Straw,Wheat,84600,Surplus Biomass Residue,2015–18,16,14.6,2420,34.226,74.771,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Jammu,Maize Residue,Maize,84800,Surplus Biomass Residue,2015–18,13,15.2,2120,32.726,74.857,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Kathua,Sugarcane Bagasse,Sugarcane,138000,Surplus Biomass Residue,2015–18,50.5,8.8,2810,32.386,75.518,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Kishtwar,Rice Husk,Rice,130800,Surplus Biomass Residue,2015–18,10.5,13.9,2380,33.314,75.768,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Kulgam,Wheat Straw,Wheat,90200,Surplus Biomass Residue,2015–18,15,14.4,2330,33.638,75.019,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Kupwara,Maize Residue,Maize,89600,Surplus Biomass Residue,2015–18,15.5,15,2040,34.526,74.255,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Poonch,Sugarcane Bagasse,Sugarcane,147000,Surplus Biomass Residue,2015–18,49.5,8.6,2700,33.771,74.092,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Pulwama,Rice Husk,Rice,138000,Surplus Biomass Residue,2015–18,13,15.1,2280,33.874,74.899,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Rajouri,Wheat Straw,Wheat,96000,Surplus Biomass Residue,2015–18,14,14.2,2240,33.379,74.315,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Ramban,Maize Residue,Maize,69600,Surplus Biomass Residue,2015–18,14.5,14.8,2290,33.243,75.236,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Reasi,Sugarcane Bagasse,Sugarcane,156000,Surplus Biomass Residue,2015–18,48.5,8.4,2600,33.081,74.832,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Samba,Rice Husk,Rice,108000,Surplus Biomass Residue,2015–18,12,14.9,2570,32.563,75.119,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Shopian,Wheat Straw,Wheat,101600,Surplus Biomass Residue,2015–18,16.5,14,2160,33.717,74.835,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Srinagar,Maize Residue,Maize,74400,Surplus Biomass Residue,2015–18,13.5,14.6,2200,34.083,74.797,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Jammu and Kashmir,Udhampur,Sugarcane Bagasse,Sugarcane,165000,Surplus Biomass Residue,2015–18,51,9.6,2500,32.916,75.141,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Almora,Rice Husk,Rice,115200,Surplus Biomass Residue,2015–18,11,14.7,2470,29.597,79.66,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Bageshwar,Wheat Straw,Wheat,107300,Surplus Biomass Residue,2015–18,15.5,13.8,2420,29.838,79.771,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Chamoli,Maize Residue,Maize,79200,Surplus Biomass Residue,2015–18,12.5,14.4,2120,30.404,79.319,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Champawat,Sugarcane Bagasse,Sugarcane,127500,Surplus Biomass Residue,2015–18,50,9.4,2810,29.334,80.096,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Dehradun,Rice Husk,Rice,122400,Surplus Biomass Residue,2015–18,13.5,14.5,2380,30.325,78.043,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Haridwar,Wheat Straw,Wheat,83600,Surplus Biomass Residue,2015–18,14.5,13.6,2330,29.945,78.164,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Nainital,Maize Residue,Maize,84000,Surplus Biomass Residue,2015–18,15,15.6,2040,29.391,79.454,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Pauri Garhwal,Sugarcane Bagasse,Sugarcane,136500,Surplus Biomass Residue,2015–18,49,9.2,2700,30.15,78.78,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Pithoragarh,Rice Husk,Rice,129600,Surplus Biomass Residue,2015–18,12.5,14.3,2280,29.583,80.218,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Rudraprayag,Wheat Straw,Wheat,89300,Surplus Biomass Residue,2015–18,13.5,13.4,2240,30.285,78.981,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Tehri Garhwal,Maize Residue,Maize,88800,Surplus Biomass Residue,2015–18,14,15.4,2290,30.375,78.48,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Udham Singh Nagar,Sugarcane Bagasse,Sugarcane,145500,Surplus Biomass Residue,2015–18,51.5,9,2600,28.975,79.4,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+Uttarakhand,Uttarkashi,Rice Husk,Rice,136800,Surplus Biomass Residue,2015–18,11.5,14.1,2570,30.729,78.443,"National Biomass Atlas of India (SSS-NIBE/MNRE), based on ASCI study"
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
