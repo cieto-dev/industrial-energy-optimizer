@@ -380,7 +380,7 @@
       },
       "credit_limit": {
         "maximum_guarantee_eligible_credit_inr": 50000000,
-        "maximum_guarantee_eligible_credit_crore": 2
+        "maximum_guarantee_eligible_credit_crore": 5
       },
       "collateral": {
         "collateral_required": false,
@@ -389,7 +389,49 @@
       "guarantee_coverage": {
         "minimum_percent": 75,
         "maximum_percent": 90,
-        "exact_percentage": "depends on borrower/category/loan conditions"
+        "coverage_range_percent": [
+          75,
+          90
+        ],
+        "coverage_basis": "Coverage varies by borrower category, eligible credit-facility amount and applicable CGTMSE provisions; it is not a universal 90% guarantee.",
+        "category_rules": {
+          "micro_enterprises": {
+            "up_to_5_lakh_percent": 85,
+            "above_5_lakh_to_50_lakh_percent": 75,
+            "above_50_lakh_to_500_lakh_percent": 75
+          },
+          "mse_north_east_region": {
+            "coverage_percent": 80,
+            "note": "Includes applicable MSEs in the North Eastern Region, Sikkim, Union Territory of Jammu and Kashmir and Union Territory of Ladakh under the current CGTMSE framework."
+          },
+          "women_entrepreneurs": {
+            "coverage_percent": 90
+          },
+          "sc_st_entrepreneurs": {
+            "coverage_percent": 85
+          },
+          "person_with_disability": {
+            "coverage_percent": 85
+          },
+          "mse_promoted_by_agniveers": {
+            "coverage_percent": 85
+          },
+          "mse_in_aspirational_district": {
+            "coverage_percent": 85
+          },
+          "zed_certified_mse": {
+            "coverage_percent": 85
+          },
+          "all_other_category_of_borrowers": {
+            "coverage_percent": 75
+          }
+        },
+        "identified_credit_deficient_district_adjustment": {
+          "enabled": true,
+          "additional_coverage_percent": 5,
+          "rule": "Eligible MSEs situated in Identified Credit Deficient Districts may receive an additional 5 percentage points over the otherwise applicable coverage, subject to the applicable CGTMSE provisions and caps.",
+          "project_range_note": "The general project model must not assume a value above 90% unless the specific applicable CGTMSE rule for the borrower and district is explicitly verified."
+        }
       },
       "policy_objective": "Increase availability of institutional credit to MSEs without requiring conventional collateral or third-party guarantees.",
       "optimizer_application": {
@@ -397,11 +439,23 @@
         "direct_subsidy": false,
         "capex_adjustment": 0,
         "financing_adjustment": "reduce collateral/credit-risk barrier rather than directly reducing technology CAPEX",
-        "use_case": "identify pathways that can be financed through eligible collateral-free credit"
+        "use_case": "identify pathways that can be financed through eligible collateral-free credit",
+        "coverage_selection_rule": "Select the applicable guarantee coverage percentage from borrower category, eligible credit-facility amount and other verified CGTMSE conditions. Do not default to 90%."
       },
-      "important_limitation": "CGTMSE is a credit guarantee to the lender, not a cash subsidy paid directly to the MSME.",
+      "important_limitations": [
+        "CGTMSE is a credit guarantee to the lender, not a cash subsidy paid directly to the MSME.",
+        "Guarantee coverage is category-dependent and must not be represented as a universal fixed percentage.",
+        "The optimizer must not subtract guarantee coverage from project CAPEX.",
+        "The optimizer must not treat guarantee coverage as cash received by the factory.",
+        "Final coverage must be verified against the current CGTMSE scheme document and applicable circulars before financial commitment."
+      ],
       "source": "Ministry of MSME / CGTMSE",
-      "source_quality": "official"
+      "source_quality": "official",
+      "source_reference": {
+        "official_page": "https://www.cgtmse.in/Home/VS/3",
+        "scheme_document": "https://www.cgtmse.in/Default/ViewFile/?id=1704475709853_CGTMSE+-+Scheme+Document+CGS+I_updated+as+on+Dec+15+2023.pdf&path=Page",
+        "current_coverage_reference": "https://www.cgtmse.in/Home/VS/3"
+      }
     },
 
     "PMEGP": {
@@ -790,7 +844,8 @@
     },
     "credit_guarantee": {
       "formula": "do_not_reduce_capex_by_guarantee_percentage",
-      "treatment": "credit guarantee reduces lender credit risk; it is not a direct cash subsidy"
+      "treatment": "credit guarantee reduces lender credit risk; it is not a direct cash subsidy",
+      "coverage_treatment": "select the applicable CGTMSE coverage percentage from the verified borrower/category rules; coverage percentage must not be treated as a CAPEX reduction"
     },
     "technical_support": {
       "formula": "do_not_monetize_unless_actual_eligible_cost_support_is_defined",
@@ -808,6 +863,9 @@
     "Do not apply PMEGP to an ordinary existing-factory retrofit without checking PMEGP's new-enterprise conditions.",
     "Do not treat ADEETIE interest subvention as a capital subsidy.",
     "Do not treat CGTMSE guarantee coverage as money received by the factory.",
+    "Do not treat CGTMSE guarantee coverage as a reduction in technology CAPEX.",
+    "Do not assume CGTMSE provides one universal coverage percentage to every eligible borrower.",
+    "Do not use the maximum CGTMSE coverage percentage unless the borrower's specific category and applicable conditions have been verified.",
     "Do not treat RAMP's total outlay as a subsidy available directly to an individual MSME.",
     "Do not treat MSE-CDP cluster grants as individual-factory grants.",
     "Do not assume ZED certification support pays for the entire energy-transition project.",
@@ -831,7 +889,9 @@
       "new eligibility notification",
       "scheme closure",
       "scheme extension",
-      "new RAMP sub-scheme"
+      "new RAMP sub-scheme",
+      "new CGTMSE scheme document or circular",
+      "change in CGTMSE guarantee coverage rules"
     ]
   },
 
@@ -864,7 +924,8 @@
     {
       "source": "CGTMSE",
       "authority": "Government-supported credit guarantee institution",
-      "purpose": "Credit guarantee rules and current guarantee framework"
+      "purpose": "Credit guarantee rules and current guarantee framework",
+      "official_url": "https://www.cgtmse.in/Home/VS/3"
     }
   ]
 }
