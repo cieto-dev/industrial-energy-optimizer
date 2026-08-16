@@ -4,9 +4,7 @@
   "country": "India",
   "sector": "Non-metallic minerals",
   "subsector": "Cement manufacturing",
-
   "description": "Energy-intensive cement manufacturing based on raw-material preparation, clinker production in a rotary kiln system, clinker cooling, and cement grinding/blending.",
-
   "typical_temperature": {
     "min": 900,
     "max": 1450,
@@ -18,7 +16,6 @@
       "NITI Aayog Roadmap for Cement Sector Decarbonisation 2026"
     ]
   },
-
   "process_temperature_ranges": {
     "raw_material_drying": {
       "min": 100,
@@ -29,7 +26,6 @@
         "hot_gas_recovery"
       ]
     },
-
     "raw_meal_preheating": {
       "min": 300,
       "max": 850,
@@ -40,7 +36,6 @@
         "kiln_heat_integration"
       ]
     },
-
     "calcination": {
       "min": 850,
       "max": 1000,
@@ -52,7 +47,6 @@
         "alternative_fuel_substitution"
       ]
     },
-
     "clinker_formation": {
       "min": 1200,
       "max": 1450,
@@ -64,7 +58,6 @@
         "refractory_optimization"
       ]
     },
-
     "clinker_cooling": {
       "hot_clinker_temperature": 1450,
       "target_cooled_clinker_temperature": 100,
@@ -74,7 +67,6 @@
         "waste_heat_recovery"
       ]
     },
-
     "cement_grinding": {
       "temperature_sensitive": true,
       "typical_process_temperature": {
@@ -89,7 +81,6 @@
       ]
     }
   },
-
   "production_process": [
     {
       "stage": 1,
@@ -196,7 +187,6 @@
       ]
     }
   ],
-
   "common_fuels": [
     "Coal",
     "Petroleum Coke",
@@ -208,7 +198,6 @@
     "Used Tyres",
     "Waste Oils"
   ],
-
   "primary_fuels_in_india": [
     {
       "fuel": "Coal",
@@ -221,7 +210,6 @@
       "use": "Kiln and calciner thermal energy"
     }
   ],
-
   "alternative_fuels": {
     "enabled": true,
     "term": "Alternative Fuels and Raw Materials",
@@ -250,7 +238,6 @@
     ],
     "optimizer_rule": "Do not assume biomass or RDF can replace an arbitrary percentage of coal. Calculate feasible thermal substitution only after fuel-quality, feeding-system and emission constraints are satisfied."
   },
-
   "energy_characteristics": {
     "energy_intensity": {
       "thermal": {
@@ -265,13 +252,11 @@
         "basis": "Indian cement-sector average reported in NITI Aayog 2026 roadmap"
       }
     },
-
     "thermal_energy_share": {
       "approximate_share_percent": 90,
       "scope": "overall cement manufacturing energy use",
       "use": "Indicates that thermal-process decarbonisation is a primary optimization target."
     },
-
     "indian_fuel_mix_reference": {
       "coal_and_pet_coke_share_percent": 97,
       "oil_share_percent": 1,
@@ -280,7 +265,6 @@
       "warning": "These values describe the cited Indian-sector reference and must not be interpreted as the exact fuel mix of every individual cement plant."
     }
   },
-
   "emissions_profile": {
     "indian_sector_emission_intensity": {
       "value": 0.63,
@@ -288,7 +272,6 @@
       "reference_year": 2023,
       "source": "NITI Aayog Roadmap for Cement Sector Decarbonisation 2026"
     },
-
     "indian_sector_total_emissions": {
       "value": 246,
       "unit": "MtCO2e_per_year",
@@ -296,17 +279,14 @@
       "cement_production_reference": 391,
       "production_unit": "Mt"
     },
-
     "emission_sources": {
       "limestone_calcination_percent": 55,
       "on_site_fuel_combustion_percent": 33,
       "electricity_percent": 12,
       "source": "NITI Aayog 2026 roadmap executive summary"
     },
-
     "important_model_rule": "Replacing fossil fuel does not eliminate process CO2 from limestone calcination. The emissions engine must separately model process emissions and combustion emissions."
   },
-
   "production_structure_india": {
     "reference_year": 2024,
     "installed_capacity_mtpa": 622,
@@ -318,13 +298,11 @@
     "clinkerization_units": 5,
     "source": "NITI Aayog Roadmap for Cement Sector Decarbonisation 2026"
   },
-
   "clinker_characteristics": {
     "clinker_to_cement_ratio_india_reference_percent": 67.5,
     "potential_ratio_if_bottlenecks_addressed_percent": 62,
     "reference_year": 2026,
     "source": "NITI Aayog Roadmap for Cement Sector Decarbonisation 2026",
-
     "decarbonization_effect": {
       "energy_saved_per_tonne_clinker_displaced": 3.7,
       "energy_unit": "GJ",
@@ -332,7 +310,6 @@
       "co2_unit": "tCO2",
       "source": "NITI Aayog citing IEA"
     },
-
     "eligible_substitutes": [
       "Ground Granulated Blast Furnace Slag",
       "Fly Ash",
@@ -341,10 +318,8 @@
       "Pozzolanic Materials",
       "Bio Ash"
     ],
-
     "optimizer_rule": "Clinker substitution must preserve the applicable cement-product quality and BIS specification requirements. Do not treat the theoretical substitution ratio as automatically achievable."
   },
-
   "common_energy_consumers": [
     {
       "equipment": "Rotary Kiln",
@@ -392,7 +367,6 @@
       "importance": "medium"
     }
   ],
-
   "recommended_technologies": [
     "Waste Heat Recovery",
     "High Efficiency Clinker Cooler",
@@ -411,9 +385,7 @@
     "Green Electricity Procurement",
     "Carbon Capture Utilisation and Storage"
   ],
-
   "technology_profiles": {
-
     "waste_heat_recovery": {
       "priority": "very_high",
       "applicable_processes": [
@@ -429,7 +401,6 @@
       "selection_rule": "Evaluate only when sufficient recoverable waste-heat flow and temperature are available.",
       "source": "BEE energy-efficient technology database"
     },
-
     "high_efficiency_clinker_cooler": {
       "priority": "very_high",
       "purpose": [
@@ -441,7 +412,6 @@
       "source": "BEE ADEETIE energy-efficient technology database",
       "selection_rule": "Use the BEE saving range as a technology reference, not as a guaranteed plant-specific saving."
     },
-
     "suspension_preheater": {
       "priority": "very_high",
       "purpose": [
@@ -455,7 +425,6 @@
         "source": "BEE energy-efficient technology database"
       }
     },
-
     "kiln_combustion_improvement": {
       "priority": "high",
       "purpose": [
@@ -471,7 +440,6 @@
         "advanced_process_control"
       ]
     },
-
     "alternative_fuels_and_raw_materials": {
       "priority": "very_high",
       "purpose": [
@@ -484,7 +452,6 @@
       "target_year": 2030,
       "important_constraint": "Fuel quality and supply reliability must be verified before calculating substitution."
     },
-
     "clinker_substitution": {
       "priority": "very_high",
       "purpose": [
@@ -497,7 +464,6 @@
       "potential_india_clinker_ratio_percent": 62,
       "source": "NITI Aayog 2026"
     },
-
     "high_efficiency_grinding": {
       "priority": "high",
       "applicable_equipment": [
@@ -508,7 +474,6 @@
       ],
       "main_benefit": "electricity reduction"
     },
-
     "variable_frequency_drives": {
       "priority": "medium",
       "applicable_equipment": [
@@ -519,7 +484,6 @@
       ],
       "main_benefit": "electricity reduction through load matching"
     },
-
     "process_automation": {
       "priority": "high",
       "applicable_processes": [
@@ -530,7 +494,6 @@
       ],
       "main_benefit": "stable_operation and reduced specific energy consumption"
     },
-
     "solar_pv": {
       "priority": "medium",
       "applicable_loads": [
@@ -543,13 +506,11 @@
       "limitation": "Solar PV cannot directly replace the 1450 C clinkerization heat requirement.",
       "optimizer_rule": "Evaluate solar PV against the factory electricity load, available roof/land area and grid/export constraints."
     },
-
     "green_electricity_procurement": {
       "priority": "medium",
       "applicable_to": "electricity_consumption",
       "limitation": "Reduces electricity-related emissions but does not remove direct kiln combustion emissions or limestone calcination emissions."
     },
-
     "carbon_capture_utilisation_and_storage": {
       "priority": "future_high",
       "technology_status": "emerging_pilot_and_scale_up",
@@ -563,20 +524,17 @@
       "optimizer_rule": "Do not rank CCUS as an ordinary low-cost MSME retrofit. Treat it as a high-capex, infrastructure-dependent pathway requiring project-specific feasibility."
     }
   },
-
   "technology_exclusions": {
     "heat_pump": {
       "default_status": "not_suitable_for_main_clinker_process",
       "reason": "Main clinker production requires approximately 1450 C process temperatures, far above conventional industrial heat-pump operating ranges.",
       "allowed_for_auxiliary_low_temperature_loads": true
     },
-
     "standard_electric_boiler": {
       "default_status": "not_suitable_for_kiln_clinkerization",
       "reason": "A conventional electric boiler produces steam and cannot directly supply the high-temperature rotary-kiln clinkerization process.",
       "allowed_for_auxiliary_steam_loads": true
     },
-
     "solar_thermal": {
       "default_status": "not_suitable_as_primary_kiln_heat_source",
       "reason": "Conventional solar-thermal systems cannot be assumed to deliver the continuous 1200-1450 C clinkerization duty required by a cement kiln.",
@@ -586,14 +544,12 @@
         "preheating_where_site_specific_feasibility_exists"
       ]
     },
-
     "biomass_boiler": {
       "default_status": "not_a_direct_kiln_replacement",
       "reason": "A biomass boiler generates steam/thermal fluid rather than directly replacing the rotary-kiln combustion system.",
       "cement_specific_application": "Biomass-derived fuels may be considered as alternative kiln fuels when fuel quality, feeding and emission constraints are satisfied."
     }
   },
-
   "decarbonization_pathways": [
     {
       "pathway_id": "cement_efficiency_first",
@@ -664,7 +620,6 @@
       "primary_objective": "address_process_CO2_that_cannot_be_removed_by_fuel_switching"
     }
   ],
-
   "constraint_inputs_required": [
     "cement_production_tonnes_per_year",
     "clinker_production_tonnes_per_year",
@@ -693,44 +648,36 @@
     "budget",
     "location"
   ],
-
   "decision_rules": {
     "high_temperature_process": {
       "condition": "required_process_temperature_c > 500",
       "effect": "exclude_conventional_heat_pump_as_primary_process_heat_source"
     },
-
     "clinkerization": {
       "required_temperature_c": 1450,
       "effect": "retain_high_temperature_kiln_based_process"
     },
-
     "alternative_fuel": {
       "condition": "alternative_fuel_available == true AND fuel_quality_verified == true",
       "effect": "evaluate_thermal_substitution"
     },
-
     "waste_heat_recovery": {
       "condition": "recoverable_waste_heat_available == true",
       "effect": "evaluate_WHR_before_new_heat_generation"
     },
-
     "clinker_substitution": {
       "condition": "eligible_SCM_available == true AND product_standard_compliance == true",
       "effect": "evaluate_clinker_factor_reduction"
     },
-
     "solar_pv": {
       "condition": "electric_load_exists == true AND adequate_site_area == true",
       "effect": "evaluate_as_electricity_decarbonization_measure"
     },
-
     "ccus": {
       "condition": "large_stationary_CO2_source == true",
       "effect": "evaluate_as_long_term_decarbonization_pathway"
     }
   },
-
   "benchmarking": {
     "india_average": {
       "thermal_energy": {
@@ -744,10 +691,8 @@
         "unit": "kWh_per_t_cement"
       }
     },
-
     "benchmarking_rule": "The Indian average is a reference benchmark, not a universal plant target. Actual SEC depends on kiln technology, plant vintage, capacity, raw material characteristics, clinker factor, fuel characteristics, product mix and operating conditions."
   },
-
   "pat_relevance": {
     "sector": "Cement",
     "included_in_PAT": true,
@@ -758,7 +703,6 @@
     "source": "Bureau of Energy Efficiency",
     "optimizer_rule": "Where a factory qualifies as a PAT Designated Consumer, policy/compliance calculations must use the applicable plant-specific PAT target rather than a generic sector target."
   },
-
   "india_decarbonization_reference": {
     "niti_aayog_2026": {
       "priority_levers": [
@@ -780,7 +724,6 @@
       "source": "NITI Aayog Roadmap for Cement Sector Decarbonisation, January 2026"
     }
   },
-
   "safety_and_quality_rules": {
     "do_not_assume_universal_energy_intensity": true,
     "do_not_assume_universal_fuel_mix": true,
@@ -791,7 +734,6 @@
     "do_not_use_sector_average_as_factory_baseline_when_factory_data_exists": true,
     "factory_measured_data_has_priority_over_sector_average": true
   },
-
   "data_quality": {
     "profile_type": "engineering_knowledge_base",
     "geographic_scope": "India",
@@ -804,57 +746,18 @@
     "last_verified": "2026-08-16",
     "verification_rule": "Sector averages are reference values; plant-specific inputs must override them whenever measured factory data is available."
   },
-
   "source_registry": [
     {
-      "organization": "NITI Aayog",
-      "document": "Roadmap for Cement Sector Decarbonisation",
-      "publication_date": "2026-01",
-      "data_used": [
-        "Indian cement production",
-        "installed capacity",
-        "number of manufacturing units",
-        "specific thermal energy consumption",
-        "specific electricity consumption",
-        "fuel mix",
-        "emission intensity",
-        "clinker ratio",
-        "RDF target",
-        "clinker substitution",
-        "CCUS"
-      ]
+      "source_id": "niti_cement_decarbonisation_roadmap"
     },
     {
-      "organization": "Bureau of Energy Efficiency",
-      "document": "PAT Cement Sector Material and Energy Efficient Technology Database",
-      "data_used": [
-        "PAT applicability",
-        "clinker cooler efficiency",
-        "suspension preheater",
-        "waste heat recovery",
-        "alternative fuels",
-        "cement-specific energy efficiency measures"
-      ]
+      "source_id": "bee_cement_pat_database"
     },
     {
-      "organization": "Bureau of Indian Standards",
-      "document": "Cement technical reference material",
-      "data_used": [
-        "cement manufacturing process",
-        "rotary kiln",
-        "clinker production",
-        "1450 C clinkerization temperature"
-      ]
+      "source_id": "bis_cement_reference"
     },
     {
-      "organization": "International Energy Agency",
-      "document": "Driving Energy Efficiency in Heavy Industries - Cement",
-      "data_used": [
-        "cement process structure",
-        "thermal energy accounting",
-        "electricity consumption boundary",
-        "clinker production energy characteristics"
-      ]
+      "source_id": "iea_heavy_industry_cement"
     }
   ]
 }
