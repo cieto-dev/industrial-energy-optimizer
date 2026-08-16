@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parents[2]
 EMISSION_FILE = (
     BASE_DIR
     / "knowledge-base"
-    / "constraints"
+    / "emissions"
     / "emission_factors.json"
 )
 

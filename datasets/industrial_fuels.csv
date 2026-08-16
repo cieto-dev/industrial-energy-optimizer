@@ -12,3 +12,4 @@ Biomass,Briquettes,Industrial,kg,12.5,17.75,MJ/kg,1.68,kg CO₂/kg,BEE + IPCC + 
 Biomass,Pellets,Industrial,kg,9,17.55,MJ/kg,1.68,kg CO₂/kg,BEE + IPCC + supplier quotation/test certificate
 Biomass,Rice Husk Pellets,Industrial,kg,10.5,15.05,MJ/kg,1.52,kg CO₂/kg,BEE + IPCC + supplier quotation/test certificate
 Biomass,Paddy Straw/Parali Pellets,Industrial,kg,11,15.9,MJ/kg,1.52,kg CO₂/kg,BEE + IPCC + supplier quotation/test certificate
+Liquid,Furnace Oil,Industrial/bulk,kg,42.70,43.96,MJ/kg,3.13,kg CO₂/kg,BEE (GCV) + IPCC 2006 (CO₂ Factor)

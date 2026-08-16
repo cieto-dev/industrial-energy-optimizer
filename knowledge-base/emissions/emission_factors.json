@@ -1,0 +1,81 @@
+{
+    "coal": {
+        "emission_factor": 96.10,
+        "unit": "tCO2/TJ",
+        "ncv": 19.63,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "kg/day",
+        "source_id": "SRC003",
+        "source_type": "IPCC-based",
+        "ncv_source_id": "SRC004",
+        "ncv_source_note": "Non-coking coal"
+    },
+
+    "diesel": {
+        "emission_factor": 74.10,
+        "unit": "tCO2/TJ",
+        "ncv": 43.0,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "L/day",
+        "source_id": "SRC003",
+        "source_type": "IPCC-based",
+        "ncv_source_id": "SRC004"
+    },
+
+    "lpg": {
+        "emission_factor": 63.10,
+        "unit": "tCO2/TJ",
+        "ncv": 47.3,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "kg/day",
+        "source_id": "SRC003",
+        "source_type": "IPCC-based",
+        "ncv_source_id": "SRC004"
+    },
+
+    "natural_gas": {
+        "emission_factor": 56.10,
+        "unit": "tCO2/TJ",
+        "ncv": 48.0,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "kg/day",
+        "source_id": "SRC003",
+        "source_type": "IPCC-based",
+        "ncv_source_id": "SRC004",
+        "ncv_source_note": "CNG / natural gas"
+    },
+
+    "biomass": {
+        "emission_factor": 100.0,
+        "unit": "tCO2/TJ",
+        "ncv": null,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "kg/day",
+        "source_id": "SRC001",
+        "source_type": "IPCC-based, biogenic CO2",
+        "source_note": "Other Primary Solid Biomass"
+    },
+
+    "biogas": {
+        "emission_factor": 54.6,
+        "unit": "tCO2/TJ",
+        "ncv": 19.88,
+        "ncv_unit": "MJ/m3",
+        "input_unit": "m3/day",
+        "source_id": "SRC001",
+        "source_type": "IPCC-based, biogenic CO2",
+        "ncv_source_id": "SRC002",
+        "ncv_range": "4500-5000 kcal/m3"
+    },
+    "furnace_oil": {
+    "emission_factor": 77.40,
+    "unit": "tCO2/TJ",
+    "ncv": 40.40,
+    "ncv_unit": "TJ/kt",
+    "input_unit": "kg/day",
+    "source_id": "SRC003",
+    "source_type": "IPCC-based",
+    "ncv_source_id": "SRC004",
+    "ncv_source_note": "Residual fuel oil, IPCC 2006 default"
+}
+}

@@ -37,5 +37,13 @@
         "electrification",
         "heat_pump",
         "solar_thermal"
-    ]
+    ],
+    "furnace_oil": [
+        "biomass",
+        "biogas",
+        "electrification",
+        "heat_pump",
+        "solar_thermal"
+    ],
+    "electricity":[]
 }

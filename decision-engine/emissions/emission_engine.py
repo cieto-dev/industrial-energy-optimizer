@@ -53,32 +53,6 @@ def calculate_fuel_emissions(fuel, consumption_per_day):
     }
 
 
-if __name__ == "__main__":
-
-    print("Emission Engine")
-    print("---------------")
-
-    # Example: 2000 kg/day coal
-    result = calculate_fuel_emissions(
-        fuel="coal",
-        consumption_per_day=2000
-    )
-
-    for key, value in result.items():
-        print(f"{key}: {value}")
-
-    print()
-
-    # Example: Biogas from our technology-engine result
-    result = calculate_fuel_emissions(
-        fuel="biogas",
-        consumption_per_day=2263.58
-    )
-
-    for key, value in result.items():
-        print(f"{key}: {value}")
-
-
 def compare_fuels(
     existing_fuel,
     existing_consumption,
@@ -112,15 +86,42 @@ def compare_fuels(
         "replacement_co2_kg_day": replacement["co2_kg_day"],
         "co2_difference_kg_day": round(difference, 2)
     }
+
+
+if __name__ == "__main__":
+
+    print("Emission Engine")
+    print("---------------")
+
+    # Example: 2000 kg/day coal
+    result = calculate_fuel_emissions(
+        fuel="coal",
+        consumption_per_day=2000
+    )
+
+    for key, value in result.items():
+        print(f"{key}: {value}")
+
+    print()
+
+    # Example: Biogas from our technology-engine result
+    result = calculate_fuel_emissions(
+        fuel="biogas",
+        consumption_per_day=2263.58
+    )
+
+    for key, value in result.items():
+        print(f"{key}: {value}")
+
     comparison = compare_fuels(
-    existing_fuel="coal",
-    existing_consumption=2000,
-    replacement_fuel="biogas",
-    replacement_consumption=2263.58
-)
+        existing_fuel="coal",
+        existing_consumption=2000,
+        replacement_fuel="biogas",
+        replacement_consumption=2263.58
+    )
 
-print("\nFuel Comparison")
-print("---------------")
+    print("\nFuel Comparison")
+    print("---------------")
 
-for key, value in comparison.items():
-    print(f"{key}: {value}")
+    for key, value in comparison.items():
+        print(f"{key}: {value}")
