@@ -307,8 +307,8 @@
     "year": 2026,
     "url": "https://beeindia.gov.in/"
   },
-  "niti_msme_roadmap": {
-    "source_id": "niti_msme_roadmap",
+  "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
+    "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026",
     "title": "Roadmap for Green Transition of MSMEs",
     "organization": "NITI Aayog, Government of India",
     "year": 2026,
@@ -342,8 +342,8 @@
     "year": 2026,
     "url": "https://www.iea.org/"
   },
-  "niti_mSME_green_transition_2026": {
-    "source_id": "niti_mSME_green_transition_2026",
+  "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
+    "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026",
     "title": "Roadmap for Green Transition of MSMEs",
     "organization": "NITI Aayog, Government of India",
     "year": 2026,
