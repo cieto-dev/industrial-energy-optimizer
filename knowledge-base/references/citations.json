@@ -1,194 +1,360 @@
 {
-  "coal_emission_factor": {
-    "source_id": "SRC003"
-  },
-  "diesel_emission_factor": {
-    "source_id": "SRC003"
-  },
-  "lpg_emission_factor": {
-    "source_id": "SRC003"
-  },
-  "natural_gas_emission_factor": {
-    "source_id": "SRC003"
-  },
-  "biomass_emission_factor": {
-    "source_id": "SRC001"
-  },
-  "biogas_emission_factor": {
-    "source_id": "SRC001"
-  },
-  "furnace_oil_emission_factor": {
-    "source_id": "SRC003"
-  },
+    "SRC001": {
+        "title": "2006 IPCC Guidelines for National Greenhouse Gas Inventories - Volume 2: Energy",
+        "organization": "Intergovernmental Panel on Climate Change (IPCC)",
+        "year": 2006,
+        "url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html"
+    },
+    "SRC002": {
+        "title": "Biogas Portal",
+        "organization": "Ministry of New and Renewable Energy (MNRE), Government of India",
+        "year": 2026,
+        "url": "https://biogas.mnre.gov.in/"
+    },
+    "SRC003": {
+        "title": "Detailed Procedure for Compliance under Carbon Credit Trading Scheme (CCTS)",
+        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+        "year": 2024,
+        "url": "https://beeindia.gov.in/"
+    },
+    "SRC004": {
+        "title": "India Greenhouse Gas Emissions Inventory",
+        "organization": "Ministry of Environment, Forest and Climate Change (MoEFCC), Government of India",
+        "year": 2019,
+        "url": "https://www.moef.gov.in/"
+    },
 
-  "coal_ncv": {
-    "source_id": "SRC004"
-  },
-  "diesel_ncv": {
-    "source_id": "SRC004"
-  },
-  "lpg_ncv": {
-    "source_id": "SRC004"
-  },
-  "natural_gas_ncv": {
-    "source_id": "SRC004"
-  },
-  "biogas_ncv": {
-    "source_id": "SRC002"
-  },
-  "furnace_oil_ncv": {
-    "source_id": "SRC004"
-  },
+    "SRC_TNERC_ORDER6_2025": {
+        "id": "SRC_TNERC_ORDER6_2025",
+        "label": "TNERC Order No. 6 of 2025 (effective 2025-07-01)"
+    },
+    "SRC_UPERC_FY26": {
+        "id": "SRC_UPERC_FY26",
+        "label": "UPERC FY26 tariff schedule"
+    },
+    "SRC_KERC_MAR2025_ORDER": {
+        "id": "SRC_KERC_MAR2025_ORDER",
+        "label": "KERC tariff order, March 2025, effective FY2025-26"
+    },
+    "SRC_TARIFF_MASTER_REPO": {
+        "id": "SRC_TARIFF_MASTER_REPO",
+        "label": "project repo datasets/electricity_tariffs/tariff_master.csv + tariff_tod.csv, compiled from state DISCOM tariff orders"
+    },
+    "SRC_COAL_INDIA_NOTIFIED": {
+        "id": "SRC_COAL_INDIA_NOTIFIED",
+        "label": "Coal India Ltd notified prices, via Ministry of Coal / CEIC"
+    },
+    "SRC_INDUSTRIAL_FUELS_CSV": {
+        "id": "SRC_INDUSTRIAL_FUELS_CSV",
+        "label": "project repo datasets/industrial_fuels.csv (BEE + IPCC + supplier quotation compile)"
+    },
+    "SRC_PPAC_APM_FORMULA": {
+        "id": "SRC_PPAC_APM_FORMULA",
+        "label": "PPAC / Kirit Parikh Committee APM gas pricing formula (2023 reform)"
+    },
+    "SRC_MOP_COFIRING_POLICY": {
+        "id": "SRC_MOP_COFIRING_POLICY",
+        "label": "Ministry of Power biomass co-firing policy, Nov 2023 (revised, effective FY2024-25)"
+    },
+    "SRC_SOLAR_VENDOR_COMPILE": {
+        "id": "SRC_SOLAR_VENDOR_COMPILE",
+        "label": "8+ independent Indian solar EPC vendor quotes, aggregated"
+    },
+    "SRC_WHR_GLOBAL_BENCHMARK": {
+        "id": "SRC_WHR_GLOBAL_BENCHMARK",
+        "label": "coalbiomassboiler.com industrial WHRB cost-range compilation (non-India)"
+    },
+    "SRC_VFD_INDIAMART": {
+        "id": "SRC_VFD_INDIAMART",
+        "label": "IndiaMART/Moglix marketplace retail listings"
+    },
+    "SRC_MOTOR_IE4_GLOBAL": {
+        "id": "SRC_MOTOR_IE4_GLOBAL",
+        "label": "iecmotores.com global motor-manufacturer technical comparison (non-India)"
+    },
+    "SRC_BIOMASS_BOILER_CHEEMA": {
+        "id": "SRC_BIOMASS_BOILER_CHEEMA",
+        "label": "Cheema Boilers industrial biomass boiler pricing guide"
+    },
+    "SRC_THERMAL_STORAGE_ACADEMIC": {
+        "id": "SRC_THERMAL_STORAGE_ACADEMIC",
+        "label": "ScienceDirect peer-reviewed FIRES-type thermal storage cost benchmark (US-centric)"
+    },
+    "SRC_BATTERY_STORAGE_INDIA_CI": {
+        "id": "SRC_BATTERY_STORAGE_INDIA_CI",
+        "label": "ornatesolar.com India C&I BESS capex reference, 2025"
+    },
+    "SRC_HYDROGEN_IEA_GLOBAL": {
+        "id": "SRC_HYDROGEN_IEA_GLOBAL",
+        "label": "IEA global hydrogen electrolysis cost projections"
+    },
+    "SRC_PROJECT_DEFAULTS": {
+        "id": "SRC_PROJECT_DEFAULTS",
+        "label": "project master document default assumptions (boiler=15yr, motor=12yr lifetime)"
+    },
+    "SRC_MSME_UDYAM_THRESHOLDS": {
+        "id": "SRC_MSME_UDYAM_THRESHOLDS",
+        "label": "MSMED Act 2006, Udyam Registration portal, 2025-04-01 revision"
+    },
+    "SRC_CLCSS_SCHEME": {
+        "id": "SRC_CLCSS_SCHEME",
+        "label": "Ministry of MSME CLCSS scheme documentation"
+    },
+    "SRC_CGTMSE": {
+        "id": "SRC_CGTMSE",
+        "label": "Ministry of MSME + SIDBI CGTMSE scheme documentation"
+    },
+    "SRC_PSL_RBI_2025": {
+        "id": "SRC_PSL_RBI_2025",
+        "label": "RBI Master Directions on Priority Sector Lending, effective 2025-04-01"
+    },
+    "SRC_MNRE_NBP": {
+        "id": "SRC_MNRE_NBP",
+        "label": "MNRE National Bioenergy Programme Phase-I guidelines"
+    },
+    "SRC_SIDBI_MSE_GIFT": {
+        "id": "SRC_SIDBI_MSE_GIFT",
+        "label": "SIDBI MSE-GIFT scheme documentation, under RAMP"
+    },
+    "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
+        "id": "SRC_NITI_AAYOG_ROADMAP_JAN2026",
+        "label": "NITI Aayog 'Roadmap for Green Transition of MSMEs', 2026-01-21"
+    },
+    "SRC_RBI_MPC_AUG2026": {
+        "id": "SRC_RBI_MPC_AUG2026",
+        "label": "RBI Monetary Policy Committee statement, 3-5 Aug 2026"
+    },
 
-  "india_green_transition_msme_roadmap": {
-    "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
-  },
+    "SRC_ADEETIE_BEE": {
+        "id": "SRC_ADEETIE_BEE",
+        "label": "BEE ADEETIE scheme documentation"
+    },
+    "SRC_MSE_GIFT": {
+        "id": "SRC_MSE_GIFT",
+        "label": "MSE-GIFT scheme documentation"
+    },
+    "SRC_MSE_SPICE": {
+        "id": "SRC_MSE_SPICE",
+        "label": "MSE-SPICE scheme documentation"
+    },
+    "SRC_ZED": {
+        "id": "SRC_ZED",
+        "label": "MSME Sustainable ZED Certification scheme documentation"
+    },
+    "SRC_MSME_LEAN": {
+        "id": "SRC_MSME_LEAN",
+        "label": "MSME Competitive Lean Scheme documentation"
+    },
+    "SRC_PMEGM": {
+        "id": "SRC_PMEGM",
+        "label": "Prime Minister's Employment Generation Programme (PMEGP)"
+    },
+    "SRC_RAMP": {
+        "id": "SRC_RAMP",
+        "label": "Raising and Accelerating MSME Performance (RAMP) Programme"
+    },
+    "SRC_MSE_CDP": {
+        "id": "SRC_MSE_CDP",
+        "label": "Micro and Small Enterprises Cluster Development Programme (MSE-CDP)"
+    },
 
-  "adeetie_programme": {
-    "source_id": "SRC_ADEETIE_BEE"
-  },
+    "SRC_HEATPUMP_COMPILE": {
+        "id": "SRC_HEATPUMP_COMPILE",
+        "label": "Industrial heat pump CAPEX and COP compilation"
+    },
+    "SRC_ELEC_RESISTANCE_COMPILE": {
+        "id": "SRC_ELEC_RESISTANCE_COMPILE",
+        "label": "Electric resistance industrial heating system CAPEX compilation (India)"
+    },
 
-  "msme_green_finance": {
-    "source_id": "SRC_MSME_GIFT"
-  },
+    "mos_annual_report_2025_26": {
+        "source_id": "mos_annual_report_2025_26",
+        "title": "Annual Report 2025-26",
+        "publisher": "Ministry of Steel, Government of India",
+        "data_used": [
+            "Crude steel production",
+            "Steel capacity",
+            "Capacity utilization"
+        ]
+    },
+    "mos_green_steel_roadmap": {
+        "source_id": "mos_green_steel_roadmap",
+        "title": "Greening the Steel Sector in India: Roadmap and Action Plan",
+        "publisher": "Ministry of Steel, Government of India",
+        "data_used": [
+            "Route-level SEC",
+            "Indian steel energy intensity",
+            "Decarbonization pathways",
+            "Hydrogen",
+            "Renewable energy",
+            "Biochar",
+            "CCUS"
+        ]
+    },
+    "mos_green_steel_taxonomy": {
+        "source_id": "mos_green_steel_taxonomy",
+        "title": "Green Steel Taxonomy for India",
+        "publisher": "Ministry of Steel, Government of India",
+        "data_used": [
+            "Green steel policy context"
+        ]
+    },
+    "bee_steel_rerolling": {
+        "source_id": "bee_steel_rerolling",
+        "title": "Energy and Resource Mapping of Steel Re-rolling Sector",
+        "publisher": "Bureau of Energy Efficiency, Government of India",
+        "data_used": [
+            "Induction furnace characteristics",
+            "Reheating furnace characteristics",
+            "Rerolling energy systems",
+            "1200 C rolling temperature"
+        ]
+    },
+    "bee_adeetie": {
+        "source_id": "bee_adeetie",
+        "title": "List of Energy Efficient Technologies",
+        "publisher": "Bureau of Energy Efficiency, Government of India",
+        "data_used": [
+            "Reheating furnace with WHR",
+            "Waste heat recovery",
+            "BOF gas recovery",
+            "Oxy-fuel combustion",
+            "Steel-sector technology savings"
+        ]
+    },
+    "niti_msme_roadmap": {
+        "source_id": "niti_msme_roadmap",
+        "title": "Roadmap for Green Transition of MSMEs",
+        "publisher": "NITI Aayog, Government of India",
+        "publication_year": 2026,
+        "data_used": [
+            "Steel rerolling MSME energy consumption",
+            "Fuel mix",
+            "SEC",
+            "Emissions"
+        ]
+    },
+    "mos_safety_eaf": {
+        "source_id": "mos_safety_eaf",
+        "title": "Process Based Safety Guidelines for Iron & Steel Sector - Electric Arc Furnace",
+        "publisher": "Ministry of Steel, Government of India",
+        "data_used": [
+            "EAF process description",
+            "EAF operating context"
+        ]
+    },
+    "mos_safety_bf": {
+        "source_id": "mos_safety_bf",
+        "title": "Process Based Safety Guidelines for Iron & Steel Sector - Blast Furnace",
+        "publisher": "Ministry of Steel, Government of India",
+        "data_used": [
+            "Hot blast temperature",
+            "Blast furnace process"
+        ]
+    },
+    "flexiheat_dst": {
+        "source_id": "flexiheat_dst",
+        "title": "FlexiHeat-DST Industrial Heating Decision Support Research",
+        "publisher": "Energy Conversion and Management: X",
+        "publication_year": 2026,
+        "data_used": [
+            "Steel process temperature ranges",
+            "EAF",
+            "Ladle furnace",
+            "Reheating furnace",
+            "Electric technology selection"
+        ]
+    },
+    "iea_heavy_industry": {
+        "source_id": "iea_heavy_industry",
+        "title": "Driving Energy Efficiency in Heavy Industries",
+        "publisher": "International Energy Agency",
+        "data_used": [
+            "Route-level steel energy intensity benchmarks",
+            "BF-BOF",
+            "DRI-EAF",
+            "Scrap-EAF"
+        ]
+    },
 
-  "msme_circular_economy_spice": {
-    "source_id": "SRC_MSME_SPICE"
-  },
-
-  "msme_zed_scheme": {
-    "source_id": "SRC_MSME_ZED"
-  },
-
-  "msme_lean_scheme": {
-    "source_id": "SRC_MSME_LEAN"
-  },
-
-  "cgtmse_credit_guarantee": {
-    "source_id": "SRC_CGTMSE"
-  },
-
-  "udyam_msme_classification": {
-    "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
-  },
-
-  "renewable_consumption_obligation_central_framework": {
-    "source_id": "SRC_MOP_RCO_2025"
-  },
-
-  "renewable_purchase_obligation_state_framework": {
-    "source_id": "SRC_SERC_RPO_STATE_RULES"
-  },
-
-  "industrial_electricity_tariff_tamil_nadu": {
-    "source_id": "SRC_TNERC_ORDER6_2025"
-  },
-
-  "industrial_electricity_tariff_uttar_pradesh": {
-    "source_id": "SRC_UPERC_FY26"
-  },
-
-  "industrial_electricity_tariff_haryana": {
-    "source_id": "SRC_HERC_FY26"
-  },
-
-  "industrial_electricity_tariff_himachal_pradesh": {
-    "source_id": "SRC_HPSEBL_TARIFF_2026"
-  },
-
-  "industrial_electricity_tariff_punjab": {
-    "source_id": "SRC_PSPCL_TARIFF_2026"
-  },
-
-  "industrial_electricity_tariff_uttarakhand": {
-    "source_id": "SRC_URERC_TARIFF_2026"
-  },
-
-  "industrial_heat_electrification": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  },
-
-  "biomass_green_steam_heat": {
-    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
-  },
-
-  "biomass_boiler_efficiency": {
-    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
-  },
-
-  "biomass_fuel_availability": {
-    "source_id": "SRC_BIOMASS_ATLAS_INDIA"
-  },
-
-  "biomass_fuel_quality": {
-    "source_id": "SRC_BIOMASS_ATLAS_INDIA"
-  },
-
-  "industrial_fuel_cost_coal": {
-    "source_id": "SRC_BEE_COAL_INDIA"
-  },
-
-  "industrial_fuel_cost_diesel": {
-    "source_id": "SRC_PPAC_DIESEL"
-  },
-
-  "industrial_fuel_cost_lpg": {
-    "source_id": "SRC_PPAC_LPG"
-  },
-
-  "industrial_fuel_cost_natural_gas": {
-    "source_id": "SRC_PPAC_GAIL_NATURAL_GAS"
-  },
-
-  "industrial_fuel_cost_biomass": {
-    "source_id": "SRC_BIOMASS_SUPPLIER_MARKET_DATA"
-  },
-
-  "industrial_fuel_cost_furnace_oil": {
-    "source_id": "SRC_BEE_FURNACE_OIL"
-  },
-
-  "state_policy_himachal_pradesh": {
-    "source_id": "SRC_HP_INDUSTRIAL_POLICY_2019"
-  },
-
-  "state_policy_punjab": {
-    "source_id": "SRC_PUNJAB_INDUSTRIAL_POLICY_2022"
-  },
-
-  "state_policy_gujarat": {
-    "source_id": "SRC_GUJARAT_INDUSTRIAL_POLICY_2020"
-  },
-
-  "technology_temperature_heat_pump": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  },
-
-  "technology_temperature_electric_boiler": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  },
-
-  "technology_temperature_biomass_boiler": {
-    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
-  },
-
-  "technology_temperature_solar_thermal": {
-    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
-  },
-
-  "technology_biomass_boiler_constraints": {
-    "source_id": "SRC_MNRE_GIZ_BIOMASS_MSME"
-  },
-
-  "technology_electric_boiler_efficiency": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  },
-
-  "industrial_electrification_cost_comparison": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  },
-
-  "industrial_electrification_emissions_comparison": {
-    "source_id": "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026"
-  }
+    "niti_mSME_green_transition_2026": {
+        "source_id": "niti_mSME_green_transition_2026",
+        "publisher": "NITI Aayog",
+        "title": "Roadmap for Green Transition of MSMEs",
+        "year": 2026,
+        "data_used": [
+            "Textile MSME energy consumption",
+            "Textile SEC",
+            "Fuel mix",
+            "Emissions"
+        ]
+    },
+    "bee_textile_sectoral_report": {
+        "source_id": "bee_textile_sectoral_report",
+        "publisher": "Bureau of Energy Efficiency",
+        "title": "Sectoral Report: Energy and Resource Mapping of MSME Textile Sector",
+        "data_used": [
+            "Jet dyeing",
+            "Dyeing temperature",
+            "Steam pressure",
+            "Textile equipment",
+            "Process characteristics"
+        ]
+    },
+    "bee_textile_cluster_manual": {
+        "source_id": "bee_textile_cluster_manual",
+        "publisher": "Bureau of Energy Efficiency",
+        "title": "Manual on Energy Conservation Measures in Textile Cluster",
+        "data_used": [
+            "Jet dyeing",
+            "Dyeing temperature",
+            "Steam-based processing",
+            "Process energy characteristics"
+        ]
+    },
+    "bee_pali_textile_cluster": {
+        "source_id": "bee_pali_textile_cluster",
+        "publisher": "Bureau of Energy Efficiency",
+        "title": "Pali Textile Cluster Manual",
+        "data_used": [
+            "Polyester steaming",
+            "Steamer temperature",
+            "Polymerization temperature",
+            "Thermal processing"
+        ]
+    },
+    "bee_jigger_project": {
+        "source_id": "bee_jigger_project",
+        "publisher": "Bureau of Energy Efficiency / SIDHIEE",
+        "title": "Detailed Project Report - Solar Water Heater for Cotton Dyeing",
+        "data_used": [
+            "Jigger dyeing temperatures",
+            "Steam consumption",
+            "Liquor ratio",
+            "Kier boiling temperature"
+        ]
+    },
+    "teri_textile_energy_efficiency": {
+        "source_id": "teri_textile_energy_efficiency",
+        "publisher": "The Energy and Resources Institute",
+        "title": "Energy efficiency improvements among small and medium textile units in India",
+        "year": 2023,
+        "data_used": [
+            "Spinning energy-saving potential",
+            "Weaving energy-saving potential",
+            "Wet-processing energy-saving potential",
+            "Priority technologies"
+        ]
+    },
+    "mnre_solar_thermal": {
+        "source_id": "mnre_solar_thermal",
+        "publisher": "Ministry of New and Renewable Energy",
+        "title": "Concentrated Solar Thermal",
+        "data_used": [
+            "Industrial solar thermal applications",
+            "Textile applicability",
+            "CST technology",
+            "Thermal storage"
+        ]
+    }
 }
