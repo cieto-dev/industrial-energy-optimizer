@@ -252,7 +252,7 @@ This source represents project-level defaults rather than an external publicatio
 - Year: 2026
 - URL: https://lean.msme.gov.in/Home/Introduction
 
-### SRC_PMEGM — Prime Minister's Employment Generation Programme (PMEGP)
+### SRC_PMEGP — Prime Minister's Employment Generation Programme (PMEGP)
 
 - Organization: Ministry of Micro, Small and Medium Enterprises, Government of India
 - Year: 2026
