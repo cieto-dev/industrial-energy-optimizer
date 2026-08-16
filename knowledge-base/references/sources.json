@@ -23,31 +23,176 @@
         "year": 2019,
         "url": "https://www.moef.gov.in/"
     },
+
+    "SRC_TNERC_ORDER6_2025": {
+        "title": "TNERC Order No. 6 of 2025",
+        "organization": "Tamil Nadu Electricity Regulatory Commission (TNERC)",
+        "year": 2025,
+        "url": "https://www.tnerc.tn.gov.in/"
+    },
+    "SRC_UPERC_FY26": {
+        "title": "FY2025-26 Tariff Schedule for UPPCL Discoms",
+        "organization": "Uttar Pradesh Electricity Regulatory Commission (UPERC)",
+        "year": 2025,
+        "url": "https://www.uperc.org/"
+    },
+    "SRC_KERC_MAR2025_ORDER": {
+        "title": "Tariff Order for FY2025-26",
+        "organization": "Karnataka Electricity Regulatory Commission (KERC)",
+        "year": 2025,
+        "url": "https://kerc.karnataka.gov.in/"
+    },
+    "SRC_TARIFF_MASTER_REPO": {
+        "title": "Compiled State DISCOM Industrial Tariff Master",
+        "organization": "Industrial Energy Transition Optimizer project research compilation from State Electricity Regulatory Commission tariff orders",
+        "year": 2025,
+        "url": "https://solarcalculators.in/discom-tariff/"
+    },
+    "SRC_COAL_INDIA_NOTIFIED": {
+        "title": "Coal India Ltd Notified Prices",
+        "organization": "Coal India Limited / Ministry of Coal / CEIC",
+        "year": 2026,
+        "url": null
+    },
+    "SRC_INDUSTRIAL_FUELS_CSV": {
+        "title": "Industrial Fuels Reference Dataset",
+        "organization": "Industrial Energy Transition Optimizer project research compilation using BEE, IPCC and supplier quotation data",
+        "year": 2026,
+        "url": null
+    },
+    "SRC_PPAC_APM_FORMULA": {
+        "title": "APM Natural Gas Pricing Formula and 2023 Gas Pricing Reform Framework",
+        "organization": "Petroleum Planning & Analysis Cell (PPAC) / Kirit Parikh Committee",
+        "year": 2023,
+        "url": "https://www.ppac.gov.in/"
+    },
+    "SRC_MOP_COFIRING_POLICY": {
+        "title": "Biomass Co-firing Policy for Thermal Power Plants",
+        "organization": "Ministry of Power, Government of India",
+        "year": 2023,
+        "url": "https://powermin.gov.in/"
+    },
+    "SRC_SOLAR_VENDOR_COMPILE": {
+        "title": "Indian Solar EPC Vendor Quotation Compilation",
+        "organization": "Industrial Energy Transition Optimizer project research compilation from independent Indian solar EPC vendors",
+        "year": 2026,
+        "url": null
+    },
+    "SRC_WHR_GLOBAL_BENCHMARK": {
+        "title": "Industrial Waste Heat Recovery Boiler Cost-Range Compilation",
+        "organization": "Coal Biomass Boiler / Industrial technology market reference",
+        "year": 2026,
+        "url": "https://coalbiomassboiler.com/"
+    },
+    "SRC_VFD_INDIAMART": {
+        "title": "Industrial Variable Frequency Drive Market Listings",
+        "organization": "IndiaMART / Moglix",
+        "year": 2026,
+        "url": "https://www.indiamart.com/"
+    },
+    "SRC_MOTOR_IE4_GLOBAL": {
+        "title": "IE4 Motor Technical Comparison",
+        "organization": "Global motor-manufacturer technical reference / IEC Motores",
+        "year": 2026,
+        "url": "https://iecmotores.com/"
+    },
+    "SRC_BIOMASS_BOILER_CHEEMA": {
+        "title": "Industrial Biomass Boiler Pricing Guide",
+        "organization": "Cheema Boilers",
+        "year": 2026,
+        "url": "https://www.cheemaboilers.com/"
+    },
+    "SRC_THERMAL_STORAGE_ACADEMIC": {
+        "title": "FIRES-Type Thermal Energy Storage Cost Benchmark",
+        "organization": "ScienceDirect / Peer-Reviewed Academic Literature",
+        "year": 2026,
+        "url": "https://www.sciencedirect.com/"
+    },
+    "SRC_BATTERY_STORAGE_INDIA_CI": {
+        "title": "India Commercial and Industrial Battery Energy Storage System CAPEX Reference",
+        "organization": "Ornate Solar",
+        "year": 2025,
+        "url": "https://ornatesolar.com/"
+    },
+    "SRC_HYDROGEN_IEA_GLOBAL": {
+        "title": "Global Hydrogen Electrolysis Cost Projections",
+        "organization": "International Energy Agency (IEA)",
+        "year": 2026,
+        "url": "https://www.iea.org/"
+    },
+    "SRC_PROJECT_DEFAULTS": {
+        "title": "Industrial Energy Transition Optimizer Project Master Default Assumptions",
+        "organization": "Industrial Energy Transition Optimizer project",
+        "year": 2026,
+        "url": null
+    },
+    "SRC_MSME_UDYAM_THRESHOLDS": {
+        "title": "Udyam Registration - MSME Classification Criteria",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://www.udyamregistration.gov.in/default.aspx"
+    },
+    "SRC_CLCSS_SCHEME": {
+        "title": "Credit Linked Capital Subsidy Scheme Documentation",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://msme.gov.in/"
+    },
+    "SRC_CGTMSE": {
+        "title": "Credit Guarantee Scheme for Micro and Small Enterprises",
+        "organization": "Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE)",
+        "year": 2026,
+        "url": "https://www.cgtmse.in/"
+    },
+    "SRC_PSL_RBI_2025": {
+        "title": "Master Directions on Priority Sector Lending",
+        "organization": "Reserve Bank of India (RBI)",
+        "year": 2025,
+        "url": "https://www.rbi.org.in/"
+    },
+    "SRC_MNRE_NBP": {
+        "title": "National Bioenergy Programme Phase-I Guidelines",
+        "organization": "Ministry of New and Renewable Energy, Government of India",
+        "year": 2026,
+        "url": "https://mnre.gov.in/"
+    },
+    "SRC_SIDBI_MSE_GIFT": {
+        "title": "SIDBI MSE-GIFT Scheme Documentation",
+        "organization": "Small Industries Development Bank of India (SIDBI)",
+        "year": 2026,
+        "url": "https://www.sidbi.in/"
+    },
     "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
         "title": "Roadmap for Green Transition of MSMEs",
         "organization": "NITI Aayog, Government of India",
         "year": 2026,
         "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf"
     },
+    "SRC_RBI_MPC_AUG2026": {
+        "title": "RBI Monetary Policy Committee Statement, 3-5 August 2026",
+        "organization": "Reserve Bank of India",
+        "year": 2026,
+        "url": "https://www.rbi.org.in/"
+    },
     "SRC_ADEETIE_BEE": {
         "title": "Assistance in Deploying Energy Efficient Technologies in Industries and Establishments (ADEETIE) Scheme",
-        "organization": "Bureau of Energy Efficiency (BEE), Ministry of Power, Government of India",
+        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
         "year": 2026,
         "url": "https://www.adeetie.beeindia.gov.in/"
     },
-    "SRC_MSME_GIFT": {
+    "SRC_MSE_GIFT": {
         "title": "MSE Green Investment and Financing for Transformation (MSE GIFT) Scheme",
         "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
         "url": "https://ramp.msme.gov.in/ramp/index.php/RAMP-initiative/mse-gift/gift-interest-subvention"
     },
-    "SRC_MSME_SPICE": {
+    "SRC_MSE_SPICE": {
         "title": "MSE Scheme for Promotion and Investment in Circular Economy (MSE SPICE)",
         "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
         "url": "https://ramp.msme.gov.in/ramp/RAMP-initiative/mse-spice/mse-spice"
     },
-    "SRC_MSME_ZED": {
+    "SRC_ZED": {
         "title": "MSME Sustainable (ZED) Certification",
         "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
@@ -59,136 +204,137 @@
         "year": 2026,
         "url": "https://lean.msme.gov.in/Home/Introduction"
     },
-    "SRC_CGTMSE": {
-        "title": "Credit Guarantee Scheme for Micro and Small Enterprises",
-        "organization": "Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE)",
-        "year": 2026,
-        "url": "https://www.cgtmse.in/"
-    },
-    "SRC_MSME_UDYAM_THRESHOLDS": {
-        "title": "Udyam Registration - MSME Classification Criteria",
+    "SRC_PMEGM": {
+        "title": "Prime Minister's Employment Generation Programme (PMEGP)",
         "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
-        "url": "https://www.udyamregistration.gov.in/default.aspx"
+        "url": "https://www.kviconline.gov.in/pmegpeportal/"
     },
-    "SRC_MOP_RCO_2025": {
-        "title": "Renewable Consumption Obligation Framework - Ministry of Power Notification S.O. 4421(E)",
-        "organization": "Ministry of Power, Government of India",
-        "year": 2025,
-        "url": "https://powermin.gov.in/"
-    },
-    "SRC_SERC_RPO_STATE_RULES": {
-        "title": "State Electricity Regulatory Commission Renewable Purchase Obligation Regulations",
-        "organization": "State Electricity Regulatory Commissions and Joint Electricity Regulatory Commissions, India",
+    "SRC_RAMP": {
+        "title": "Raising and Accelerating MSME Performance (RAMP) Programme",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
-        "url": "https://powermin.gov.in/"
+        "url": "https://ramp.msme.gov.in/"
     },
-    "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026": {
-        "title": "Electrifying Industrial Heat in India",
-        "organization": "Energy Innovation: Policy and Technology LLC",
+    "SRC_MSE_CDP": {
+        "title": "Micro and Small Enterprises Cluster Development Programme (MSE-CDP)",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
         "year": 2026,
-        "url": "https://energyinnovation.org/report/electrifying-industrial-heat-in-india/"
+        "url": "https://msme.gov.in/"
     },
-    "SRC_MNRE_GIZ_BIOMASS_MSME": {
-        "title": "Decarbonizing MSMEs: Biomass for Green Steam & Heat",
-        "organization": "GIZ India / Ministry of New and Renewable Energy, Government of India",
+    "SRC_HEATPUMP_COMPILE": {
+        "title": "Industrial Heat Pump CAPEX and COP Compilation",
+        "organization": "Industrial Energy Transition Optimizer project research compilation",
         "year": 2026,
-        "url": "https://www.giz.de/sites/default/files/media/pkb-document/2026-02/giz2024-en-india-decarbonizing-msmes-biomass.pdf"
+        "url": null
     },
-    "SRC_BIOMASS_ATLAS_INDIA": {
-        "title": "National Biomass Atlas of India",
-        "organization": "Combustion, Gasification & Propulsion Laboratory (CGPL), Indian Institute of Science (IISc), with Ministry of New and Renewable Energy support",
-        "year": 2006,
-        "url": "https://cgpl.iisc.ac.in/oldwebcontent/html/Biomass-Atlas/Biomass-Atlas.html"
-    },
-    "SRC_BEE_COAL_INDIA": {
-        "title": "Energy Efficiency and Energy Consumption Reference Materials for Coal Use in Industry",
-        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+    "SRC_ELEC_RESISTANCE_COMPILE": {
+        "title": "Electric Resistance Industrial Heating System CAPEX Compilation",
+        "organization": "Industrial Energy Transition Optimizer project research compilation",
         "year": 2026,
-        "url": "https://beeindia.gov.in/"
+        "url": null
     },
-    "SRC_PPAC_DIESEL": {
-        "title": "Petroleum Product Price and Analysis Data",
-        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
+
+    "mos_annual_report_2025_26": {
+        "title": "Annual Report 2025-26",
+        "organization": "Ministry of Steel, Government of India",
         "year": 2026,
-        "url": "https://www.ppac.gov.in/"
+        "url": "https://steel.gov.in/"
     },
-    "SRC_PPAC_LPG": {
-        "title": "Petroleum Product Price and Analysis Data - LPG",
-        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
+    "mos_green_steel_roadmap": {
+        "title": "Greening the Steel Sector in India: Roadmap and Action Plan",
+        "organization": "Ministry of Steel, Government of India",
         "year": 2026,
-        "url": "https://www.ppac.gov.in/"
+        "url": "https://steel.gov.in/"
     },
-    "SRC_PPAC_GAIL_NATURAL_GAS": {
-        "title": "Natural Gas Pricing and Market Information",
-        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
-        "year": 2026,
-        "url": "https://www.ppac.gov.in/"
+    "mos_green_steel_taxonomy": {
+        "title": "Green Steel Taxonomy for India",
+        "organization": "Ministry of Steel, Government of India",
+        "year": 2024,
+        "url": "https://steel.gov.in/"
     },
-    "SRC_BIOMASS_SUPPLIER_MARKET_DATA": {
-        "title": "Industrial Biomass Fuel Market and Supplier Data",
-        "organization": "Industrial Biomass Fuel Suppliers and Market Data Sources",
-        "year": 2026,
-        "url": "https://biourja.mnre.gov.in/"
-    },
-    "SRC_BEE_FURNACE_OIL": {
-        "title": "Energy Efficiency and Fuel Reference Data for Furnace Oil",
-        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+    "bee_steel_rerolling": {
+        "title": "Energy and Resource Mapping of Steel Re-rolling Sector",
+        "organization": "Bureau of Energy Efficiency, Government of India",
         "year": 2026,
         "url": "https://beeindia.gov.in/"
     },
-    "SRC_HP_INDUSTRIAL_POLICY_2019": {
-        "title": "Himachal Pradesh Industrial Investment Policy 2019 and Rules Regarding Grant of Incentives, Concessions and Facilities",
-        "organization": "Government of Himachal Pradesh, Department of Industries",
-        "year": 2019,
-        "url": "https://himachalpr.gov.in/PressReleaseByYear.aspx?Date=29%2F11%2F2020&ID=19899&Language=1&Type=2"
-    },
-    "SRC_PUNJAB_INDUSTRIAL_POLICY_2022": {
-        "title": "Punjab Industrial and Business Development Policy 2022",
-        "organization": "Government of Punjab, Department of Industries and Commerce",
-        "year": 2022,
-        "url": "https://www.indiacode.nic.in/handle/123456789/19356?locale=en"
-    },
-    "SRC_GUJARAT_INDUSTRIAL_POLICY_2020": {
-        "title": "Gujarat Industrial Policy 2020",
-        "organization": "Government of Gujarat, Industries Commissionerate",
-        "year": 2020,
-        "url": "https://ic.gujarat.gov.in/documents/commondoc/2020/Industrial-Policy2020.pdf"
-    },
-    "SRC_HPSEBL_TARIFF_2026": {
-        "title": "HPSEBL Electricity Tariff Schedule / Tariff Order for FY 2026-27",
-        "organization": "Himachal Pradesh Electricity Regulatory Commission / Himachal Pradesh State Electricity Board Limited",
+    "bee_adeetie": {
+        "title": "List of Energy Efficient Technologies",
+        "organization": "Bureau of Energy Efficiency, Government of India",
         "year": 2026,
-        "url": "https://www.hpseb.in/irj/go/km/docs/internet/New_Website/Pages/tariff2.html"
+        "url": "https://beeindia.gov.in/"
     },
-    "SRC_PSPCL_TARIFF_2026": {
-        "title": "PSPCL Electricity Tariff Schedule for FY 2026-27",
-        "organization": "Punjab State Power Corporation Limited (PSPCL)",
+    "niti_msme_roadmap": {
+        "title": "Roadmap for Green Transition of MSMEs",
+        "organization": "NITI Aayog, Government of India",
         "year": 2026,
-        "url": "https://docs.pspcl.in/docs/cecommercial2620260409130617682.pdf"
+        "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf"
     },
-    "SRC_HERC_FY26": {
-        "title": "HERC Tariff Schedule for DHBVN/UHBVN FY 2026-27",
-        "organization": "Haryana Electricity Regulatory Commission / Dakshin Haryana Bijli Vitran Nigam / Uttar Haryana Bijli Vitran Nigam",
-        "year": 2026,
-        "url": "https://dhbvn.org.in/staticContent/saleregulation/salecircular/circular2025/04_D_2025.pdf"
-    },
-    "SRC_UPERC_FY26": {
-        "title": "UPERC Approved Industrial Electricity Tariff for FY 2025-26",
-        "organization": "Uttar Pradesh Electricity Regulatory Commission / Uttar Pradesh Power Corporation Limited",
+    "mos_safety_eaf": {
+        "title": "Process Based Safety Guidelines for Iron & Steel Sector - Electric Arc Furnace",
+        "organization": "Ministry of Steel, Government of India",
         "year": 2025,
-        "url": "https://uppcl.org/"
+        "url": "https://steel.gov.in/"
     },
-    "SRC_TNERC_ORDER6_2025": {
-        "title": "TNERC Tariff Order - HT Industrial Tariff HV-3.1",
-        "organization": "Tamil Nadu Electricity Regulatory Commission / Tamil Nadu Generation and Distribution Corporation Limited",
+    "mos_safety_bf": {
+        "title": "Process Based Safety Guidelines for Iron & Steel Sector - Blast Furnace",
+        "organization": "Ministry of Steel, Government of India",
         "year": 2025,
-        "url": "https://www.tnerc.tn.gov.in/"
+        "url": "https://steel.gov.in/"
     },
-    "SRC_URERC_TARIFF_2026": {
-        "title": "Tariff Order for UPCL for FY 2026-27",
-        "organization": "Uttarakhand Electricity Regulatory Commission / Uttarakhand Power Corporation Limited",
+    "flexiheat_dst": {
+        "title": "FlexiHeat-DST Industrial Heating Decision Support Research",
+        "organization": "Energy Conversion and Management: X",
         "year": 2026,
-        "url": "https://upcl.uk.gov.in/document/tariff-order-for-the-fy-2026-27/"
+        "url": "https://www.sciencedirect.com/science/article/pii/S2590174526001145"
+    },
+    "iea_heavy_industry": {
+        "title": "Driving Energy Efficiency in Heavy Industries",
+        "organization": "International Energy Agency (IEA)",
+        "year": 2026,
+        "url": "https://www.iea.org/"
+    },
+    "niti_mSME_green_transition_2026": {
+        "title": "Roadmap for Green Transition of MSMEs",
+        "organization": "NITI Aayog, Government of India",
+        "year": 2026,
+        "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf"
+    },
+    "bee_textile_sectoral_report": {
+        "title": "Sectoral Report: Energy and Resource Mapping of MSME Textile Sector",
+        "organization": "Bureau of Energy Efficiency, Government of India",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "bee_textile_cluster_manual": {
+        "title": "Manual on Energy Conservation Measures in Textile Cluster",
+        "organization": "Bureau of Energy Efficiency, Government of India",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "bee_pali_textile_cluster": {
+        "title": "Pali Textile Cluster Manual",
+        "organization": "Bureau of Energy Efficiency, Government of India",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "bee_jigger_project": {
+        "title": "Detailed Project Report - Solar Water Heater for Cotton Dyeing",
+        "organization": "Bureau of Energy Efficiency / SIDHIEE",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "teri_textile_energy_efficiency": {
+        "title": "Energy Efficiency Improvements Among Small and Medium Textile Units in India",
+        "organization": "The Energy and Resources Institute (TERI)",
+        "year": 2023,
+        "url": "https://www.teriin.org/"
+    },
+    "mnre_solar_thermal": {
+        "title": "Concentrated Solar Thermal",
+        "organization": "Ministry of New and Renewable Energy, Government of India",
+        "year": 2026,
+        "url": "https://mnre.gov.in/"
     }
 }
