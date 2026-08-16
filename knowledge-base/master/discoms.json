@@ -10,15 +10,15 @@
     "state_id": "HP"
   },
   {
-  "discom_id": "JK_JPDCL",
-  "discom_name": "Jammu Power Distribution Corporation Limited (JPDCL)",
-  "state_id": "JK"
-},
-{
-  "discom_id": "JK_KPDCL",
-  "discom_name": "Kashmir Power Distribution Corporation Limited (KPDCL)",
-  "state_id": "JK"
-},
+    "discom_id": "JK_JPDCL",
+    "discom_name": "Jammu Power Distribution Corporation Limited (JPDCL)",
+    "state_id": "JK"
+  },
+  {
+    "discom_id": "JK_KPDCL",
+    "discom_name": "Kashmir Power Distribution Corporation Limited (KPDCL)",
+    "state_id": "JK"
+  },
   {
     "discom_id": "PB_PSPCL",
     "discom_name": "PSPCL",
