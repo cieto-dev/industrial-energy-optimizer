@@ -1148,92 +1148,37 @@
   },
   "sources": {
     "SRC_SOLAR_VENDOR_COMPILE": {
-      "title": "Compiled quotations from 8+ independent Indian solar EPC vendors, industrial rooftop/ground-mount",
-      "publisher": "Project research compile of Indian solar EPC vendor pricing",
-      "publication_date": "2025-06",
-      "url": "",
-      "type": "Vendor Quotation Compilation",
-      "pages": ""
+      "source_id": "SRC_SOLAR_VENDOR_COMPILE"
     },
     "SRC_WHR_GLOBAL_BENCHMARK": {
-      "title": "Industrial waste-heat-recovery boiler (WHRB) cost-range compilation",
-      "publisher": "coalbiomassboiler.com (industry compilation, non-India-specific)",
-      "publication_date": "2025-01",
-      "url": "https://www.coalbiomassboiler.com/",
-      "type": "Industry Compilation",
-      "pages": ""
+      "source_id": "SRC_WHR_GLOBAL_BENCHMARK"
     },
     "SRC_VFD_INDIAMART": {
-      "title": "Variable frequency drive (VFD) retail listings, 1.5-132kW range",
-      "publisher": "IndiaMART / Moglix B2B marketplace listings",
-      "publication_date": "2025-06",
-      "url": "https://www.indiamart.com/",
-      "type": "Marketplace Listing",
-      "pages": ""
+      "source_id": "SRC_VFD_INDIAMART"
     },
     "SRC_MOTOR_IE4_GLOBAL": {
-      "title": "Global technical/cost comparison of IE3 vs IE4 premium-efficiency motors",
-      "publisher": "iecmotores.com (manufacturer technical comparison, non-India-specific)",
-      "publication_date": "2024-01",
-      "url": "https://www.iecmotores.com/",
-      "type": "Manufacturer Technical Comparison",
-      "pages": ""
+      "source_id": "SRC_MOTOR_IE4_GLOBAL"
     },
     "SRC_BIOMASS_BOILER_CHEEMA": {
-      "title": "Industrial biomass boiler pricing guide, by capacity band",
-      "publisher": "Cheema Boilers Ltd",
-      "publication_date": "2025-01",
-      "url": "https://www.cheemaboilers.com/",
-      "type": "Vendor Pricing Guide",
-      "pages": ""
+      "source_id": "SRC_BIOMASS_BOILER_CHEEMA"
     },
     "SRC_THERMAL_STORAGE_ACADEMIC": {
-      "title": "Peer-reviewed cost benchmark for FIRES-type high-temperature thermal energy storage",
-      "publisher": "ScienceDirect (peer-reviewed journal article, US-centric cost basis)",
-      "publication_date": "2023-01",
-      "url": "https://www.sciencedirect.com/",
-      "type": "Peer-Reviewed Academic Source",
-      "pages": ""
+      "source_id": "SRC_THERMAL_STORAGE_ACADEMIC"
     },
     "SRC_BATTERY_STORAGE_INDIA_CI": {
-      "title": "India Commercial & Industrial (C&I) battery energy storage system (BESS) capex reference",
-      "publisher": "ornatesolar.com",
-      "publication_date": "2025-01",
-      "url": "https://www.ornatesolar.com/",
-      "type": "Industry Reference",
-      "pages": ""
+      "source_id": "SRC_BATTERY_STORAGE_INDIA_CI"
     },
     "SRC_HYDROGEN_IEA_GLOBAL": {
-      "title": "Global hydrogen electrolyser cost projections to 2030",
-      "publisher": "International Energy Agency (IEA)",
-      "publication_date": "2024-01",
-      "url": "https://www.iea.org/",
-      "type": "International Agency Report",
-      "pages": ""
+      "source_id": "SRC_HYDROGEN_IEA_GLOBAL"
     },
     "SRC_PROJECT_DEFAULTS": {
-      "title": "Project master-document default lifetime assumptions for generic equipment categories",
-      "publisher": "Project internal engineering defaults (boiler=15yr, motor=12yr), consistent with typical BEE industrial-equipment lifetime guidance",
-      "publication_date": "2026-06",
-      "url": "",
-      "type": "Internal Project Assumption",
-      "pages": ""
+      "source_id": "SRC_PROJECT_DEFAULTS"
     },
     "SRC_HEATPUMP_COMPILE": {
-      "title": "Industrial heat pump CAPEX and COP compilation",
-      "publisher": "Project research compile of industrial heat-pump vendor/technical literature (global basis, USD converted at reference rate)",
-      "publication_date": "2025-06",
-      "url": "",
-      "type": "Secondary Compilation",
-      "pages": ""
+      "source_id": "SRC_HEATPUMP_COMPILE"
     },
     "SRC_ELEC_RESISTANCE_COMPILE": {
-      "title": "Electric resistance industrial heating system CAPEX compilation (India)",
-      "publisher": "Project research compile of Indian industrial electric-heater vendor pricing",
-      "publication_date": "2025-06",
-      "url": "",
-      "type": "Secondary Compilation",
-      "pages": ""
+      "source_id": "SRC_ELEC_RESISTANCE_COMPILE"
     }
   },
   "cross_references": {
