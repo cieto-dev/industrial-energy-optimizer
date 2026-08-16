@@ -4,7 +4,6 @@
   "country": "India",
   "sector": "Pulp and Paper",
   "description": "Industry profile for Indian paper manufacturing covering recycled-fibre paper mills, agro-based paper mills, integrated pulp-and-paper mills and selected specialty paper production. Paper manufacturing is a high thermal-energy process dominated by pulping where applicable, stock preparation, dewatering, paper-machine drying and steam generation, with substantial electricity demand from pumps, refiners, vacuum systems, fans, motors and auxiliary equipment.",
-
   "supported_subsectors": [
     "Recycled Fibre Paper",
     "Kraft and Packaging Paper",
@@ -17,7 +16,6 @@
     "Integrated Pulp and Paper",
     "Standalone Paper Mill"
   ],
-
   "process_route_classification": {
     "recycled_fibre_paper": {
       "typical_raw_material": [
@@ -40,7 +38,6 @@
       "msme_relevance": "very_high",
       "source": "BEE Paper Sector Report"
     },
-
     "agro_based_paper": {
       "typical_raw_material": [
         "Bagasse",
@@ -58,7 +55,6 @@
       ],
       "msme_relevance": "high"
     },
-
     "wood_based_integrated": {
       "typical_raw_material": [
         "Wood chips",
@@ -80,7 +76,6 @@
       "energy_intensity": "very_high"
     }
   },
-
   "india_sector_context": {
     "reference_year": "BEE primary study period",
     "paper_mills_studied_clusters": [
@@ -92,12 +87,12 @@
       "W&E Godavari"
     ],
     "cluster_total_production_mtpa": 6.28,
-    "overall_indian_paper_sector_msme_benchmark": {
+    "overall_indian_paper_sector_msmE_benchmark": {
       "electrical_sec_toe_per_tonne": 0.033,
       "thermal_sec_toe_per_tonne": 0.218,
       "overall_sec_toe_per_tonne": 0.251
     },
-    "international_msme_reference": {
+    "international_msmE_reference": {
       "electrical_sec_toe_per_tonne": 0.07,
       "thermal_sec_toe_per_tonne": 0.15,
       "overall_sec_toe_per_tonne": 0.22
@@ -105,12 +100,11 @@
     "large_industry_PAT_reference": {
       "electrical_sec_toe_per_tonne": 0.12,
       "thermal_sec_toe_per_tonne": 1.38,
-      "overall_sec_toe_per_tonne": 1.50
+      "overall_sec_toe_per_tonne": 1.5
     },
     "source": "BEE Energy and Resource Mapping of MSMEs in India - Paper Sector Report",
     "scope_warning": "The 0.251 toe/t MSME value is a six-cluster benchmark. It is not a universal value for every paper grade or mill configuration."
   },
-
   "cluster_benchmarks": {
     "overall_sec_toe_per_tonne": {
       "Muzaffarnagar_Saharanpur": 0.284,
@@ -120,7 +114,6 @@
       "Erode_Coimbatore": 0.216,
       "paper_sector_overall": 0.251
     },
-
     "thermal_sec_toe_per_tonne": {
       "Muzaffarnagar_Saharanpur": 0.294,
       "Kashipur": 0.228,
@@ -129,11 +122,9 @@
       "Erode_Coimbatore": 0.213,
       "paper_sector_overall": 0.218
     },
-
     "benchmark_interpretation": "Differences arise partly from product grade and fibre source. BEE notes that meaningful benchmarking requires comparable pulp/paper types and comparable subprocesses.",
     "source": "BEE Paper Sector Report"
   },
-
   "product_specific_benchmarks": {
     "kraft": {
       "thermal_sec_toe_per_tonne": 0.169,
@@ -157,7 +148,6 @@
     "source": "BEE Paper Sector Report best-operating-practice benchmark table",
     "warning": "These are product-type reference values, not guaranteed factory targets."
   },
-
   "raw_material_characteristics": {
     "main_categories": [
       "Wood-based fibre",
@@ -182,7 +172,6 @@
     "source": "BEE Paper Sector Report",
     "interpretation": "Indian paper production has a high recycled-fibre share relative to the global reference, particularly in MSME paper production."
   },
-
   "production_processes": {
     "pulping": {
       "description": "Separation and treatment of fibres to produce pulp.",
@@ -212,7 +201,6 @@
         "De-inking systems"
       ]
     },
-
     "stock_preparation": {
       "description": "Prepared pulp is mixed and conditioned before entry to the paper machine.",
       "operations": [
@@ -231,7 +219,6 @@
         "Refiners"
       ]
     },
-
     "papermaking": {
       "description": "Pulp is formed into a continuous paper web through forming, pressing and drying sections.",
       "operations": [
@@ -257,7 +244,6 @@
         "Dryer ventilation systems"
       ]
     },
-
     "drying": {
       "description": "Mechanical and thermal moisture removal from the paper web after formation and pressing.",
       "major_energy_form": "Steam",
@@ -271,7 +257,6 @@
       "thermal_importance": "very_high",
       "energy_reduction_priority": "very_high"
     },
-
     "finishing": {
       "operations": [
         "Calendering",
@@ -288,7 +273,6 @@
         "Packaging equipment"
       ]
     },
-
     "chemical_recovery": {
       "applicable_to": "Kraft and integrated virgin-fibre mills",
       "operations": [
@@ -306,7 +290,6 @@
       "msme_status": "generally_not_typical_of_small_recycled_fibre_units"
     }
   },
-
   "operating_temperature_ranges": {
     "paper_machine_dryer_air": {
       "min_c": 100,
@@ -316,7 +299,6 @@
       "source": "BEE Paper Sector Report",
       "status": "documented_technology_case"
     },
-
     "steam_system": {
       "documented_usable_steam_pressure_min_kg_cm2": 0.5,
       "documented_intermediate_steam_pressure_kg_cm2": 4,
@@ -324,11 +306,9 @@
       "process_application": "Dryer section and paper-machine steam system",
       "source": "BEE Paper Sector Report"
     },
-
     "boiler_temperature": {
       "modeling_rule": "Do not use a generic boiler temperature as an industry requirement. The optimizer should use measured steam pressure, steam temperature, boiler flue-gas temperature, feedwater temperature and fuel properties for the individual boiler."
     },
-
     "lime_kiln": {
       "process": "Kraft chemical-recovery lime kiln",
       "temperature_category": "very_high",
@@ -337,7 +317,6 @@
       "source": "BEE Paper Sector Report"
     }
   },
-
   "steam_characteristics": {
     "importance": "very_high",
     "major_uses": [
@@ -362,7 +341,6 @@
     ],
     "source": "BEE Paper Sector Report"
   },
-
   "common_fuels": [
     "Coal",
     "Biomass",
@@ -378,7 +356,6 @@
     "Electricity",
     "Renewable Electricity"
   ],
-
   "fuel_application_map": {
     "coal": {
       "common_uses": [
@@ -388,7 +365,6 @@
       ],
       "transition_priority": "high"
     },
-
     "biomass": {
       "common_uses": [
         "Steam generation",
@@ -404,7 +380,6 @@
         "Storage"
       ]
     },
-
     "agro_residue": {
       "common_uses": [
         "Biomass boilers",
@@ -412,7 +387,6 @@
       ],
       "transition_priority": "site_specific"
     },
-
     "black_liquor": {
       "common_uses": [
         "Recovery boiler",
@@ -421,7 +395,6 @@
       "applicability": "Kraft integrated mills",
       "transition_priority": "recover_and_optimize_before_external_fuel_switching"
     },
-
     "natural_gas": {
       "common_uses": [
         "Boilers",
@@ -429,7 +402,6 @@
       ],
       "transition_priority": "medium"
     },
-
     "electricity": {
       "common_uses": [
         "Pulpers",
@@ -444,7 +416,6 @@
       "transition_priority": "very_high"
     }
   },
-
   "energy_consumption_characteristics": {
     "thermal_energy_importance": "very_high",
     "electrical_energy_importance": "high",
@@ -467,7 +438,6 @@
     "energy_priority": "thermal_efficiency_first",
     "source": "BEE Paper Sector Report"
   },
-
   "common_energy_systems": {
     "boiler": {
       "importance": "very_high",
@@ -481,7 +451,6 @@
         "Poor blowdown control"
       ]
     },
-
     "paper_machine_vacuum": {
       "importance": "very_high",
       "documented_equipment": [
@@ -496,14 +465,12 @@
       "source": "BEE Paper Sector Report",
       "warning": "Technology-case saving; validate against actual vacuum duty."
     },
-
     "pumping_system": {
       "importance": "high",
       "documented_problem": "Oversized pumps and throttled flow are common efficiency losses in audited paper plants.",
       "documented_efficiency_improvement_percent": 15,
       "source": "BEE Paper Sector Report"
     },
-
     "compressed_air": {
       "importance": "medium_high",
       "best_practices": [
@@ -523,7 +490,6 @@
       "warning": "The 9% value is an operational example, not a universal compressor law."
     }
   },
-
   "recommended_technologies": [
     "Waste Heat Recovery",
     "Boiler Oxygen Analyzer",
@@ -559,7 +525,6 @@
     "Thermal Energy Storage",
     "Electrification of Selected Boiler Loads"
   ],
-
   "technology_profiles": {
     "boiler_oxygen_analyzer": {
       "priority": "very_high",
@@ -572,7 +537,6 @@
       "source": "BEE Paper Sector Report",
       "selection_rule": "Measure O2 and flue-gas conditions before modifying air-fuel control."
     },
-
     "boiler_air_preheater": {
       "priority": "very_high",
       "purpose": [
@@ -583,7 +547,6 @@
       "BEE_priority_score": 15,
       "source": "BEE Paper Sector Report"
     },
-
     "correctly_sized_pumps": {
       "priority": "very_high",
       "documented_efficiency_improvement_percent": 15,
@@ -596,7 +559,6 @@
       ],
       "selection_rule": "Check operating point, head, flow and throttling before pump replacement."
     },
-
     "vacuum_blower": {
       "priority": "very_high",
       "current_vacuum_pump_efficiency_percent": 40,
@@ -605,7 +567,6 @@
       "source": "BEE Paper Sector Report",
       "selection_rule": "Evaluate only where the required vacuum level can be met by a blower."
     },
-
     "vacuum_system_automation": {
       "priority": "high",
       "documented_electrical_saving_percent": 20,
@@ -618,7 +579,6 @@
       "source": "BEE audited paper-sector case",
       "warning": "Case-study economics; recompute using actual plant load."
     },
-
     "thermocompressor": {
       "priority": "high",
       "application": "Dryer section",
@@ -633,7 +593,6 @@
       "source": "BEE Paper Sector Report",
       "selection_rule": "Requires a suitable low-pressure flash/suction-steam source and available motive steam."
     },
-
     "back_pressure_turbine": {
       "priority": "high",
       "application": "Pressure reduction from high-pressure steam to lower process pressure while generating electricity",
@@ -648,14 +607,12 @@
       "source": "BEE Paper Sector Report",
       "selection_rule": "Only applicable when pressure reduction and steam flow are substantial and stable."
     },
-
     "solar_pv": {
       "priority": "high",
       "application": "Offsetting paper-mill electricity demand",
       "documented_case_condition": "BEE observed usable roof/terrace area and substantial in-house electricity demand in paper plants.",
       "source": "BEE Paper Sector Report"
     },
-
     "de_inking_vfd": {
       "priority": "high",
       "application": "De-inking recirculation pumps",
@@ -666,7 +623,6 @@
       },
       "source": "BEE Paper Sector Report"
     },
-
     "pocket_ventilation": {
       "priority": "high",
       "dryer_air_temperature_min_c": 100,
@@ -675,7 +631,6 @@
       "source": "BEE Paper Sector Report",
       "warning": "The 100–110°C value is the documented steam-air heating condition for pocket ventilation."
     },
-
     "shoe_press": {
       "priority": "very_high",
       "application": "Paper-machine press section",
@@ -690,7 +645,6 @@
       },
       "source": "BEE Paper Sector Report"
     },
-
     "boiler_economizer": {
       "priority": "very_high",
       "documented_thermal_saving_percent_min": 2,
@@ -701,7 +655,6 @@
       },
       "source": "BEE Paper Sector Report"
     },
-
     "high_efficiency_motors": {
       "priority": "high",
       "replacement_standard": [
@@ -715,7 +668,6 @@
       },
       "source": "BEE Paper Sector Report"
     },
-
     "energy_efficient_agitators": {
       "priority": "high",
       "documented_electrical_saving_percent": 15,
@@ -725,7 +677,6 @@
       },
       "source": "BEE Paper Sector Report"
     },
-
     "pressurized_headbox": {
       "priority": "medium",
       "documented_electrical_saving_percent": 3,
@@ -741,7 +692,6 @@
       ],
       "source": "BEE Paper Sector Report"
     },
-
     "impulse_drying": {
       "priority": "medium",
       "documented_water_evaporation_reduction_kg_per_t_paper_min": 175,
@@ -751,7 +701,6 @@
       "source": "BEE Paper Sector Report",
       "technology_status": "emerging"
     },
-
     "condebelt_dryer": {
       "priority": "future_high",
       "documented_steam_saving_percent_min": 10,
@@ -761,7 +710,6 @@
       "technology_status": "commercialized_emerging_papermaking_option",
       "source": "BEE Paper Sector Report"
     },
-
     "gas_fired_dryer": {
       "priority": "medium",
       "documented_drying_energy_saving_percent_min": 10,
@@ -770,7 +718,6 @@
       "technology_status": "commercialized",
       "source": "BEE Paper Sector Report"
     },
-
     "microwave_drying": {
       "priority": "future",
       "documented_overall_energy_saving_percent": 12,
@@ -778,7 +725,6 @@
       "technology_status": "development_stage",
       "source": "BEE Paper Sector Report"
     },
-
     "high_consistency_papermaking": {
       "priority": "future_high",
       "documented_electricity_saving_percent": 8,
@@ -787,7 +733,6 @@
       "source": "BEE Paper Sector Report",
       "technology_status": "commercialized"
     },
-
     "steam_cycle_washing": {
       "priority": "future_high",
       "documented_electricity_reduction_percent": 20,
@@ -796,7 +741,6 @@
       "source": "BEE Paper Sector Report",
       "technology_status": "demonstration_stage"
     },
-
     "biomass_gasification": {
       "priority": "medium",
       "purpose": [
@@ -809,7 +753,6 @@
       "technology_status": "various_stages",
       "source": "BEE Paper Sector Report"
     },
-
     "black_liquor_gasification": {
       "priority": "future",
       "applicability": "Kraft integrated mills",
@@ -822,7 +765,6 @@
       "source": "BEE Paper Sector Report"
     }
   },
-
   "decarbonization_pathways": [
     {
       "pathway_id": "paper_efficiency_first",
@@ -838,7 +780,6 @@
       ],
       "objective": "Reduce specific energy consumption before fuel switching."
     },
-
     {
       "pathway_id": "paper_drying_efficiency",
       "priority": 2,
@@ -852,7 +793,6 @@
       ],
       "objective": "Reduce steam required to remove water from the paper web."
     },
-
     {
       "pathway_id": "paper_boiler_decarbonization",
       "priority": 3,
@@ -867,7 +807,6 @@
       ],
       "objective": "Reduce fossil thermal energy use while preserving reliable steam production."
     },
-
     {
       "pathway_id": "paper_low_grade_heat_recovery",
       "priority": 4,
@@ -882,7 +821,6 @@
       ],
       "objective": "Recover otherwise rejected low-grade heat."
     },
-
     {
       "pathway_id": "paper_electrical_efficiency",
       "priority": 5,
@@ -897,7 +835,6 @@
       ],
       "objective": "Reduce electricity consumption and associated emissions."
     },
-
     {
       "pathway_id": "paper_circularity",
       "priority": 6,
@@ -912,7 +849,6 @@
       "objective": "Reduce virgin-fibre demand, process energy and material waste."
     }
   ],
-
   "circular_economy_characteristics": {
     "recovered_fibre_role": "very_high",
     "india_recovered_paper_usage_reference": "BEE reports a substantially higher recycled-fibre share in Indian paper production than the global reference.",
@@ -929,29 +865,24 @@
     ],
     "warning": "Increasing recovered-fibre use is constrained by feedstock quality, collection systems, contamination, price and product quality requirements."
   },
-
   "technology_exclusions": {
     "generic_heat_pump_for_main_paper_dryer": {
       "status": "not_default",
       "reason": "Main paper drying is a steam-dominated thermal duty and the optimizer must compare industrial heat-pump capabilities, available low-grade heat and required dryer steam conditions before considering substitution."
     },
-
     "solar_thermal_as_only_steam_source": {
       "status": "not_default",
       "reason": "Paper machines can operate continuously; intermittent solar heat requires storage and/or backup steam generation."
     },
-
     "biomass_without_feedstock_validation": {
       "status": "excluded",
       "reason": "Biomass feasibility depends on local quantity, moisture, ash, calorific value, logistics and boiler configuration."
     },
-
     "electric_boiler_without_grid_assessment": {
       "status": "excluded",
       "reason": "Large paper mills can have significant electrical loads. Electrification of steam generation requires transformer, contracted-demand, power-quality and tariff analysis."
     }
   },
-
   "optimization_rules": {
     "route_rule": {
       "mandatory_input": "paper_route",
@@ -963,17 +894,14 @@
         "integrated_pulp_and_paper"
       ]
     },
-
     "benchmark_rule": {
       "rule": "Compare plants against the closest product/route benchmark rather than a single sector-wide SEC.",
       "reason": "BEE explicitly states that benchmarking different mills is difficult because paper grade, fibre source, production route and subprocesses differ."
     },
-
     "thermal_first_rule": {
       "priority": "very_high",
       "reason": "BEE's MSME benchmark shows thermal SEC of 0.218 toe/t versus electrical SEC of 0.033 toe/t, making thermal efficiency the dominant immediate energy-efficiency lever."
     },
-
     "dryer_rule": {
       "priority": "very_high",
       "actions": [
@@ -985,7 +913,6 @@
         "Recover condensate"
       ]
     },
-
     "boiler_rule": {
       "priority": "very_high",
       "actions": [
@@ -998,7 +925,6 @@
         "Fuel-air ratio"
       ]
     },
-
     "vacuum_rule": {
       "priority": "high",
       "actions": [
@@ -1008,7 +934,6 @@
         "Install VFD/automation when load varies"
       ]
     },
-
     "pump_rule": {
       "priority": "high",
       "actions": [
@@ -1019,19 +944,16 @@
         "Replace oversized pumps where economically justified"
       ]
     },
-
     "solar_rule": {
       "priority": "medium_high",
       "application": "Electricity offset",
       "condition": "Use only after electricity-load profile and available roof/land area are measured."
     },
-
     "steam_pressure_rule": {
       "condition": "pressure_reduction_available",
       "action": "Evaluate back-pressure turbine or thermocompressor before wasting pressure through a PRDS, subject to process steam quality and reliability requirements."
     }
   },
-
   "optimizer_required_inputs": {
     "plant": [
       "Paper route",
@@ -1100,7 +1022,6 @@
       "Required payback"
     ]
   },
-
   "priority_order": {
     "priority_1": [
       "Boiler oxygen control",
@@ -1133,7 +1054,6 @@
       "Microwave drying"
     ]
   },
-
   "data_quality": {
     "primary_sources": [
       "Bureau of Energy Efficiency",
@@ -1155,58 +1075,18 @@
       "Use recovered-fibre availability and quality as explicit model inputs."
     ]
   },
-
   "source_registry": [
     {
-      "source_id": "bee_paper_sector_report",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "Energy and Resource Mapping of MSMEs in India - Paper Sector Report",
-      "year": 2022,
-      "url": "https://www.beeindia.gov.in/WriteReadData/RTF1984/RTF-PDF-95dc2a5852c2feb3_1776169549.pdf",
-      "data_used": [
-        "Cluster benchmarks",
-        "Process structure",
-        "SEC",
-        "Raw-material split",
-        "Paper-machine energy systems",
-        "Boiler practices",
-        "Vacuum systems",
-        "Pumps",
-        "Steam systems",
-        "Technology savings",
-        "Decarbonization options"
-      ]
+      "source_id": "bee_paper_sector_report"
     },
     {
-      "source_id": "bee_ee_technology_list",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "List of Energy Efficient Technologies",
-      "url": "https://adeetie.beeindia.gov.in/list-of-energy-efficient-technologies",
-      "data_used": [
-        "Vacuum blower",
-        "Pulp and paper energy-efficient technologies"
-      ]
+      "source_id": "bee_adeetie"
     },
     {
-      "source_id": "niti_msme_roadmap",
-      "publisher": "NITI Aayog",
-      "title": "Roadmap for Green Transition of MSMEs",
-      "year": 2026,
-      "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf",
-      "data_used": [
-        "Paper-cluster energy consumption",
-        "Paper-cluster emissions",
-        "Paper-cluster efficiency investment potential"
-      ]
+      "source_id": "niti_msme_roadmap"
     },
     {
-      "source_id": "bee_pat_rules",
-      "publisher": "Bureau of Energy Efficiency",
-      "title": "Energy Conservation Act / PAT sector framework",
-      "data_used": [
-        "Pulp and Paper energy-accounting boundary",
-        "Specific Energy Consumption methodology"
-      ]
+      "source_id": "bee_pat_rules"
     }
   ]
 }
