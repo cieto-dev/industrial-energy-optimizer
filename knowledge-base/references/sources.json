@@ -52,13 +52,13 @@
         "title": "Coal India Ltd Notified Prices",
         "organization": "Coal India Limited / Ministry of Coal / CEIC",
         "year": 2026,
-        "url": null
+        "url": "https://bcclweb.in/?page_id=8805"
     },
     "SRC_INDUSTRIAL_FUELS_CSV": {
         "title": "Industrial Fuels Reference Dataset",
         "organization": "Industrial Energy Transition Optimizer project research compilation using BEE, IPCC and supplier quotation data",
         "year": 2026,
-        "url": null
+        "url": "https://www.ipcc-nggip.iges.or.jp/efdb/find_ef.php"
     },
     "SRC_PPAC_APM_FORMULA": {
         "title": "APM Natural Gas Pricing Formula and 2023 Gas Pricing Reform Framework",
@@ -76,7 +76,7 @@
         "title": "Indian Solar EPC Vendor Quotation Compilation",
         "organization": "Industrial Energy Transition Optimizer project research compilation from independent Indian solar EPC vendors",
         "year": 2026,
-        "url": null
+        "url": "https://rhe.conx.in/solar-epc-companies-india/"
     },
     "SRC_WHR_GLOBAL_BENCHMARK": {
         "title": "Industrial Waste Heat Recovery Boiler Cost-Range Compilation",
@@ -226,13 +226,13 @@
         "title": "Industrial Heat Pump CAPEX and COP Compilation",
         "organization": "Industrial Energy Transition Optimizer project research compilation",
         "year": 2026,
-        "url": null
+        "url": "https://www.bpa.gov/-/media/Aep/energy-efficiency/emerging-technologies/202403-industrial-heat-pump-market-study.pdf"
     },
     "SRC_ELEC_RESISTANCE_COMPILE": {
         "title": "Electric Resistance Industrial Heating System CAPEX Compilation",
         "organization": "Industrial Energy Transition Optimizer project research compilation",
         "year": 2026,
-        "url": null
+        "url": "https://betterbuildingssolutioncenter.energy.gov/sites/default/files/attachments/FINAL%20Industrial%20Electrification%20Booklet.pdf"
     },
 
     "mos_annual_report_2025_26": {
