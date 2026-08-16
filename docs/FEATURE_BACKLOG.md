@@ -14,7 +14,8 @@
 |--------|--------|
 | Research | ✅ Completed |
 | Documentation | 🟡 In Progress |
-| Architecture Design | ✅ completed|
+| Architecture Design | ✅ Completed |
+| Knowledge Base Build-out | 🟡 In Progress (mostly populated, consistency pass ongoing) |
 | Database Design | ⏳ Pending |
 | Backend Development | ⏳ Pending |
 | Frontend Development | ⏳ Pending |
@@ -26,153 +27,98 @@
 
 # PRIORITY LEGEND
 
-🔴 Critical
-
-🟠 High
-
-🟡 Medium
-
-🟢 Low
+🔴 Critical &nbsp; 🟠 High &nbsp; 🟡 Medium &nbsp; 🟢 Low
 
 ---
 
-# PHASE 1 — DOCUMENTATION
+# ⚠️ OPEN SCOPE DECISION — GOVERNMENT SUBSIDY / POLICY INTEGRATION
+
+**This needs a team decision before Phase 2 planning finalizes.**
+
+Previously, this document listed "Government Subsidy Integration" under Future Enhancements (outside the SIH MVP). Since then, `knowledge-base/policies/` has been fully built out — `central_policies.json`, `state_policies.json`, `eligibility_rules.json`, `carbon_pricing.json`, `renewable_purchase_obligations.json` — well beyond what a "future enhancement" would normally have.
+
+**Decide one of:**
+
+- **(A) Bring it into MVP scope.** Move it to Phase 2 as Module 4a (see `SYSTEM_DESIGN.md`). Requires: consolidating the currently-duplicated subsidy data (`policies/`, `finance/subsidies.json`, `constraints/budget.json` all overlap), and extending the User Input module to collect MSME/eligibility fields.
+- **(B) Confirm it stays out of MVP.** Freeze further work on `knowledge-base/policies/` and treat the existing files as a head start for post-SIH development.
+
+Until this is decided, do not add further content to `knowledge-base/policies/` — resolve the decision first so effort isn't spent on something that might stay out of scope, or conversely so the rest of the architecture doesn't get built assuming it's out of scope when it's actually needed.
+
+**Owner:** _[assign]_ **Target decision date:** _[fill in]_
+
+---
+
+# PHASE 0 — DOCUMENTATION
 
 | Feature | Priority | Status |
 |----------|----------|--------|
-| README.md|    🔴    | ⏳.    |
-| PROJECT_STATE.md | 🔴 | ✅ |
-| SYSTEM_DESIGN.md | 🔴 | 🟡 |
-| FEATURE_BACKLOG.md | 🔴 | 🟡 |
-| SESSION_LOG.md | 🔴 | ⏳ |
-| MENTOR_NOTES.md | 🟠 | ⏳ |
+| README.md (root — canonical) | 🔴 | ✅ |
+| docs/README.md (pointer) | 🟢 | ✅ |
+| PROJECT_STATE.md | 🔴 | ✅ (kept current) |
+| SYSTEM_DESIGN.md | 🔴 | ✅ (kept current) |
+| FEATURE_BACKLOG.md | 🔴 | 🟡 In Progress (this file) |
+| SESSION_LOG.md | 🔴 | 🟡 In Progress — now actively used |
+| MENTOR_NOTES.md | 🟠 | ⏳ Template ready, awaiting first real entry |
+| RESEARCH_NOTES.md | 🟠 | 🟡 Needs assumptions ported in from knowledge-base source fields |
+
+---
+
+# PHASE 1 — KNOWLEDGE BASE *(new phase — this work already happened but was never tracked here)*
+
+| Component | Status | Notes |
+|---|---|---|
+| `industries/` (cement, chemical, food_processing, pharma, steel, textile) | ✅ Completed | All 6 populated with matching `industry_id` naming |
+| `technologies/` (biomass, electrification, heat_pump, solar_thermal, thermal_storage, waste_heat_recovery) | 🟡 Mostly complete | `solar_thermal.json` is thinner than the others — needs expansion |
+| `constraints/` (budget, fuel, grid, space, temperature, technology_rules) | 🟡 Mostly complete | References `paper`/`dairy`/`glass` industries that don't have profile files yet |
+| `finance/` (electricity_tariffs, fuel_prices, subsidies, technology_costs) | 🟡 Mostly complete | `subsidies.json` overlaps with `policies/` — needs dedup (see scope decision above) |
+| `emissions/` (emission_factors, grid_factors) | 🔴 Blocking gap | `emission_factors.json` is empty — needed before Module 8 (Environmental Impact) can be built |
+| `policies/` (central_policies, state_policies, eligibility_rules, carbon_pricing, renewable_purchase_obligations) | ✅ Built | Scope decision pending — see box above |
+| `references/` (citations, sources) | ⏳ Not started | Currently empty; provenance is tracked inline in each file instead — decide if this folder is still needed |
+| Cross-file consistency pass (naming, coverage, duplication) | 🟡 In Progress | Tracked in `PROJECT_STATE.md` §12 |
 
 ---
 
 # PHASE 2 — CORE ARCHITECTURE
 
 ## User Input Module
-
 Status: ⏳ Planned
-
-Tasks
-
-- Factory profile form
-- Input validation
-- Unit validation
-- Required field validation
-
----
+Tasks: factory profile form · input validation · unit validation · required field validation · *(conditional)* MSME/eligibility fields if Module 4a is in scope
 
 ## Baseline Energy Engine
-
 Status: ⏳ Planned
-
-Tasks
-
-- Current energy calculation
-- Useful heat estimation
-- Fuel consumption estimation
-- Energy cost calculation
-- Baseline emissions
-
----
+Tasks: current energy calculation · useful heat estimation · fuel consumption estimation · energy cost calculation · baseline emissions
 
 ## Technology Assessment Engine
-
 Status: ⏳ Planned
-
-Technologies
-
-- Biomass
-- Solar Thermal
-- Heat Pumps
-- Waste Heat Recovery
-- Thermal Storage
-- Electrification
-
----
+Technologies: Biomass · Solar Thermal · Heat Pumps · Waste Heat Recovery · Thermal Storage · Electrification
 
 ## Constraint Engine
-
 Status: ⏳ Planned
+Checks: process temperature · space · budget · grid capacity · resource availability · retrofit compatibility
 
-Checks
-
-- Process temperature
-- Space
-- Budget
-- Grid capacity
-- Resource availability
-- Retrofit compatibility
-
----
+## Policy & Eligibility Engine *(conditional — see scope decision above)*
+Status: ⏳ Blocked on scope decision
+Tasks (if in scope): eligibility determination · subsidy matching · incentive value calculation for Finance Engine
 
 ## Scenario Generator
-
 Status: ⏳ Planned
-
-Tasks
-
-- Generate feasible combinations
-- Remove duplicates
-- Scenario identification
-- Scenario storage
-
----
+Tasks: generate feasible combinations · remove duplicates · scenario identification · scenario storage
 
 ## Optimization Engine
-
 Status: ⏳ Planned
-
-Evaluation
-
-- Cost
-- CapEx
-- Payback
-- Emissions
-- Reliability
-- Weighted score
-
----
+Evaluation: cost · CapEx · payback · emissions · reliability · weighted score
 
 ## Finance Engine
-
 Status: ⏳ Planned
-
-Tasks
-
-- CapEx
-- OpEx
-- Savings
-- ROI
-- Payback
-
----
+Tasks: CapEx · OpEx · savings · ROI · payback · *(conditional)* net of eligible subsidies
 
 ## Environmental Engine
-
-Status: ⏳ Planned
-
-Tasks
-
-- CO₂ reduction
-- Fossil fuel reduction
-- Renewable contribution
-- Sustainability metrics
-
----
+Status: ⏳ Planned — blocked on `emissions/emission_factors.json` being populated
+Tasks: CO₂ reduction · fossil fuel reduction · renewable contribution · sustainability metrics
 
 ## AI Recommendation Engine
-
 Status: ⏳ Planned
-
-Tasks
-
-- Recommendation generation
-- Explainability
-- Confidence score
-- Recommendation summary
+Tasks: recommendation generation · explainability · confidence score · recommendation summary
 
 ---
 
@@ -180,28 +126,17 @@ Tasks
 
 Status: ⏳ Planned
 
-Features
+Features: industry profiles · technology database · assumption storage · user sessions · scenario history
 
-- Industry profiles
-- Technology database
-- Assumption storage
-- User sessions
-- Scenario history
+**Prerequisite:** Phase 1 consistency pass should be finished first — the schema will be designed directly from the knowledge-base JSON shapes, so unresolved naming/duplication issues there will propagate into the schema if not fixed first.
 
 ---
 
 # PHASE 4 — FRONTEND
 
-Status: ⏳ Planned
+Status: ⏳ Planned (folder structure scaffolded under `frontend/`)
 
-Pages
-
-- Landing Page
-- Factory Input
-- Dashboard
-- Recommendation View
-- Scenario Comparison
-- Report Generation
+Pages: Landing Page · Factory Input · Dashboard · Recommendation View · Scenario Comparison · Report Generation
 
 ---
 
@@ -209,13 +144,7 @@ Pages
 
 Status: ⏳ Planned
 
-Charts
-
-- Energy Consumption
-- Cost Comparison
-- CO₂ Reduction
-- Technology Mix
-- Financial Analysis
+Charts: Energy Consumption · Cost Comparison · CO₂ Reduction · Technology Mix · Financial Analysis
 
 ---
 
@@ -223,52 +152,34 @@ Charts
 
 Status: ⏳ Planned
 
-Features
-
-- Recommendation Explanation
-- Pathway Comparison
-- Report Summarization
-- Interactive Assistant
+Features: Recommendation Explanation · Pathway Comparison · Report Summarization · Interactive Assistant
 
 ---
 
 # PHASE 7 — TESTING
 
-Status: ⏳ Planned
+Status: ⏳ Planned (test file stubs exist in `tests/` — no logic yet)
 
-Tasks
-
-- Unit Tests
-- Integration Tests
-- Performance Tests
-- Validation Tests
-- User Acceptance Testing
+Tasks: Unit Tests · Integration Tests · Performance Tests · Validation Tests · User Acceptance Testing
 
 ---
 
 # PHASE 8 — DEPLOYMENT
 
-Status: ⏳ Planned
+Status: ⏳ Planned (Docker config scaffolded in `deployment/` — unused)
 
-Tasks
-
-- Backend Deployment
-- Frontend Deployment
-- Database Hosting
-- Environment Configuration
-- Production Testing
+Tasks: Backend Deployment · Frontend Deployment · Database Hosting · Environment Configuration · Production Testing
 
 ---
 
 # FUTURE ENHANCEMENTS
 
-These are outside the SIH MVP.
+Outside the SIH MVP regardless of the subsidy scope decision above:
 
 - IoT Integration
-- Digital Twin
+- Digital Twin (see `digital-twin/future_scope.md`)
 - Live Energy Prices
 - GIS Support
-- Government Subsidy Integration
 - Carbon Credit Analysis
 - Multi-Factory Optimization
 - Predictive Analytics
@@ -302,13 +213,14 @@ A feature is considered complete only when:
 
 # NEXT DEVELOPMENT TARGET
 
-Immediate Priority
+Immediate priority, in order:
 
-1. Complete documentation
-2. Finalize architecture
-3. Design database
-4. Define API contracts
-5. Start backend implementation
+1. Resolve the subsidy/policy scope decision (box above).
+2. Finish the knowledge-base consistency pass (Phase 1 open items).
+3. Design database schema from the (now-consistent) knowledge-base structure.
+4. Build `scripts/` ETL pipeline (`convert_datasets.py` → `pre_process.py` → `load_knowledge.py` → `seed_database.py`).
+5. Define API contracts for `backend/apis/`.
+6. Start backend implementation (`backend/database.py`, `backend/main.py`, then `models/`).
 
 ---
 

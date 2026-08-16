@@ -1,11 +1,11 @@
 {
   "industry": "Pharmaceuticals",
-  "industry_id": "pharma",
+  "industry_id": "pharmaceutical",
   "country": "India",
-  "sector": "Pharmaceutical Manufacturing",
+  "sector": "pharmaceutical Manufacturing",
 
   "subsector_scope": [
-    "Active Pharmaceutical Ingredients (API) and bulk drugs",
+    "Active pharmaceutical Ingredients (API) and bulk drugs",
     "Formulations",
     "Tablets and capsules",
     "Liquid formulations",
@@ -15,12 +15,12 @@
     "Contract manufacturing"
   ],
 
-  "description": "Industry profile for Indian pharmaceutical manufacturing focused on energy, process heat, cooling, steam, utility systems and industrial decarbonization. Pharmaceutical plants are process-specific; the optimizer must use measured plant data for final technology matching rather than applying one universal energy or temperature profile.",
+  "description": "Industry profile for Indian pharmaceutical manufacturing focused on energy, process heat, cooling, steam, utility systems and industrial decarbonization. pharmaceutical plants are process-specific; the optimizer must use measured plant data for final technology matching rather than applying one universal energy or temperature profile.",
 
   "india_sector_context": {
     "energy_reference_year": 2022,
-    "overall_msme_pharma_energy_consumption_mtoe": 1.48,
-    "overall_msme_pharma_emissions_mtco2e": 1.8,
+    "overall_msme_pharmaceutical_energy_consumption_mtoe": 1.48,
+    "overall_msme_pharmaceutical_emissions_mtco2e": 1.8,
     "specific_energy_consumption_toe_per_tonne": 0.2,
     "source": "NITI Aayog, Roadmap for Green Transition of MSMEs, January 2026; annexure values derived from BEE energy and resource mapping of MSME sectors.",
     "scope_warning": "These values are sector-level MSME estimates used in the NITI Aayog roadmap and are not a plant-level benchmark. Do not use them to estimate an individual factory's consumption without plant production and utility data."
@@ -31,12 +31,12 @@
       "min": 10,
       "max": 20
     },
-    "cluster_reference": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim Pharma Cluster",
+    "cluster_reference": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
     "cluster_energy_cost_split_percent": {
       "HSD": 70,
       "electricity": 30
     },
-    "cluster_energy_cost_split_scope": "Typical Sikkim pharma cluster example; not a national pharma-sector average.",
+    "cluster_energy_cost_split_scope": "Typical Sikkim pharmaceutical cluster example; not a national pharmaceutical-sector average.",
     "major_energy_consuming_systems": [
       "Refrigeration and chillers",
       "Boilers and steam generation",
@@ -58,7 +58,7 @@
     "primary_process_heat_unit": "C",
     "extended_process_heat_max": 200,
     "extended_process_heat_unit": "C",
-    "basis": "BEE pharma-cluster data reports process steam temperatures below 130 C; Energy Innovation's India industrial-heat analysis identifies pharmaceutical process heat including reactor duties around 200 C.",
+    "basis": "BEE pharmaceutical-cluster data reports process steam temperatures below 130 C; Energy Innovation's India industrial-heat analysis identifies pharmaceutical process heat including reactor duties around 200 C.",
     "selection_rule": "Use the factory's measured process temperature, steam pressure and required heat-transfer medium for final technology selection."
   },
 
@@ -349,7 +349,7 @@
     "documented_cluster_hsd_gcv_kj_per_kg": 45187,
     "documented_cluster_fuel": "High Speed Diesel (HSD)",
     "documented_cluster_operating_hours_per_day": 15,
-    "fuel_application_note": "HSD is documented as the main thermal fuel in the Sikkim pharma cluster. Some units were shifting toward solid-fuel boilers using briquettes. This is a cluster observation, not a national fuel-share assumption."
+    "fuel_application_note": "HSD is documented as the main thermal fuel in the Sikkim pharmaceutical cluster. Some units were shifting toward solid-fuel boilers using briquettes. This is a cluster observation, not a national fuel-share assumption."
   },
 
   "common_fuels_and_energy_sources": {
@@ -362,7 +362,7 @@
       "Grid electricity",
       "On-site solar PV electricity"
     ],
-    "optimizer_rule": "Treat fuel availability, delivered price, calorific value, emissions factor, storage requirement and supply reliability as plant-location inputs; do not assume any one fuel is universal across Indian pharma plants."
+    "optimizer_rule": "Treat fuel availability, delivered price, calorific value, emissions factor, storage requirement and supply reliability as plant-location inputs; do not assume any one fuel is universal across Indian pharmaceutical plants."
   },
 
   "energy_efficiency_opportunities": {
@@ -371,7 +371,7 @@
       "max": 15
     },
     "additional_potential_with_investment_percent": 15,
-    "source": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim Pharma Cluster",
+    "source": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
     "priority_measures": [
       {
         "measure": "Condensate recovery",
@@ -531,7 +531,7 @@
       ],
       "source_basis": [
         "MNRE Concentrated Solar Thermal",
-        "BEE Sikkim Pharma Cluster compendium"
+        "BEE Sikkim pharmaceutical Cluster compendium"
       ]
     },
 
@@ -562,7 +562,7 @@
         "Boiler compatibility",
         "Local air-emission compliance"
       ],
-      "scope_warning": "All financial and fuel-conversion values above are from a specific Sikkim pharma-cluster case and must not be treated as universal benchmarks."
+      "scope_warning": "All financial and fuel-conversion values above are from a specific Sikkim pharmaceutical-cluster case and must not be treated as universal benchmarks."
     },
 
     "waste_heat_recovery": {
@@ -635,7 +635,7 @@
 
   "documented_case_studies": {
     "biomass_boiler_replacement": {
-      "source_scope": "Sikkim pharma cluster",
+      "source_scope": "Sikkim pharmaceutical cluster",
       "baseline_boiler_capacity_tph": 2,
       "baseline_fuel": "HSD",
       "annual_hsd_savings_litres": 189258,
@@ -645,7 +645,7 @@
     },
 
     "refrigeration_compressor_vfd": {
-      "source_scope": "Sikkim pharma cluster",
+      "source_scope": "Sikkim pharmaceutical cluster",
       "refrigeration_load_kw": 80.5,
       "refrigeration_load_tr": 51.93,
       "specific_power_kw_per_tr": 1.55,
@@ -659,7 +659,7 @@
     },
 
     "active_refrigerant_agent": {
-      "source_scope": "Sikkim pharma cluster",
+      "source_scope": "Sikkim pharmaceutical cluster",
       "chiller_power_kw": 143,
       "reported_power_saving_percent": 20,
       "reported_power_saving_kw": 28.6,
@@ -674,7 +674,7 @@
     },
 
     "low_pressure_compressor_replacement": {
-      "source_scope": "Sikkim pharma cluster",
+      "source_scope": "Sikkim pharmaceutical cluster",
       "baseline_sec_kw_per_cfm": 0.3,
       "proposed_sec_kw_per_cfm": 0.1,
       "annual_energy_savings_kwh": 5397,
@@ -686,7 +686,7 @@
   },
 
   "technology_attractiveness_reference": {
-    "source_scope": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim Pharma Cluster",
+    "source_scope": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
     "documented_options": [
       {
         "technology": "Conversion of HSD-fired boiler to biomass-fired boiler",
@@ -799,7 +799,7 @@
     "electric_boiler_rule": "Recommend electric boilers when steam demand, required pressure, available electrical capacity, tariff and reliability make the option technically and economically feasible.",
     "solar_thermal_rule": "Prioritize solar thermal for suitable daytime low/medium-temperature thermal loads and boiler-feedwater/hot-water preheating; include thermal storage or backup where production continues outside solar hours.",
     "biomass_rule": "Recommend biomass only when sustainable local feedstock, delivered cost, storage, moisture/quality, boiler compatibility and emissions compliance are acceptable.",
-    "refrigeration_rule": "Treat refrigeration and chillers as a major optimization target because BEE pharma-cluster data identifies refrigeration as a major energy-consuming system.",
+    "refrigeration_rule": "Treat refrigeration and chillers as a major optimization target because BEE pharmaceutical-cluster data identifies refrigeration as a major energy-consuming system.",
     "compressed_air_rule": "Check pressure setpoints, leaks, loading, specific power and VFD suitability before replacing or expanding compressor capacity.",
     "plant_specificity_rule": "Never use the sector-level SEC, cluster fuel share, or a single case-study payback as a direct plant forecast."
   },
@@ -810,12 +810,12 @@
       "NITI Aayog",
       "Ministry of New and Renewable Energy"
     ],
-    "case_study_source": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim Pharma Cluster",
+    "case_study_source": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
     "recent_sector_source": "NITI Aayog Roadmap for Green Transition of MSMEs, January 2026",
     "technical_electrification_source": "Energy Innovation, Electrifying Industrial Heat in India, 2026",
     "validation_status": "Values are source-derived where explicitly marked; case-study numbers are deliberately retained with scope warnings instead of being generalized.",
     "do_not_infer": [
-      "National pharma fuel shares from Sikkim cluster fuel shares",
+      "National pharmaceutical fuel shares from Sikkim cluster fuel shares",
       "Plant-level energy consumption from sector SEC alone",
       "Universal payback from cluster case studies",
       "Universal process temperature from a single pharmaceutical process"
@@ -824,13 +824,13 @@
 
   "sources": [
     {
-      "id": "bee_pharma_cluster",
-      "title": "Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim Pharma Cluster",
+      "id": "bee_pharmaceutical_cluster",
+      "title": "Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
       "publisher": "Bureau of Energy Efficiency, Government of India"
     },
     {
-      "id": "bee_pharma_mapping",
-      "title": "Benchmarking & Policy Recommendation Report for Energy Efficiency in MSME - Pharma Sector",
+      "id": "bee_pharmaceutical_mapping",
+      "title": "Benchmarking & Policy Recommendation Report for Energy Efficiency in MSME - pharmaceutical Sector",
       "publisher": "Bureau of Energy Efficiency, Government of India"
     },
     {
