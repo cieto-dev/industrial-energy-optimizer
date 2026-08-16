@@ -2,7 +2,7 @@ import csv
 import json
 from pathlib import Path
 
-CSV_FILE = Path("datasets/electricity_tariffs/tariff_master_2026_27_complete_no_empty.csv")
+CSV_FILE = Path("datasets/electricity_tariffs/tariff_master.csv")
 OUTPUT_FILE = Path("knowledge-base/master/tariffs.json")
 
 
