@@ -29,6 +29,20 @@ The root entity. Everything else is computed *for* a Factory.
 | `grid_reliability_pct` | number | affects electrification feasibility |
 | `msme_classification` | enum | micro / small / medium (Udyam thresholds — see `knowledge-base` Step 1 research) |
 | `udyam_registered` | boolean | **gates subsidy eligibility** (CLCSS, MNRE CFA, PSL rates all require this) |
+| `udyam_number` | string \| null | optional; required only if `udyam_registered` is true |
+| `annual_turnover_inr` | number | **required for Module 4a** — feeds `enterprise_category` derivation and scheme eligibility (see `knowledge-base/policies/eligibility_rules.json`) |
+| `plant_and_machinery_or_equipment_investment_inr` | number | **required for Module 4a** — Udyam classification threshold input, distinct from `budget_inr` (project budget) |
+| `project_type` | enum | one of: energy_efficiency / electrification / renewable_energy / alternative_fuel / biomass / waste_heat_recovery / energy_storage / waste_management / circular_economy / clean_transport / pollution_control / green_infrastructure / other — **required for Module 4a**, drives scheme matching |
+| `project_cost_inr` | number | **required for Module 4a** — distinct from `budget_inr`; total cost of the specific transition project being evaluated |
+| `loan_amount_inr` | number \| null | optional — required only for credit-guarantee schemes (e.g. CGTMSE) |
+| `existing_or_new_project` | enum | existing / new — **required for Module 4a** (e.g. gates PMEGP eligibility) |
+| `brownfield_or_greenfield` | enum \| null | brownfield / greenfield / not_applicable — optional |
+| `cluster_name` | string \| null | optional |
+| `cluster_is_adeetie_identified` | boolean \| null | optional — gates ADEETIE eligibility |
+| `annual_energy_savings_percent` | number \| null | optional — gates ADEETIE eligibility (≥10% threshold) |
+| `special_category` | object \| null | optional — booleans: `women_owned`, `sc_st_owned`, `pwd_owned`, `agniveer_owned`, `transgender_owned`, `north_east_region`, `jammu_kashmir`, `ladakh`, `aspirational_district`, `identified_credit_deficient_district` |
+
+**Field source note:** the Module 4a fields above are copied field-for-field from `knowledge-base/policies/eligibility_rules.json`'s `factory_profile_requirements.required_fields` block — that file is the source of truth for exact names/types/enums; keep this table in sync with it if it changes.
 
 **Immutability rule (from architecture plan):** the Factory's current-state baseline, once computed, is immutable. Pathways are computed *against* it, never by mutating it.
 
