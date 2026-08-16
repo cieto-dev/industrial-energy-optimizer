@@ -200,7 +200,7 @@ Estimates:
 - Renewable energy contribution
 - Sustainability indicators
 
-Depends on `knowledge-base/emissions/emission_factors.json`, which is currently empty and needs to be populated from `datasets/industrial_fuels.csv` before this module can be implemented accurately.
+Depends on `knowledge-base/emissions/emission_factors.json` — populated (7 fuels, IPCC-based, sourced), confirmed against live repo 16 Aug 2026. No longer blocked on data; `decision-engine/emissions/` (`co2_calculator.py`, `emission_engine.py`, `emission_factors.py`) already contains implementation code, functional/tested status unconfirmed.
 
 ---
 
@@ -314,7 +314,7 @@ industrial-energy-optimizer/
 |-----------|--------|
 | Research | ✅ Complete |
 | Knowledge base — industries, technologies, constraints, finance | 🟡 Populated, consistency pass in progress |
-| Knowledge base — policies, emissions, references | 🟡 Built, not yet integrated / has gaps (see `PROJECT_STATE.md` §12) |
+| Knowledge base — policies, emissions, references | 🟡 Built, not yet integrated. `emissions` and `references` gaps previously logged here are resolved (see `PROJECT_STATE.md` §5, corrected 16 Aug 2026 — note: §12 was a broken reference, this file only has 9 sections) |
 | Documentation | 🟡 In Progress |
 | Database Design | ⏳ Pending |
 | Backend | ⏳ Pending (scaffolding only) |

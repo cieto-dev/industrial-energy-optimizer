@@ -96,10 +96,10 @@ Implementation notes:
 - **Scope for MVP is not yet finalized** — see the open decision box in `FEATURE_BACKLOG.md`.
 
 ## 11. Emission Factors
-Status: ✅ Research complete (data exists) → ⚠️ Not yet ported into `knowledge-base/emissions/emission_factors.json` (still empty)
+Status: ✅ Research complete → ✅ Ported into `knowledge-base/emissions/emission_factors.json` (confirmed populated against live repo 16 Aug 2026 — 7 fuels, IPCC-based, sourced)
 Implementation notes:
-- Per-fuel CO₂ factors are already researched and sitting in `datasets/industrial_fuels.csv` (e.g., Indian industrial coal: 1.52 kg CO₂/kg; diesel: 3.13 kg CO₂/kg; natural gas: 2.69 kg CO₂/SCM — BEE + PPAC + GAIL).
-- This is the highest-priority knowledge-base gap: Module 8 (Environmental Impact) in `SYSTEM_DESIGN.md` cannot be implemented accurately until this file is populated.
+- Per-fuel CO₂ factors researched and ported from `datasets/industrial_fuels.csv` into the knowledge base.
+- Previous "still empty" status here was stale documentation, not a real gap. `decision-engine/emissions/` already has implementation code consuming this file — functional/tested status of that code is separately unconfirmed.
 
 ## 12. AI & Decision Support
 Status: 🔄 Ongoing
@@ -121,7 +121,7 @@ AI should NOT: replace engineering calculations, ignore technical constraints, p
 | Waste heat recovery source stream range | 90–1000°C (source, not output) | DOE WHR Technology Assessment | High |
 | ADEETIE interest subvention — micro/small | 5% | BEE (SRC_ADEETIE_BEE) | High (0.85) |
 | ADEETIE interest subvention — medium | 3% | BEE (SRC_ADEETIE_BEE) | High (0.85) |
-| CGTMSE guarantee coverage | 75% (per `central_policies.json`) vs 75–90% (per `constraints/budget.json`) | CGTMSE scheme docs | **Conflicting — needs reconciliation** |
+| CGTMSE guarantee coverage | 75–90% (per `budget.json` and `central_policies.json`, which agree) vs 75–85% (per `finance/subsidies.json`) | CGTMSE scheme docs | **Conflicting — needs reconciliation against current cgtmse.in figures before fixing; previous version of this row misidentified which two files disagreed** |
 
 ---
 
