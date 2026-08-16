@@ -18,9 +18,177 @@
         "url": "https://beeindia.gov.in/"
     },
     "SRC004": {
-    "title": "India Greenhouse Gas Emissions Inventory",
-    "organization": "Ministry of Environment, Forest and Climate Change (MoEFCC), Government of India",
-    "year": 2019,
-    "url": "https://www.moef.gov.in/"
-}
+        "title": "India Greenhouse Gas Emissions Inventory",
+        "organization": "Ministry of Environment, Forest and Climate Change (MoEFCC), Government of India",
+        "year": 2019,
+        "url": "https://www.moef.gov.in/"
+    },
+    "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
+        "title": "Roadmap for Green Transition of MSMEs",
+        "organization": "NITI Aayog, Government of India",
+        "year": 2026,
+        "url": "https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf"
+    },
+    "SRC_ADEETIE_BEE": {
+        "title": "Assistance in Deploying Energy Efficient Technologies in Industries and Establishments (ADEETIE) Scheme",
+        "organization": "Bureau of Energy Efficiency (BEE), Ministry of Power, Government of India",
+        "year": 2026,
+        "url": "https://www.adeetie.beeindia.gov.in/"
+    },
+    "SRC_MSME_GIFT": {
+        "title": "MSE Green Investment and Financing for Transformation (MSE GIFT) Scheme",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://ramp.msme.gov.in/ramp/index.php/RAMP-initiative/mse-gift/gift-interest-subvention"
+    },
+    "SRC_MSME_SPICE": {
+        "title": "MSE Scheme for Promotion and Investment in Circular Economy (MSE SPICE)",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://ramp.msme.gov.in/ramp/RAMP-initiative/mse-spice/mse-spice"
+    },
+    "SRC_MSME_ZED": {
+        "title": "MSME Sustainable (ZED) Certification",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://www.msme.gov.in/offerings/schemes-and-services/details/technology-upgradation-and-quality-certification-kjNzETMtQWa"
+    },
+    "SRC_MSME_LEAN": {
+        "title": "MSME Competitive Lean Scheme",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://lean.msme.gov.in/Home/Introduction"
+    },
+    "SRC_CGTMSE": {
+        "title": "Credit Guarantee Scheme for Micro and Small Enterprises",
+        "organization": "Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE)",
+        "year": 2026,
+        "url": "https://www.cgtmse.in/"
+    },
+    "SRC_MSME_UDYAM_THRESHOLDS": {
+        "title": "Udyam Registration - MSME Classification Criteria",
+        "organization": "Ministry of Micro, Small and Medium Enterprises, Government of India",
+        "year": 2026,
+        "url": "https://www.udyamregistration.gov.in/default.aspx"
+    },
+    "SRC_MOP_RCO_2025": {
+        "title": "Renewable Consumption Obligation Framework - Ministry of Power Notification S.O. 4421(E)",
+        "organization": "Ministry of Power, Government of India",
+        "year": 2025,
+        "url": "https://powermin.gov.in/"
+    },
+    "SRC_SERC_RPO_STATE_RULES": {
+        "title": "State Electricity Regulatory Commission Renewable Purchase Obligation Regulations",
+        "organization": "State Electricity Regulatory Commissions and Joint Electricity Regulatory Commissions, India",
+        "year": 2026,
+        "url": "https://powermin.gov.in/"
+    },
+    "SRC_ENERGY_INNOVATION_ELECTRIFYING_HEAT_INDIA_2026": {
+        "title": "Electrifying Industrial Heat in India",
+        "organization": "Energy Innovation: Policy and Technology LLC",
+        "year": 2026,
+        "url": "https://energyinnovation.org/report/electrifying-industrial-heat-in-india/"
+    },
+    "SRC_MNRE_GIZ_BIOMASS_MSME": {
+        "title": "Decarbonizing MSMEs: Biomass for Green Steam & Heat",
+        "organization": "GIZ India / Ministry of New and Renewable Energy, Government of India",
+        "year": 2026,
+        "url": "https://www.giz.de/sites/default/files/media/pkb-document/2026-02/giz2024-en-india-decarbonizing-msmes-biomass.pdf"
+    },
+    "SRC_BIOMASS_ATLAS_INDIA": {
+        "title": "National Biomass Atlas of India",
+        "organization": "Combustion, Gasification & Propulsion Laboratory (CGPL), Indian Institute of Science (IISc), with Ministry of New and Renewable Energy support",
+        "year": 2006,
+        "url": "https://cgpl.iisc.ac.in/oldwebcontent/html/Biomass-Atlas/Biomass-Atlas.html"
+    },
+    "SRC_BEE_COAL_INDIA": {
+        "title": "Energy Efficiency and Energy Consumption Reference Materials for Coal Use in Industry",
+        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "SRC_PPAC_DIESEL": {
+        "title": "Petroleum Product Price and Analysis Data",
+        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
+        "year": 2026,
+        "url": "https://www.ppac.gov.in/"
+    },
+    "SRC_PPAC_LPG": {
+        "title": "Petroleum Product Price and Analysis Data - LPG",
+        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
+        "year": 2026,
+        "url": "https://www.ppac.gov.in/"
+    },
+    "SRC_PPAC_GAIL_NATURAL_GAS": {
+        "title": "Natural Gas Pricing and Market Information",
+        "organization": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas, Government of India",
+        "year": 2026,
+        "url": "https://www.ppac.gov.in/"
+    },
+    "SRC_BIOMASS_SUPPLIER_MARKET_DATA": {
+        "title": "Industrial Biomass Fuel Market and Supplier Data",
+        "organization": "Industrial Biomass Fuel Suppliers and Market Data Sources",
+        "year": 2026,
+        "url": "https://biourja.mnre.gov.in/"
+    },
+    "SRC_BEE_FURNACE_OIL": {
+        "title": "Energy Efficiency and Fuel Reference Data for Furnace Oil",
+        "organization": "Bureau of Energy Efficiency (BEE), Government of India",
+        "year": 2026,
+        "url": "https://beeindia.gov.in/"
+    },
+    "SRC_HP_INDUSTRIAL_POLICY_2019": {
+        "title": "Himachal Pradesh Industrial Investment Policy 2019 and Rules Regarding Grant of Incentives, Concessions and Facilities",
+        "organization": "Government of Himachal Pradesh, Department of Industries",
+        "year": 2019,
+        "url": "https://himachalpr.gov.in/PressReleaseByYear.aspx?Date=29%2F11%2F2020&ID=19899&Language=1&Type=2"
+    },
+    "SRC_PUNJAB_INDUSTRIAL_POLICY_2022": {
+        "title": "Punjab Industrial and Business Development Policy 2022",
+        "organization": "Government of Punjab, Department of Industries and Commerce",
+        "year": 2022,
+        "url": "https://www.indiacode.nic.in/handle/123456789/19356?locale=en"
+    },
+    "SRC_GUJARAT_INDUSTRIAL_POLICY_2020": {
+        "title": "Gujarat Industrial Policy 2020",
+        "organization": "Government of Gujarat, Industries Commissionerate",
+        "year": 2020,
+        "url": "https://ic.gujarat.gov.in/documents/commondoc/2020/Industrial-Policy2020.pdf"
+    },
+    "SRC_HPSEBL_TARIFF_2026": {
+        "title": "HPSEBL Electricity Tariff Schedule / Tariff Order for FY 2026-27",
+        "organization": "Himachal Pradesh Electricity Regulatory Commission / Himachal Pradesh State Electricity Board Limited",
+        "year": 2026,
+        "url": "https://www.hpseb.in/irj/go/km/docs/internet/New_Website/Pages/tariff2.html"
+    },
+    "SRC_PSPCL_TARIFF_2026": {
+        "title": "PSPCL Electricity Tariff Schedule for FY 2026-27",
+        "organization": "Punjab State Power Corporation Limited (PSPCL)",
+        "year": 2026,
+        "url": "https://docs.pspcl.in/docs/cecommercial2620260409130617682.pdf"
+    },
+    "SRC_HERC_FY26": {
+        "title": "HERC Tariff Schedule for DHBVN/UHBVN FY 2026-27",
+        "organization": "Haryana Electricity Regulatory Commission / Dakshin Haryana Bijli Vitran Nigam / Uttar Haryana Bijli Vitran Nigam",
+        "year": 2026,
+        "url": "https://dhbvn.org.in/staticContent/saleregulation/salecircular/circular2025/04_D_2025.pdf"
+    },
+    "SRC_UPERC_FY26": {
+        "title": "UPERC Approved Industrial Electricity Tariff for FY 2025-26",
+        "organization": "Uttar Pradesh Electricity Regulatory Commission / Uttar Pradesh Power Corporation Limited",
+        "year": 2025,
+        "url": "https://uppcl.org/"
+    },
+    "SRC_TNERC_ORDER6_2025": {
+        "title": "TNERC Tariff Order - HT Industrial Tariff HV-3.1",
+        "organization": "Tamil Nadu Electricity Regulatory Commission / Tamil Nadu Generation and Distribution Corporation Limited",
+        "year": 2025,
+        "url": "https://www.tnerc.tn.gov.in/"
+    },
+    "SRC_URERC_TARIFF_2026": {
+        "title": "Tariff Order for UPCL for FY 2026-27",
+        "organization": "Uttarakhand Electricity Regulatory Commission / Uttarakhand Power Corporation Limited",
+        "year": 2026,
+        "url": "https://upcl.uk.gov.in/document/tariff-order-for-the-fy-2026-27/"
+    }
 }
