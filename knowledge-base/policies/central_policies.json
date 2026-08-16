@@ -16,6 +16,7 @@
       "Verify scheme-specific eligibility",
       "Verify project type and technology eligibility",
       "Check project cost or loan ceiling",
+      "Retrieve applicable financial support from subsidies.json where a financial support reference exists",
       "Calculate applicable subsidy or interest support",
       "Check whether benefits can be combined",
       "Apply policy-adjusted financial values",
@@ -25,7 +26,8 @@
     "verification_rule": "Final eligibility must be verified against the latest scheme guidelines, implementing agency and lender requirements before a financial commitment is made.",
     "no_double_counting_rule": "The optimizer must not automatically stack multiple subsidies for the same capital expenditure unless the respective scheme guidelines explicitly permit such convergence.",
     "policy_value_rule": "Policy benefits must be represented separately from the underlying technology economics so that the recommendation remains auditable.",
-    "uncertain_eligibility_rule": "If eligibility cannot be established from available factory data, the optimizer must label the benefit as 'potential' rather than treating it as guaranteed."
+    "uncertain_eligibility_rule": "If eligibility cannot be established from available factory data, the optimizer must label the benefit as 'potential' rather than treating it as guaranteed.",
+    "financial_data_ownership": "Financial-support parameters such as subsidy rates, interest-subvention rates, benefit caps, loan limits and guarantee coverage must be maintained in subsidies.json as the canonical financial-support source. central_policies.json stores policy applicability, eligibility logic and references to the corresponding financial-support records."
   },
 
   "msme_classification": {
@@ -77,6 +79,7 @@
       "policy_type": "energy_efficiency_financial_and_technical_support",
       "status": "active",
       "direct_relevance_to_project": "very_high",
+      "financial_support_reference": "SUB_ADEETIE",
       "target_enterprises": [
         "Micro Enterprises",
         "Small Enterprises",
@@ -95,12 +98,6 @@
           "small",
           "medium"
         ]
-      },
-      "financial_support": {
-        "micro_interest_subvention_percent": 5,
-        "small_interest_subvention_percent": 5,
-        "medium_interest_subvention_percent": 3,
-        "support_type": "interest_subvention"
       },
       "technical_support": {
         "investment_grade_energy_audit": true,
@@ -122,14 +119,15 @@
           "energy_management",
           "other_eligible_energy_efficiency_technologies"
         ],
-        "financial_calculation": "annual_interest_saving = eligible_loan_amount * applicable_interest_subvention_rate",
+        "financial_calculation": "annual_interest_saving = eligible_loan_amount * applicable_interest_subvention_rate_from_subsidies",
         "capex_subsidy": false,
         "opex_adjustment": "reduce financing-related annual cost where applicable"
       },
       "important_limitations": [
         "Interest subvention is not equivalent to a direct capital subsidy.",
         "Project must satisfy scheme-specific technical and administrative requirements.",
-        "The optimizer must not assume eligibility merely because a technology saves energy."
+        "The optimizer must not assume eligibility merely because a technology saves energy.",
+        "Financial-support parameters must be retrieved from the referenced record in subsidies.json."
       ],
       "source": "Bureau of Energy Efficiency, Government of India",
       "source_quality": "official"
@@ -143,6 +141,7 @@
       "policy_type": "green_finance",
       "status": "active",
       "direct_relevance_to_project": "very_high",
+      "financial_support_reference": "SUB_MSE_GIFT",
       "outlay_inr": 4780000000,
       "outlay_crore": 478,
       "duration_years": 4,
@@ -152,17 +151,6 @@
           "micro",
           "small"
         ]
-      },
-      "financial_support": {
-        "interest_subvention_percent": 2,
-        "maximum_term_loan_inr": 20000000,
-        "maximum_term_loan_crore": 2,
-        "risk_sharing_enabled": true,
-        "risk_sharing_eligible_loan_limit_inr": 20000000,
-        "risk_sharing_eligible_loan_limit_crore": 2,
-        "risk_sharing_guarantee_coverage_percent": 75,
-        "risk_sharing_component_outlay_inr": 1250000000,
-        "interest_subvention_component_outlay_inr": 3500000000
       },
       "eligible_green_activity_categories": [
         "resource_efficiency",
@@ -198,11 +186,9 @@
           "clean_electricity",
           "other_eligible_green_projects"
         ],
-        "financial_calculation": "annual_interest_support = eligible_term_loan * 0.02",
-        "maximum_annual_interest_support_at_2cr_loan_inr": 400000,
-        "maximum_annual_interest_support_at_2cr_loan_lakh": 4,
+        "financial_calculation": "annual_interest_support = eligible_term_loan * applicable_interest_subvention_rate_from_subsidies",
         "capex_subsidy": false,
-        "treatment": "interest_cost reduction"
+        "treatment": "interest cost reduction"
       },
       "expected_programme_impact": {
         "target_mse_beneficiaries": 12000,
@@ -213,7 +199,8 @@
       "important_limitations": [
         "MSE-GIFT is for Micro and Small Enterprises, not automatically Medium Enterprises.",
         "Eligible project categories and lending conditions must be satisfied.",
-        "Interest subvention must not be confused with a 2% reduction in project CAPEX."
+        "Interest subvention must not be confused with a reduction in project CAPEX.",
+        "Financial-support parameters must be retrieved from the referenced record in subsidies.json."
       ],
       "source": "Ministry of MSME / RAMP Portal",
       "source_quality": "official"
@@ -227,6 +214,7 @@
       "policy_type": "circular_economy_capital_subsidy",
       "status": "active",
       "direct_relevance_to_project": "high",
+      "financial_support_reference": "SUB_MSE_SPICE",
       "outlay_inr": 4725000000,
       "outlay_crore": 472.5,
       "duration_years": 4,
@@ -238,14 +226,6 @@
         ],
         "brownfield_projects_only": true
       },
-      "financial_support": {
-        "capital_subsidy_percent": 25,
-        "eligible_cost_basis": "plant_and_machinery",
-        "maximum_subsidy_inr": 1250000,
-        "maximum_subsidy_lakh": 12.5,
-        "project_cost_ceiling_inr": 20000000,
-        "project_cost_ceiling_crore": 2
-      },
       "optimizer_application": {
         "eligible_pathways": [
           "waste_management",
@@ -256,13 +236,13 @@
           "waste_to_energy",
           "eligible_clean_technology_projects"
         ],
-        "subsidy_formula": "min(eligible_plant_and_machinery_cost * 0.25, 1250000)",
+        "subsidy_formula": "policy_benefit = min(eligible_plant_and_machinery_cost * applicable_subsidy_rate_from_subsidies, applicable_subsidy_cap_from_subsidies)",
         "adjusted_capex_formula": "gross_capex - eligible_spice_subsidy"
       },
       "important_limitations": [
         "Only eligible brownfield projects should be considered.",
-        "The 25% applies to eligible plant and machinery, not automatically to the entire project cost.",
-        "Maximum subsidy is capped at ₹12.5 lakh.",
+        "The subsidy applies to eligible plant and machinery according to scheme rules, not automatically to the entire project cost.",
+        "The applicable subsidy rate and maximum subsidy must be retrieved from the referenced record in subsidies.json.",
         "Do not apply SPICE merely because a project reduces CO2."
       ],
       "source": "Ministry of MSME / RAMP Portal",
@@ -276,52 +256,19 @@
       "policy_type": "sustainability_quality_and_clean_technology_support",
       "status": "active",
       "direct_relevance_to_project": "high",
+      "financial_support_reference": "SUB_ZED",
       "objective": "Promote manufacturing with high quality and productivity while minimizing environmental impact through cleaner and more efficient processes.",
-      "certification_levels": {
-        "bronze": {
-          "base_certification_cost_inr": 10000,
-          "subsidy_percent": 80
-        },
-        "silver": {
-          "base_certification_cost_inr": 40000,
-          "subsidy_percent": 60
-        },
-        "gold": {
-          "base_certification_cost_inr": 90000,
-          "subsidy_percent": 50
-        }
-      },
-      "joining_reward_inr": 10000,
-      "additional_subsidy": {
-        "women_owned_msmes_percent": 10,
-        "sc_st_owned_msm_es_percent": 10,
-        "ner_percent": 10,
-        "himalayan_region_percent": 10,
-        "lwe_affected_area_percent": 10,
-        "island_territory_percent": 10,
-        "aspirational_district_percent": 10,
-        "sfurt_i_or_mse_cdp_participant_percent": 5
-      },
-      "testing_and_certification_support": {
-        "maximum_subsidy_percent": 75,
-        "maximum_subsidy_inr": 50000
-      },
-      "handholding": {
-        "maximum_support_inr": 200000
-      },
-      "zero_effect_technology_support": {
-        "maximum_support_inr": 300000,
-        "purpose": "technology upgradation toward zero-effect solutions, pollution control and cleaner technology"
-      },
       "optimizer_application": {
         "direct_capex_subsidy": false,
         "possible_clean_technology_support": true,
-        "use_case": "reduce eligible technology certification/handholding/cleaner-technology expenditure where applicable"
+        "use_case": "reduce eligible technology certification, handholding or cleaner-technology expenditure where applicable",
+        "financial_support_reference": "SUB_ZED"
       },
       "important_limitations": [
         "ZED is primarily a certification and competitiveness programme, not a general renewable-energy subsidy.",
         "Do not subtract the full ZED benefit from every energy-transition CAPEX calculation.",
-        "Only apply technology-upgradation support where the project satisfies the relevant ZED component."
+        "Only apply technology-upgradation support where the project satisfies the relevant ZED component.",
+        "Financial-support parameters must be retrieved from the referenced record in subsidies.json."
       ],
       "source": "Ministry of MSME",
       "source_quality": "official"
@@ -371,6 +318,7 @@
       "policy_type": "credit_guarantee",
       "status": "active",
       "direct_relevance_to_project": "very_high",
+      "financial_support_reference": "SUB_CGTMSE",
       "eligible_enterprises": [
         "micro",
         "small"
@@ -378,84 +326,17 @@
       "registration": {
         "udyam_required": true
       },
-      "credit_limit": {
-        "maximum_guarantee_eligible_credit_inr": 50000000,
-        "maximum_guarantee_eligible_credit_crore": 5
-      },
-      "collateral": {
-        "collateral_required": false,
-        "third_party_guarantee_required": false
-      },
-      "guarantee_coverage": {
-        "minimum_percent": 75,
-        "maximum_percent": 90,
-        "coverage_range_percent": [
-          75,
-          90
-        ],
-        "coverage_basis": "Coverage varies by borrower category, eligible credit-facility amount and applicable CGTMSE provisions; it is not a universal 90% guarantee.",
-        "category_rules": {
-          "micro_enterprises": {
-            "up_to_5_lakh_percent": 85,
-            "above_5_lakh_to_50_lakh_percent": 75,
-            "above_50_lakh_to_500_lakh_percent": 75
-          },
-          "mse_north_east_region": {
-            "coverage_percent": 80,
-            "note": "Includes applicable MSEs in the North Eastern Region, Sikkim, Union Territory of Jammu and Kashmir and Union Territory of Ladakh under the current CGTMSE framework."
-          },
-          "women_entrepreneurs": {
-            "coverage_percent": 90
-          },
-          "sc_st_entrepreneurs": {
-            "coverage_percent": 85
-          },
-          "person_with_disability": {
-            "coverage_percent": 85
-          },
-          "mse_promoted_by_agniveers": {
-            "coverage_percent": 85
-          },
-          "mse_in_aspirational_district": {
-            "coverage_percent": 85
-          },
-          "zed_certified_mse": {
-            "coverage_percent": 85
-          },
-          "all_other_category_of_borrowers": {
-            "coverage_percent": 75
-          }
-        },
-        "identified_credit_deficient_district_adjustment": {
-          "enabled": true,
-          "additional_coverage_percent": 5,
-          "rule": "Eligible MSEs situated in Identified Credit Deficient Districts may receive an additional 5 percentage points over the otherwise applicable coverage, subject to the applicable CGTMSE provisions and caps.",
-          "project_range_note": "The general project model must not assume a value above 90% unless the specific applicable CGTMSE rule for the borrower and district is explicitly verified."
-        }
-      },
       "policy_objective": "Increase availability of institutional credit to MSEs without requiring conventional collateral or third-party guarantees.",
       "optimizer_application": {
         "eligible_for_transition_financing": true,
         "direct_subsidy": false,
         "capex_adjustment": 0,
         "financing_adjustment": "reduce collateral/credit-risk barrier rather than directly reducing technology CAPEX",
-        "use_case": "identify pathways that can be financed through eligible collateral-free credit",
-        "coverage_selection_rule": "Select the applicable guarantee coverage percentage from borrower category, eligible credit-facility amount and other verified CGTMSE conditions. Do not default to 90%."
+        "use_case": "identify pathways that can be financed through eligible collateral-free credit"
       },
-      "important_limitations": [
-        "CGTMSE is a credit guarantee to the lender, not a cash subsidy paid directly to the MSME.",
-        "Guarantee coverage is category-dependent and must not be represented as a universal fixed percentage.",
-        "The optimizer must not subtract guarantee coverage from project CAPEX.",
-        "The optimizer must not treat guarantee coverage as cash received by the factory.",
-        "Final coverage must be verified against the current CGTMSE scheme document and applicable circulars before financial commitment."
-      ],
+      "important_limitation": "CGTMSE is a credit guarantee to the lender, not a cash subsidy paid directly to the MSME.",
       "source": "Ministry of MSME / CGTMSE",
-      "source_quality": "official",
-      "source_reference": {
-        "official_page": "https://www.cgtmse.in/Home/VS/3",
-        "scheme_document": "https://www.cgtmse.in/Default/ViewFile/?id=1704475709853_CGTMSE+-+Scheme+Document+CGS+I_updated+as+on+Dec+15+2023.pdf&path=Page",
-        "current_coverage_reference": "https://www.cgtmse.in/Home/VS/3"
-      }
+      "source_quality": "official"
     },
 
     "PMEGP": {
@@ -466,36 +347,13 @@
       "policy_type": "credit_linked_margin_money_subsidy",
       "status": "active",
       "direct_relevance_to_project": "medium",
+      "financial_support_reference": "SUB_PMEGP",
       "target": "new micro enterprises",
       "eligibility": {
         "enterprise_type": "new_micro_enterprise",
         "minimum_age_years": 18,
         "existing_subsidized_units_generally_excluded": true,
         "udyam_registration_required_before_physical_verification": true
-      },
-      "project_cost_limit": {
-        "manufacturing_max_inr": 5000000,
-        "manufacturing_max_lakh": 50,
-        "service_business_max_inr": 2000000,
-        "service_business_max_lakh": 20
-      },
-      "beneficiary_contribution": {
-        "general_percent": 10,
-        "special_category_percent": 5
-      },
-      "margin_money_subsidy": {
-        "general_category": {
-          "urban_percent": 15,
-          "rural_percent": 25
-        },
-        "special_category": {
-          "urban_percent": 25,
-          "rural_percent": 35
-        }
-      },
-      "bank_finance": {
-        "general_category_percent": 90,
-        "special_category_percent": 95
       },
       "optimizer_application": {
         "direct_relevance": "new_factory_or_new_micro_enterprise",
@@ -505,7 +363,8 @@
       "important_limitations": [
         "Do not apply PMEGP to every existing industrial energy-retrofit project.",
         "PMEGP is primarily for setting up new micro enterprises.",
-        "Existing units that have already received government subsidy under specified schemes may be ineligible."
+        "Existing units that have already received government subsidy under specified schemes may be ineligible.",
+        "Project cost limits, beneficiary contribution and margin-money subsidy parameters must be retrieved from the referenced record in subsidies.json."
       ],
       "source": "Ministry of MSME / PMEGP",
       "source_quality": "official"
@@ -513,7 +372,6 @@
 
     "RAMP": {
       "policy_name": "Raising and Accelerating MSME Performance",
-      "abbreviation": "RAMP",
       "administering_ministry": "Ministry of Micro, Small and Medium Enterprises",
       "policy_type": "central_sector_programme",
       "status": "active",
@@ -562,31 +420,8 @@
       "policy_type": "cluster_infrastructure_and_common_facility_support",
       "status": "active",
       "direct_relevance_to_project": "medium_high",
+      "financial_support_reference": "SUB_MSE_CDP",
       "objective": "Improve productivity and competitiveness of MSE clusters through common facilities, infrastructure and cluster-level interventions.",
-      "supported_components": {
-        "diagnostic_study": {
-          "maximum_project_cost_inr": 250000,
-          "maximum_project_cost_lakh": 2.5
-        },
-        "soft_intervention": {
-          "maximum_project_cost_inr": 2500000,
-          "maximum_project_cost_lakh": 25,
-          "normal_goi_contribution_percent": 75,
-          "special_category_contribution_percent": 90
-        },
-        "common_facility_centre": {
-          "maximum_eligible_project_cost_inr": 150000000,
-          "maximum_eligible_project_cost_crore": 15,
-          "normal_goi_contribution_percent": 70,
-          "special_category_contribution_percent": 90
-        },
-        "industrial_area_infrastructure": {
-          "maximum_eligible_project_cost_inr": 100000000,
-          "maximum_eligible_project_cost_crore": 10,
-          "normal_goi_contribution_percent": 60,
-          "special_category_contribution_percent": 80
-        }
-      },
       "special_category_conditions": [
         "North Eastern States",
         "Hill States",
@@ -608,7 +443,7 @@
           "common utility infrastructure"
         ]
       },
-      "important_limitation": "MSE-CDP is primarily a cluster-level mechanism and should not be treated as an automatic individual-factory CAPEX subsidy.",
+      "important_limitation": "MSE-CDP is primarily a cluster-level mechanism and should not be treated as an automatic individual-factory CAPEX subsidy. Financial-support parameters must be retrieved from the referenced record in subsidies.json.",
       "source": "Ministry of MSME",
       "source_quality": "official"
     },
@@ -642,9 +477,6 @@
       "policy_type": "market_access_policy",
       "status": "active",
       "direct_relevance_to_project": "medium",
-      "annual_procurement_target_percent": 25,
-      "sc_st_sub_target_percent": 4,
-      "women_owned_mse_sub_target_percent": 3,
       "applicable_buyers": [
         "Central Government Ministries",
         "Central Government Departments",
@@ -812,6 +644,7 @@
       "Project classification",
       "Technology classification",
       "Scheme eligibility check",
+      "Retrieve referenced financial-support record",
       "Benefit calculation",
       "Convergence/double-counting check",
       "Policy-adjusted economics",
@@ -835,17 +668,16 @@
 
   "financial_calculation_rules": {
     "capital_subsidy": {
-      "formula": "policy_benefit = min(eligible_cost * subsidy_rate, subsidy_cap)",
+      "formula": "policy_benefit = min(eligible_cost * applicable_subsidy_rate_from_subsidies, applicable_subsidy_cap_from_subsidies)",
       "adjusted_capex": "gross_capex - policy_benefit"
     },
     "interest_subvention": {
-      "formula": "annual_interest_support = eligible_term_loan * subvention_rate",
+      "formula": "annual_interest_support = eligible_term_loan * applicable_subvention_rate_from_subsidies",
       "adjusted_annual_financing_cost": "annual_financing_cost - annual_interest_support"
     },
     "credit_guarantee": {
       "formula": "do_not_reduce_capex_by_guarantee_percentage",
-      "treatment": "credit guarantee reduces lender credit risk; it is not a direct cash subsidy",
-      "coverage_treatment": "select the applicable CGTMSE coverage percentage from the verified borrower/category rules; coverage percentage must not be treated as a CAPEX reduction"
+      "treatment": "credit guarantee reduces lender credit risk; it is not a direct cash subsidy"
     },
     "technical_support": {
       "formula": "do_not_monetize_unless_actual_eligible_cost_support_is_defined",
@@ -863,9 +695,6 @@
     "Do not apply PMEGP to an ordinary existing-factory retrofit without checking PMEGP's new-enterprise conditions.",
     "Do not treat ADEETIE interest subvention as a capital subsidy.",
     "Do not treat CGTMSE guarantee coverage as money received by the factory.",
-    "Do not treat CGTMSE guarantee coverage as a reduction in technology CAPEX.",
-    "Do not assume CGTMSE provides one universal coverage percentage to every eligible borrower.",
-    "Do not use the maximum CGTMSE coverage percentage unless the borrower's specific category and applicable conditions have been verified.",
     "Do not treat RAMP's total outlay as a subsidy available directly to an individual MSME.",
     "Do not treat MSE-CDP cluster grants as individual-factory grants.",
     "Do not assume ZED certification support pays for the entire energy-transition project.",
@@ -874,7 +703,9 @@
     "Do not treat a scheme as guaranteed merely because the factory is Udyam registered.",
     "Do not calculate policy benefits before technical feasibility is established.",
     "Do not allow policy incentives to make an otherwise technically infeasible pathway feasible.",
-    "Do not hide policy assumptions inside CAPEX; preserve gross CAPEX, policy benefit and net CAPEX separately."
+    "Do not hide policy assumptions inside CAPEX; preserve gross CAPEX, policy benefit and net CAPEX separately.",
+    "Do not duplicate financial-support parameters from subsidies.json inside this policy file.",
+    "When a policy contains a financial_support_reference, retrieve the corresponding financial parameters from subsidies.json."
   ],
 
   "data_freshness": {
@@ -889,9 +720,7 @@
       "new eligibility notification",
       "scheme closure",
       "scheme extension",
-      "new RAMP sub-scheme",
-      "new CGTMSE scheme document or circular",
-      "change in CGTMSE guarantee coverage rules"
+      "new RAMP sub-scheme"
     ]
   },
 
@@ -924,8 +753,7 @@
     {
       "source": "CGTMSE",
       "authority": "Government-supported credit guarantee institution",
-      "purpose": "Credit guarantee rules and current guarantee framework",
-      "official_url": "https://www.cgtmse.in/Home/VS/3"
+      "purpose": "Credit guarantee rules and current guarantee framework"
     }
   ]
 }
