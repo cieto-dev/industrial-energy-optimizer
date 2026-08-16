@@ -1,7 +1,7 @@
 import csv
 import json
 
-input_file = "datasets/district_coordinates_6_regions.csv"
+input_file = "datasets/district_coordinates.csv"
 output_file = "knowledge-base/master/districts.json"
 
 state_ids = {
