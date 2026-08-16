@@ -57,7 +57,7 @@
   },
 
   "applicability": {
-    "default_for_msm_e": "not_automatically_applicable",
+    "default_for_msme": "not_automatically_applicable",
     "check_before_calculation": [
       "is_distribution_licensee",
       "is_designated_consumer",
@@ -99,7 +99,7 @@
         "covered": true,
         "condition": "Only where the captive user is a designated consumer under the Energy Conservation Act framework."
       },
-      "ordinary_grid_connected_msm_e": {
+      "ordinary_grid_connected_msme": {
         "covered_automatically": false,
         "condition": "Ordinary electricity consumption from a distribution licensee does not by itself make an MSME an RCO-obligated entity."
       }
@@ -656,7 +656,7 @@
     ]
   },
 
-  "example_1_non_obligated_msm_e": {
+  "example_1_non_obligated_msme": {
     "factory": {
       "enterprise_category": "small",
       "industry": "food_processing",
@@ -783,7 +783,7 @@
   },
 
   "data_quality_rules": {
-    "never_assume_rpo_for_all_msm_es": true,
+    "never_assume_rpo_for_all_msmes": true,
     "never_use_old_2022_rpo_trajectory_without_checking_current_framework": true,
     "never_use_2023_rco_notification_as_current_when_2025_notification_applies": true,
     "never_mix_rpo_and_rco_without_recording_framework": true,
