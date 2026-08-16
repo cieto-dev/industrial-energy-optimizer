@@ -1,0 +1,34 @@
+[
+  {
+    "technology_id": "HEAT_PUMP",
+    "technology_name": "Heat Pump"
+  },
+  {
+    "technology_id": "ELECTRIC_BOILER",
+    "technology_name": "Electric Boiler"
+  },
+  {
+    "technology_id": "BIOMASS_BOILER",
+    "technology_name": "Biomass Boiler"
+  },
+  {
+    "technology_id": "SOLAR_THERMAL",
+    "technology_name": "Solar Thermal"
+  },
+  {
+    "technology_id": "SOLAR_PV",
+    "technology_name": "Solar PV"
+  },
+  {
+    "technology_id": "THERMAL_STORAGE",
+    "technology_name": "Thermal Storage"
+  },
+  {
+    "technology_id": "WASTE_HEAT_RECOVERY",
+    "technology_name": "Waste Heat Recovery"
+  },
+  {
+    "technology_id": "GRID_ELECTRICITY",
+    "technology_name": "Grid Electricity"
+  }
+]

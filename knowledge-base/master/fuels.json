@@ -1,0 +1,34 @@
+[
+  {
+    "fuel_id": "COAL",
+    "fuel_name": "Coal"
+  },
+  {
+    "fuel_id": "DIESEL",
+    "fuel_name": "Diesel"
+  },
+  {
+    "fuel_id": "LPG",
+    "fuel_name": "LPG"
+  },
+  {
+    "fuel_id": "NATURAL_GAS",
+    "fuel_name": "Natural Gas"
+  },
+  {
+    "fuel_id": "FURNACE_OIL",
+    "fuel_name": "Furnace Oil"
+  },
+  {
+    "fuel_id": "BIOMASS",
+    "fuel_name": "Biomass"
+  },
+  {
+    "fuel_id": "BIOGAS",
+    "fuel_name": "Biogas"
+  },
+  {
+    "fuel_id": "ELECTRICITY",
+    "fuel_name": "Electricity"
+  }
+]

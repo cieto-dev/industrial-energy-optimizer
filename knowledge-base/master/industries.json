@@ -1,0 +1,38 @@
+[
+  {
+    "industry_id": "TEXTILE",
+    "industry_name": "Textile"
+  },
+  {
+    "industry_id": "FOOD_PROCESSING",
+    "industry_name": "Food Processing"
+  },
+  {
+    "industry_id": "PHARMACEUTICAL",
+    "industry_name": "Pharmaceutical"
+  },
+  {
+    "industry_id": "CHEMICAL",
+    "industry_name": "Chemical"
+  },
+  {
+    "industry_id": "PAPER",
+    "industry_name": "Paper"
+  },
+  {
+    "industry_id": "DAIRY",
+    "industry_name": "Dairy"
+  },
+  {
+    "industry_id": "CEMENT",
+    "industry_name": "Cement"
+  },
+  {
+    "industry_id": "STEEL",
+    "industry_name": "Steel"
+  },
+  {
+    "industry_id": "GLASS",
+    "industry_name": "Glass"
+  }
+]
