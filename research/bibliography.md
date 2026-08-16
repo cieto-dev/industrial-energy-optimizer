@@ -332,13 +332,13 @@ This source represents project-level defaults rather than an external publicatio
 
 ## 7. MSME Green Transition and Textile Sector References
 
-### niti_msme_roadmap — Roadmap for Green Transition of MSMEs
+### SRC_NITI_AAYOG_ROADMAP_JAN2026 — Roadmap for Green Transition of MSMEs
 
 - Organization: NITI Aayog, Government of India
 - Year: 2026
 - URL: https://www.niti.gov.in/sites/default/files/2026-01/Roadmap_for_Green_Transition_of_MSMEs.pdf
 
-### niti_mSME_green_transition_2026 — Roadmap for Green Transition of MSMEs
+### SRC_NITI_AAYOG_ROADMAP_JAN2026 — Roadmap for Green Transition of MSMEs
 
 - Organization: NITI Aayog, Government of India
 - Year: 2026
