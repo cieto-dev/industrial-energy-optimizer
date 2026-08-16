@@ -485,36 +485,16 @@
   },
   "sources": {
     "SRC_COAL_INDIA_NOTIFIED": {
-      "title": "Notified prices of coal grades (G1-G17, non-coking)",
-      "publisher": "Coal India Limited / Ministry of Coal, Government of India",
-      "publication_date": "2026-06",
-      "url": "https://www.coalindia.in/",
-      "type": "Government Report / Notified Price List",
-      "pages": ""
+      "source_id": "SRC_COAL_INDIA_NOTIFIED"
     },
     "SRC_INDUSTRIAL_FUELS_CSV": {
-      "title": "Industrial fuel price compilation (diesel, LPG, PNG, biomass variants)",
-      "publisher": "Project research compile: Bureau of Energy Efficiency (BEE) fuel data, IPCC emission-factor guidance, and supplier/marketplace quotations",
-      "publication_date": "2026-06",
-      "url": "https://beeindia.gov.in/",
-      "type": "Secondary Compilation",
-      "pages": ""
+      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
     },
     "SRC_PPAC_APM_FORMULA": {
-      "title": "Administered Price Mechanism (APM) domestic natural gas pricing formula, post Kirit Parikh Committee reform",
-      "publisher": "Petroleum Planning & Analysis Cell (PPAC), Ministry of Petroleum and Natural Gas",
-      "publication_date": "2023-04",
-      "url": "https://www.ppac.gov.in/",
-      "type": "Government Report",
-      "pages": ""
+      "source_id": "SRC_PPAC_APM_FORMULA"
     },
     "SRC_MOP_COFIRING_POLICY": {
-      "title": "Revised policy for biomass co-firing in coal-based thermal power plants",
-      "publisher": "Ministry of Power, Government of India",
-      "publication_date": "2023-11",
-      "url": "https://powermin.gov.in/",
-      "type": "Government Policy Notification",
-      "pages": ""
+      "source_id": "SRC_MOP_COFIRING_POLICY"
     }
   },
   "cross_references": {
