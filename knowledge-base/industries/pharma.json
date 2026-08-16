@@ -3,7 +3,6 @@
   "industry_id": "pharmaceutical",
   "country": "India",
   "sector": "pharmaceutical Manufacturing",
-
   "subsector_scope": [
     "Active pharmaceutical Ingredients (API) and bulk drugs",
     "Formulations",
@@ -14,9 +13,7 @@
     "Topical products",
     "Contract manufacturing"
   ],
-
   "description": "Industry profile for Indian pharmaceutical manufacturing focused on energy, process heat, cooling, steam, utility systems and industrial decarbonization. pharmaceutical plants are process-specific; the optimizer must use measured plant data for final technology matching rather than applying one universal energy or temperature profile.",
-
   "india_sector_context": {
     "energy_reference_year": 2022,
     "overall_msme_pharmaceutical_energy_consumption_mtoe": 1.48,
@@ -25,7 +22,6 @@
     "source": "NITI Aayog, Roadmap for Green Transition of MSMEs, January 2026; annexure values derived from BEE energy and resource mapping of MSME sectors.",
     "scope_warning": "These values are sector-level MSME estimates used in the NITI Aayog roadmap and are not a plant-level benchmark. Do not use them to estimate an individual factory's consumption without plant production and utility data."
   },
-
   "energy_cost_characteristics": {
     "energy_cost_share_of_manufacturing_cost_percent": {
       "min": 10,
@@ -51,7 +47,6 @@
       "Cleaning utilities"
     ]
   },
-
   "typical_temperature": {
     "primary_process_heat_min": 55,
     "primary_process_heat_max": 130,
@@ -61,7 +56,6 @@
     "basis": "BEE pharmaceutical-cluster data reports process steam temperatures below 130 C; Energy Innovation's India industrial-heat analysis identifies pharmaceutical process heat including reactor duties around 200 C.",
     "selection_rule": "Use the factory's measured process temperature, steam pressure and required heat-transfer medium for final technology selection."
   },
-
   "process_temperature_ranges": {
     "low_temperature_heat": {
       "min": 55,
@@ -81,7 +75,6 @@
         "Thermal energy storage"
       ]
     },
-
     "low_medium_temperature_heat": {
       "min": 80,
       "max": 130,
@@ -102,7 +95,6 @@
         "Thermal energy storage"
       ]
     },
-
     "medium_temperature_heat": {
       "min": 130,
       "max": 200,
@@ -122,7 +114,6 @@
       ],
       "heat_pump_status": "case_specific"
     },
-
     "specialized_high_temperature_or_thermal_treatment": {
       "min": 200,
       "max": 300,
@@ -139,7 +130,6 @@
       "warning": "This range is not a generic pharmaceutical-sector process-heat requirement; activate it only when the selected plant process actually requires it."
     }
   },
-
   "production_process": [
     {
       "stage": 1,
@@ -163,7 +153,6 @@
         "Pumps"
       ]
     },
-
     {
       "stage": 2,
       "name": "Synthesis / reaction / biological processing",
@@ -190,7 +179,6 @@
         "Cooling systems"
       ]
     },
-
     {
       "stage": 3,
       "name": "Separation and purification",
@@ -219,7 +207,6 @@
         "Compressors"
       ]
     },
-
     {
       "stage": 4,
       "name": "Formulation and finishing",
@@ -247,7 +234,6 @@
         "Packaging equipment"
       ]
     },
-
     {
       "stage": 5,
       "name": "Sterilization and clean utilities",
@@ -272,7 +258,6 @@
         "Pumps"
       ]
     },
-
     {
       "stage": 6,
       "name": "Effluent and utility treatment",
@@ -296,7 +281,6 @@
       ]
     }
   ],
-
   "steam_system": {
     "importance": "very_high",
     "cluster_operating_pressure_kg_per_cm2_g": {
@@ -336,7 +320,6 @@
       "Automatic blowdown control"
     ]
   },
-
   "boiler_and_fuel_baseline": {
     "documented_cluster_boiler_type": "Fire-tube, HSD-fired, shell-type, three-pass",
     "documented_cluster_boiler_capacity_tph": 2,
@@ -351,7 +334,6 @@
     "documented_cluster_operating_hours_per_day": 15,
     "fuel_application_note": "HSD is documented as the main thermal fuel in the Sikkim pharmaceutical cluster. Some units were shifting toward solid-fuel boilers using briquettes. This is a cluster observation, not a national fuel-share assumption."
   },
-
   "common_fuels_and_energy_sources": {
     "documented_or_relevant": [
       "High Speed Diesel (HSD)",
@@ -364,7 +346,6 @@
     ],
     "optimizer_rule": "Treat fuel availability, delivered price, calorific value, emissions factor, storage requirement and supply reliability as plant-location inputs; do not assume any one fuel is universal across Indian pharmaceutical plants."
   },
-
   "energy_efficiency_opportunities": {
     "sector_level_potential_percent_without_or_marginal_investment": {
       "min": 10,
@@ -425,7 +406,6 @@
       }
     ]
   },
-
   "technology_profiles": {
     "energy_management_system": {
       "priority": "very_high",
@@ -443,7 +423,6 @@
       ],
       "selection_condition": "Prioritize when adequate sub-metering and operational data can be collected."
     },
-
     "electric_boiler": {
       "priority": "very_high",
       "temperature_fit": {
@@ -473,7 +452,6 @@
         "BEE pharmaceutical energy-efficiency material"
       ]
     },
-
     "industrial_heat_pump": {
       "priority": "high",
       "temperature_fit": {
@@ -503,7 +481,6 @@
         "IPCC AR6 WGIII industrial heat efficiency discussion"
       ]
     },
-
     "solar_thermal": {
       "priority": "high",
       "temperature_fit": {
@@ -534,7 +511,6 @@
         "BEE Sikkim pharmaceutical Cluster compendium"
       ]
     },
-
     "biomass_boiler": {
       "priority": "medium_high",
       "best_fit": [
@@ -564,7 +540,6 @@
       ],
       "scope_warning": "All financial and fuel-conversion values above are from a specific Sikkim pharmaceutical-cluster case and must not be treated as universal benchmarks."
     },
-
     "waste_heat_recovery": {
       "priority": "very_high",
       "best_fit": [
@@ -576,7 +551,6 @@
       ],
       "selection_rule": "Only activate when the temperature, flow rate, operating hours and heat-sink demand support useful heat recovery."
     },
-
     "thermal_energy_storage": {
       "priority": "medium_high",
       "best_fit": [
@@ -592,7 +566,6 @@
         "Capital cost"
       ]
     },
-
     "solar_pv": {
       "priority": "high",
       "best_fit": [
@@ -609,7 +582,6 @@
         "Day/night load profile"
       ]
     },
-
     "high_efficiency_compressors_and_vfd": {
       "priority": "high",
       "best_fit": [
@@ -632,7 +604,6 @@
       "scope_warning": "Case values are equipment-specific and should not be generalized to all pharmaceutical plants."
     }
   },
-
   "documented_case_studies": {
     "biomass_boiler_replacement": {
       "source_scope": "Sikkim pharmaceutical cluster",
@@ -643,7 +614,6 @@
       "investment_inr_lakh": 60,
       "payback_months": 9
     },
-
     "refrigeration_compressor_vfd": {
       "source_scope": "Sikkim pharmaceutical cluster",
       "refrigeration_load_kw": 80.5,
@@ -657,7 +627,6 @@
       "investment_inr_lakh": 2.66,
       "payback_months": 23
     },
-
     "active_refrigerant_agent": {
       "source_scope": "Sikkim pharmaceutical cluster",
       "chiller_power_kw": 143,
@@ -672,7 +641,6 @@
       "annual_energy_savings_toe": 14.76,
       "annual_ghg_savings_tco2": 140.71
     },
-
     "low_pressure_compressor_replacement": {
       "source_scope": "Sikkim pharmaceutical cluster",
       "baseline_sec_kw_per_cfm": 0.3,
@@ -684,7 +652,6 @@
       "annual_ghg_savings_tco2": 4.43
     }
   },
-
   "technology_attractiveness_reference": {
     "source_scope": "BEE Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
     "documented_options": [
@@ -791,7 +758,6 @@
     ],
     "warning": "These IRR, payback and investment figures are case-study/cluster estimates from the BEE compendium, not guaranteed project economics. The optimizer should recompute economics from user-specific capex, tariffs, operating hours, fuel prices and financing assumptions."
   },
-
   "recommendation_rules": {
     "first_priority": "Energy efficiency and loss reduction before fuel switching or electrification, unless safety, compliance or equipment replacement makes a different sequence necessary.",
     "clean_steam_rule": "Where steam directly contacts product or is used for critical sterilization, preserve required steam quality and validation; do not treat ordinary plant steam and clean/pure steam as interchangeable.",
@@ -803,7 +769,6 @@
     "compressed_air_rule": "Check pressure setpoints, leaks, loading, specific power and VFD suitability before replacing or expanding compressor capacity.",
     "plant_specificity_rule": "Never use the sector-level SEC, cluster fuel share, or a single case-study payback as a direct plant forecast."
   },
-
   "data_quality": {
     "primary_or_government_sources": [
       "Bureau of Energy Efficiency",
@@ -821,34 +786,21 @@
       "Universal process temperature from a single pharmaceutical process"
     ]
   },
-
   "sources": [
     {
-      "id": "bee_pharmaceutical_cluster",
-      "title": "Technology Compendium for Energy Efficiency and Renewable Energy - Sikkim pharmaceutical Cluster",
-      "publisher": "Bureau of Energy Efficiency, Government of India"
+      "source_id": "bee_pharmaceutical_cluster"
     },
     {
-      "id": "bee_pharmaceutical_mapping",
-      "title": "Benchmarking & Policy Recommendation Report for Energy Efficiency in MSME - pharmaceutical Sector",
-      "publisher": "Bureau of Energy Efficiency, Government of India"
+      "source_id": "bee_pharmaceutical_mapping"
     },
     {
-      "id": "niti_msme_roadmap_2026",
-      "title": "Roadmap for Green Transition of MSMEs",
-      "publisher": "NITI Aayog, Government of India",
-      "publication_date": "January 2026"
+      "source_id": "niti_msme_roadmap"
     },
     {
-      "id": "mnre_cst",
-      "title": "Concentrated Solar Thermal",
-      "publisher": "Ministry of New and Renewable Energy, Government of India"
+      "source_id": "mnre_solar_thermal"
     },
     {
-      "id": "energy_innovation_india_heat_2026",
-      "title": "Electrifying Industrial Heat in India",
-      "publisher": "Energy Innovation",
-      "publication_year": 2026
+      "source_id": "energy_innovation_india_heat_2026"
     }
   ]
 }
