@@ -8,7 +8,249 @@
   "SRC003": {
     "source_id": "SRC003"
   },
+  "SRC004": {{
+  "SRC001": {
+    "source_id": "SRC001"
+  },
+  "SRC002": {
+    "source_id": "SRC002"
+  },
+  "SRC003": {
+    "source_id": "SRC003"
+  },
   "SRC004": {
+    "source_id": "SRC004"
+  },
+  "SRC_TNERC_ORDER6_2025": {
+    "source_id": "SRC_TNERC_ORDER6_2025"
+  },
+  "SRC_UPERC_FY26": {
+    "source_id": "SRC_UPERC_FY26"
+  },
+  "SRC_KERC_MAR2025_ORDER": {
+    "source_id": "SRC_KERC_MAR2025_ORDER"
+  },
+  "SRC_TARIFF_MASTER_REPO": {
+    "source_id": "SRC_TARIFF_MASTER_REPO"
+  },
+  "SRC_COAL_INDIA_NOTIFIED": {
+    "source_id": "SRC_COAL_INDIA_NOTIFIED"
+  },
+  "SRC_INDUSTRIAL_FUELS_CSV": {
+    "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
+  },
+  "SRC_PPAC_APM_FORMULA": {
+    "source_id": "SRC_PPAC_APM_FORMULA"
+  },
+  "SRC_MOP_COFIRING_POLICY": {
+    "source_id": "SRC_MOP_COFIRING_POLICY"
+  },
+  "SRC_SOLAR_VENDOR_COMPILE": {
+    "source_id": "SRC_SOLAR_VENDOR_COMPILE"
+  },
+  "SRC_WHR_GLOBAL_BENCHMARK": {
+    "source_id": "SRC_WHR_GLOBAL_BENCHMARK"
+  },
+  "SRC_VFD_INDIAMART": {
+    "source_id": "SRC_VFD_INDIAMART"
+  },
+  "SRC_MOTOR_IE4_GLOBAL": {
+    "source_id": "SRC_MOTOR_IE4_GLOBAL"
+  },
+  "SRC_BIOMASS_BOILER_CHEEMA": {
+    "source_id": "SRC_BIOMASS_BOILER_CHEEMA"
+  },
+  "SRC_THERMAL_STORAGE_ACADEMIC": {
+    "source_id": "SRC_THERMAL_STORAGE_ACADEMIC"
+  },
+  "SRC_BATTERY_STORAGE_INDIA_CI": {
+    "source_id": "SRC_BATTERY_STORAGE_INDIA_CI"
+  },
+  "SRC_HYDROGEN_IEA_GLOBAL": {
+    "source_id": "SRC_HYDROGEN_IEA_GLOBAL"
+  },
+  "SRC_PROJECT_DEFAULTS": {
+    "source_id": "SRC_PROJECT_DEFAULTS"
+  },
+  "SRC_MSME_UDYAM_THRESHOLDS": {
+    "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
+  },
+  "SRC_CLCSS_SCHEME": {
+    "source_id": "SRC_CLCSS_SCHEME"
+  },
+  "SRC_CGTMSE": {
+    "source_id": "SRC_CGTMSE"
+  },
+  "SRC_PSL_RBI_2025": {
+    "source_id": "SRC_PSL_RBI_2025"
+  },
+  "SRC_MNRE_NBP": {
+    "source_id": "SRC_MNRE_NBP"
+  },
+  "SRC_SIDBI_MSE_GIFT": {
+    "source_id": "SRC_SIDBI_MSE_GIFT"
+  },
+  "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
+    "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
+  },
+  "SRC_RBI_MPC_AUG2026": {
+    "source_id": "SRC_RBI_MPC_AUG2026"
+  },
+  "SRC_ADEETIE_BEE": {
+    "source_id": "SRC_ADEETIE_BEE"
+  },
+  "SRC_MSE_GIFT": {
+    "source_id": "SRC_MSE_GIFT"
+  },
+  "SRC_MSE_SPICE": {
+    "source_id": "SRC_MSE_SPICE"
+  },
+  "SRC_ZED": {
+    "source_id": "SRC_ZED"
+  },
+  "SRC_MSME_LEAN": {
+    "source_id": "SRC_MSME_LEAN"
+  },
+  "SRC_RAMP": {
+    "source_id": "SRC_RAMP"
+  },
+  "SRC_MSE_CDP": {
+    "source_id": "SRC_MSE_CDP"
+  },
+  "SRC_HEATPUMP_COMPILE": {
+    "source_id": "SRC_HEATPUMP_COMPILE"
+  },
+  "SRC_ELEC_RESISTANCE_COMPILE": {
+    "source_id": "SRC_ELEC_RESISTANCE_COMPILE"
+  },
+  "mos_annual_report_2025_26": {
+    "source_id": "mos_annual_report_2025_26"
+  },
+  "mos_green_steel_roadmap": {
+    "source_id": "mos_green_steel_roadmap"
+  },
+  "mos_green_steel_taxonomy": {
+    "source_id": "mos_green_steel_taxonomy"
+  },
+  "bee_steel_rerolling": {
+    "source_id": "bee_steel_rerolling"
+  },
+  "bee_adeetie": {
+    "source_id": "bee_adeetie"
+  },
+  "niti_msme_roadmap": {
+    "source_id": "niti_msme_roadmap"
+  },
+  "mos_safety_eaf": {
+    "source_id": "mos_safety_eaf"
+  },
+  "mos_safety_bf": {
+    "source_id": "mos_safety_bf"
+  },
+  "flexiheat_dst": {
+    "source_id": "flexiheat_dst"
+  },
+  "iea_heavy_industry": {
+    "source_id": "iea_heavy_industry"
+  },
+  "bee_textile_sectoral_report": {
+    "source_id": "bee_textile_sectoral_report"
+  },
+  "bee_textile_cluster_manual": {
+    "source_id": "bee_textile_cluster_manual"
+  },
+  "bee_pali_textile_cluster": {
+    "source_id": "bee_pali_textile_cluster"
+  },
+  "bee_jigger_project": {
+    "source_id": "bee_jigger_project"
+  },
+  "teri_textile_energy_efficiency": {
+    "source_id": "teri_textile_energy_efficiency"
+  },
+  "mnre_solar_thermal": {
+    "source_id": "mnre_solar_thermal"
+  },
+  "SRC_PMEGP": {
+    "source_id": "SRC_PMEGP"
+  },
+  "bee_dairy_haryana": {
+    "source_id": "bee_dairy_haryana"
+  },
+  "bee_dairy_punjab": {
+    "source_id": "bee_dairy_punjab"
+  },
+  "bee_dairy_case_studies": {
+    "source_id": "bee_dairy_case_studies"
+  },
+  "bee_dairy_clusters": {
+    "source_id": "bee_dairy_clusters"
+  },
+  "fssai_dairy_standards": {
+    "source_id": "fssai_dairy_standards"
+  },
+  "mofpi_annual_report": {
+    "source_id": "mofpi_annual_report"
+  },
+  "bee_glass_refractory": {
+    "source_id": "bee_glass_refractory"
+  },
+  "bee_energy_mapping_program": {
+    "source_id": "bee_energy_mapping_program"
+  },
+  "bee_paper_sector_report": {
+    "source_id": "bee_paper_sector_report"
+  },
+  "bee_pat_rules": {
+    "source_id": "bee_pat_rules"
+  },
+  "bee_pharmaceutical_cluster": {
+    "source_id": "bee_pharmaceutical_cluster"
+  },
+  "bee_pharmaceutical_mapping": {
+    "source_id": "bee_pharmaceutical_mapping"
+  },
+  "energy_innovation_india_heat_2026": {
+    "source_id": "energy_innovation_india_heat_2026"
+  },
+  "bee_food_processing_mapping": {
+    "source_id": "bee_food_processing_mapping"
+  },
+  "fssai_milk_processing_guidance": {
+    "source_id": "fssai_milk_processing_guidance"
+  },
+  "iea_heat_pump_monitor_2026": {
+    "source_id": "iea_heat_pump_monitor_2026"
+  },
+  "icar_food_processing_reference": {
+    "source_id": "icar_food_processing_reference"
+  },
+  "mnre_giz_biomass_msme": {
+    "source_id": "mnre_giz_biomass_msme"
+  },
+  "dcpc_chemical_statistics_2025": {
+    "source_id": "dcpc_chemical_statistics_2025"
+  },
+  "bee_chemical_efficiency": {
+    "source_id": "bee_chemical_efficiency"
+  },
+  "iea_electrification_renewables_industry": {
+    "source_id": "iea_electrification_renewables_industry"
+  },
+  "niti_cement_decarbonisation_roadmap": {
+    "source_id": "niti_cement_decarbonisation_roadmap"
+  },
+  "bee_cement_pat_database": {
+    "source_id": "bee_cement_pat_database"
+  },
+  "bis_cement_reference": {
+    "source_id": "bis_cement_reference"
+  },
+  "iea_heavy_industry_cement": {
+    "source_id": "iea_heavy_industry_cement"
+  }
+}
+
     "source_id": "SRC004"
   },
   "SRC_TNERC_ORDER6_2025": {
