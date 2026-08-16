@@ -536,57 +536,57 @@
       }
     },
     "SUB_CGTMSE": {
-  "id": "SUB_CGTMSE",
-  "display_name": "CGTMSE -- Credit Guarantee Scheme for Micro and Small Enterprises",
-  "category": "subsidy_scheme",
-  "status": "verified",
-  "description": "Collateral-free credit guarantee mechanism (Ministry of MSME / SIDBI) that backstops lenders, increasing MSE access to institutional credit for financing without conventional collateral or third-party guarantee.",
-  "parameters": {
-    "guarantee_coverage": {
-      "general": {
-        "coverage_pct": 75
-      },
-      "women_entrepreneurs": {
-        "coverage_pct": 90
-      },
-      "micro_enterprise_up_to_5_lakh": {
-        "coverage_pct": 85
-      },
-      "sc_st": {
-        "coverage_pct": 85
-      },
-      "pwd": {
-        "coverage_pct": 85
-      },
-      "transgender": {
-        "coverage_pct": 85
-      },
-      "zed_certified": {
-        "coverage_pct": 85
-      },
-      "aspirational_district": {
-        "coverage_pct": 85
-      },
-      "north_east_jk_ladakh": {
-        "coverage_pct": 80
-      },
-      "unit": "%",
+      "id": "SUB_CGTMSE",
+      "display_name": "CGTMSE -- Credit Guarantee Scheme for Micro and Small Enterprises",
+      "category": "subsidy_scheme",
       "status": "verified",
-      "confidence": 0.85,
-      "source_id": "SRC_CGTMSE",
-      "last_verified": "2026-08-15",
-      "applicability": {
-        "country": "India",
-        "state": null,
-        "industry": null,
-        "msme_class": null
-      },
-      "research": {
-        "summary": "Credit guarantee coverage varies according to borrower category under the CGTMSE scheme.",
-        "assumptions": "",
-        "limitations": "Applicable coverage depends on borrower eligibility and prevailing CGTMSE guidelines."
-      }
-    },
+      "description": "Collateral-free credit guarantee mechanism (Ministry of MSME / SIDBI) that backstops lenders, increasing MSE access to institutional credit for financing without conventional collateral or third-party guarantee.",
+      "parameters": {
+        "guarantee_coverage": {
+          "general": {
+            "coverage_pct": 75
+          },
+          "women_entrepreneurs": {
+            "coverage_pct": 90
+          },
+          "micro_enterprise_up_to_5_lakh": {
+            "coverage_pct": 85
+          },
+          "sc_st": {
+            "coverage_pct": 85
+          },
+          "pwd": {
+            "coverage_pct": 85
+          },
+          "transgender": {
+            "coverage_pct": 85
+          },
+          "zed_certified": {
+            "coverage_pct": 85
+          },
+          "aspirational_district": {
+            "coverage_pct": 85
+          },
+          "north_east_jk_ladakh": {
+            "coverage_pct": 80
+          },
+          "unit": "%",
+          "status": "verified",
+          "confidence": 0.85,
+          "source_id": "SRC_CGTMSE",
+          "last_verified": "2026-08-15",
+          "applicability": {
+            "country": "India",
+            "state": null,
+            "industry": null,
+            "msme_class": null
+          },
+          "research": {
+            "summary": "Credit guarantee coverage varies according to borrower category under the CGTMSE scheme.",
+            "assumptions": "",
+            "limitations": "Applicable coverage depends on borrower eligibility and prevailing CGTMSE guidelines."
+          }
+        },
         "maximum_guarantee_eligible_credit": {
           "value": 50000000,
           "unit": "INR",
@@ -1265,116 +1265,46 @@
   },
   "sources": {
     "SRC_MSME_UDYAM_THRESHOLDS": {
-      "title": "MSME classification criteria (investment and turnover thresholds), effective 2025-04-01",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises / Udyam Registration Portal, Government of India",
-      "publication_date": "2025-04-01",
-      "url": "https://udyamregistration.gov.in/",
-      "type": "Government Notification",
-      "pages": ""
+      "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
     },
     "SRC_ADEETIE_BEE": {
-      "title": "Assistance in Deploying Energy Efficient Technologies in Industries and Establishments (ADEETIE) Scheme",
-      "publisher": "Bureau of Energy Efficiency (BEE), Ministry of Power, Government of India",
-      "publication_date": "2025-07-15",
-      "url": "https://adeetie.beeindia.gov.in/",
-      "type": "Government Scheme Portal",
-      "pages": ""
+      "source_id": "SRC_ADEETIE_BEE"
     },
     "SRC_MSE_GIFT": {
-      "title": "MSE Green Investment and Financing for Transformation (MSE-GIFT), under RAMP",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India",
-      "publication_date": "2025-01",
-      "url": "https://msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_MSE_GIFT"
     },
     "SRC_MSE_SPICE": {
-      "title": "Scheme for Promotion and Investment in Circular Economy (MSE-SPICE), under RAMP",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India",
-      "publication_date": "2025-01",
-      "url": "https://msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_MSE_SPICE"
     },
     "SRC_ZED": {
-      "title": "MSME Sustainable (Zero Defect Zero Effect) Certification Scheme",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India",
-      "publication_date": "2024-01",
-      "url": "https://zed.msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_ZED"
     },
     "SRC_MSME_LEAN": {
-      "title": "MSME Competitive Lean Scheme",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India",
-      "publication_date": "2024-01",
-      "url": "https://msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_MSME_LEAN"
     },
     "SRC_CGTMSE": {
-      "title": "Credit Guarantee Scheme for Micro and Small Enterprises",
-      "publisher": "Credit Guarantee Fund Trust for Micro and Small Enterprises (CGTMSE), Ministry of MSME / SIDBI",
-      "publication_date": "2023-04",
-      "url": "https://www.cgtmse.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_CGTMSE"
     },
     "SRC_PMEGP": {
-      "title": "Prime Minister's Employment Generation Programme (PMEGP)",
-      "publisher": "Khadi and Village Industries Commission (KVIC), Ministry of Micro, Small and Medium Enterprises",
-      "publication_date": "2024-01",
-      "url": "https://www.kviconline.gov.in/pmegpeportal/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_PMEGP"
     },
     "SRC_RAMP": {
-      "title": "Raising and Accelerating MSME Performance (RAMP) Programme",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India, with World Bank support",
-      "publication_date": "2022-06",
-      "url": "https://msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_RAMP"
     },
     "SRC_MSE_CDP": {
-      "title": "Micro and Small Enterprises Cluster Development Programme (MSE-CDP)",
-      "publisher": "Ministry of Micro, Small and Medium Enterprises, Government of India",
-      "publication_date": "2023-01",
-      "url": "https://msme.gov.in/",
-      "type": "Government Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_MSE_CDP"
     },
     "SRC_MNRE_NBP": {
-      "title": "National Bioenergy Programme, Phase-I -- biomass briquette/pellet manufacturing and non-bagasse cogeneration Central Financial Assistance (CFA)",
-      "publisher": "Ministry of New and Renewable Energy (MNRE), Government of India",
-      "publication_date": "2022-01",
-      "url": "https://mnre.gov.in/",
-      "type": "Government Scheme Guidelines",
-      "pages": ""
+      "source_id": "SRC_MNRE_NBP"
     },
     "SRC_SIDBI_MSE_GIFT": {
-      "title": "MSE-GIFT interest subvention scheme documentation (SIDBI implementation)",
-      "publisher": "Small Industries Development Bank of India (SIDBI), under RAMP",
-      "publication_date": "2025-01",
-      "url": "https://www.sidbi.in/",
-      "type": "Government/Institutional Scheme Documentation",
-      "pages": ""
+      "source_id": "SRC_SIDBI_MSE_GIFT"
     },
     "SRC_PSL_RBI_2025": {
-      "title": "Master Directions on Priority Sector Lending, Renewable Energy sub-category",
-      "publisher": "Reserve Bank of India (RBI)",
-      "publication_date": "2025-04-01",
-      "url": "https://www.rbi.org.in/",
-      "type": "Regulatory Master Direction",
-      "pages": ""
+      "source_id": "SRC_PSL_RBI_2025"
     },
     "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
-      "title": "Roadmap for Green Transition of MSMEs",
-      "publisher": "NITI Aayog, Government of India",
-      "publication_date": "2026-01-21",
-      "url": "https://www.niti.gov.in/",
-      "type": "Government Policy Report",
-      "pages": ""
+      "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
     }
   },
   "cross_references": {
