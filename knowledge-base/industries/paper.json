@@ -92,12 +92,12 @@
       "W&E Godavari"
     ],
     "cluster_total_production_mtpa": 6.28,
-    "overall_indian_paper_sector_msmE_benchmark": {
+    "overall_indian_paper_sector_msme_benchmark": {
       "electrical_sec_toe_per_tonne": 0.033,
       "thermal_sec_toe_per_tonne": 0.218,
       "overall_sec_toe_per_tonne": 0.251
     },
-    "international_msmE_reference": {
+    "international_msme_reference": {
       "electrical_sec_toe_per_tonne": 0.07,
       "thermal_sec_toe_per_tonne": 0.15,
       "overall_sec_toe_per_tonne": 0.22
