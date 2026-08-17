@@ -1,34 +1,38 @@
 [
   {
-    "technology_id": "HEAT_PUMP",
+    "technology_id": "heat_pump",
     "technology_name": "Heat Pump"
   },
   {
-    "technology_id": "ELECTRIC_BOILER",
+    "technology_id": "electric_boiler",
     "technology_name": "Electric Boiler"
   },
   {
-    "technology_id": "BIOMASS_BOILER",
+    "technology_id": "biomass_boiler",
     "technology_name": "Biomass Boiler"
   },
   {
-    "technology_id": "SOLAR_THERMAL",
+    "technology_id": "solar_thermal",
     "technology_name": "Solar Thermal"
   },
   {
-    "technology_id": "SOLAR_PV",
+    "technology_id": "solar_pv",
     "technology_name": "Solar PV"
   },
   {
-    "technology_id": "THERMAL_STORAGE",
+    "technology_id": "thermal_storage",
     "technology_name": "Thermal Storage"
   },
   {
-    "technology_id": "WASTE_HEAT_RECOVERY",
+    "technology_id": "waste_heat_recovery",
     "technology_name": "Waste Heat Recovery"
   },
   {
-    "technology_id": "GRID_ELECTRICITY",
+    "technology_id": "biogas",
+    "technology_name": "Biogas"
+  },
+  {
+    "technology_id": "grid_electricity",
     "technology_name": "Grid Electricity"
   }
 ]
