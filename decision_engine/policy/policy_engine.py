@@ -46,6 +46,9 @@ class PolicyEvaluationResult:
     combined_subsidy_ceiling_note: str = ""
     warnings: list[str] = field(default_factory=list)
     eligibility_summary: Optional[EligibilitySummary] = None
+    # Flag indicating whether estimated_total_benefit_inr is verified against
+    # a documented combined-subsidy ceiling. Propagated from SubsidyMatchResult.
+    total_benefit_verified: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -60,6 +63,7 @@ class PolicyEvaluationResult:
                 self.combined_subsidy_ceiling_checked
             ),
             "combined_subsidy_ceiling_note": self.combined_subsidy_ceiling_note,
+            "total_benefit_verified": self.total_benefit_verified,
             "warnings": list(self.warnings),
             "eligible_schemes": [
                 {
@@ -144,6 +148,7 @@ class PolicyEngine:
             ),
             warnings=match_result.warnings,
             eligibility_summary=eligibility,
+            total_benefit_verified=match_result.total_benefit_verified,
         )
 
 

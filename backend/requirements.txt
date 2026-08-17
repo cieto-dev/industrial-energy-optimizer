@@ -3,3 +3,5 @@ uvicorn
 sqlalchemy
 pydantic
 python-dotenv
+reportlab
+openpyxl

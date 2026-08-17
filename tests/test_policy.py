@@ -202,6 +202,7 @@ def test_estimated_total_not_verified_against_combined_ceiling():
     assert result.combined_subsidy_ceiling_checked is False
     assert "Do not treat this total" in result.combined_subsidy_ceiling_note
     assert result.combined_subsidy_ceiling_note in result.warnings
+    assert result.total_benefit_verified is False
 
     per_scheme_sum = sum(s.benefit_inr for s in result.eligible_schemes)
     assert result.estimated_total_benefit_inr == pytest.approx(per_scheme_sum)
@@ -209,6 +210,7 @@ def test_estimated_total_not_verified_against_combined_ceiling():
     payload = result.to_dict()
     assert payload["combined_subsidy_ceiling_checked"] is False
     assert payload["combined_subsidy_ceiling_note"]
+    assert payload["total_benefit_verified"] is False
 
     # TN schemes still estimated independently (unchanged per-scheme builders)
     tn_ids = {s.scheme_id for s in result.eligible_schemes}

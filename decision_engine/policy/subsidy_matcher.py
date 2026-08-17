@@ -101,6 +101,11 @@ class SubsidyMatchResult:
     # is documented in the policy KB (see _combined_subsidy_ceiling_status).
     combined_subsidy_ceiling_checked: bool = False
     combined_subsidy_ceiling_note: str = ""
+    # Flag indicating whether estimated_total_benefit_inr is verified against
+    # a documented combined-subsidy ceiling. Currently always False because
+    # the KB only contains procedural no-double-counting rules, not numeric
+    # stacking limits or machine-checkable convergence rules.
+    total_benefit_verified: bool = False
 
 
 def _load_json(path: Path) -> dict[str, Any]:
