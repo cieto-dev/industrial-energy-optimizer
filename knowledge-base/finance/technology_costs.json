@@ -1176,6 +1176,7 @@
 
   "sources": {
     "SRC_SOLAR_VENDOR_COMPILE": {
+
       "source_id": "SRC_SOLAR_VENDOR_COMPILE"
     },
     "SRC_WHR_GLOBAL_BENCHMARK": {
@@ -1207,6 +1208,7 @@
     },
     "SRC_ELEC_RESISTANCE_COMPILE": {
       "source_id": "SRC_ELEC_RESISTANCE_COMPILE"
+
     }
   },
 
