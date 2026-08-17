@@ -191,3 +191,26 @@ def test_msme_classification_derived_from_thresholds():
     assert category == "small"
     # investment 18M, turnover 45M → micro (both within micro ceilings)
     assert checker.classify_msme(18_000_000, 45_000_000) == "micro"
+
+
+def test_estimated_total_not_verified_against_combined_ceiling():
+    """Multiple schemes summed; KB has no numeric combined cap to enforce."""
+    factory = tamil_nadu_textile_small_udyam_factory()
+    result = PolicyEngine().evaluate(factory)
+
+    assert len(result.eligible_schemes) > 1
+    assert result.combined_subsidy_ceiling_checked is False
+    assert "Do not treat this total" in result.combined_subsidy_ceiling_note
+    assert result.combined_subsidy_ceiling_note in result.warnings
+
+    per_scheme_sum = sum(s.benefit_inr for s in result.eligible_schemes)
+    assert result.estimated_total_benefit_inr == pytest.approx(per_scheme_sum)
+
+    payload = result.to_dict()
+    assert payload["combined_subsidy_ceiling_checked"] is False
+    assert payload["combined_subsidy_ceiling_note"]
+
+    # TN schemes still estimated independently (unchanged per-scheme builders)
+    tn_ids = {s.scheme_id for s in result.eligible_schemes}
+    assert "TN_CAPITAL_SUBSIDY" in tn_ids
+    assert "TN_CLEAN_TECHNOLOGY_SUBSIDY" in tn_ids

@@ -42,6 +42,8 @@ class PolicyEvaluationResult:
     ineligible_schemes: list[SchemeEligibility]
     insufficient_data_schemes: list[SchemeEligibility]
     estimated_total_benefit_inr: float
+    combined_subsidy_ceiling_checked: bool = False
+    combined_subsidy_ceiling_note: str = ""
     warnings: list[str] = field(default_factory=list)
     eligibility_summary: Optional[EligibilitySummary] = None
 
@@ -54,6 +56,10 @@ class PolicyEvaluationResult:
             "derived_msme_classification": self.derived_msme_classification,
             "eligible": self.eligible,
             "estimated_total_benefit_inr": self.estimated_total_benefit_inr,
+            "combined_subsidy_ceiling_checked": (
+                self.combined_subsidy_ceiling_checked
+            ),
+            "combined_subsidy_ceiling_note": self.combined_subsidy_ceiling_note,
             "warnings": list(self.warnings),
             "eligible_schemes": [
                 {
@@ -129,6 +135,12 @@ class PolicyEngine:
             insufficient_data_schemes=match_result.insufficient_data_schemes,
             estimated_total_benefit_inr=(
                 match_result.estimated_total_benefit_inr
+            ),
+            combined_subsidy_ceiling_checked=(
+                match_result.combined_subsidy_ceiling_checked
+            ),
+            combined_subsidy_ceiling_note=(
+                match_result.combined_subsidy_ceiling_note
             ),
             warnings=match_result.warnings,
             eligibility_summary=eligibility,

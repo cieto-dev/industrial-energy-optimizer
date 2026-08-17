@@ -97,6 +97,10 @@ class SubsidyMatchResult:
     insufficient_data_schemes: list[SchemeEligibility]
     estimated_total_benefit_inr: float
     warnings: list[str] = field(default_factory=list)
+    # False when multiple schemes are summed — no numeric combined ceiling
+    # is documented in the policy KB (see _combined_subsidy_ceiling_status).
+    combined_subsidy_ceiling_checked: bool = False
+    combined_subsidy_ceiling_note: str = ""
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -141,6 +145,49 @@ class SubsidyMatcher:
         self._subsidies = _load_json(subsidies_path or _SUBSIDIES_PATH)
         self._entities = self._subsidies.get("entities", {})
         self._policies = self._central.get("policies", {})
+
+    def _combined_subsidy_ceiling_status(
+        self,
+        eligible_count: int,
+    ) -> tuple[bool, str]:
+        """
+        Report whether estimated_total_benefit_inr was checked against a
+        documented combined-subsidy ceiling.
+
+        KB source check (central_policies.json, state_policies.json):
+        - central_policies.json policy_engine_rules.no_double_counting_rule:
+          procedural — do not auto-stack without explicit convergence permission.
+        - state_policies.json benefit_convergence_rules.same_cost_component:
+          procedural — do not claim same cost twice unless stacking permitted.
+        - state_policies.json critical_rules.do_not_double_count_central_and_state_benefits:
+          procedural flag only.
+        - Tamil Nadu manufacturing_incentives.capital_subsidy and
+          additional_clean_technology_subsidy: per-scheme rate_percent and
+          maximum_inr only; no combined total cap or reduced eligible base
+          for the second scheme documented in the KB.
+
+        No numeric combined-subsidy ceiling (% of project cost) or
+        machine-checkable TN stacking rule exists in the KB — do not invent one.
+        """
+        if eligible_count <= 1:
+            return (
+                True,
+                "Single eligible scheme with benefit estimate; "
+                "combined-subsidy ceiling check not applicable.",
+            )
+
+        note = (
+            "estimated_total_benefit_inr sums per-scheme benefit_inr without "
+            "applying a combined-subsidy ceiling. The knowledge base documents "
+            "procedural convergence rules only "
+            "(central_policies.json policy_engine_rules.no_double_counting_rule; "
+            "state_policies.json benefit_convergence_rules.same_cost_component) "
+            "but no numeric total-subsidy cap and no Tamil Nadu rule defining "
+            "whether capital_subsidy and additional_clean_technology_subsidy "
+            "may stack on the same eligible plant-and-machinery base. "
+            "Do not treat this total as a verified claimable amount."
+        )
+        return False, note
 
     def _subsidy_entity(self, ref: str) -> Optional[dict[str, Any]]:
         if ref in _DUPLICATE_SUBSIDY_IDS:
@@ -473,6 +520,11 @@ class SubsidyMatcher:
             reverse=True,
         )
         total = sum(b.benefit_inr for b in ranked)
+        ceiling_checked, ceiling_note = self._combined_subsidy_ceiling_status(
+            len(ranked)
+        )
+        if not ceiling_checked:
+            warnings.append(ceiling_note)
 
         return SubsidyMatchResult(
             eligible_schemes=ranked,
@@ -480,4 +532,6 @@ class SubsidyMatcher:
             insufficient_data_schemes=insufficient,
             estimated_total_benefit_inr=total,
             warnings=warnings,
+            combined_subsidy_ceiling_checked=ceiling_checked,
+            combined_subsidy_ceiling_note=ceiling_note,
         )
