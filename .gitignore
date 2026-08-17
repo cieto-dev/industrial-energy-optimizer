@@ -61,4 +61,4 @@ dist/
 data/
 outputs/
 results/
-models/
+# models/ (removed so that models/factory.py, etc., are tracked)

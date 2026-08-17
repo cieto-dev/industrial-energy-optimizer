@@ -1,4 +1,4 @@
-from emission_factors import get_emission_factor
+from decision_engine.emissions.emission_factors import get_emission_factor
 
 
 def calculate_fuel_emissions(fuel, consumption_per_day):

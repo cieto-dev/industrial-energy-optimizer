@@ -43,6 +43,7 @@ class Factory(BaseModel):
     # Production and energy baseline
     production_per_day: Quantity
     operating_hours_per_day: float = Field(gt=0)
+    operating_days_per_year: int = Field(default=300, ge=1, le=366)
     current_fuel: str
     fuel_consumption: Quantity
     electricity_consumption_kwh_day: float = Field(ge=0)
