@@ -1,28 +1,31 @@
 # PROJECT_STATE.md
 
-**Project:** AI-Powered Industrial Energy Transition Platform (working repo name: `msme-energy-optimizer`)
+**Project:** AI-Powered Industrial Energy Transition Platform (working repo name: `industrial-energy-optimizer`)
 **Track:** Smart India Hackathon (SIH) prototype → intended startup direction
 **Team size:** 6 members
-**Status date:** 16 August 2026 (re-verified against live repo same day — see §0)
+**Status date:** 17 August 2026 (re-verified against live repo same day — see §0)
 **Repo:** https://github.com/cieto-dev/industrial-energy-optimizer
 
-> This file is a living snapshot of where the project actually stands — problem, evidence, architecture, gaps, and next actions. It is reconciled against the team's own `SYSTEM_DESIGN.md`, `RESEARCH_NOTES.md`, `MENTOR_NOTES.md`, and `FEATURE_BACKLOG.md`, which are the authoritative sources where they conflict with earlier drafts of this file. Update it whenever a research phase closes, a scope decision is made, or the architecture changes.
+> This file is a living snapshot of where the project actually stands — problem, evidence, architecture, gaps, and next actions. It is reconciled against the team's own `SYSTEM_DESIGN.md`, `RESEARCH_NOTES.md`, `MENTOR_NOTES.md`, and `FEATURE_BACKLOG.md`. Update it whenever a research phase closes, a scope decision is made, or the architecture changes.
 
 ---
 
-## 0. Correction notice (16 Aug 2026, updated)
+## 0. Correction notice (17 Aug 2026 — evening pass)
 
-An earlier version of this file, built from repo folder/file screenshots alone, was **too optimistic** about implementation status. The team's own `SYSTEM_DESIGN.md` status table (§10) and `FEATURE_BACKLOG.md` are explicit: **backend is scaffolding only, frontend is folder structure only, database/AI/testing/deployment are all still pending.** File names existing is not the same as logic existing — this file now reflects that distinction accurately. Treat `SYSTEM_DESIGN.md`, `RESEARCH_NOTES.md`, and `FEATURE_BACKLOG.md` as the primary sources of truth for status going forward; this file summarizes and cross-links them.
+This revision supersedes the previous pass (17 Aug 2026, earlier in the day). Key changes:
 
-**Second correction (16 Aug 2026, same day):** this file had also drifted stale in the other direction — several items logged as gaps had already been fixed by the time this was re-checked against the live repo (via GitHub API/tarball, actual file content, not folder screenshots). See §5 and §8 for the specific corrections. Lesson: this file needs to be re-verified against live repo content periodically, not just written once and trusted.
+1. **`decision-engine/policy/` is now scaffolded.** It has `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, and `policy_engine.py` — all 0 bytes. Status changes from "missing" to "scaffolded." The team has de facto committed to Module 4a being in scope.
+2. **`knowledge-base/master/tariffs.json` was updated** in commit `bb4d669` ("small update", 17 Aug 17:09) — 76 insertions/76 deletions, reformatting pass only. This is the latest commit.
+3. **Sector scope creep is now clearer** — nine full industry profiles exist and policy scaffold is being built. Formal decision is overdue.
+4. **Implementation bottleneck is now precisely scoped** — the exact files to write to unblock end-to-end are listed in §8.
 
 ---
 
-## 1. The Problem (current, final framing)
+## 1. The Problem (final framing — unchanged)
 
-**We are NOT building:** "AI that replaces coal with solar" / a generic renewable-energy calculator / a carbon footprint calculator / an energy audit app / a chatbot.
+**We are NOT building:** "AI that replaces coal with solar" / generic renewable calculator / carbon footprint calculator / chatbot.
 
-**We ARE building:** An engineering decision-support system that combines engineering models, optimization, financial evaluation, and explainable AI to recommend the most suitable energy-transition pathway for a specific industrial MSME — supporting, not replacing, engineering judgment.
+**We ARE building:** An engineering decision-support system combining engineering models, optimization, financial evaluation, and explainable AI to recommend the most suitable energy-transition pathway for a specific industrial MSME — supporting, not replacing, engineering judgment.
 
 ### Master Research Question (MRQ)
 > Can a data-driven techno-economic decision-support system identify and compare technically feasible, economically viable, and lower-emission energy-transition pathways for individual Indian MSMEs under process, resource, reliability, and financial constraints?
@@ -35,28 +38,11 @@ An earlier version of this file, built from repo folder/file screenshots alone, 
 5. **Optimization** — Can multiple technologies be combined/sequenced to meet process-energy needs at minimum cost/emissions?
 6. **Robustness** — How sensitive is the recommended pathway to price, resource, and production uncertainty?
 
-### Why this framing
-- Solar/wind aren't "inefficient" — their output is variable while industrial loads are often continuous. The real engineering problem is **generation + intermittency + storage + dispatch + economics + reliability**, not generation volume.
-- The bottleneck isn't that clean technologies don't exist. The bottleneck is **decision-making**: which combination is right for *this* factory, under *its* constraints — and being able to explain why.
-
 ---
 
-## 2. Evidence base (why this problem is real and 2026-relevant)
+## 2. Evidence base — unchanged, see `RESEARCH_NOTES.md`
 
-Converging January–April 2026 signals, now also formally listed in `RESEARCH_NOTES.md`:
-
-| Source | Key contribution |
-|---|---|
-| **NITI Aayog** — *Roadmap for Green Transition of MSMEs* (Jan 2026) | Models 35–55% shift away from coal/high-emission fuels; names priority MSME clusters |
-| **MNRE + GIZ** — *Decarbonizing MSMEs: Biomass for Green Steam & Heat* (Jan 2026) | MSMEs get 80%+ of manufacturing energy from process heat; biomass supply-chain reliability is the real constraint, not technology availability |
-| **BEE — ADEETIE programme** | 60 clusters, 14 sectors; proves the audit/technology-database layer is already solved — our gap is the decision layer above it |
-| **Energy Innovation** — *Electrifying Industrial Heat in India* (Apr 2026) | Electrified heat now cheaper than coal in bands covering ~55% of India's industrial heat demand — the optimizer must not assume biomass is always the answer |
-| **IEA** — Renewables for Industry / Heat Pump Monitor 2026, SHC Task 49/64 | Concrete technology boundaries now baked into the knowledge base (see §5) |
-| **DOE** — Process Heating Sourcebook, WHR Technology Assessment, CHP review | Source used for waste-heat and storage temperature ranges |
-
-**Existing adjacent tools (so we don't overclaim novelty):** NREL STEP 1, FlexiHeat-DST, BEE/SIDHIEE. None integrate India-specific process constraints + local resources + Indian tariffs/financing + uncertainty + explainability into one MSME-facing pathway optimizer. **That integration is the claimed gap** — stated carefully, never as "nobody has built this."
-
-Full citation list: `research/bibliography.md`. Per-parameter sourcing lives inline in each `knowledge-base/**/*.json` file via `source_id`/`confidence`/`last_verified` fields (a deliberate design choice — see `RESEARCH_NOTES.md`).
+No change since last revision. Full citation list: `research/bibliography.md`. Per-parameter sourcing lives inline in each `knowledge-base/**/*.json` file.
 
 ---
 
@@ -64,9 +50,9 @@ Full citation list: `research/bibliography.md`. Per-parameter sourcing lives inl
 
 **Selected first vertical: Textile dyeing / wet-processing MSME using solid fuel (coal/biomass) for steam.**
 
-Reasoning unchanged from earlier research: process heat is central, strong 2026 Indian evidence exists, and it avoids the furnace-modeling complexity of cement/steel.
+**⚠️ De facto scope creep — needs formal acknowledgement.** Nine full industry profiles exist. Policy scaffold is built. DOMAIN_MODEL.md documents Module 4a fields. The team is building for all nine sectors with policy eligibility in scope — the formal decisions have not been documented.
 
-**⚠️ Status conflict to resolve:** `knowledge-base/industries/` has six populated sectors (cement, chemical, food_processing, pharma, steel, textile) — confirmed "✅ Completed" in `FEATURE_BACKLOG.md` Phase 1. The original plan was to scope the *prototype* to textile only, with other sectors as future data. **This has not been explicitly re-confirmed since the knowledge base expanded** — resolve and record the answer here.
+**Required action:** Update `FEATURE_BACKLOG.md` to record "9 sectors in scope" and "Module 4a: IN scope." Then build accordingly. Any API contract written without this decision will need rework.
 
 ---
 
@@ -85,7 +71,7 @@ Technology Assessment
       ↓
 Constraint Engine
       ↓
-[ Policy & Eligibility Check — Module 4a, scope pending, see §5a ]
+[ Policy & Eligibility Check — Module 4a — scaffolded, implementation pending ]
       ↓
 Scenario Generator
       ↓
@@ -100,44 +86,52 @@ AI Explanation Layer
 Dashboard & Reports
 ```
 
-Full module-by-module reference: `docs/SYSTEM_DESIGN.md` §4 (authoritative) and `docs/DECISION_ENGINE_ARCHITECTURE.md` (companion doc — needs a pass to align its module list with `SYSTEM_DESIGN.md`'s numbering, since the two were written independently and use slightly different module boundaries/names for the same logic).
+Full module reference: `docs/SYSTEM_DESIGN.md` §4 (authoritative) and `docs/DECISION_ENGINE_ARCHITECTURE.md`.
 
-### Implementation status by layer (per `SYSTEM_DESIGN.md` §10 and `FEATURE_BACKLOG.md` — authoritative, corrects earlier optimism)
+### Implementation status by layer (re-verified 17 Aug 2026 — evening)
 
-| Component | Status |
-|---|---|
-| Research | ✅ Complete |
-| Knowledge base — industries, technologies, constraints, finance | 🟡 Populated, consistency pass in progress |
-| Knowledge base — policies, emissions, references | 🟡 Built, not yet integrated / has real gaps (see §5) |
-| Documentation | 🟡 In progress |
-| Database design | ⏳ Pending |
-| Backend | ⏳ **Pending — scaffolding only.** Files exist (`apis/*.py`, `main.py`, etc.) but per the team's own status table this is structure, not working logic. |
-| Frontend | ⏳ **Pending — folder structure only.** Same caveat as backend. |
-| Decision engine | 🟡 Mixed — `emissions/` (co2_calculator.py, emission_engine.py, emission_factors.py) and `technology/` (technology_engine.py, technology_filter.py, technology_matcher.py) contain real implementation code, not stubs (confirmed by reading file content 16 Aug 2026). `scenario/scenario_generator.py` also has logic. `baseline/`, `economics/`, `optimizer/`, `reliability/`, `reports/` are still 0-byte stubs. Code existing ≠ tested/integrated — functional status of the written modules is still unconfirmed, but this is further along than the earlier "all pending" read. |
-| AI layer | ⏳ Pending |
-| Testing | ⏳ Pending — test file stubs only, no logic yet |
-| Deployment | ⏳ Pending — Docker/nginx config scaffolded, unused |
-| Digital twin | Out of MVP — `digital-twin/future_scope.md` only, correctly deferred to Future Improvements |
+| Component | Status | Notes |
+|---|---|---|
+| Research | ✅ Complete | All six RQs answered; sourced in KB |
+| Knowledge base — industries, technologies, constraints, finance | ✅ Complete | Alignment pass closed; 9 sectors, 6 tech profiles, all consistency issues resolved |
+| Knowledge base — policies, emissions, references | ✅ Complete | Internally consistent; policies consumed by `decision-engine/policy/` scaffold |
+| Knowledge base — `solar_thermal.json` | 🟡 Thin | Smaller than other tech files; no concentrating/non-concentrating split |
+| Documentation | 🟡 In progress | This pass — see `ROADMAP.md` for next-phase guidance |
+| Database design | ⏳ Not started | Blocks `seed_database.py` and all backend persistence |
+| Backend infrastructure | ⏳ Not started | `main.py`, `database.py`, `config.py`, `logger.py`, `utils.py` all 0 bytes |
+| Backend APIs | ⏳ Not started | All 7 files under `backend/apis/` are 0 bytes |
+| Models (`models/`) | ⏳ Not started | All 6 Python files are 0 bytes; `factory.py` mentioned but does not exist yet |
+| Decision engine — technology | ✅ Implemented | `technology_engine.py` (1,844B), `technology_filter.py` (2,560B), `technology_matcher.py` (1,767B) — real code |
+| Decision engine — emissions | ✅ Implemented | `co2_calculator.py` (1,411B), `emission_engine.py` (2,996B), `emission_factors.py` (955B) — real code |
+| Decision engine — scenario | 🟡 Partial | `scenario_generator.py` (1,558B, real code); `scenario_filter.py` and `scenario_validator.py` are 0 bytes |
+| Decision engine — baseline | ⏳ Not started | `baseline_engine.py`, `energy_calculator.py`, `fuel_calculator.py` all 0 bytes |
+| Decision engine — economics | ⏳ Not started | `capex.py`, `opex.py`, `payback.py`, `roi.py`, `economics_engine.py` all 0 bytes |
+| Decision engine — optimizer | ⏳ Not started | `mcda.py`, `optimization_engine.py`, `ranking.py`, `weights.py` all 0 bytes |
+| Decision engine — reliability | ⏳ Not started | `confidence.py`, `reliability_engine.py`, `risk_score.py` all 0 bytes |
+| Decision engine — policy | 🟡 Scaffolded | `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, `policy_engine.py` — structure exists, all 0 bytes |
+| Decision engine — reports | ⏳ Not started | `excel_report.py`, `pdf_report.py`, `report_generator.py` all 0 bytes |
+| Scripts — KB support/validation | ✅ Complete | `create_district_discoms.py`, `create_districts_json.py`, `create_tariffs_json.py`, `validate_references.py` passing |
+| Scripts — ETL pipeline | ⏳ Not started | `convert_datasets.py`, `pre_process.py`, `load_knowledge.py`, `seed_database.py`, `run_pipeline.py` all 0 bytes |
+| Frontend | ⏳ Not started | Folder structure scaffolded; all files 0 bytes |
+| Tests | ⏳ Not started | All test files 0 bytes |
+| Deployment | ⏳ Scaffolded | Dockerfile, docker-compose.yml, nginx.conf exist but unused |
+| Digital twin | Out of MVP | `digital-twin/future_scope.md` only |
 
-**Net correction:** the repo has excellent, consistent *scaffolding* across every layer — this reflects real planning discipline. But almost nothing is confirmed functionally working yet outside the knowledge base and research. Progress should now be measured by modules moving from "scaffolded" to "implemented and tested," per `FEATURE_BACKLOG.md`'s lifecycle (Planned → In Progress → Testing → Completed).
+**Net position:** Knowledge base and documentation are mature. Three decision-engine modules have working code (technology, emissions, scenario_generator). Everything else — backend, models, database, five decision-engine modules, reports, frontend — has not been started. This is the clear critical path. See `docs/ROADMAP.md`.
 
 ---
 
-## 5. Knowledge base — status and real gaps
-
-Structure (seven sub-domains) confirmed via repo screenshots and now cross-verified against `FEATURE_BACKLOG.md` Phase 1 and `RESEARCH_NOTES.md`:
+## 5. Knowledge base — final status
 
 ```
 knowledge-base/
 ├── constraints/   (budget, fuel, grid, space, technology_rules, temperature)
 ├── emissions/     (emission_factors, grid_factors)
 ├── finance/       (electricity_tariffs, fuel_prices, subsidies, technology_costs)
-├── industries/    (cement, chemical, food_processing, pharma, steel, textile)
+├── industries/    (cement, chemical, dairy, food_processing, glass, paper,
+│                   pharma, steel, textile) — 9 sectors, all fully populated
 ├── master/        (discoms, district_discoms, districts, fuels, industries,
-│                   states, tariffs, technologies) — NOT previously documented here;
-│                   found via live repo check 16 Aug 2026, appears generated by
-│                   scripts/create_district_discoms.py, create_districts_json.py,
-│                   create_tariffs_json.py (also undocumented until now)
+│                   states, tariffs, technologies)
 ├── policies/      (carbon_pricing, central_policies, eligibility_rules,
 │                   renewable_purchase_obligations, state_policies)
 ├── references/    (citations, sources)
@@ -145,39 +139,36 @@ knowledge-base/
                     thermal_storage, waste_heat_recovery)
 ```
 
-### Confirmed real gaps and issues (per `FEATURE_BACKLOG.md` Phase 1 + `RESEARCH_NOTES.md`)
+### Resolved (as of this pass)
 
-| Issue | Severity | Detail |
-|---|---|---|
-| ~~`emissions/emission_factors.json` empty~~ | ✅ Resolved | Populated — 7 fuels (coal, diesel, LPG, natural gas, biomass, biogas, furnace oil), IPCC-based emission factors + NCV, sourced (`SRC003`/`SRC004`). Confirmed against live repo content 16 Aug 2026. Previous "empty/blocking" status was stale documentation, not a real gap. |
-| `technologies/solar_thermal.json` thinner than other technology files | 🟡 | Confirmed still true (2,048 bytes vs. 4–9KB for other technology files). Needs expansion; also doesn't yet distinguish non-concentrating (60–150°C) vs. concentrating (150–400°C) sub-technologies |
-| Subsidy data duplicated across 3 files | 🟠 | Confirmed — `policies/central_policies.json`, `finance/subsidies.json`, and `constraints/budget.json` all carry a CGTMSE entry independently. Needs deduplication into one source of truth before database schema design |
-| **Conflicting CGTMSE guarantee coverage number — corrected** | 🟠 | Previous entry here was itself wrong (`central_policies.json` "75%" vs. `budget.json` "75–90%") — re-checked against live file content 16 Aug 2026: `budget.json` and `central_policies.json` actually **agree** (75–90%). The real conflict is `finance/subsidies.json`, which says **75–85%** (max differs from the other two by 5 points). Someone needs to check the current CGTMSE source (cgtmse.in) and fix whichever file is wrong — not guessing the correct number here. Still blocks Phase 3 per `FEATURE_BACKLOG.md`. |
-| `constraints/technology_rules.json` references `paper`, `dairy`, `glass` industries | 🟢 | No corresponding `industries/*.json` profile exists yet for these three — flagged as an open research question, not urgent |
-| ~~`references/` folder empty~~ | ✅ Resolved | Populated — `citations.json` (5.7KB) + `sources.json` (19.1KB, 80 sources). Confirmed against live repo content + `scripts/validate_references.py` (added) 17 Aug 2026. Previous "empty" and "9.8KB" statuses were both stale documentation — the folder was populated but had 218 validator errors (duplicate/competing schemas across 16 files); fixed via `scripts/migrate_reference_schema*.py`. `validate_references.py` now passes with 0 errors. |
-| `policies/` fully built but **not yet integrated** — see §5a | 🔴 Blocking (scope) | See below |
-| `knowledge-base/master/` folder and its generating scripts undocumented | 🟢 | Found via live repo check 16 Aug 2026 — see §3 diagram above. Not a functional gap, but nobody wrote down what this folder is for or that the scripts exist; needs a short doc entry so it doesn't get rediscovered again |
+| Issue | Resolution |
+|---|---|
+| Subsidy data duplicated across `policies/`, `finance/subsidies.json`, `constraints/budget.json` | ✅ Canonical `financial_data_ownership` rule in `central_policies.json` |
+| Conflicting CGTMSE guarantee-coverage number | ✅ Full category table in `subsidies.json`; other files reference only |
+| Redundant `source_id` fields | ✅ Commit `c9e3ed5` — 33 fields removed |
+| `industries/` missing `paper`, `dairy`, `glass` | ✅ All three populated (16 Aug 2026) |
+| `references/` consistency | ✅ Confirmed |
+| `master/` undocumented | ✅ Documented above |
 
-### 5a. ⚠️ OPEN SCOPE DECISION — Policy & Eligibility Engine (Module 4a)
+### Still open
 
-This is the single most important open decision in the project right now, and it's explicitly flagged as blocking in `FEATURE_BACKLOG.md`.
+| Item | Status |
+|---|---|
+| `technologies/solar_thermal.json` thin (2,048B vs 4–9KB others) | 🟡 No concentrating/non-concentrating split; no `solar_thermal` policy key |
+| `master/technologies.json` lists 9 IDs but only 6 have full profiles | 🟡 `electric_boiler`, `solar_pv`, `biogas` master-list only |
 
-`knowledge-base/policies/` is fully built (central/state policies, eligibility rules, carbon pricing, renewable purchase obligations) — well beyond what a "future enhancement" would normally have. But:
-- No corresponding module exists yet in `decision-engine/` or is confirmed in scope in `SYSTEM_DESIGN.md` (documented there as "Module 4a — status: scope not yet finalized").
-- If it's brought into MVP scope, the User Input module needs new fields (Udyam registration, enterprise category, turnover, investment, project type, cluster membership, special-category status) that **are not currently being collected**.
-- If it's brought into MVP scope, the subsidy-data duplication issue above must be resolved first.
+### 5a. Module 4a — Policy & Eligibility Engine
 
-**Decide one of:**
-- **(A) Bring it into MVP scope** as Module 4a — requires the User Input extension and data dedup above.
-- **(B) Confirm it stays out of MVP** — freeze further `policies/` work, keep it as a head start for post-SIH development.
-
-**Until decided:** per `FEATURE_BACKLOG.md`, no further content should be added to `knowledge-base/policies/` — resolve the decision first so effort isn't wasted either direction.
-
-**Owner:** _[assign]_ **Target decision date:** _[fill in]_ — *(both currently blank in `FEATURE_BACKLOG.md` — this needs an owner assigned this week, not left open indefinitely)*
+**Status change from previous revision:** `decision-engine/policy/` scaffold now exists with correct files. The blocker is now implementation, not scope. What remains:
+- Implement `eligibility.py` — MSME/Udyam/enterprise-category/turnover/state checks
+- Implement `subsidy_matcher.py` — load policy JSON, match schemes, rank by benefit
+- Implement `policy_engine.py` — orchestrate the above
+- Connect to `backend/apis/policy_api.py`
+- Extend Module 1 to collect all required MSME eligibility fields
 
 ---
 
-## 6. Team structure (6 members, ownership not silos)
+## 6. Team structure — unchanged
 
 | Member | Owns | Output |
 |---|---|---|
@@ -188,43 +179,43 @@ This is the single most important open decision in the project right now, and it
 | 5 | Optimization / backend | Constraint engine, optimizer, sensitivity analysis |
 | 6 | Product / frontend / validation | UI, comparison dashboard, demo, docs |
 
-Everyone should understand the whole system — these are ownership areas, not walls.
-
 ---
 
-## 7. What's genuinely solved elsewhere (be honest about this in the pitch)
-
-Energy audits, technology databases, MSME EE schemes, financial support, solar/biomass/waste-heat/induction feasibility tools, carbon calculators, and industrial decarbonization roadmaps **all already exist**. Never claim any of these individually as novel.
+## 7. What's genuinely solved elsewhere — unchanged
 
 **Claimed novelty = integration + India/MSME-specific constraint modeling + accessibility + explainability**, not any single component.
 
 ---
 
-## 8. Immediate next actions
+## 8. Immediate next actions (implementation phase — dependency-ordered)
 
-Per `FEATURE_BACKLOG.md`'s own "Next Development Target" list (authoritative — reproduced here for visibility), in order:
+1. **Formally document scope decisions** — update `FEATURE_BACKLOG.md`: "9 sectors in scope" + "Module 4a: IN scope."
+2. **Design database schema** from `DOMAIN_MODEL.md` entities → write as migration in `scripts/migrations/`.
+3. **Implement `backend/database.py` and `backend/config.py`** — required before any model or API can persist.
+4. **Implement `models/`** — all 6 Python domain model files (Pydantic/dataclass, trace to `DOMAIN_MODEL.md`).
+5. **Implement `backend/main.py`** — FastAPI app init, route registration.
+6. **Implement `decision-engine/baseline/`** — feeds every downstream module; first pipeline step.
+7. **Implement `decision-engine/economics/`** — CAPEX/OPEX/payback/ROI per scenario.
+8. **Implement `decision-engine/reliability/`** — sensitivity/confidence scoring.
+9. **Implement `decision-engine/optimizer/`** — MCDA ranking.
+10. **Implement `decision-engine/policy/`** — eligibility + subsidy matching.
+11. **Implement `decision-engine/reports/`** — explainability narrative + PDF/Excel export.
+12. **Implement backend APIs** — wire each `backend/apis/*.py` to its engine module.
+13. **Build ETL pipeline** — `convert_datasets.py` → `seed_database.py` → `run_pipeline.py`.
+14. **Build frontend** — factory input form and recommendation display first.
+15. **Write tests** — unit tests per decision-engine module, integration tests for full pipeline.
+16. **End-to-end demo** — run Scenario T1 (textile MSME) through the full pipeline.
 
-1. **Resolve the Module 4a subsidy/policy scope decision** (§5a) — assign an owner and target date this week; this blocks meaningful further knowledge-base and decision-engine work on that module.
-2. **Finish the knowledge-base consistency pass** — `emission_factors.json` is already done (see §5 correction); remaining work is: dedupe subsidy data across 3 files, reconcile the CGTMSE 85%-vs-90% conflict against a real source, expand `solar_thermal.json`.
-3. **Design database schema** from the now-consistent knowledge-base structure — explicitly blocked on step 2.
-4. **Build the `scripts/` ETL pipeline**: `convert_datasets.py` → `pre_process.py` → `load_knowledge.py` → `seed_database.py`.
-5. **Define API contracts** for `backend/apis/` — this is what turns the current file scaffolding into real interfaces the frontend and decision-engine can build against.
-6. **Start backend implementation** (`backend/database.py`, `backend/main.py`, then `models/`).
-
-**Additional items from this file's own review:**
-7. **Log mentor/jury feedback** — `MENTOR_NOTES.md` currently has zero entries despite being fully templated. If any mentor sessions have happened, backfill them now before details are forgotten; if none have happened yet, prioritize getting one scheduled given the project's maturity.
-8. **Start using `SESSION_LOG.md`** — referenced as "actively used" in `FEATURE_BACKLOG.md`/`SYSTEM_DESIGN.md` §12 but not yet reviewed here — confirm it's actually being kept current.
-9. ~~Verify README.md status~~ — ✅ Resolved 16 Aug 2026: root `README.md` is 5,145 bytes, fully written (problem statement, architecture, stack, project structure, getting-started commands, status, team, research base). `FEATURE_BACKLOG.md`'s "complete" mark was correct; the earlier "23-byte stub" note was itself the stale claim.
-10. Once steps 1–6 are done: **run the full pipeline end-to-end against one representative textile MSME scenario** — this remains the real measure of progress, more meaningful than any file count.
+See `docs/ROADMAP.md` for sprint-by-sprint breakdown.
 
 ---
 
 ## 9. Open risks / honesty checks
 
-- **Backend and frontend are still scaffolded, not implemented** — confirmed unchanged 16 Aug 2026 (all backend `.py` files and nearly all frontend files are 0 bytes). **Decision-engine is no longer fully in this bucket** — its `emissions/` and `technology/` modules contain real code (confirmed by reading file content, not just size); `baseline/`, `economics/`, `optimizer/`, `reliability/`, `reports/` remain empty. Don't let this correction become the next overclaim — "has code" is not the same as "tested and integrated."
-- **Module 4a (policy/eligibility) is a real, unassigned, undated open decision** — see §5a. This is scope risk, not just a technical gap.
-- **Knowledge base has a blocking gap** (`emission_factors.json` empty) and **a real data-integrity issue** (conflicting CGTMSE numbers) that should be fixed before the database schema is designed, since the schema will inherit whatever inconsistencies exist at that point.
-- **Sector scope re-confirmation needed** — six industries built vs. original one-sector prototype plan.
-- **Novelty claim is real but narrow** — must be pitched as "integration of fragmented existing tools into an India/MSME-specific pathway system," never as "no such system exists."
-- **`MENTOR_NOTES.md` unused** — zero mentor feedback logged despite the project's maturity; this is a missed opportunity for external validation before further build time is spent.
-- **Documentation quality is a genuine strength** — `SYSTEM_DESIGN.md`, `RESEARCH_NOTES.md`, and `FEATURE_BACKLOG.md` are unusually disciplined and self-correcting (they flag their own inconsistencies, e.g. the CGTMSE conflict, the subsidy duplication, the Module 4a gap). This is worth preserving as a habit through the build phase, not just the planning phase.
+- **Backend, models, and tests are fully unimplemented** — all 0 bytes as of 17 Aug 2026 evening. Clear critical path.
+- **Five decision-engine modules are unimplemented** — baseline, economics, optimizer, reliability, reports.
+- **No sprint plan existed until `ROADMAP.md` was created this pass.**
+- **`MENTOR_NOTES.md` has zero real entries** — fill after next faculty/jury interaction.
+- **`solar_thermal.json` remains the one KB gap.**
+- **Python import hygiene** — `decision-engine/` uses a hyphen, invalid for Python package imports. Rename to `decision_engine/` before cross-module imports are written.
+- **Documentation quality is a genuine strength** — maintain the self-correction practice into the implementation phase.

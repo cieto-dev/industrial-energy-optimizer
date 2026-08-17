@@ -100,11 +100,15 @@ Factory (input)
 - **`weights.py`** presumably lets the relative importance of cost/emissions/risk be tuned — worth documenting whether these weights are fixed, user-adjustable, or industry-specific defaults.
 
 ### `policy/`
-**Files:** *(not confirmed from available screenshots — folder listed but contents not visible)*
+**Files:** `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, `policy_engine.py` *(confirmed 17 Aug 2026 — all 0 bytes, structure scaffolded, not yet implemented)*
 
-**Role (intended, per plan):** applies subsidy eligibility (`knowledge-base/policies/eligibility_rules.json`, `central_policies.json`, `state_policies.json`) and any regulatory constraints (e.g. `renewable_purchase_obligations.json`, `carbon_pricing.json`) to the ranked scenarios.
+**Role (intended):** applies subsidy eligibility (`knowledge-base/policies/eligibility_rules.json`, `central_policies.json`, `state_policies.json`) and regulatory constraints (e.g. `renewable_purchase_obligations.json`, `carbon_pricing.json`) to the ranked scenarios.
 
-- **Action needed:** confirm this folder's actual files — flagged in `PROJECT_STATE.md` as unverified.
+- **`eligibility.py`** — checks MSME registration, enterprise category, investment limits, turnover limits, state-specific requirements. Answers: "Is this factory eligible?"
+- **`subsidy_matcher.py`** — loads policy JSON, matches applicable schemes, removes duplicates, ranks by benefit value, estimates total benefit.
+- **`policy_engine.py`** — orchestrator: accepts Factory, calls EligibilityChecker then SubsidyMatcher, returns eligible schemes.
+- **`__init__.py`** — exposes `EligibilityChecker`, `SubsidyMatcher`, `PolicyEngine` as package public API.
+- **Status:** IN scope (see `FEATURE_BACKLOG.md`). Implementation target: Sprint 3 (see `docs/ROADMAP.md`).
 
 ### `reports/`
 **Files:** `excel_report.py`, `pdf_report.py`, `report_generator.py`
@@ -126,11 +130,23 @@ Factory (input)
 
 ---
 
-## Open items for the module owners to confirm
+## Open items for module owners to confirm
 
-- [ ] `policy/` folder contents (unverified)
-- [ ] Whether `optimizer/weights.py` is fixed, configurable, or per-industry
-- [ ] Whether `reliability/` runs real perturbation sweeps or static risk labels
+- [x] `policy/` folder contents — **confirmed 17 Aug 2026:** `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, `policy_engine.py`
+- [ ] Whether `optimizer/weights.py` is fixed, configurable, or per-industry defaults (document in `weights.py` header before implementing)
+- [ ] Whether `reliability/` runs real perturbation sweeps or static risk labels (must be real sweeps — see architecture note above)
 - [ ] Whether `economics/capex.py` correctly branches on MSME vs. large-industry subsidy eligibility
-- [ ] Whether `emissions/grid_factors.json` is state-keyed
+- [ ] Whether `emissions/grid_factors.json` is state-keyed (required — India's grid mix varies by state)
 - [ ] End-to-end test: does `scripts/run_pipeline.py` produce a sane, explainable output for Scenario T1?
+
+---
+
+## ⚠️ Python import hygiene — action required before cross-module imports are written
+
+This folder is named `decision-engine/` with a **hyphen**. Python cannot import packages with hyphens. The following will fail:
+
+```python
+from decision-engine.policy import PolicyEngine  # SyntaxError
+```
+
+Before any module in this folder imports from another module in the same folder, the folder **must be renamed** to `decision_engine/` (underscore). Update all references in `README.md`, `SYSTEM_DESIGN.md`, and this file simultaneously. This is low-effort but must happen before Sprint 2 implementation begins.

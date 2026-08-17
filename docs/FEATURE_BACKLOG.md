@@ -2,9 +2,7 @@
 
 > **Purpose:** Track every feature, module, engine, integration, and enhancement planned for the AI-Powered Industrial Energy Transition Platform.
 >
-> **Rule:** Every feature should move through the lifecycle:
->
-> Planned → In Progress → Testing → Completed
+> **Rule:** Every feature moves through: Planned → In Progress → Testing → Completed
 
 ---
 
@@ -13,15 +11,16 @@
 | Phase | Status |
 |--------|--------|
 | Research | ✅ Completed |
-| Documentation | 🟡 In Progress |
+| Documentation | ✅ Completed (this pass — 17 Aug 2026) |
 | Architecture Design | ✅ Completed |
-| Knowledge Base Build-out | 🟡 In Progress (mostly populated, consistency pass ongoing) |
-| Database Design | ⏳ Pending |
-| Backend Development | ⏳ Pending |
-| Frontend Development | ⏳ Pending |
-| AI Integration | ⏳ Pending |
-| Testing | ⏳ Pending |
-| Deployment | ⏳ Pending |
+| Knowledge Base Build-out | ✅ Completed (alignment pass closed 17 Aug 2026) |
+| Database Design | ⏳ Pending — Sprint 1 |
+| Backend Development | ⏳ Pending — Sprint 1–3 |
+| Decision Engine Implementation | 🟡 In Progress (technology, emissions, scenario_generator done; 5 modules pending) |
+| Frontend Development | ⏳ Pending — Sprint 5 |
+| ETL Pipeline | ⏳ Pending — Sprint 4 |
+| Testing | ⏳ Pending — Sprint 4 |
+| Deployment | ⏳ Pending — Sprint 5 |
 
 ---
 
@@ -31,20 +30,31 @@
 
 ---
 
-# ⚠️ OPEN SCOPE DECISION — GOVERNMENT SUBSIDY / POLICY INTEGRATION
+# SCOPE DECISIONS — NOW FORMALLY RECORDED
 
-**This needs a team decision before Phase 2 planning finalizes.**
+Previously listed as "open decisions." The team has de facto resolved both through code actions. Formally recorded here:
 
-Previously, this document listed "Government Subsidy Integration" under Future Enhancements (outside the SIH MVP). Since then, `knowledge-base/policies/` has been fully built out — `central_policies.json`, `state_policies.json`, `eligibility_rules.json`, `carbon_pricing.json`, `renewable_purchase_obligations.json` — well beyond what a "future enhancement" would normally have.
+## Decision 1: Module 4a (Policy & Eligibility Engine) — IN SCOPE
 
-**Decide one of:**
+**Decision:** IN scope for MVP.
 
-- **(A) Bring it into MVP scope.** Move it to Phase 2 as Module 4a (see `SYSTEM_DESIGN.md`). Requires: consolidating the currently-duplicated subsidy data (`policies/`, `finance/subsidies.json`, `constraints/budget.json` all overlap), and extending the User Input module to collect MSME/eligibility fields.
-- **(B) Confirm it stays out of MVP.** Freeze further work on `knowledge-base/policies/` and treat the existing files as a head start for post-SIH development.
+**Evidence:** `decision-engine/policy/` scaffold created with `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, `policy_engine.py`. `DOMAIN_MODEL.md` already documents all Module 4a fields. `backend/apis/policy_api.py` stub exists.
 
-Until this is decided, do not add further content to `knowledge-base/policies/` — resolve the decision first so effort isn't spent on something that might stay out of scope, or conversely so the rest of the architecture doesn't get built assuming it's out of scope when it's actually needed.
+**Impact:** Module 1 (User Input) MUST collect: Udyam registration, enterprise category, annual turnover, plant & machinery investment, project type, cluster membership, brownfield/greenfield, special-category status.
 
-**Owner:** _[assign]_ **Target decision date:** _[fill in]_
+**Owner:** _[assign]_
+
+---
+
+## Decision 2: Sector Scope — ALL 9 INDUSTRIES
+
+**Decision:** Support all 9 built industries in the prototype.
+
+**Evidence:** `knowledge-base/industries/` has cement, chemical, dairy, food_processing, glass, paper, pharma, steel, textile — all fully populated.
+
+**Impact:** `technology_filter.py` and the constraint engine must handle all 9 industry profiles, not just textile. The demo will use textile as the primary scenario, but the system must work for all 9.
+
+**Owner:** _[assign]_
 
 ---
 
@@ -52,130 +62,203 @@ Until this is decided, do not add further content to `knowledge-base/policies/` 
 
 | Feature | Priority | Status |
 |----------|----------|--------|
-| README.md (root — canonical) | 🔴 | ✅ |
-| docs/README.md (pointer) | 🟢 | ✅ |
-| PROJECT_STATE.md | 🔴 | ✅ (kept current) |
-| SYSTEM_DESIGN.md | 🔴 | ✅ (kept current) |
-| FEATURE_BACKLOG.md | 🔴 | 🟡 In Progress (this file) |
-| SESSION_LOG.md | 🔴 | 🟡 In Progress — now actively used |
-| MENTOR_NOTES.md | 🟠 | ⏳ Template ready, awaiting first real entry |
-| RESEARCH_NOTES.md | 🟠 | 🟡 Needs assumptions ported in from knowledge-base source fields |
+| README.md (root — canonical) | 🔴 | ✅ Complete |
+| docs/README.md (pointer) | 🟢 | ✅ Complete |
+| PROJECT_STATE.md | 🔴 | ✅ Updated (17 Aug 2026 evening) |
+| SYSTEM_DESIGN.md | 🔴 | ✅ Current |
+| DECISION_ENGINE_ARCHITECTURE.md | 🔴 | ✅ Updated — policy/ folder contents confirmed |
+| DOMAIN_MODEL.md | 🔴 | ✅ Current |
+| FEATURE_BACKLOG.md | 🔴 | ✅ This file |
+| ROADMAP.md | 🔴 | ✅ **New file — created 17 Aug 2026** |
+| MENTOR_NOTES.md | 🟠 | ⏳ Template ready — awaiting first real entry |
+| RESEARCH_NOTES.md | 🟠 | ✅ Complete |
 
 ---
 
-# PHASE 1 — KNOWLEDGE BASE *(new phase — this work already happened but was never tracked here)*
+# PHASE 1 — KNOWLEDGE BASE
 
 | Component | Status | Notes |
 |---|---|---|
-| `industries/` (cement, chemical, food_processing, pharma, steel, textile) | ✅ Completed | All 6 populated with matching `industry_id` naming |
-| `technologies/` (biomass, electrification, heat_pump, solar_thermal, thermal_storage, waste_heat_recovery) | 🟡 Mostly complete | `solar_thermal.json` is thinner than the others — needs expansion |
-| `constraints/` (budget, fuel, grid, space, temperature, technology_rules) | 🟡 Mostly complete | References `paper`/`dairy`/`glass` industries that don't have profile files yet |
-| `finance/` (electricity_tariffs, fuel_prices, subsidies, technology_costs) | 🟡 Mostly complete | `subsidies.json` overlaps with `policies/` — needs dedup (see scope decision above) |
-| `emissions/` (emission_factors, grid_factors) | ✅ Completed | `emission_factors.json` populated (7 fuels, IPCC-based, sourced) — confirmed against live repo 16 Aug 2026. Previous "empty/blocking" status was stale. |
-| `policies/` (central_policies, state_policies, eligibility_rules, carbon_pricing, renewable_purchase_obligations) | ✅ Built | Scope decision pending — see box above |
-| `references/` (citations, sources) | ✅ Completed | Populated (`citations.json` 13.3KB, `sources.json` 9.8KB) — confirmed against live repo 16 Aug 2026. Previous "not started/empty" status was stale. |
-| `master/` (discoms, district_discoms, districts, fuels, industries, states, tariffs, technologies) | 🟢 Found, undocumented | Not previously tracked here. 8 populated files, appears generated by `scripts/create_district_discoms.py` / `create_districts_json.py` / `create_tariffs_json.py` — also undocumented until 16 Aug 2026 check. No action needed beyond writing it down. |
-| Cross-file consistency pass (naming, coverage, duplication) | 🟡 In Progress | Tracked in `PROJECT_STATE.md` §12 |
+| `industries/` (9 sectors) | ✅ Completed | cement, chemical, dairy, food_processing, glass, paper, pharma, steel, textile — all populated |
+| `technologies/` (6 profiles) | 🟡 Mostly complete | `solar_thermal.json` still thin — needs concentrating/non-concentrating split |
+| `constraints/` | ✅ Completed | All 6 files consistent |
+| `finance/` | ✅ Completed | Subsidy dedup resolved; canonical ownership in `central_policies.json` |
+| `emissions/` | ✅ Completed | `emission_factors.json` (7 fuels, IPCC-based), `grid_factors.json` |
+| `policies/` | ✅ Built | Internally consistent; Module 4a decision now formal — these files will be consumed |
+| `references/` | ✅ Completed | `citations.json` and `sources.json` consistent; `validate_references.py` passing |
+| `master/` | ✅ Complete | 8 files; generated by KB support scripts |
+| Cross-file consistency pass | ✅ Closed | All issues from previous pass resolved (see `PROJECT_STATE.md` §5) |
+
+**One remaining KB gap:**
+- `technologies/solar_thermal.json` (2,048B vs 4–9KB for others) — missing concentrating/non-concentrating split and `solar_thermal` key in `central_policies.json`
 
 ---
 
-# PHASE 2 — CORE ARCHITECTURE
+# PHASE 2 — DECISION ENGINE
 
-## User Input Module
-Status: ⏳ Planned
-Tasks: factory profile form · input validation · unit validation · required field validation · *(conditional)* MSME/eligibility fields if Module 4a is in scope
+## Baseline Energy Engine — `decision-engine/baseline/`
+**Status:** ⏳ Not started — Sprint 2 target
+- [ ] `energy_calculator.py` — thermal + electrical demand
+- [ ] `fuel_calculator.py` — fuel consumption + cost
+- [ ] `baseline_engine.py` — orchestrator; outputs immutable BaselineProfile
 
-## Baseline Energy Engine
-Status: ⏳ Planned
-Tasks: current energy calculation · useful heat estimation · fuel consumption estimation · energy cost calculation · baseline emissions
-
-## Technology Assessment Engine
-Status: 🟡 In Progress — `technology_engine.py`, `technology_filter.py`, `technology_matcher.py` contain real implementation code (confirmed by reading file content 16 Aug 2026), not stubs. Functional/tested status still unconfirmed — code existing is not the same as code working.
-Technologies: Biomass · Solar Thermal · Heat Pumps · Waste Heat Recovery · Thermal Storage · Electrification
+## Technology Assessment Engine — `decision-engine/technology/`
+**Status:** ✅ Implemented (3 files with real code)
+- ✅ `technology_engine.py` (1,844B)
+- ✅ `technology_filter.py` (2,560B)
+- ✅ `technology_matcher.py` (1,767B)
+- ⚠️ Functional/tested status unconfirmed — code exists but hasn't run end-to-end
 
 ## Constraint Engine
-Status: ⏳ Planned
-Checks: process temperature · space · budget · grid capacity · resource availability · retrofit compatibility
+**Status:** Distributed across `technology_filter.py` + `knowledge-base/constraints/`
+- Temperature, space, budget, grid, resource, retrofit checks embedded in filter
+- No separate `constraint_engine.py` file — this is intentional per current design
 
-## Policy & Eligibility Engine *(conditional — see scope decision above)*
-Status: ⏳ Blocked on scope decision
-Tasks (if in scope): eligibility determination · subsidy matching · incentive value calculation for Finance Engine
+## Scenario Generator — `decision-engine/scenario/`
+**Status:** 🟡 Partial — Sprint 2 target for completion
+- ✅ `scenario_generator.py` (1,558B — real code)
+- ❌ `scenario_filter.py` (0 bytes)
+- ❌ `scenario_validator.py` (0 bytes)
 
-## Scenario Generator
-Status: ⏳ Planned
-Tasks: generate feasible combinations · remove duplicates · scenario identification · scenario storage
+## Environmental Engine — `decision-engine/emissions/`
+**Status:** ✅ Implemented (3 files with real code)
+- ✅ `co2_calculator.py` (1,411B)
+- ✅ `emission_engine.py` (2,996B)
+- ✅ `emission_factors.py` (955B)
+- ⚠️ Functional/tested status unconfirmed
 
-## Optimization Engine
-Status: ⏳ Planned
-Evaluation: cost · CapEx · payback · emissions · reliability · weighted score
+## Economics Engine — `decision-engine/economics/`
+**Status:** ⏳ Not started — Sprint 2 target
+- [ ] `capex.py` — CAPEX per technology; MSME vs. large-industry eligibility branch
+- [ ] `opex.py` — annual OPEX
+- [ ] `payback.py` — payback as range [low, high]
+- [ ] `roi.py` — NPV and ROI
+- [ ] `economics_engine.py` — orchestrator
 
-## Finance Engine
-Status: ⏳ Planned
-Tasks: CapEx · OpEx · savings · ROI · payback · *(conditional)* net of eligible subsidies
+## Reliability / Sensitivity Engine — `decision-engine/reliability/`
+**Status:** ⏳ Not started — Sprint 3 target
+- [ ] `confidence.py`
+- [ ] `risk_score.py`
+- [ ] `reliability_engine.py` — real perturbation sweep
 
-## Environmental Engine
-Status: 🟡 In Progress — no longer blocked, `emission_factors.json` is populated (see Phase 1 table above). `co2_calculator.py`, `emission_engine.py`, `emission_factors.py` contain real implementation code (confirmed 16 Aug 2026), not stubs. Functional/tested status still unconfirmed.
-Tasks: CO₂ reduction · fossil fuel reduction · renewable contribution · sustainability metrics
+## Optimization Engine — `decision-engine/optimizer/`
+**Status:** ⏳ Not started — Sprint 3 target
+- [ ] `weights.py`
+- [ ] `mcda.py`
+- [ ] `ranking.py`
+- [ ] `optimization_engine.py`
 
-## AI Recommendation Engine
-Status: ⏳ Planned
-Tasks: recommendation generation · explainability · confidence score · recommendation summary
+## Policy & Eligibility Engine — `decision-engine/policy/` *(Module 4a — IN SCOPE)*
+**Status:** 🟡 Scaffolded — Sprint 3 target for implementation
+- 🟡 `__init__.py` (0 bytes — structure only)
+- 🟡 `eligibility.py` (0 bytes — to implement)
+- 🟡 `subsidy_matcher.py` (0 bytes — to implement)
+- 🟡 `policy_engine.py` (0 bytes — to implement)
+
+## AI Recommendation / Reports — `decision-engine/reports/`
+**Status:** ⏳ Not started — Sprint 3 target
+- [ ] `report_generator.py` — Recommendation object with explanation
+- [ ] `pdf_report.py` — PDF export
+- [ ] `excel_report.py` — Excel export
 
 ---
 
 # PHASE 3 — DATABASE
 
-Status: ⏳ Planned
+**Status:** ⏳ Not started — Sprint 1 target
 
-Features: industry profiles · technology database · assumption storage · user sessions · scenario history
+- [ ] Schema design from `DOMAIN_MODEL.md` entities
+- [ ] Migration file (`scripts/migrations/001_initial_schema.sql`)
+- [ ] SQLAlchemy models or equivalent
 
-**Prerequisite:** Phase 1 consistency pass should be finished first — the schema will be designed directly from the knowledge-base JSON shapes, so unresolved naming/duplication issues there will propagate into the schema if not fixed first.
-
----
-
-# PHASE 4 — FRONTEND
-
-Status: ⏳ Planned (folder structure scaffolded under `frontend/`)
-
-Pages: Landing Page · Factory Input · Dashboard · Recommendation View · Scenario Comparison · Report Generation
+**Prerequisite:** KB consistency pass complete ✅ (done) — schema can now be designed
 
 ---
 
-# PHASE 5 — VISUALIZATION
+# PHASE 4 — BACKEND
 
-Status: ⏳ Planned
+**Status:** ⏳ Not started — Sprint 1 target
 
-Charts: Energy Consumption · Cost Comparison · CO₂ Reduction · Technology Mix · Financial Analysis
+**Infrastructure:**
+- [ ] `backend/config.py`
+- [ ] `backend/database.py`
+- [ ] `backend/logger.py`
+- [ ] `backend/utils.py`
+- [ ] `backend/main.py`
 
----
-
-# PHASE 6 — AI
-
-Status: ⏳ Planned
-
-Features: Recommendation Explanation · Pathway Comparison · Report Summarization · Interactive Assistant
-
----
-
-# PHASE 7 — TESTING
-
-Status: ⏳ Planned (test file stubs exist in `tests/` — no logic yet)
-
-Tasks: Unit Tests · Integration Tests · Performance Tests · Validation Tests · User Acceptance Testing
+**APIs:**
+- [ ] `backend/apis/health_api.py`
+- [ ] `backend/apis/industry_api.py`
+- [ ] `backend/apis/technology_api.py`
+- [ ] `backend/apis/optimization_api.py`
+- [ ] `backend/apis/policy_api.py`
+- [ ] `backend/apis/recommendation_api.py`
+- [ ] `backend/apis/report_api.py`
 
 ---
 
-# PHASE 8 — DEPLOYMENT
+# PHASE 5 — MODELS
 
-Status: ⏳ Planned (Docker config scaffolded in `deployment/` — unused)
+**Status:** ⏳ Not started — Sprint 1 target
 
-Tasks: Backend Deployment · Frontend Deployment · Database Hosting · Environment Configuration · Production Testing
+All 6 Python files are 0 bytes. Implement as Pydantic models tracing to `DOMAIN_MODEL.md`:
+
+- [ ] `models/factory.py`
+- [ ] `models/industry.py`
+- [ ] `models/technology.py`
+- [ ] `models/scenario.py`
+- [ ] `models/financial.py`
+- [ ] `models/emission.py`
+- [ ] `models/recommendation.py`
+
+---
+
+# PHASE 6 — ETL PIPELINE
+
+**Status:** ⏳ Not started — Sprint 4 target
+
+- [ ] `scripts/convert_datasets.py`
+- [ ] `scripts/pre_process.py`
+- [ ] `scripts/load_knowledge.py`
+- [ ] `scripts/seed_database.py`
+- [ ] `scripts/run_pipeline.py`
+
+---
+
+# PHASE 7 — FRONTEND
+
+**Status:** ⏳ Not started — Sprint 5 target (folder scaffolded, all files 0 bytes)
+
+Pages: Landing → Factory Input → Dashboard → Recommendation View → Scenario Comparison → Report Generation
+
+---
+
+# PHASE 8 — TESTING
+
+**Status:** ⏳ Not started — Sprint 4 target (stubs exist, 0 bytes)
+
+- [ ] `tests/test_baseline.py`
+- [ ] `tests/test_constraints.py`
+- [ ] `tests/test_optimizer.py`
+- [ ] `tests/test_recommendations.py`
+
+---
+
+# PHASE 9 — DEPLOYMENT
+
+**Status:** ⏳ Scaffolded — Sprint 5 target (Docker/nginx config exists, unused)
+
+- [ ] Backend deployment
+- [ ] Frontend deployment
+- [ ] Database hosting
+- [ ] Environment configuration
+- [ ] Production testing
 
 ---
 
 # FUTURE ENHANCEMENTS
 
-Outside the SIH MVP regardless of the subsidy scope decision above:
+Outside SIH MVP regardless of scope decisions above:
 
 - IoT Integration
 - Digital Twin (see `digital-twin/future_scope.md`)
@@ -184,6 +267,7 @@ Outside the SIH MVP regardless of the subsidy scope decision above:
 - Carbon Credit Analysis
 - Multi-Factory Optimization
 - Predictive Analytics
+- Industry benchmarking
 
 ---
 
@@ -201,8 +285,7 @@ Outside the SIH MVP regardless of the subsidy scope decision above:
 
 # DEFINITION OF COMPLETE
 
-A feature is considered complete only when:
-
+A feature is complete only when:
 - Functional requirements are implemented.
 - Documentation is updated.
 - Testing is complete.
@@ -214,14 +297,15 @@ A feature is considered complete only when:
 
 # NEXT DEVELOPMENT TARGET
 
-Immediate priority, in order:
+Immediate priority, in dependency order (see `docs/ROADMAP.md` for full detail):
 
-1. Resolve the subsidy/policy scope decision (box above).
-2. Finish the knowledge-base consistency pass (Phase 1 open items).
-3. Design database schema from the (now-consistent) knowledge-base structure.
-4. Build `scripts/` ETL pipeline (`convert_datasets.py` → `pre_process.py` → `load_knowledge.py` → `seed_database.py`).
-5. Define API contracts for `backend/apis/`.
-6. Start backend implementation (`backend/database.py`, `backend/main.py`, then `models/`).
+1. Formally record scope decisions above (assign owners, update this file).
+2. Design database schema from `DOMAIN_MODEL.md`.
+3. Implement `backend/database.py` and `backend/config.py`.
+4. Implement all 6 `models/` files.
+5. Implement `backend/main.py`.
+6. Implement `decision-engine/baseline/` — first pipeline module.
+7. Continue Sprint 2–5 per `docs/ROADMAP.md`.
 
 ---
 

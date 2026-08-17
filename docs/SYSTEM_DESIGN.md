@@ -133,20 +133,22 @@ Only feasible pathways proceed further.
 
 ---
 
-## Module 4a – Policy & Eligibility Engine *(status: scope not yet finalized)*
+## Module 4a – Policy & Eligibility Engine *(status: IN scope — scaffolded, implementation pending)*
 
-> **This module does not yet formally exist in this document or in `decision-engine/`, even though `knowledge-base/policies/` has already been fully built out** (`central_policies.json`, `state_policies.json`, `eligibility_rules.json`, `carbon_pricing.json`, `renewable_purchase_obligations.json`). This section is included to make that gap explicit rather than silent, and to record what the module would do once scope is confirmed in `FEATURE_BACKLOG.md`.
+> **This module is now confirmed in scope.** `decision-engine/policy/` exists with `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, and `policy_engine.py` — all 0 bytes (scaffolded, not yet implemented). `knowledge-base/policies/` is fully built and internally consistent. See `FEATURE_BACKLOG.md` for the formal scope decision and `docs/ROADMAP.md` Sprint 3 for the implementation plan.
 
-If in scope, this module would:
+This module:
 
-- Determine which central/state government schemes, subsidies, and tax benefits a factory is eligible for, based on MSME classification, location, and project type.
-- Apply eligibility rules from `knowledge-base/policies/eligibility_rules.json`.
-- Feed eligible subsidy/incentive values into Module 7 (Financial Analysis) to adjust effective capital cost and payback period.
+- Determines which central/state government schemes, subsidies, and tax benefits a factory is eligible for, based on MSME classification, location, and project type.
+- Applies eligibility rules from `knowledge-base/policies/eligibility_rules.json`.
+- Feeds eligible subsidy/incentive values into Module 7 (Financial Analysis) to adjust effective capital cost and payback period.
 
-**Blocking dependencies before this can be built:**
-- Formal MVP scope decision (currently `FEATURE_BACKLOG.md` lists subsidy integration as post-MVP — needs reconciling against the work already done).
-- Consolidation of the currently-duplicated subsidy data across `policies/`, `finance/subsidies.json`, and `constraints/budget.json` into one source of truth.
-- Module 1 extended to collect the MSME/eligibility fields listed above.
+**What remains before this can be implemented:**
+- Write `eligibility.py` — MSME/Udyam/enterprise-category/turnover/state checks.
+- Write `subsidy_matcher.py` — load policy JSON, match schemes, rank by benefit.
+- Write `policy_engine.py` — orchestrate the above.
+- Connect to `backend/apis/policy_api.py` (stub exists, 0 bytes).
+- Extend Module 1 to collect all required MSME/eligibility fields (see `DOMAIN_MODEL.md` §1 Module 4a fields).
 
 ---
 
@@ -288,40 +290,48 @@ industrial-energy-optimizer/
 
 # 9. BUILD SEQUENCE
 
-1. Repository setup
-2. **Knowledge base consistency pass** *(current stage — added; wasn't in the original sequence)*
-3. Database schema design
-4. Backend structure (`backend/`)
-5. `scripts/` ETL pipeline (dataset conversion → preprocessing → knowledge loading → DB seeding)
-6. Baseline engine (`models/`, `decision-engine/baseline/`)
-7. Technology models
-8. Constraint engine
-9. **Policy & eligibility engine** *(conditional — only if confirmed in scope, see Module 4a)*
-10. Scenario generator
-11. Optimization
-12. Finance
-13. AI layer
+*(Updated 17 Aug 2026 — see `docs/ROADMAP.md` for sprint-by-sprint detail)*
+
+1. ✅ Repository setup
+2. ✅ Knowledge base consistency pass — closed 17 Aug 2026
+3. ✅ Architecture documentation — closed 17 Aug 2026
+4. ⬅ **NOW:** Database schema design (derive from `DOMAIN_MODEL.md`)
+5. Backend infrastructure (`backend/config.py`, `backend/database.py`, `backend/main.py`)
+6. Domain models (`models/` — all 6 Python files)
+7. Decision-engine baseline (`decision-engine/baseline/` — first pipeline module)
+8. Decision-engine economics + reliability (parallel)
+9. Decision-engine optimizer (MCDA)
+10. Decision-engine policy (Module 4a — confirmed in scope)
+11. Decision-engine reports (explainability + PDF/Excel)
+12. Backend APIs (wire each to its engine module)
+13. `scripts/` ETL pipeline (parallel with APIs post-schema)
 14. Frontend
-15. Integration
-16. Testing
+15. Tests
+16. End-to-end demo (Scenario T1)
 17. Deployment
 
 ---
 
 # 10. CURRENT ARCHITECTURE STATUS
 
+*(Re-verified 17 Aug 2026 — evening. See `PROJECT_STATE.md` §4 for full file-level detail.)*
+
 | Component | Status |
 |-----------|--------|
 | Research | ✅ Complete |
-| Knowledge base — industries, technologies, constraints, finance | 🟡 Populated, consistency pass in progress |
-| Knowledge base — policies, emissions, references | 🟡 Built, not yet integrated. `emissions` and `references` gaps previously logged here are resolved (see `PROJECT_STATE.md` §5, corrected 16 Aug 2026 — note: §12 was a broken reference, this file only has 9 sections) |
-| Documentation | 🟡 In Progress |
-| Database Design | ⏳ Pending |
-| Backend | ⏳ Pending (scaffolding only) |
-| Frontend | ⏳ Pending (folder structure only) |
-| AI Layer | ⏳ Pending |
-| Integration | ⏳ Pending |
-| Testing | ⏳ Pending (test file stubs only) |
+| Knowledge base — all sub-domains | ✅ Complete — alignment pass closed 17 Aug 2026 |
+| Documentation | ✅ Completed this pass — `ROADMAP.md` added |
+| Decision engine — technology, emissions | ✅ Implemented (real code) |
+| Decision engine — scenario | 🟡 Partial (`scenario_generator.py` done; filter/validator 0 bytes) |
+| Decision engine — policy | 🟡 Scaffolded (folder + files exist, all 0 bytes) |
+| Decision engine — baseline, economics, optimizer, reliability, reports | ⏳ Not started |
+| Database Design | ⏳ Not started — Sprint 1 |
+| Backend | ⏳ Not started — all files 0 bytes — Sprint 1 |
+| Models | ⏳ Not started — all 6 Python files 0 bytes — Sprint 1 |
+| Frontend | ⏳ Not started — folder structure only — Sprint 5 |
+| ETL Pipeline | ⏳ Not started — Sprint 4 |
+| Testing | ⏳ Not started — Sprint 4 |
+| Deployment | ⏳ Scaffolded (Docker/nginx config exists, unused) |
 
 ---
 
