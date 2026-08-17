@@ -1,6 +1,6 @@
 # DECISION_ENGINE_ARCHITECTURE.md
 
-Documents every module inside `decision-engine/`, its inputs, outputs, and how it fits the overall flow. Companion to `architecture/decision_flow.drawio` (visual) and `DOMAIN_MODEL.md` (entities). Where a module's actual internal logic isn't yet confirmed from code, that's flagged explicitly — this doc describes intended contracts; whoever owns each module should confirm/correct against the real implementation.
+Documents every module inside `decision_engine/`, its inputs, outputs, and how it fits the overall flow. Companion to `architecture/decision_flow.drawio` (visual) and `DOMAIN_MODEL.md` (entities). Where a module's actual internal logic isn't yet confirmed from code, that's flagged explicitly — this doc describes intended contracts; whoever owns each module should confirm/correct against the real implementation.
 
 ## Overall flow
 
@@ -123,7 +123,7 @@ Factory (input)
 
 ## Cross-cutting rules (from the original architecture plan — restate here so this doc is self-contained)
 
-1. **AI boundary:** no module above should use an LLM to decide technical feasibility, ranking, or financial eligibility. LLMs (if used at all) sit outside this pipeline — parsing free-text user input into structured Factory fields, and turning `Recommendation.explanation` into natural language. Everything inside `decision-engine/` stays rule-based and mathematical, so results are auditable.
+1. **AI boundary:** no module above should use an LLM to decide technical feasibility, ranking, or financial eligibility. LLMs (if used at all) sit outside this pipeline — parsing free-text user input into structured Factory fields, and turning `Recommendation.explanation` into natural language. Everything inside `decision_engine/` stays rule-based and mathematical, so results are auditable.
 2. **Every number must be traceable** to `knowledge-base/references/citations.json` — this is what separates the system from "AI guesses a percentage."
 3. **Outputs are ranges where uncertainty exists** (payback, CO2 reduction under variable grid mix), not false-precision point values.
 4. **The pipeline is linear and debuggable** — Factory → baseline → feasibility filter → scenarios → scoring → ranking → policy → report. If `scripts/run_pipeline.py` doesn't follow this exact order, reconcile the code with this doc (or update this doc to match reality, whichever is correct).
@@ -143,10 +143,10 @@ Factory (input)
 
 ## ⚠️ Python import hygiene — action required before cross-module imports are written
 
-This folder is named `decision-engine/` with a **hyphen**. Python cannot import packages with hyphens. The following will fail:
+This folder is named `decision_engine/` with a **hyphen**. Python cannot import packages with hyphens. The following will fail:
 
 ```python
-from decision-engine.policy import PolicyEngine  # SyntaxError
+from decision_engine.policy import PolicyEngine  # SyntaxError
 ```
 
 Before any module in this folder imports from another module in the same folder, the folder **must be renamed** to `decision_engine/` (underscore). Update all references in `README.md`, `SYSTEM_DESIGN.md`, and this file simultaneously. This is low-effort but must happen before Sprint 2 implementation begins.

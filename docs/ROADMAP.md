@@ -14,20 +14,20 @@
 - ✅ All research (RQ1–RQ6)
 - ✅ Complete knowledge base (9 industries, 6 tech profiles, constraints, finance, policies, emissions, references)
 - ✅ KB validation scripts
-- ✅ Decision-engine: `technology/` (3 files), `emissions/` (3 files), `scenario_generator.py`
+- ✅ Decisionengine: `technology/` (3 files), `emissions/` (3 files), `scenario_generator.py`
 - ✅ Architecture documentation, domain model, system design
 - ✅ Folder structure for all components
 
 ### What is NOT done (zero bytes, confirmed 17 Aug 2026 evening)
 - ❌ `models/` — all 6 Python files
 - ❌ `backend/` — all infrastructure and API files
-- ❌ `decision-engine/baseline/` — all 3 files
-- ❌ `decision-engine/economics/` — all 5 files
-- ❌ `decision-engine/optimizer/` — all 4 files
-- ❌ `decision-engine/reliability/` — all 3 files
-- ❌ `decision-engine/policy/` — all 4 files (scaffolded structure, 0 bytes)
-- ❌ `decision-engine/reports/` — all 3 files
-- ❌ `decision-engine/scenario/scenario_filter.py` and `scenario_validator.py`
+- ❌ `decision_engine/baseline/` — all 3 files
+- ❌ `decision_engine/economics/` — all 5 files
+- ❌ `decision_engine/optimizer/` — all 4 files
+- ❌ `decision_engine/reliability/` — all 3 files
+- ❌ `decision_engine/policy/` — all 4 files (scaffolded structure, 0 bytes)
+- ❌ `decision_engine/reports/` — all 3 files
+- ❌ `decision_engine/scenario/scenario_filter.py` and `scenario_validator.py`
 - ❌ `scripts/` ETL pipeline — 5 files
 - ❌ `tests/` — all 4 test files
 - ❌ `frontend/` — all components
@@ -101,23 +101,23 @@ Implementation:
 **Estimated effort:** ~4–5 days for 2–3 people.
 
 ### 2.1 Baseline Engine
-- [ ] `decision-engine/baseline/energy_calculator.py` — thermal and electrical demand from factory inputs
-- [ ] `decision-engine/baseline/fuel_calculator.py` — fuel consumption and cost (reads `knowledge-base/finance/fuel_prices.json`)
-- [ ] `decision-engine/baseline/baseline_engine.py` — outputs BaselineProfile (CO2, cost, useful heat)
+- [ ] `decision_engine/baseline/energy_calculator.py` — thermal and electrical demand from factory inputs
+- [ ] `decision_engine/baseline/fuel_calculator.py` — fuel consumption and cost (reads `knowledge-base/finance/fuel_prices.json`)
+- [ ] `decision_engine/baseline/baseline_engine.py` — outputs BaselineProfile (CO2, cost, useful heat)
 - **Critical:** BaselineProfile is immutable once computed — pathways evaluate against it, never mutate it
 - **Gate:** Textile MSME test input → BaselineProfile with correct thermal demand, CO2, cost (validate against known benchmark)
 
 ### 2.2 Scenario Completion
-- [ ] `decision-engine/scenario/scenario_filter.py` — remove duplicate or inconsistent combinations
-- [ ] `decision-engine/scenario/scenario_validator.py` — validate no double-counted thermal load, no mutually exclusive technologies combined
+- [ ] `decision_engine/scenario/scenario_filter.py` — remove duplicate or inconsistent combinations
+- [ ] `decision_engine/scenario/scenario_validator.py` — validate no double-counted thermal load, no mutually exclusive technologies combined
 - **Gate:** 3–5 unique, internally consistent scenarios produced for test input
 
 ### 2.3 Economics Engine
-- [ ] `decision-engine/economics/capex.py` — CAPEX per technology (reads `knowledge-base/finance/technology_costs.json`); branches on MSME vs. large-industry eligibility
-- [ ] `decision-engine/economics/opex.py` — annual OPEX per scenario
-- [ ] `decision-engine/economics/payback.py` — simple payback as [low, high] range (not a point estimate)
-- [ ] `decision-engine/economics/roi.py` — NPV and ROI
-- [ ] `decision-engine/economics/economics_engine.py` — orchestrates the above; outputs FinancialModel per scenario
+- [ ] `decision_engine/economics/capex.py` — CAPEX per technology (reads `knowledge-base/finance/technology_costs.json`); branches on MSME vs. large-industry eligibility
+- [ ] `decision_engine/economics/opex.py` — annual OPEX per scenario
+- [ ] `decision_engine/economics/payback.py` — simple payback as [low, high] range (not a point estimate)
+- [ ] `decision_engine/economics/roi.py` — NPV and ROI
+- [ ] `decision_engine/economics/economics_engine.py` — orchestrates the above; outputs FinancialModel per scenario
 - **Gate:** Each generated scenario has a FinancialModel with CAPEX, OPEX, payback range, ROI
 
 ### 2.4 Technology API
@@ -133,30 +133,30 @@ Implementation:
 **Estimated effort:** ~5–6 days for 3 people.
 
 ### 3.1 Reliability Engine
-- [ ] `decision-engine/reliability/confidence.py` — confidence scoring based on data quality and assumption uncertainty
-- [ ] `decision-engine/reliability/risk_score.py` — risk score per scenario (fuel price volatility, grid reliability, biomass logistics)
-- [ ] `decision-engine/reliability/reliability_engine.py` — real sensitivity sweep (perturbations across fuel price +/-X%, production +/-X%, solar +/-X%); outputs payback range
+- [ ] `decision_engine/reliability/confidence.py` — confidence scoring based on data quality and assumption uncertainty
+- [ ] `decision_engine/reliability/risk_score.py` — risk score per scenario (fuel price volatility, grid reliability, biomass logistics)
+- [ ] `decision_engine/reliability/reliability_engine.py` — real sensitivity sweep (perturbations across fuel price +/-X%, production +/-X%, solar +/-X%); outputs payback range
 - **Critical:** Real perturbations, not a static risk label — this is what answers RQ6
 - **Gate:** Payback range widens meaningfully under adverse input assumptions
 
 ### 3.2 Optimizer / MCDA
-- [ ] `decision-engine/optimizer/weights.py` — default weight set (cost/emissions/risk); document whether fixed or adjustable
-- [ ] `decision-engine/optimizer/mcda.py` — normalizes scores, applies weights
-- [ ] `decision-engine/optimizer/ranking.py` — ranked scenario list with objective scores
-- [ ] `decision-engine/optimizer/optimization_engine.py` — orchestrates the above
+- [ ] `decision_engine/optimizer/weights.py` — default weight set (cost/emissions/risk); document whether fixed or adjustable
+- [ ] `decision_engine/optimizer/mcda.py` — normalizes scores, applies weights
+- [ ] `decision_engine/optimizer/ranking.py` — ranked scenario list with objective scores
+- [ ] `decision_engine/optimizer/optimization_engine.py` — orchestrates the above
 - **Critical:** Ranking must NOT always pick the cheapest scenario — this is the core technical differentiator
 - **Gate:** Recommended scenario is explainably not always the cheapest
 
 ### 3.3 Policy Engine
-- [ ] `decision-engine/policy/eligibility.py` — MSME registration, enterprise category, investment limits, turnover limits, state requirements
-- [ ] `decision-engine/policy/subsidy_matcher.py` — reads `knowledge-base/policies/` JSON, matches eligible schemes, ranks by benefit
-- [ ] `decision-engine/policy/policy_engine.py` — orchestrates eligibility + matching; accepts Factory, returns eligible schemes with benefit estimates
+- [ ] `decision_engine/policy/eligibility.py` — MSME registration, enterprise category, investment limits, turnover limits, state requirements
+- [ ] `decision_engine/policy/subsidy_matcher.py` — reads `knowledge-base/policies/` JSON, matches eligible schemes, ranks by benefit
+- [ ] `decision_engine/policy/policy_engine.py` — orchestrates eligibility + matching; accepts Factory, returns eligible schemes with benefit estimates
 - **Gate:** Udyam-registered small enterprise in Tamil Nadu → correct subset of CLCSS/MNRE CFA/ADEETIE schemes with benefit estimates
 
 ### 3.4 Reports
-- [ ] `decision-engine/reports/report_generator.py` — generates Recommendation object with `why_selected`, `why_others_rejected`, `sensitivity_notes`
-- [ ] `decision-engine/reports/pdf_report.py` — PDF export
-- [ ] `decision-engine/reports/excel_report.py` — Excel export with scenario comparison table
+- [ ] `decision_engine/reports/report_generator.py` — generates Recommendation object with `why_selected`, `why_others_rejected`, `sensitivity_notes`
+- [ ] `decision_engine/reports/pdf_report.py` — PDF export
+- [ ] `decision_engine/reports/excel_report.py` — Excel export with scenario comparison table
 - **Gate:** Human-readable explanation produced that a non-expert can understand
 
 ### 3.5 Full Pipeline
@@ -173,7 +173,7 @@ Implementation:
 
 ## Sprint 4 — ETL Pipeline + Tests
 
-**Goal:** KB data loadable into DB. All decision-engine modules have unit tests. Integration test confirms end-to-end correctness.
+**Goal:** KB data loadable into DB. All decision_engine modules have unit tests. Integration test confirms end-to-end correctness.
 
 **Estimated effort:** ~3–4 days for 2 people.
 
@@ -244,16 +244,16 @@ models/ (all 6 files)
          ↓
 backend/main.py
          ↓
-decision-engine/baseline/    ← feeds everything downstream
+decision_engine/baseline/    ← feeds everything downstream
          ↓
-decision-engine/economics/
-decision-engine/reliability/  ← parallel
+decision_engine/economics/
+decision_engine/reliability/  ← parallel
          ↓
-decision-engine/optimizer/
+decision_engine/optimizer/
          ↓
-decision-engine/policy/
+decision_engine/policy/
          ↓
-decision-engine/reports/
+decision_engine/reports/
          ↓
 backend/apis/ (all endpoints)
          ↓
@@ -270,7 +270,7 @@ End-to-end demo — Scenario T1
 
 ## Python import hygiene — action required before Sprint 2
 
-`decision-engine/` uses a hyphen. Python cannot import packages with hyphens. Before any cross-module imports are written, rename the folder to `decision_engine/` (underscore). Update all references in `README.md`, `SYSTEM_DESIGN.md`, and `DECISION_ENGINE_ARCHITECTURE.md` simultaneously.
+`decision_engine/` uses a hyphen. Python cannot import packages with hyphens. Before any cross-module imports are written, rename the folder to `decision_engine/` (underscore). Update all references in `README.md`, `SYSTEM_DESIGN.md`, and `DECISION_ENGINE_ARCHITECTURE.md` simultaneously.
 
 ---
 

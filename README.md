@@ -30,7 +30,7 @@ System diagrams: [`architecture/`](architecture/) (drawio files for API flow, da
 ## Stack
 
 - **Backend:** Python (FastAPI-style), domain-separated APIs (`backend/apis/`)
-- **Decision engine:** independent modules for baseline, technology filtering, scenario generation, economics, emissions, reliability/sensitivity, MCDA optimization, policy, and reporting — see `decision-engine/`
+- **Decision engine:** independent modules for baseline, technology filtering, scenario generation, economics, emissions, reliability/sensitivity, MCDA optimization, policy, and reporting — see `decision_engine/`
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind
 - **Knowledge base:** structured JSON + cited sources across constraints, emissions, finance, industries, policies, and technologies — see `knowledge-base/`
 - **Deployment:** Docker + Docker Compose + nginx
@@ -41,7 +41,7 @@ System diagrams: [`architecture/`](architecture/) (drawio files for API flow, da
 architecture/       System diagrams (drawio) + summary
 backend/             FastAPI app: apis/, config, database, logger, utils
 datasets/            Raw CSV/reference datasets (tariffs, biomass atlas, coordinates)
-decision-engine/     Core product logic — see docs/DECISION_ENGINE_ARCHITECTURE.md
+decision_engine/     Core product logic — see docs/DECISION_ENGINE_ARCHITECTURE.md
 deployment/          Docker, nginx config
 digital-twin/        [status TBD — see docs/PROJECT_STATE.md]
 docs/                Architecture, research, project state, mentor notes, backlog

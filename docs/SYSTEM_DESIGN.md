@@ -135,7 +135,7 @@ Only feasible pathways proceed further.
 
 ## Module 4a – Policy & Eligibility Engine *(status: IN scope — scaffolded, implementation pending)*
 
-> **This module is now confirmed in scope.** `decision-engine/policy/` exists with `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, and `policy_engine.py` — all 0 bytes (scaffolded, not yet implemented). `knowledge-base/policies/` is fully built and internally consistent. See `FEATURE_BACKLOG.md` for the formal scope decision and `docs/ROADMAP.md` Sprint 3 for the implementation plan.
+> **This module is now confirmed in scope.** `decision_engine/policy/` exists with `__init__.py`, `eligibility.py`, `subsidy_matcher.py`, and `policy_engine.py` — all 0 bytes (scaffolded, not yet implemented). `knowledge-base/policies/` is fully built and internally consistent. See `FEATURE_BACKLOG.md` for the formal scope decision and `docs/ROADMAP.md` Sprint 3 for the implementation plan.
 
 This module:
 
@@ -202,7 +202,7 @@ Estimates:
 - Renewable energy contribution
 - Sustainability indicators
 
-Depends on `knowledge-base/emissions/emission_factors.json` — populated (7 fuels, IPCC-based, sourced), confirmed against live repo 16 Aug 2026. No longer blocked on data; `decision-engine/emissions/` (`co2_calculator.py`, `emission_engine.py`, `emission_factors.py`) already contains implementation code, functional/tested status unconfirmed.
+Depends on `knowledge-base/emissions/emission_factors.json` — populated (7 fuels, IPCC-based, sourced), confirmed against live repo 16 Aug 2026. No longer blocked on data; `decision_engine/emissions/` (`co2_calculator.py`, `emission_engine.py`, `emission_factors.py`) already contains implementation code, functional/tested status unconfirmed.
 
 ---
 
@@ -273,7 +273,7 @@ industrial-energy-optimizer/
 ├── backend/            (apis/, config.py, database.py, logger.py, main.py, utils.py)
 ├── frontend/           (app/, components/, hooks/, services/, styles/, types/, utils/)
 ├── models/             (industry.py, technology.py, emission.py, financial.py, scenario.py, recommendation.py)
-├── decision-engine/    (baseline/, technology/, economics/, emissions/, optimizer/, scenario/, reliability/, reports/)
+├── decision_engine/    (baseline/, technology/, economics/, emissions/, optimizer/, scenario/, reliability/, reports/)
 ├── knowledge-base/     (industries/, technologies/, constraints/, finance/, emissions/, policies/, references/)
 ├── datasets/           (raw + semi-processed source data, incl. electricity_tariffs/)
 ├── scripts/            (convert_datasets.py, pre_process.py, load_knowledge.py, seed_database.py, run_pipeline.py)
@@ -298,11 +298,11 @@ industrial-energy-optimizer/
 4. ⬅ **NOW:** Database schema design (derive from `DOMAIN_MODEL.md`)
 5. Backend infrastructure (`backend/config.py`, `backend/database.py`, `backend/main.py`)
 6. Domain models (`models/` — all 6 Python files)
-7. Decision-engine baseline (`decision-engine/baseline/` — first pipeline module)
-8. Decision-engine economics + reliability (parallel)
-9. Decision-engine optimizer (MCDA)
-10. Decision-engine policy (Module 4a — confirmed in scope)
-11. Decision-engine reports (explainability + PDF/Excel)
+7. Decision_engine baseline (`decision_engine/baseline/` — first pipeline module)
+8. Decision_engine economics + reliability (parallel)
+9. Decision_engine optimizer (MCDA)
+10. Decision_engine policy (Module 4a — confirmed in scope)
+11. Decision_engine reports (explainability + PDF/Excel)
 12. Backend APIs (wire each to its engine module)
 13. `scripts/` ETL pipeline (parallel with APIs post-schema)
 14. Frontend
