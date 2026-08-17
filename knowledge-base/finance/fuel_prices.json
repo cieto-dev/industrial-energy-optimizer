@@ -484,19 +484,10 @@
     }
   },
   "sources": {
-    "SRC_COAL_INDIA_NOTIFIED": {
-
-      "source_id": "SRC_COAL_INDIA_NOTIFIED"
-    },
-    "SRC_INDUSTRIAL_FUELS_CSV": {
-      "source_id": "SRC_INDUSTRIAL_FUELS_CSV"
-    },
-    "SRC_PPAC_APM_FORMULA": {
-      "source_id": "SRC_PPAC_APM_FORMULA"
-    },
-    "SRC_MOP_COFIRING_POLICY": {
-      "source_id": "SRC_MOP_COFIRING_POLICY"
-    }
+    "SRC_COAL_INDIA_NOTIFIED": {},
+    "SRC_INDUSTRIAL_FUELS_CSV": {},
+    "SRC_PPAC_APM_FORMULA": {},
+    "SRC_MOP_COFIRING_POLICY": {}
   },
   "cross_references": {
     "used_by": [

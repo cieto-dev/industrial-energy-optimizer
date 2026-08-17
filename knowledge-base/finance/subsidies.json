@@ -1264,50 +1264,20 @@
     }
   },
   "sources": {
-    "SRC_MSME_UDYAM_THRESHOLDS": {
-
-      "source_id": "SRC_MSME_UDYAM_THRESHOLDS"
-    },
-    "SRC_ADEETIE_BEE": {
-      "source_id": "SRC_ADEETIE_BEE"
-    },
-    "SRC_MSE_GIFT": {
-      "source_id": "SRC_MSE_GIFT"
-    },
-    "SRC_MSE_SPICE": {
-      "source_id": "SRC_MSE_SPICE"
-    },
-    "SRC_ZED": {
-      "source_id": "SRC_ZED"
-    },
-    "SRC_MSME_LEAN": {
-      "source_id": "SRC_MSME_LEAN"
-    },
-    "SRC_CGTMSE": {
-      "source_id": "SRC_CGTMSE"
-    },
-    "SRC_PMEGP": {
-      "source_id": "SRC_PMEGP"
-    },
-    "SRC_RAMP": {
-      "source_id": "SRC_RAMP"
-    },
-    "SRC_MSE_CDP": {
-      "source_id": "SRC_MSE_CDP"
-    },
-    "SRC_MNRE_NBP": {
-      "source_id": "SRC_MNRE_NBP"
-    },
-    "SRC_SIDBI_MSE_GIFT": {
-      "source_id": "SRC_SIDBI_MSE_GIFT"
-    },
-    "SRC_PSL_RBI_2025": {
-      "source_id": "SRC_PSL_RBI_2025"
-    },
-    "SRC_NITI_AAYOG_ROADMAP_JAN2026": {
-      "source_id": "SRC_NITI_AAYOG_ROADMAP_JAN2026"
-
-    }
+    "SRC_MSME_UDYAM_THRESHOLDS": {},
+    "SRC_ADEETIE_BEE": {},
+    "SRC_MSE_GIFT": {},
+    "SRC_MSE_SPICE": {},
+    "SRC_ZED": {},
+    "SRC_MSME_LEAN": {},
+    "SRC_CGTMSE": {},
+    "SRC_PMEGP": {},
+    "SRC_RAMP": {},
+    "SRC_MSE_CDP": {},
+    "SRC_MNRE_NBP": {},
+    "SRC_SIDBI_MSE_GIFT": {},
+    "SRC_PSL_RBI_2025": {},
+    "SRC_NITI_AAYOG_ROADMAP_JAN2026": {}
   },
   "cross_references": {
     "used_by": [

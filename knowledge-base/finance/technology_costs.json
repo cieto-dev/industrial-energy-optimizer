@@ -1147,41 +1147,17 @@
     }
   },
   "sources": {
-    "SRC_SOLAR_VENDOR_COMPILE": {
-
-      "source_id": "SRC_SOLAR_VENDOR_COMPILE"
-    },
-    "SRC_WHR_GLOBAL_BENCHMARK": {
-      "source_id": "SRC_WHR_GLOBAL_BENCHMARK"
-    },
-    "SRC_VFD_INDIAMART": {
-      "source_id": "SRC_VFD_INDIAMART"
-    },
-    "SRC_MOTOR_IE4_GLOBAL": {
-      "source_id": "SRC_MOTOR_IE4_GLOBAL"
-    },
-    "SRC_BIOMASS_BOILER_CHEEMA": {
-      "source_id": "SRC_BIOMASS_BOILER_CHEEMA"
-    },
-    "SRC_THERMAL_STORAGE_ACADEMIC": {
-      "source_id": "SRC_THERMAL_STORAGE_ACADEMIC"
-    },
-    "SRC_BATTERY_STORAGE_INDIA_CI": {
-      "source_id": "SRC_BATTERY_STORAGE_INDIA_CI"
-    },
-    "SRC_HYDROGEN_IEA_GLOBAL": {
-      "source_id": "SRC_HYDROGEN_IEA_GLOBAL"
-    },
-    "SRC_PROJECT_DEFAULTS": {
-      "source_id": "SRC_PROJECT_DEFAULTS"
-    },
-    "SRC_HEATPUMP_COMPILE": {
-      "source_id": "SRC_HEATPUMP_COMPILE"
-    },
-    "SRC_ELEC_RESISTANCE_COMPILE": {
-      "source_id": "SRC_ELEC_RESISTANCE_COMPILE"
-
-    }
+    "SRC_SOLAR_VENDOR_COMPILE": {},
+    "SRC_WHR_GLOBAL_BENCHMARK": {},
+    "SRC_VFD_INDIAMART": {},
+    "SRC_MOTOR_IE4_GLOBAL": {},
+    "SRC_BIOMASS_BOILER_CHEEMA": {},
+    "SRC_THERMAL_STORAGE_ACADEMIC": {},
+    "SRC_BATTERY_STORAGE_INDIA_CI": {},
+    "SRC_HYDROGEN_IEA_GLOBAL": {},
+    "SRC_PROJECT_DEFAULTS": {},
+    "SRC_HEATPUMP_COMPILE": {},
+    "SRC_ELEC_RESISTANCE_COMPILE": {}
   },
   "cross_references": {
     "used_by": [

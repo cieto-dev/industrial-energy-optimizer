@@ -1517,18 +1517,10 @@
     }
   },
   "sources": {
-    "SRC_TNERC_ORDER6_2025": {
-      "source_id": "SRC_TNERC_ORDER6_2025"
-    },
-    "SRC_UPERC_FY26": {
-      "source_id": "SRC_UPERC_FY26"
-    },
-    "SRC_KERC_MAR2025_ORDER": {
-      "source_id": "SRC_KERC_MAR2025_ORDER"
-    },
-    "SRC_TARIFF_MASTER_REPO": {
-      "source_id": "SRC_TARIFF_MASTER_REPO"
-    }
+    "SRC_TNERC_ORDER6_2025": {},
+    "SRC_UPERC_FY26": {},
+    "SRC_KERC_MAR2025_ORDER": {},
+    "SRC_TARIFF_MASTER_REPO": {}
   },
   "cross_references": {
     "used_by": [
