@@ -34,15 +34,27 @@
 
 ---
 
-## Scope confirmations needed before Sprint 1
+# Sprint 0 Scope Decisions
 
-| Decision | Status | Action needed |
-|---|---|---|
-| Module 4a (Policy/Eligibility) in or out of MVP? | De facto IN — scaffold exists | Update `FEATURE_BACKLOG.md` |
-| 9 sectors or textile-only prototype? | De facto ALL 9 — all profiles built | Update `FEATURE_BACKLOG.md` |
+## Decision 1 – Policy & Eligibility (Module 4A)
 
-These decisions change the `Factory` input schema and every API contract. Document them first (takes 15 minutes).
+Status: Deferred (Post-MVP)
 
+Reason:
+- MVP will display applicable schemes only.
+- Automatic eligibility verification is out of scope.
+- Future enhancement.
+
+---
+
+## Decision 2 – Sector Coverage
+
+Status: Approved
+
+Implementation:
+- Support all 9 industrial sectors.
+- Use configuration-driven sector profiles.
+- Single recommendation engine for every sector.
 ---
 
 ## Sprint 1 — Foundation: Database + Backend Core + Models
