@@ -15,7 +15,6 @@
   "entities": {
     "TECH_SOLAR_PV": {
       "id": "TECH_SOLAR_PV",
-      "technology_id": "solar_pv",
       "display_name": "Solar PV (Industrial Rooftop/Ground-Mount)",
       "category": "technology",
       "status": "estimated",
@@ -104,10 +103,8 @@
         "limitations": ""
       }
     },
-
     "TECH_WHR": {
       "id": "TECH_WHR",
-      "technology_id": "waste_heat_recovery",
       "display_name": "Waste Heat Recovery (Industrial)",
       "category": "technology",
       "status": "estimated",
@@ -215,10 +212,8 @@
         "limitations": ""
       }
     },
-
     "TECH_VFD": {
       "id": "TECH_VFD",
-      "technology_id": "vfd",
       "display_name": "Variable Frequency Drive (Motor/Pump/Compressor Retrofit)",
       "category": "technology",
       "status": "estimated",
@@ -307,10 +302,8 @@
         "limitations": ""
       }
     },
-
     "TECH_MOTOR_IE3_IE4_PREMIUM": {
       "id": "TECH_MOTOR_IE3_IE4_PREMIUM",
-      "technology_id": "motor_efficiency_upgrade",
       "display_name": "Motor Upgrade, IE3 to IE4 Premium Efficiency",
       "category": "technology",
       "status": "estimated",
@@ -399,11 +392,8 @@
         "limitations": ""
       }
     },
-
     "TECH_BIOMASS_BOILER_1_10TPH": {
       "id": "TECH_BIOMASS_BOILER_1_10TPH",
-      "technology_id": "biomass_boiler",
-      "capacity_band": "1_10_tph",
       "display_name": "Biomass Boiler, New Install (1-10 TPH)",
       "category": "technology",
       "status": "estimated",
@@ -473,11 +463,8 @@
         "limitations": ""
       }
     },
-
     "TECH_BIOMASS_BOILER_ABOVE_10TPH": {
       "id": "TECH_BIOMASS_BOILER_ABOVE_10TPH",
-      "technology_id": "biomass_boiler",
-      "capacity_band": "above_10_tph",
       "display_name": "Biomass Boiler, New Install (above 10 TPH)",
       "category": "technology",
       "status": "estimated",
@@ -547,10 +534,8 @@
         "limitations": ""
       }
     },
-
     "TECH_THERMAL_STORAGE": {
       "id": "TECH_THERMAL_STORAGE",
-      "technology_id": "thermal_storage",
       "display_name": "Thermal Energy Storage (High-Temperature)",
       "category": "technology",
       "status": "estimated",
@@ -620,10 +605,8 @@
         "limitations": ""
       }
     },
-
     "TECH_BATTERY_STORAGE": {
       "id": "TECH_BATTERY_STORAGE",
-      "technology_id": "battery_storage",
       "display_name": "Battery Energy Storage System (C&I)",
       "category": "technology",
       "status": "estimated",
@@ -712,10 +695,8 @@
         "limitations": ""
       }
     },
-
     "TECH_HYDROGEN_ELECTROLYSIS": {
       "id": "TECH_HYDROGEN_ELECTROLYSIS",
-      "technology_id": "hydrogen_electrolysis",
       "display_name": "Hydrogen Electrolysis (Green Hydrogen)",
       "category": "technology",
       "status": "estimated",
@@ -785,10 +766,8 @@
         "limitations": ""
       }
     },
-
     "TECH_BOILER_GENERIC": {
       "id": "TECH_BOILER_GENERIC",
-      "technology_id": "boiler_generic",
       "display_name": "Boiler (Generic, Fallback Default)",
       "category": "technology",
       "status": "estimated",
@@ -839,10 +818,8 @@
         "limitations": ""
       }
     },
-
     "TECH_MOTOR_GENERIC": {
       "id": "TECH_MOTOR_GENERIC",
-      "technology_id": "motor_generic",
       "display_name": "Motor (Generic, Fallback Default)",
       "category": "technology",
       "status": "estimated",
@@ -893,10 +870,8 @@
         "limitations": ""
       }
     },
-
     "TECH_HEAT_PUMP": {
       "id": "TECH_HEAT_PUMP",
-      "technology_id": "heat_pump",
       "display_name": "Industrial Heat Pump",
       "category": "technology",
       "status": "estimated",
@@ -1023,10 +998,8 @@
         "limitations": ""
       }
     },
-
     "TECH_ELECTRIC_RESISTANCE_HEATING": {
       "id": "TECH_ELECTRIC_RESISTANCE_HEATING",
-      "technology_id": "electric_resistance_heating",
       "display_name": "Electric Resistance Heating (Industrial)",
       "category": "technology",
       "status": "estimated",
@@ -1173,7 +1146,6 @@
       }
     }
   },
-
   "sources": {
     "SRC_SOLAR_VENDOR_COMPILE": {
 
@@ -1211,7 +1183,6 @@
 
     }
   },
-
   "cross_references": {
     "used_by": [
       "decision-engine/economics/capex.py",
