@@ -160,7 +160,7 @@ Implementation:
 - **Gate:** Human-readable explanation produced that a non-expert can understand
 
 ### 3.5 Full Pipeline
-- [ ] `scripts/run_pipeline.py` — full sequence: factory input → baseline → technology filter → scenarios → economics + emissions + reliability → optimizer → policy → reports
+- [x] `scripts/run_pipeline.py` — full sequence: factory input → baseline → technology filter → scenarios → economics + emissions + reliability → optimizer → policy → reports
 - **Gate:** `python scripts/run_pipeline.py` with Scenario T1 input produces complete recommendation without errors
 
 ### 3.6 Core APIs
