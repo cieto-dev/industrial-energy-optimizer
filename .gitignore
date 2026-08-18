@@ -61,4 +61,11 @@ dist/
 data/
 outputs/
 results/
-# models/ (removed so that models/factory.py, etc., are tracked)
+
+# Frontend / Node.js
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+.vercel
