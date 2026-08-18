@@ -58,14 +58,16 @@ The platform is designed to:
 
 | Layer | Technology |
 |--------|------------|
-| Frontend | Next.js + TypeScript |
-| Backend | FastAPI |
-| Database | PostgreSQL |
-| AI Layer | LLM + Rule-Based Decision Engine |
-| Analytics | Pandas & NumPy |
-| Optimization | Python Optimization Libraries |
-| Visualization | Interactive Dashboards |
-
+| Frontend | Next.js + TypeScript + Tailwind CSS |
+| Backend | FastAPI (Python) |
+| Database | PostgreSQL + PostGIS + pgvector |
+| AI Layer | Hybrid AI (LLM + Rule Engine + RAG) |
+| Optimization Engine | Pyomo + Google OR-Tools |
+| Analytics | Pandas + NumPy |
+| Visualization | Plotly + Apache ECharts |
+| Authentication | JWT |
+| Deployment | Docker |
+| Version Control | GitHub |
 ---
 
 # High-Level Workflow
