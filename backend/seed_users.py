@@ -9,7 +9,7 @@ Safe to re-run — skips any email that already exists.
 """
 
 from database import SessionLocal, engine, Base
-from models import User
+from db_models import User
 from auth import hash_password
 
 # Create the users table if it doesn't exist yet
