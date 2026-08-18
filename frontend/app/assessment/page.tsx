@@ -29,6 +29,7 @@ const STEPS = [
 export default function AssessmentPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const router = useRouter()
 
   const methods = useForm<FactoryProfileType>({
@@ -85,18 +86,18 @@ export default function AssessmentPage() {
 
   const onSubmit = async (data: FactoryProfileType) => {
     setIsSubmitting(true)
+    setSubmitError(null)
     try {
       const payload = {
         ...data,
         factory_id: data.factory_id || `fac_${Math.random().toString(36).substr(2, 9)}`,
       }
-      
       const response = await apiService.optimize(payload as any)
       localStorage.setItem("last_optimization", JSON.stringify(response))
       router.push("/dashboard")
-    } catch (error) {
+    } catch (error: any) {
       console.error("Submission failed", error)
-      alert("Failed to submit assessment. Please check your inputs.")
+      setSubmitError(error?.message ?? "Failed to submit assessment. Please check your inputs and try again.")
     } finally {
       setIsSubmitting(false)
     }
@@ -127,6 +128,13 @@ export default function AssessmentPage() {
                 />
               ))}
             </div>
+
+            {submitError && (
+              <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-start gap-2">
+                <span className="mt-0.5">⚠</span>
+                <span>{submitError}</span>
+              </div>
+            )}
 
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(onSubmit)}>
