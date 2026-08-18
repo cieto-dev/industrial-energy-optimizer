@@ -20,4 +20,9 @@ export const apiService = {
     const response = await apiClient.post<ReportResponse>("/reports/generate", request);
     return response.data;
   },
+
+  async getRecommendation(id: string): Promise<{status: string, id: string, recommendation: any}> {
+    const response = await apiClient.get<{status: string, id: string, recommendation: any}>(`/recommendations/${id}`);
+    return response.data;
+  }
 };
