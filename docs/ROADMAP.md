@@ -185,10 +185,10 @@ Implementation:
 - **Gate:** After full ETL sequence, `GET /industries` returns all 9 industries from DB with correct data
 
 ### 4.2 Unit Tests
-- [ ] `tests/test_baseline.py` — test `baseline_engine.py` with known input/output pairs for textile MSME
-- [ ] `tests/test_constraints.py` — test `technology_filter.py` with inputs that should reject specific technologies
-- [ ] `tests/test_optimizer.py` — test MCDA ranking; confirm it does not always pick least-cost
-- [ ] `tests/test_recommendations.py` — test `report_generator.py` explanation output; confirm rejection reasons populated
+- [x] `tests/test_baseline.py` — test `baseline_engine.py` with known input/output pairs for textile MSME
+- [x] `tests/test_constraints.py` — test `technology_filter.py` with inputs that should reject specific technologies
+- [x] `tests/test_optimizer.py` — test MCDA ranking; confirm it does not always pick least-cost
+- [x] `tests/test_recommendations.py` — test `report_generator.py` explanation output; confirm rejection reasons populated
 - **Gate:** `pytest tests/` passes with no failures
 
 ### 4.3 KB Cleanup (opportunistic, low effort)
@@ -223,9 +223,11 @@ Implementation:
 - [ ] Error handling for invalid inputs
 - [ ] Docker deployment configuration
 
-### 5.5 Demo Preparation
-- [ ] Scenario T1 pre-loaded as default demo input (textile MSME, coal boiler, 200°C, Rajasthan)
-- [ ] Verify recommendation is explainable and defensible in front of SIH jury
+### 5.5 End-to-End Demo Script
+- [ ] Draft 5-minute pitch script aligned with flow
+- [ ] Create pre-seeded database fixture for the demo (textile MSME, coal boiler, 200°C, Tamil Nadu)
+- [ ] Dry run end-to-end: UI -> API -> Decision Engine -> UI
+- **Gate:** Flawless 3-minute technical run-through recorded on video
 - [ ] Final `pytest tests/` green
 - [ ] Final `validate_references.py` green
 

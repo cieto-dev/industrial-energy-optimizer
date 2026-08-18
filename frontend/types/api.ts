@@ -1,11 +1,6 @@
-export interface FactoryProfile {
-  industry: string;
-  production: number;
-  current_fuel: string;
-  process_temperature: number;
-  technologies: string[];
-  biomass_type?: string;
-}
+import { FactoryProfileType } from "@/utils/validators";
+
+export type FactoryProfile = FactoryProfileType;
 
 export interface OptimizationResponse {
   status: string;

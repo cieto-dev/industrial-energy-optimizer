@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
-import { Button } from "@/components/reports/common/button"
+import { Button } from "@/components/reports/common/Button"
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme()
