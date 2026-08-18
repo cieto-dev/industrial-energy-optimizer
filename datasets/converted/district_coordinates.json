@@ -1,0 +1,1000 @@
+{
+  "_meta": {
+    "source_file": "datasets/district_coordinates.csv",
+    "record_count": 165,
+    "description": "District-level geographic coordinates for resource lookups",
+    "cleaned": true
+  },
+  "records": [
+    {
+      "district": "Ambala",
+      "state": "Haryana",
+      "latitude": 30.378,
+      "longitude": 76.776
+    },
+    {
+      "district": "Bhiwani",
+      "state": "Haryana",
+      "latitude": 28.795,
+      "longitude": 76.132
+    },
+    {
+      "district": "Charkhi Dadri",
+      "state": "Haryana",
+      "latitude": 28.591,
+      "longitude": 76.272
+    },
+    {
+      "district": "Faridabad",
+      "state": "Haryana",
+      "latitude": 28.408,
+      "longitude": 77.317
+    },
+    {
+      "district": "Fatehabad",
+      "state": "Haryana",
+      "latitude": 29.515,
+      "longitude": 75.455
+    },
+    {
+      "district": "Gurugram",
+      "state": "Haryana",
+      "latitude": 28.459,
+      "longitude": 77.026
+    },
+    {
+      "district": "Hisar",
+      "state": "Haryana",
+      "latitude": 29.149,
+      "longitude": 75.722
+    },
+    {
+      "district": "Jhajjar",
+      "state": "Haryana",
+      "latitude": 28.606,
+      "longitude": 76.656
+    },
+    {
+      "district": "Jind",
+      "state": "Haryana",
+      "latitude": 29.316,
+      "longitude": 76.316
+    },
+    {
+      "district": "Kaithal",
+      "state": "Haryana",
+      "latitude": 29.801,
+      "longitude": 76.399
+    },
+    {
+      "district": "Karnal",
+      "state": "Haryana",
+      "latitude": 29.685,
+      "longitude": 76.99
+    },
+    {
+      "district": "Kurukshetra",
+      "state": "Haryana",
+      "latitude": 29.969,
+      "longitude": 76.878
+    },
+    {
+      "district": "Mahendragarh",
+      "state": "Haryana",
+      "latitude": 28.277,
+      "longitude": 76.14
+    },
+    {
+      "district": "Nuh",
+      "state": "Haryana",
+      "latitude": 28.103,
+      "longitude": 77.014
+    },
+    {
+      "district": "Palwal",
+      "state": "Haryana",
+      "latitude": 28.148,
+      "longitude": 77.333
+    },
+    {
+      "district": "Panchkula",
+      "state": "Haryana",
+      "latitude": 30.694,
+      "longitude": 76.86
+    },
+    {
+      "district": "Panipat",
+      "state": "Haryana",
+      "latitude": 29.391,
+      "longitude": 76.963
+    },
+    {
+      "district": "Rewari",
+      "state": "Haryana",
+      "latitude": 28.199,
+      "longitude": 76.619
+    },
+    {
+      "district": "Rohtak",
+      "state": "Haryana",
+      "latitude": 28.895,
+      "longitude": 76.606
+    },
+    {
+      "district": "Sirsa",
+      "state": "Haryana",
+      "latitude": 29.535,
+      "longitude": 75.028
+    },
+    {
+      "district": "Sonipat",
+      "state": "Haryana",
+      "latitude": 28.993,
+      "longitude": 77.015
+    },
+    {
+      "district": "Yamunanagar",
+      "state": "Haryana",
+      "latitude": 30.129,
+      "longitude": 77.267
+    },
+    {
+      "district": "Bilaspur",
+      "state": "Himachal Pradesh",
+      "latitude": 31.333,
+      "longitude": 76.756
+    },
+    {
+      "district": "Chamba",
+      "state": "Himachal Pradesh",
+      "latitude": 32.553,
+      "longitude": 76.126
+    },
+    {
+      "district": "Hamirpur",
+      "state": "Himachal Pradesh",
+      "latitude": 31.686,
+      "longitude": 76.522
+    },
+    {
+      "district": "Kangra",
+      "state": "Himachal Pradesh",
+      "latitude": 32.099,
+      "longitude": 76.269
+    },
+    {
+      "district": "Kinnaur",
+      "state": "Himachal Pradesh",
+      "latitude": 31.583,
+      "longitude": 78.467
+    },
+    {
+      "district": "Kullu",
+      "state": "Himachal Pradesh",
+      "latitude": 31.959,
+      "longitude": 77.108
+    },
+    {
+      "district": "Lahaul And Spiti",
+      "state": "Himachal Pradesh",
+      "latitude": 32.5,
+      "longitude": 77.75
+    },
+    {
+      "district": "Mandi",
+      "state": "Himachal Pradesh",
+      "latitude": 31.708,
+      "longitude": 76.931
+    },
+    {
+      "district": "Shimla",
+      "state": "Himachal Pradesh",
+      "latitude": 31.104,
+      "longitude": 77.173
+    },
+    {
+      "district": "Sirmaur",
+      "state": "Himachal Pradesh",
+      "latitude": 30.562,
+      "longitude": 77.297
+    },
+    {
+      "district": "Solan",
+      "state": "Himachal Pradesh",
+      "latitude": 30.904,
+      "longitude": 77.096
+    },
+    {
+      "district": "Una",
+      "state": "Himachal Pradesh",
+      "latitude": 31.468,
+      "longitude": 76.27
+    },
+    {
+      "district": "Anantnag",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.731,
+      "longitude": 75.154
+    },
+    {
+      "district": "Bandipora",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.417,
+      "longitude": 74.637
+    },
+    {
+      "district": "Baramulla",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.202,
+      "longitude": 74.348
+    },
+    {
+      "district": "Budgam",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.015,
+      "longitude": 74.723
+    },
+    {
+      "district": "Doda",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.149,
+      "longitude": 75.548
+    },
+    {
+      "district": "Ganderbal",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.226,
+      "longitude": 74.771
+    },
+    {
+      "district": "Jammu",
+      "state": "Jammu And Kashmir",
+      "latitude": 32.726,
+      "longitude": 74.857
+    },
+    {
+      "district": "Kathua",
+      "state": "Jammu And Kashmir",
+      "latitude": 32.386,
+      "longitude": 75.518
+    },
+    {
+      "district": "Kishtwar",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.314,
+      "longitude": 75.768
+    },
+    {
+      "district": "Kulgam",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.638,
+      "longitude": 75.019
+    },
+    {
+      "district": "Kupwara",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.526,
+      "longitude": 74.255
+    },
+    {
+      "district": "Poonch",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.771,
+      "longitude": 74.092
+    },
+    {
+      "district": "Pulwama",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.874,
+      "longitude": 74.899
+    },
+    {
+      "district": "Rajouri",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.379,
+      "longitude": 74.315
+    },
+    {
+      "district": "Ramban",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.243,
+      "longitude": 75.236
+    },
+    {
+      "district": "Reasi",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.081,
+      "longitude": 74.832
+    },
+    {
+      "district": "Samba",
+      "state": "Jammu And Kashmir",
+      "latitude": 32.563,
+      "longitude": 75.119
+    },
+    {
+      "district": "Shopian",
+      "state": "Jammu And Kashmir",
+      "latitude": 33.717,
+      "longitude": 74.835
+    },
+    {
+      "district": "Srinagar",
+      "state": "Jammu And Kashmir",
+      "latitude": 34.083,
+      "longitude": 74.797
+    },
+    {
+      "district": "Udhampur",
+      "state": "Jammu And Kashmir",
+      "latitude": 32.916,
+      "longitude": 75.141
+    },
+    {
+      "district": "Amritsar",
+      "state": "Punjab",
+      "latitude": 31.634,
+      "longitude": 74.873
+    },
+    {
+      "district": "Barnala",
+      "state": "Punjab",
+      "latitude": 30.378,
+      "longitude": 75.546
+    },
+    {
+      "district": "Bathinda",
+      "state": "Punjab",
+      "latitude": 30.211,
+      "longitude": 74.945
+    },
+    {
+      "district": "Faridkot",
+      "state": "Punjab",
+      "latitude": 30.677,
+      "longitude": 74.755
+    },
+    {
+      "district": "Fatehgarh Sahib",
+      "state": "Punjab",
+      "latitude": 30.643,
+      "longitude": 76.395
+    },
+    {
+      "district": "Fazilka",
+      "state": "Punjab",
+      "latitude": 30.403,
+      "longitude": 74.028
+    },
+    {
+      "district": "Firozpur",
+      "state": "Punjab",
+      "latitude": 30.933,
+      "longitude": 74.622
+    },
+    {
+      "district": "Gurdaspur",
+      "state": "Punjab",
+      "latitude": 32.041,
+      "longitude": 75.405
+    },
+    {
+      "district": "Hoshiarpur",
+      "state": "Punjab",
+      "latitude": 31.532,
+      "longitude": 75.911
+    },
+    {
+      "district": "Jalandhar",
+      "state": "Punjab",
+      "latitude": 31.326,
+      "longitude": 75.576
+    },
+    {
+      "district": "Kapurthala",
+      "state": "Punjab",
+      "latitude": 31.38,
+      "longitude": 75.381
+    },
+    {
+      "district": "Ludhiana",
+      "state": "Punjab",
+      "latitude": 30.901,
+      "longitude": 75.857
+    },
+    {
+      "district": "Malerkotla",
+      "state": "Punjab",
+      "latitude": 30.525,
+      "longitude": 75.89
+    },
+    {
+      "district": "Mansa",
+      "state": "Punjab",
+      "latitude": 29.999,
+      "longitude": 75.393
+    },
+    {
+      "district": "Moga",
+      "state": "Punjab",
+      "latitude": 30.816,
+      "longitude": 75.172
+    },
+    {
+      "district": "Pathankot",
+      "state": "Punjab",
+      "latitude": 32.274,
+      "longitude": 75.652
+    },
+    {
+      "district": "Patiala",
+      "state": "Punjab",
+      "latitude": 30.339,
+      "longitude": 76.386
+    },
+    {
+      "district": "Rupnagar",
+      "state": "Punjab",
+      "latitude": 30.966,
+      "longitude": 76.533
+    },
+    {
+      "district": "Sahibzada Ajit Singh Nagar",
+      "state": "Punjab",
+      "latitude": 30.704,
+      "longitude": 76.717
+    },
+    {
+      "district": "Sangrur",
+      "state": "Punjab",
+      "latitude": 30.245,
+      "longitude": 75.842
+    },
+    {
+      "district": "Shahid Bhagat Singh Nagar",
+      "state": "Punjab",
+      "latitude": 31.124,
+      "longitude": 76.117
+    },
+    {
+      "district": "Sri Muktsar Sahib",
+      "state": "Punjab",
+      "latitude": 30.476,
+      "longitude": 74.512
+    },
+    {
+      "district": "Tarn Taran",
+      "state": "Punjab",
+      "latitude": 31.451,
+      "longitude": 74.928
+    },
+    {
+      "district": "Agra",
+      "state": "Uttar Pradesh",
+      "latitude": 27.176,
+      "longitude": 78.008
+    },
+    {
+      "district": "Aligarh",
+      "state": "Uttar Pradesh",
+      "latitude": 27.897,
+      "longitude": 78.088
+    },
+    {
+      "district": "Ambedkar Nagar",
+      "state": "Uttar Pradesh",
+      "latitude": 26.405,
+      "longitude": 82.545
+    },
+    {
+      "district": "Amethi",
+      "state": "Uttar Pradesh",
+      "latitude": 26.154,
+      "longitude": 81.814
+    },
+    {
+      "district": "Amroha",
+      "state": "Uttar Pradesh",
+      "latitude": 28.904,
+      "longitude": 78.467
+    },
+    {
+      "district": "Auraiya",
+      "state": "Uttar Pradesh",
+      "latitude": 26.464,
+      "longitude": 79.51
+    },
+    {
+      "district": "Ayodhya",
+      "state": "Uttar Pradesh",
+      "latitude": 26.799,
+      "longitude": 82.204
+    },
+    {
+      "district": "Azamgarh",
+      "state": "Uttar Pradesh",
+      "latitude": 26.067,
+      "longitude": 83.183
+    },
+    {
+      "district": "Baghpat",
+      "state": "Uttar Pradesh",
+      "latitude": 28.944,
+      "longitude": 77.219
+    },
+    {
+      "district": "Bahraich",
+      "state": "Uttar Pradesh",
+      "latitude": 27.574,
+      "longitude": 81.595
+    },
+    {
+      "district": "Ballia",
+      "state": "Uttar Pradesh",
+      "latitude": 25.758,
+      "longitude": 84.149
+    },
+    {
+      "district": "Balrampur",
+      "state": "Uttar Pradesh",
+      "latitude": 27.43,
+      "longitude": 82.182
+    },
+    {
+      "district": "Banda",
+      "state": "Uttar Pradesh",
+      "latitude": 25.475,
+      "longitude": 80.335
+    },
+    {
+      "district": "Barabanki",
+      "state": "Uttar Pradesh",
+      "latitude": 26.938,
+      "longitude": 81.199
+    },
+    {
+      "district": "Bareilly",
+      "state": "Uttar Pradesh",
+      "latitude": 28.367,
+      "longitude": 79.43
+    },
+    {
+      "district": "Basti",
+      "state": "Uttar Pradesh",
+      "latitude": 26.8,
+      "longitude": 82.716
+    },
+    {
+      "district": "Bhadohi",
+      "state": "Uttar Pradesh",
+      "latitude": 25.395,
+      "longitude": 82.57
+    },
+    {
+      "district": "Bijnor",
+      "state": "Uttar Pradesh",
+      "latitude": 29.373,
+      "longitude": 78.136
+    },
+    {
+      "district": "Budaun",
+      "state": "Uttar Pradesh",
+      "latitude": 28.033,
+      "longitude": 79.121
+    },
+    {
+      "district": "Bulandshahr",
+      "state": "Uttar Pradesh",
+      "latitude": 28.407,
+      "longitude": 77.849
+    },
+    {
+      "district": "Chandauli",
+      "state": "Uttar Pradesh",
+      "latitude": 25.26,
+      "longitude": 83.268
+    },
+    {
+      "district": "Chitrakoot",
+      "state": "Uttar Pradesh",
+      "latitude": 25.198,
+      "longitude": 80.922
+    },
+    {
+      "district": "Deoria",
+      "state": "Uttar Pradesh",
+      "latitude": 26.502,
+      "longitude": 83.779
+    },
+    {
+      "district": "Etah",
+      "state": "Uttar Pradesh",
+      "latitude": 27.558,
+      "longitude": 78.662
+    },
+    {
+      "district": "Etawah",
+      "state": "Uttar Pradesh",
+      "latitude": 26.785,
+      "longitude": 79.015
+    },
+    {
+      "district": "Farrukhabad",
+      "state": "Uttar Pradesh",
+      "latitude": 27.392,
+      "longitude": 79.581
+    },
+    {
+      "district": "Fatehpur",
+      "state": "Uttar Pradesh",
+      "latitude": 25.93,
+      "longitude": 80.813
+    },
+    {
+      "district": "Firozabad",
+      "state": "Uttar Pradesh",
+      "latitude": 27.159,
+      "longitude": 78.395
+    },
+    {
+      "district": "Gautam Buddha Nagar",
+      "state": "Uttar Pradesh",
+      "latitude": 28.535,
+      "longitude": 77.391
+    },
+    {
+      "district": "Ghaziabad",
+      "state": "Uttar Pradesh",
+      "latitude": 28.669,
+      "longitude": 77.453
+    },
+    {
+      "district": "Ghazipur",
+      "state": "Uttar Pradesh",
+      "latitude": 25.58,
+      "longitude": 83.576
+    },
+    {
+      "district": "Gonda",
+      "state": "Uttar Pradesh",
+      "latitude": 27.133,
+      "longitude": 81.962
+    },
+    {
+      "district": "Gorakhpur",
+      "state": "Uttar Pradesh",
+      "latitude": 26.76,
+      "longitude": 83.373
+    },
+    {
+      "district": "Hamirpur",
+      "state": "Uttar Pradesh",
+      "latitude": 25.956,
+      "longitude": 80.149
+    },
+    {
+      "district": "Hapur",
+      "state": "Uttar Pradesh",
+      "latitude": 28.73,
+      "longitude": 77.781
+    },
+    {
+      "district": "Hardoi",
+      "state": "Uttar Pradesh",
+      "latitude": 27.398,
+      "longitude": 80.126
+    },
+    {
+      "district": "Hathras",
+      "state": "Uttar Pradesh",
+      "latitude": 27.596,
+      "longitude": 78.052
+    },
+    {
+      "district": "Jalaun",
+      "state": "Uttar Pradesh",
+      "latitude": 26.145,
+      "longitude": 79.337
+    },
+    {
+      "district": "Jaunpur",
+      "state": "Uttar Pradesh",
+      "latitude": 25.747,
+      "longitude": 82.683
+    },
+    {
+      "district": "Jhansi",
+      "state": "Uttar Pradesh",
+      "latitude": 25.448,
+      "longitude": 78.569
+    },
+    {
+      "district": "Kannauj",
+      "state": "Uttar Pradesh",
+      "latitude": 27.055,
+      "longitude": 79.918
+    },
+    {
+      "district": "Kanpur Dehat",
+      "state": "Uttar Pradesh",
+      "latitude": 26.415,
+      "longitude": 79.85
+    },
+    {
+      "district": "Kanpur Nagar",
+      "state": "Uttar Pradesh",
+      "latitude": 26.449,
+      "longitude": 80.331
+    },
+    {
+      "district": "Kasganj",
+      "state": "Uttar Pradesh",
+      "latitude": 27.808,
+      "longitude": 78.646
+    },
+    {
+      "district": "Kaushambi",
+      "state": "Uttar Pradesh",
+      "latitude": 25.53,
+      "longitude": 81.381
+    },
+    {
+      "district": "Kushinagar",
+      "state": "Uttar Pradesh",
+      "latitude": 26.74,
+      "longitude": 83.888
+    },
+    {
+      "district": "Lakhimpur Kheri",
+      "state": "Uttar Pradesh",
+      "latitude": 27.946,
+      "longitude": 80.782
+    },
+    {
+      "district": "Lalitpur",
+      "state": "Uttar Pradesh",
+      "latitude": 24.69,
+      "longitude": 78.418
+    },
+    {
+      "district": "Lucknow",
+      "state": "Uttar Pradesh",
+      "latitude": 26.847,
+      "longitude": 80.947
+    },
+    {
+      "district": "Maharajganj",
+      "state": "Uttar Pradesh",
+      "latitude": 27.128,
+      "longitude": 83.562
+    },
+    {
+      "district": "Mahoba",
+      "state": "Uttar Pradesh",
+      "latitude": 25.292,
+      "longitude": 79.872
+    },
+    {
+      "district": "Mainpuri",
+      "state": "Uttar Pradesh",
+      "latitude": 27.235,
+      "longitude": 79.019
+    },
+    {
+      "district": "Mathura",
+      "state": "Uttar Pradesh",
+      "latitude": 27.492,
+      "longitude": 77.673
+    },
+    {
+      "district": "Mau",
+      "state": "Uttar Pradesh",
+      "latitude": 25.941,
+      "longitude": 83.561
+    },
+    {
+      "district": "Meerut",
+      "state": "Uttar Pradesh",
+      "latitude": 28.984,
+      "longitude": 77.706
+    },
+    {
+      "district": "Mirzapur",
+      "state": "Uttar Pradesh",
+      "latitude": 25.146,
+      "longitude": 82.569
+    },
+    {
+      "district": "Moradabad",
+      "state": "Uttar Pradesh",
+      "latitude": 28.838,
+      "longitude": 78.776
+    },
+    {
+      "district": "Muzaffarnagar",
+      "state": "Uttar Pradesh",
+      "latitude": 29.472,
+      "longitude": 77.708
+    },
+    {
+      "district": "Pilibhit",
+      "state": "Uttar Pradesh",
+      "latitude": 28.631,
+      "longitude": 79.805
+    },
+    {
+      "district": "Pratapgarh",
+      "state": "Uttar Pradesh",
+      "latitude": 25.897,
+      "longitude": 81.945
+    },
+    {
+      "district": "Prayagraj",
+      "state": "Uttar Pradesh",
+      "latitude": 25.435,
+      "longitude": 81.846
+    },
+    {
+      "district": "Raebareli",
+      "state": "Uttar Pradesh",
+      "latitude": 26.234,
+      "longitude": 81.24
+    },
+    {
+      "district": "Rampur",
+      "state": "Uttar Pradesh",
+      "latitude": 28.799,
+      "longitude": 79.025
+    },
+    {
+      "district": "Saharanpur",
+      "state": "Uttar Pradesh",
+      "latitude": 29.964,
+      "longitude": 77.546
+    },
+    {
+      "district": "Sambhal",
+      "state": "Uttar Pradesh",
+      "latitude": 28.584,
+      "longitude": 78.571
+    },
+    {
+      "district": "Sant Kabir Nagar",
+      "state": "Uttar Pradesh",
+      "latitude": 26.691,
+      "longitude": 83.072
+    },
+    {
+      "district": "Shahjahanpur",
+      "state": "Uttar Pradesh",
+      "latitude": 27.881,
+      "longitude": 79.909
+    },
+    {
+      "district": "Shamli",
+      "state": "Uttar Pradesh",
+      "latitude": 29.45,
+      "longitude": 77.315
+    },
+    {
+      "district": "Shravasti",
+      "state": "Uttar Pradesh",
+      "latitude": 27.508,
+      "longitude": 82.049
+    },
+    {
+      "district": "Siddharthnagar",
+      "state": "Uttar Pradesh",
+      "latitude": 27.257,
+      "longitude": 83.117
+    },
+    {
+      "district": "Sitapur",
+      "state": "Uttar Pradesh",
+      "latitude": 27.574,
+      "longitude": 80.665
+    },
+    {
+      "district": "Sonbhadra",
+      "state": "Uttar Pradesh",
+      "latitude": 24.688,
+      "longitude": 83.068
+    },
+    {
+      "district": "Sultanpur",
+      "state": "Uttar Pradesh",
+      "latitude": 26.265,
+      "longitude": 82.073
+    },
+    {
+      "district": "Unnao",
+      "state": "Uttar Pradesh",
+      "latitude": 26.547,
+      "longitude": 80.487
+    },
+    {
+      "district": "Varanasi",
+      "state": "Uttar Pradesh",
+      "latitude": 25.318,
+      "longitude": 82.974
+    },
+    {
+      "district": "Almora",
+      "state": "Uttarakhand",
+      "latitude": 29.597,
+      "longitude": 79.66
+    },
+    {
+      "district": "Bageshwar",
+      "state": "Uttarakhand",
+      "latitude": 29.838,
+      "longitude": 79.771
+    },
+    {
+      "district": "Chamoli",
+      "state": "Uttarakhand",
+      "latitude": 30.404,
+      "longitude": 79.319
+    },
+    {
+      "district": "Champawat",
+      "state": "Uttarakhand",
+      "latitude": 29.334,
+      "longitude": 80.096
+    },
+    {
+      "district": "Dehradun",
+      "state": "Uttarakhand",
+      "latitude": 30.325,
+      "longitude": 78.043
+    },
+    {
+      "district": "Haridwar",
+      "state": "Uttarakhand",
+      "latitude": 29.945,
+      "longitude": 78.164
+    },
+    {
+      "district": "Nainital",
+      "state": "Uttarakhand",
+      "latitude": 29.391,
+      "longitude": 79.454
+    },
+    {
+      "district": "Pauri Garhwal",
+      "state": "Uttarakhand",
+      "latitude": 30.15,
+      "longitude": 78.78
+    },
+    {
+      "district": "Pithoragarh",
+      "state": "Uttarakhand",
+      "latitude": 29.583,
+      "longitude": 80.218
+    },
+    {
+      "district": "Rudraprayag",
+      "state": "Uttarakhand",
+      "latitude": 30.285,
+      "longitude": 78.981
+    },
+    {
+      "district": "Tehri Garhwal",
+      "state": "Uttarakhand",
+      "latitude": 30.375,
+      "longitude": 78.48
+    },
+    {
+      "district": "Udham Singh Nagar",
+      "state": "Uttarakhand",
+      "latitude": 28.975,
+      "longitude": 79.4
+    },
+    {
+      "district": "Uttarkashi",
+      "state": "Uttarakhand",
+      "latitude": 30.729,
+      "longitude": 78.443
+    }
+  ]
+}

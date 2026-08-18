@@ -1,0 +1,106 @@
+{
+  "_meta": {
+    "source_file": "datasets/temperature_ranges.csv",
+    "record_count": 8,
+    "description": "Technology operating temperature ranges from IEA, DOE, and official sources",
+    "cleaned": true
+  },
+  "records": [
+    {
+      "technology_id": "T001",
+      "technology_name": "Biogas",
+      "min_output_temp_c": 80.0,
+      "max_output_temp_c": 500.0,
+      "temperature_type": "Fuel/thermal energy application",
+      "source": "IEA",
+      "source_reference": "Outlook for Biogas and Biomethane",
+      "notes": "Biogas is primarily an energy carrier; useful heat/output temperature depends on the end-use equipment (boiler, CHP, burner, etc.).",
+      "official_resource": "IEA – Outlook for Biogas and Biomethane",
+      "official_resource_url": "https://www.iea.org/reports/outlook-for-biogas-and-biomethane/introduction-to-biogas-and-biomethane-2"
+    },
+    {
+      "technology_id": "T002",
+      "technology_name": "Biomass",
+      "min_output_temp_c": 150.0,
+      "max_output_temp_c": 450.0,
+      "temperature_type": "Steam/process heat output",
+      "source": "DOE + IEA",
+      "source_reference": "DOE Biomass-Fired Boilers / IEA Bioenergy for Heat and Power",
+      "notes": "Biomass can be burned in boilers to produce steam for industrial processes. Temperature depends strongly on boiler and steam conditions.",
+      "official_resource": "DOE – Biopower: Energy for Heat and Electricity",
+      "official_resource_url": "https://www.energy.gov/es/cmei/fuels/biopower-energy-heat-and-electricity"
+    },
+    {
+      "technology_id": "T003",
+      "technology_name": "Electrification",
+      "min_output_temp_c": 90.0,
+      "max_output_temp_c": 350.0,
+      "temperature_type": "Industrial process heat / steam",
+      "source": "IEA",
+      "source_reference": "Renewables for Industry / Electrification",
+      "notes": "Range represents established industrial heat-pump and electric-boiler applications; broader electrification technologies can reach higher process temperatures.",
+      "official_resource": "IEA – Electrification",
+      "official_resource_url": "https://www.iea.org/energy-system/electricity/electrification"
+    },
+    {
+      "technology_id": "T004",
+      "technology_name": "Heat Pump",
+      "min_output_temp_c": 60.0,
+      "max_output_temp_c": 150.0,
+      "temperature_type": "Useful process heat output",
+      "source": "IEA",
+      "source_reference": "Renewables for Industry / Heat Pump Monitor",
+      "notes": "Large-scale industrial heat pumps are well established up to about 150°C; higher-temperature systems are emerging.",
+      "official_resource": "IEA – Renewables for Industry",
+      "official_resource_url": "https://www.iea.org/reports/renewables-for-industry/executive-summary"
+    },
+    {
+      "technology_id": "T005",
+      "technology_name": "Solar Thermal",
+      "min_output_temp_c": 60.0,
+      "max_output_temp_c": 400.0,
+      "temperature_type": "Useful process heat output",
+      "source": "IEA SHC",
+      "source_reference": "Task 49 – Solar Heat Integration in Industrial Processes",
+      "notes": "Range combines non-concentrating and concentrating solar process-heat applications; technology suitability depends on collector type and integration.",
+      "official_resource": "IEA SHC – Task 49: Solar Heat Integration in Industrial Processes",
+      "official_resource_url": "https://task49.iea-shc.org/"
+    },
+    {
+      "technology_id": "T006",
+      "technology_name": "Thermal Storage",
+      "min_output_temp_c": 100.0,
+      "max_output_temp_c": 1000.0,
+      "temperature_type": "Storage/discharge temperature",
+      "source": "IEA",
+      "source_reference": "Renewables for Industry",
+      "notes": "Industrial thermal storage can use materials such as sand, cement and bricks and can store heat up to about 1,000°C.",
+      "official_resource": "IEA – Renewables for Industry",
+      "official_resource_url": "https://www.iea.org/reports/renewables-for-industry/executive-summary"
+    },
+    {
+      "technology_id": "T007",
+      "technology_name": "Waste Heat Recovery",
+      "min_output_temp_c": 90.0,
+      "max_output_temp_c": 1000.0,
+      "temperature_type": "Waste heat source temperature",
+      "source": "DOE",
+      "source_reference": "Waste Heat Recovery Technology Assessment",
+      "notes": "These temperatures describe recoverable waste-heat source streams, not necessarily the output temperature after recovery.",
+      "official_resource": "DOE – Waste Heat Recovery Technology Assessment",
+      "official_resource_url": "https://www.energy.gov/documents/advanced-manufacturing-technology-assessment-waste-heat-recoverypdf"
+    },
+    {
+      "technology_id": "T008",
+      "technology_name": "Electricity",
+      "min_output_temp_c": 60.0,
+      "max_output_temp_c": 1980.0,
+      "temperature_type": "Industrial electric heating output",
+      "source": "IEA + DOE",
+      "source_reference": "IEA Electrification / DOE Process Heating Sourcebook",
+      "notes": "Electricity is an energy carrier rather than one specific heating technology. Depending on the conversion technology, industrial electricity can provide low-temperature heat through heat pumps and very high-temperature heat through resistance, induction, and other electric heating systems.",
+      "official_resource": "IEA – Electrification / DOE – Process Heating Sourcebook",
+      "official_resource_url": "https://www.iea.org/energy-system/electricity/electrification"
+    }
+  ]
+}
