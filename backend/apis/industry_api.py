@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
+from auth import get_current_user
 
 router = APIRouter(
     prefix="/industry",
@@ -16,8 +17,7 @@ class IndustryProfile(BaseModel):
 
 
 @router.post("/profile")
-def create_industry_profile(profile: IndustryProfile):
-
+def create_industry_profile(profile: IndustryProfile, current_user: str = Depends(get_current_user)):
     return {
         "status": "success",
         "message": "Industry profile received successfully",

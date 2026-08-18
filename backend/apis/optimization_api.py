@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List, Optional
+
+from auth import get_current_user
 
 
 router = APIRouter(
@@ -19,7 +21,7 @@ class OptimizationRequest(BaseModel):
 
 
 @router.post("/run")
-def run_optimization(request: OptimizationRequest):
+def run_optimization(request: OptimizationRequest, current_user: str = Depends(get_current_user)):
 
     return {
         "status": "success",

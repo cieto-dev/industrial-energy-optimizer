@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
+from auth import get_current_user
 
 router = APIRouter(
     prefix="/policies",
@@ -14,7 +15,7 @@ class PolicyRequest(BaseModel):
 
 
 @router.post("/check")
-def check_policy(request: PolicyRequest):
+def check_policy(request: PolicyRequest, current_user: str = Depends(get_current_user)):
 
     return {
         "status": "success",

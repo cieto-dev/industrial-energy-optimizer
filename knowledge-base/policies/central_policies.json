@@ -610,6 +610,14 @@
         "ZED"
       ]
     },
+    "solar_thermal": {
+      "high_priority_policies": [
+        "MSE_GIFT",
+        "ADEETIE",
+        "CGTMSE"
+      ],
+      "note": "Eligibility depends on specific temperature needs and scheme guidelines for solar thermal integration."
+    },
     "cluster_level_energy_infrastructure": {
       "high_priority_policies": [
         "MSE_CDP",

@@ -1,9 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from typing import List
 import json
 from pathlib import Path
 
 from models.factory import FactoryProfile
+from auth import get_current_user
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 RULES_FILE = BASE_DIR / "knowledge-base" / "constraints" / "technology_rules.json"
@@ -28,7 +29,7 @@ TECHNOLOGY_IDS = [
 
 
 @router.get("")
-def get_technologies():
+def get_technologies(current_user: str = Depends(get_current_user)):
     """
     Return all technologies available in the optimizer.
     """
@@ -40,7 +41,7 @@ def get_technologies():
 
 
 @router.get("/{technology_id}")
-def get_technology(technology_id: str):
+def get_technology(technology_id: str, current_user: str = Depends(get_current_user)):
 
     technology_id = technology_id.upper()
 
@@ -58,7 +59,7 @@ def get_technology(technology_id: str):
 
 
 @router.post("/filter")
-def filter_technologies(profile: FactoryProfile):
+def filter_technologies(profile: FactoryProfile, current_user: str = Depends(get_current_user)):
     """
     Gate: Given a factory profile, returns feasible and rejected technology lists with rejection reasons.
     """

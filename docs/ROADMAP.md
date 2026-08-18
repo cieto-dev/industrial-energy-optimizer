@@ -192,9 +192,9 @@ Implementation:
 - **Gate:** `pytest tests/` passes with no failures
 
 ### 4.3 KB Cleanup (opportunistic, low effort)
-- [ ] Expand `technologies/solar_thermal.json` — concentrating vs. non-concentrating split, temperature ranges per type
-- [ ] Add `solar_thermal` key to `central_policies.json` pathway matching
-- [ ] Verify `master/technologies.json` IDs match what `technology_filter.py` expects
+- [x] Expand `technologies/solar_thermal.json` — concentrating vs. non-concentrating split, temperature ranges per type
+- [x] Add `solar_thermal` key to `central_policies.json` pathway matching
+- [x] Verify `master/technologies.json` IDs match what `technology_filter.py` expects
 
 ---
 

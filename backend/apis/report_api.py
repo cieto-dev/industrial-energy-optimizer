@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import Any, Dict, Optional
+
+from auth import get_current_user
 
 
 router = APIRouter(
@@ -16,7 +18,7 @@ class ReportRequest(BaseModel):
 
 
 @router.post("/generate")
-def generate_report(request: ReportRequest):
+def generate_report(request: ReportRequest, current_user: str = Depends(get_current_user)):
 
     return {
         "status": "success",

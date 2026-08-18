@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from typing import List, Optional
+
+from auth import get_current_user
 
 
 router = APIRouter(
@@ -22,7 +24,7 @@ class RecommendationRequest(BaseModel):
 
 
 @router.post("/rank")
-def rank_recommendations(request: RecommendationRequest):
+def rank_recommendations(request: RecommendationRequest, current_user: str = Depends(get_current_user)):
 
     if not request.options:
         return {

@@ -1,0 +1,44 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: ieto-backend
+    restart: always
+    env_file:
+      - ../backend/.env.example
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:alpine
+    container_name: ieto-nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+
+  postgres:
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    container_name: ieto-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: optimizer_user
+      POSTGRES_PASSWORD: CHANGE_ME_PASSWORD
+      POSTGRES_DB: industrial_energy_optimizer
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U optimizer_user -d industrial_energy_optimizer"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
