@@ -21,7 +21,7 @@ export function EligibilityForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>MSME Classification</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select classification" />
@@ -44,7 +44,7 @@ export function EligibilityForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Udyam Registered?</FormLabel>
-              <Select onValueChange={(val) => field.onChange(val === "yes")} defaultValue={field.value ? "yes" : "no"}>
+              <Select onValueChange={(val) => field.onChange(val === "yes")} value={field.value ? "yes" : "no"}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select status" />
@@ -114,7 +114,7 @@ export function EligibilityForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select type" />
@@ -147,7 +147,7 @@ export function EligibilityForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project Stage</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value ?? ""}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select stage" />

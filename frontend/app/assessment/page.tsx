@@ -4,10 +4,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 
-import { Sidebar } from "@/components/layout/Sidebar"
-import { Navbar } from "@/components/layout/Navbar"
 import { Button } from "@/components/reports/common/Button"
-import { Card, CardContent, CardFooter } from "@/components/reports/common/Card"
 
 import { FactoryProfileSchema, FactoryProfileType } from "@/utils/validators"
 import { apiService } from "@/services/api"
@@ -36,26 +33,30 @@ export default function AssessmentPage() {
     resolver: zodResolver(FactoryProfileSchema),
     mode: "onTouched",
     defaultValues: {
-      name: "",
-      industry: "",
-      state: "",
-      district: "",
-      production_per_day: { value: 0, unit: "" },
-      operating_hours_per_day: 0,
+      name: "TN Textile MSME Demo",
+      industry: "textile",
+      state: "Tamil Nadu",
+      district: "Coimbatore",
+      production_per_day: { value: 500, unit: "kg" },
+      operating_hours_per_day: 16,
       operating_days_per_year: 300,
-      current_fuel: "",
-      fuel_consumption: { value: 0, unit: "" },
-      electricity_consumption_kwh_day: 0,
-      required_process_temperature_c: 0,
-      roof_area_sqm: 0,
-      budget_inr: 0,
-      grid_reliability_pct: 0,
-      annual_turnover_inr: 0,
-      plant_and_machinery_or_equipment_investment_inr: 0,
-      project_cost_inr: 0,
-      udyam_registered: false,
+      current_fuel: "coal",
+      fuel_consumption: { value: 10, unit: "tonnes" },
+      electricity_consumption_kwh_day: 5000,
+      required_process_temperature_c: 200,
+      roof_area_sqm: 2000,
+      available_land_sqm: 500,
+      budget_inr: 20000000,
+      grid_reliability_pct: 95,
+      annual_turnover_inr: 50000000,
+      plant_and_machinery_or_equipment_investment_inr: 25000000,
+      project_cost_inr: 15000000,
+      project_type: "energy_efficiency",
+      existing_or_new_project: "existing",
+      msme_classification: "small",
+      udyam_registered: true,
       special_category: {
-        women_owned: false,
+        women_owned: true,
         sc_st_owned: false,
         pwd_owned: false,
         agniveer_owned: false,
@@ -103,69 +104,146 @@ export default function AssessmentPage() {
     }
   }
 
+  // Called when form has validation errors — show them clearly
+  const onInvalid = (errors: any) => {
+    console.error("Form validation errors:", errors)
+    const firstError = Object.values(errors)[0] as any
+    setSubmitError(`Please fix: ${firstError?.message ?? "some fields have errors"}`)
+  }
+
   const CurrentComponent = STEPS[currentStep].component
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto bg-background p-6">
-          <div className="mx-auto max-w-4xl space-y-4">
-            
-            <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold tracking-tight">Factory Assessment</h1>
-              <div className="text-sm text-muted-foreground">
-                Step {currentStep + 1} of {STEPS.length}
-              </div>
-            </div>
+    <div className="flex h-screen overflow-hidden bg-zinc-950">
 
-            <div className="flex gap-2 mb-8">
-              {STEPS.map((step, index) => (
-                <div 
-                  key={step.id} 
-                  className={`h-2 flex-1 rounded-full ${index <= currentStep ? 'bg-primary' : 'bg-muted'}`}
-                />
-              ))}
+      {/* LEFT PANEL — motivational image with mission text */}
+      <div
+        className="hidden lg:flex relative w-[380px] flex-shrink-0 flex-col justify-end overflow-hidden"
+        style={{
+          backgroundImage: "url('/assessment_bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Dark overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-zinc-950/30" />
+        {/* Mission text overlay */}
+        <div className="relative z-10 p-8 pb-12">
+          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 mb-4">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Step {currentStep + 1} of {STEPS.length}
+          </div>
+          <h2 className="text-3xl font-black text-white leading-tight mb-3">
+            Every watt counts<br />
+            <span className="text-emerald-400">toward zero.</span>
+          </h2>
+          <p className="text-sm text-zinc-400 leading-relaxed">
+            You're building the case for a cleaner, more profitable factory. The data you enter here powers our AI engine to find the best clean energy pathway for your exact operation.
+          </p>
+          {/* Step names */}
+          <div className="mt-8 space-y-2">
+            {STEPS.map((step, index) => (
+              <div key={step.id} className="flex items-center gap-3">
+                <div className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
+                  index < currentStep ? "bg-emerald-500 text-zinc-950"
+                  : index === currentStep ? "border-2 border-emerald-500 text-emerald-400"
+                  : "border border-zinc-700 text-zinc-600"
+                }`}>
+                  {index < currentStep ? "✓" : index + 1}
+                </div>
+                <span className={`text-sm font-medium ${
+                  index === currentStep ? "text-white" : index < currentStep ? "text-emerald-400" : "text-zinc-600"
+                }`}>{step.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* RIGHT PANEL — form area */}
+      <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Slim top bar */}
+        <div className="flex items-center justify-between px-8 py-4 border-b border-zinc-800 bg-zinc-950 flex-shrink-0">
+          <div className="flex items-center gap-3">
+            {/* Inline brand mark */}
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow-md shadow-emerald-500/30">
+              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-zinc-950" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 22 C6 18 14 10 22 2" />
+                <path d="M22 2 C22 14 12 22 2 22" fill="currentColor" fillOpacity="0.3"/>
+              </svg>
             </div>
+            <div>
+              <p className="text-sm font-bold text-white leading-none">Factory Assessment</p>
+              <p className="text-xs text-zinc-500 mt-0.5">{STEPS[currentStep].title}</p>
+            </div>
+          </div>
+          {/* Step progress pills */}
+          <div className="flex gap-1.5">
+            {STEPS.map((_, index) => (
+              <div
+                key={index}
+                className={`h-1.5 w-8 rounded-full transition-all duration-500 ${
+                  index <= currentStep ? "bg-emerald-500" : "bg-zinc-800"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Scrollable form area */}
+        <main className="flex-1 overflow-y-auto bg-zinc-950 p-8">
+          <div className="mx-auto max-w-xl">
 
             {submitError && (
-              <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-start gap-2">
-                <span className="mt-0.5">⚠</span>
+              <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-start gap-2">
+                <span className="mt-0.5 flex-shrink-0">⚠</span>
                 <span>{submitError}</span>
               </div>
             )}
 
             <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Card className="border-border">
-                  <CardContent className="pt-6">
-                    <CurrentComponent />
-                  </CardContent>
-                  <CardFooter className="flex justify-between border-t pt-6">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={prevStep}
-                      disabled={currentStep === 0 || isSubmitting}
+              <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
+                {/* Form card */}
+                <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-sm p-6 mb-6">
+                  <CurrentComponent />
+                </div>
+
+                {/* Navigation footer */}
+                <div className="flex justify-between items-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                    disabled={currentStep === 0 || isSubmitting}
+                    className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                  >
+                    ← Previous
+                  </Button>
+
+                  {currentStep < STEPS.length - 1 ? (
+                    <button
+                      type="button"
+                      onClick={nextStep}
+                      className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-6 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-400"
                     >
-                      Previous
-                    </Button>
-                    
-                    {currentStep < STEPS.length - 1 ? (
-                      <Button type="button" onClick={nextStep}>
-                        Next
-                      </Button>
-                    ) : (
-                      <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? "Submitting..." : "Submit Assessment"}
-                      </Button>
-                    )}
-                  </CardFooter>
-                </Card>
+                      Next Step →
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-6 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <><span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-950 border-t-transparent" /> Analyzing...</>
+                      ) : (
+                        <>Run Analysis →</>
+                      )}
+                    </button>
+                  )}
+                </div>
               </form>
             </FormProvider>
-
           </div>
         </main>
       </div>
