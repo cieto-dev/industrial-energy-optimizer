@@ -164,10 +164,10 @@ Implementation:
 - **Gate:** `python scripts/run_pipeline.py` with Scenario T1 input produces complete recommendation without errors
 
 ### 3.6 Core APIs
-- [ ] `backend/apis/optimization_api.py` — `POST /optimize`
-- [ ] `backend/apis/policy_api.py` — `POST /policy/evaluate`
-- [ ] `backend/apis/recommendation_api.py` — `GET /recommendation/{id}`
-- [ ] `backend/apis/report_api.py` — `GET /report/{id}/pdf` and `/excel`
+- [x] `backend/apis/optimization_api.py` — `POST /optimize`
+- [x] `backend/apis/policy_api.py` — `POST /policy/evaluate`
+- [x] `backend/apis/recommendation_api.py` — `GET /recommendation/{id}`
+- [x] `backend/apis/report_api.py` — `GET /report/{id}/pdf` and `/excel`
 
 ---
 
