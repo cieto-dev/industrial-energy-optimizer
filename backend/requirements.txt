@@ -5,3 +5,8 @@ pydantic
 python-dotenv
 reportlab
 openpyxl
+psycopg2-binary
+geoalchemy2
+pgvector
+python-jose[cryptography]
+passlib[bcrypt]

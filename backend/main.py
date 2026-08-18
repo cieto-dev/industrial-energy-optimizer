@@ -11,6 +11,7 @@ from apis.policy_api import router as policy_router
 from apis.optimization_api import router as optimization_router
 from apis.recommendation_api import router as recommendation_router
 from apis.report_api import router as report_router
+from apis.auth_api import router as auth_router
 
 
 # --------------------------------------------------
@@ -78,6 +79,7 @@ app.include_router(technology_router)
 app.include_router(policy_router)
 app.include_router(optimization_router)
 app.include_router(recommendation_router)
+app.include_router(auth_router)
 app.include_router(report_router)
 
 
