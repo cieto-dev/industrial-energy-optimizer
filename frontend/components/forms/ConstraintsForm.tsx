@@ -27,6 +27,20 @@ export function ConstraintsForm() {
 
       <FormField
         control={control}
+        name="available_land_sqm"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Available Land Area (sq. meters) (Optional)</FormLabel>
+            <FormControl>
+              <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(e.target.value ? parseFloat(e.target.value) : null)} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
         name="budget_inr"
         render={({ field }) => (
           <FormItem>

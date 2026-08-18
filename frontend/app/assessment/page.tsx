@@ -20,10 +20,10 @@ import { EligibilityForm } from "@/components/forms/EligibilityForm"
 
 const STEPS = [
   { id: "industry", title: "General", component: IndustryForm, fields: ["name", "industry", "state", "district"] },
-  { id: "energy", title: "Production", component: EnergyInputForm, fields: ["production_per_day.value", "production_per_day.unit", "operating_hours_per_day", "current_fuel", "fuel_consumption.value", "fuel_consumption.unit"] },
+  { id: "energy", title: "Production", component: EnergyInputForm, fields: ["production_per_day.value", "production_per_day.unit", "operating_hours_per_day", "operating_days_per_year", "current_fuel", "fuel_consumption.value", "fuel_consumption.unit"] },
   { id: "process", title: "Technical", component: ProcessForm, fields: ["required_process_temperature_c", "electricity_consumption_kwh_day"] },
-  { id: "constraints", title: "Constraints", component: ConstraintsForm, fields: ["roof_area_sqm", "budget_inr", "grid_reliability_pct"] },
-  { id: "eligibility", title: "Eligibility", component: EligibilityForm, fields: ["msme_classification", "udyam_registered", "annual_turnover_inr", "plant_and_machinery_or_equipment_investment_inr", "project_type", "project_cost_inr", "existing_or_new_project"] }
+  { id: "constraints", title: "Constraints", component: ConstraintsForm, fields: ["roof_area_sqm", "available_land_sqm", "budget_inr", "grid_reliability_pct"] },
+  { id: "eligibility", title: "Eligibility", component: EligibilityForm, fields: ["msme_classification", "udyam_registered", "udyam_number", "annual_turnover_inr", "plant_and_machinery_or_equipment_investment_inr", "project_type", "project_cost_inr", "loan_amount_inr", "existing_or_new_project", "brownfield_or_greenfield", "cluster_name", "cluster_is_adeetie_identified", "annual_energy_savings_percent", "special_category"] }
 ]
 
 export default function AssessmentPage() {
@@ -41,6 +41,7 @@ export default function AssessmentPage() {
       district: "",
       production_per_day: { value: 0, unit: "" },
       operating_hours_per_day: 0,
+      operating_days_per_year: 300,
       current_fuel: "",
       fuel_consumption: { value: 0, unit: "" },
       electricity_consumption_kwh_day: 0,
@@ -51,7 +52,19 @@ export default function AssessmentPage() {
       annual_turnover_inr: 0,
       plant_and_machinery_or_equipment_investment_inr: 0,
       project_cost_inr: 0,
-      udyam_registered: false
+      udyam_registered: false,
+      special_category: {
+        women_owned: false,
+        sc_st_owned: false,
+        pwd_owned: false,
+        agniveer_owned: false,
+        transgender_owned: false,
+        north_east_region: false,
+        jammu_kashmir: false,
+        ladakh: false,
+        aspirational_district: false,
+        identified_credit_deficient_district: false
+      }
     }
   })
 
@@ -76,7 +89,6 @@ export default function AssessmentPage() {
       const payload = {
         ...data,
         factory_id: data.factory_id || `fac_${Math.random().toString(36).substr(2, 9)}`,
-        operating_days_per_year: 300 // default backend value
       }
       
       const response = await apiService.optimize(payload as any)

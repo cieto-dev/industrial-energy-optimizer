@@ -1,4 +1,5 @@
 import { FactoryProfileType } from "@/utils/validators";
+import { ScenarioMetrics } from "./scenario";
 
 export type FactoryProfile = FactoryProfileType;
 
@@ -6,7 +7,8 @@ export interface OptimizationResponse {
   status: string;
   message: string;
   input: FactoryProfile;
-  pathways: any[];
+  recommended_scenario_id: string;
+  pathways: ScenarioMetrics[];
 }
 
 export interface ReportRequest {

@@ -205,9 +205,9 @@ Implementation:
 **Estimated effort:** ~5–6 days for 2 people.
 
 ### 5.1 Factory Input Form
-- [ ] All Module 1 fields including Module 4a eligibility fields
-- [ ] TypeScript types match backend Pydantic schemas
-- [ ] Submit to `POST /optimize`
+- [x] All Module 1 fields including Module 4a eligibility fields
+- [x] TypeScript types match backend Pydantic schemas
+- [x] Submit to `POST /optimize`
 
 ### 5.2 Recommendation Dashboard
 - [ ] Recommended scenario display with explanation

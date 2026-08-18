@@ -12,7 +12,7 @@ const apiClient = axios.create({
 
 export const apiService = {
   async optimize(profile: FactoryProfile): Promise<OptimizationResponse> {
-    const response = await apiClient.post<OptimizationResponse>("/optimization/run", profile);
+    const response = await apiClient.post<OptimizationResponse>("/optimization/optimize", profile);
     return response.data;
   },
 

@@ -40,19 +40,34 @@ export function EnergyInputForm() {
         />
       </div>
 
-      <FormField
-        control={control}
-        name="operating_hours_per_day"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Operating Hours Per Day</FormLabel>
-            <FormControl>
-              <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      <div className="grid grid-cols-2 gap-4">
+        <FormField
+          control={control}
+          name="operating_hours_per_day"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Operating Hours Per Day</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name="operating_days_per_year"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Operating Days Per Year</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 300)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
 
       <div className="grid grid-cols-3 gap-4">
         <FormField
