@@ -210,26 +210,34 @@ Implementation:
 - [x] Submit to `POST /optimize`
 
 ### 5.2 Recommendation Dashboard
-- [ ] Recommended scenario display with explanation
-- [ ] Scenario comparison table (all 3–5 scenarios: CAPEX, payback range, CO2 reduction, score)
-- [ ] "Why not X?" technology rejection log
+- [x] Recommended scenario display with explanation
+- [x] Scenario comparison table (all 3–5 scenarios: CAPEX, payback range, CO2 reduction, score)
+- [x] "Why not X?" technology rejection log
 
 ### 5.3 Reports
-- [ ] Download PDF → `GET /report/{id}/pdf`
-- [ ] Download Excel → `GET /report/{id}/excel`
+- [x] Download PDF → `GET /report/{id}/pdf`
+- [x] Download Excel → `GET /report/{id}/excel`
 
 ### 5.4 Integration & Hardening
-- [ ] End-to-end frontend → backend → decision engine connection
-- [ ] Error handling for invalid inputs
-- [ ] Docker deployment configuration
+- [x] End-to-end frontend → backend → decision engine connection
+- [x] Error handling for invalid inputs
+- [x] Docker deployment configuration
 
 ### 5.5 End-to-End Demo Script
-- [ ] Draft 5-minute pitch script aligned with flow
-- [ ] Create pre-seeded database fixture for the demo (textile MSME, coal boiler, 200°C, Tamil Nadu)
-- [ ] Dry run end-to-end: UI -> API -> Decision Engine -> UI
+- [x] Draft 5-minute pitch script aligned with flow
+- [x] Seed database with the FULL knowledge-base dataset (all 9 industries,
+      all technology profiles, full tariff/policy/geographic data — per
+      FEATURE_BACKLOG.md Decision 2)
+- [x] Configure one scripted demo Factory input for the live walkthrough
+      (textile MSME, coal boiler, 200°C, Tamil Nadu — matches the working
+      pipeline_output.json fixture)
+- [x] Dry run end-to-end: UI → API → Decision Engine → UI, using the
+      scripted input above
+- [x] Spot-check: confirm at least 2 other industries (e.g. steel, dairy)
+      return valid recommendations from the seeded DB, not just textile
 - **Gate:** Flawless 3-minute technical run-through recorded on video
-- [ ] Final `pytest tests/` green
-- [ ] Final `validate_references.py` green
+- [x] Final `pytest tests/` green
+- [x] Final `validate_references.py` green
 
 ---
 

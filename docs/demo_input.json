@@ -1,0 +1,43 @@
+{
+  "factory_id": "demo_factory_01",
+  "name": "Textile MSME Demo",
+  "industry": "textile",
+  "state": "Tamil Nadu",
+  "district": "Coimbatore",
+  "production_per_day": {
+    "value": 500,
+    "unit": "kg"
+  },
+  "operating_hours_per_day": 16,
+  "operating_days_per_year": 300,
+  "current_fuel": "coal",
+  "fuel_consumption": {
+    "value": 10,
+    "unit": "tonnes"
+  },
+  "required_process_temperature_c": 200,
+  "electricity_consumption_kwh_day": 5000,
+  "roof_area_sqm": 2000,
+  "available_land_sqm": 500,
+  "budget_inr": 20000000,
+  "grid_reliability_pct": 95,
+  "msme_classification": "small",
+  "udyam_registered": true,
+  "annual_turnover_inr": 50000000,
+  "plant_and_machinery_or_equipment_investment_inr": 25000000,
+  "project_type": "Energy Efficiency/Conservation",
+  "project_cost_inr": 15000000,
+  "existing_or_new_project": "existing",
+  "special_category": {
+    "women_owned": true,
+    "sc_st_owned": false,
+    "pwd_owned": false,
+    "agniveer_owned": false,
+    "transgender_owned": false,
+    "north_east_region": false,
+    "jammu_kashmir": false,
+    "ladakh": false,
+    "aspirational_district": false,
+    "identified_credit_deficient_district": false
+  }
+}
