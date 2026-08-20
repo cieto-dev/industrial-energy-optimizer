@@ -4,43 +4,50 @@
 
 @layer base {
   :root {
-    /* Dark-first: deep zinc/slate to match a serious decarbonization platform */
-    --background: 240 10% 6%;
-    --foreground: 0 0% 96%;
+    --background: 0 0% 98%;
+    --surface: 0 0% 100%;
+    --surface-muted: 210 4% 96%;
+    --foreground: 222 47% 11%;
+    --foreground-muted: 215 16% 47%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+ 
+    --primary: 210 100% 45%;
+    --primary-foreground: 0 0% 100%;
+ 
+    --secondary: 210 4% 96%;
+    --secondary-foreground: 222 47% 11%;
+ 
+    --muted: 210 4% 96%;
+    --muted-foreground: 215 16% 47%;
+ 
+    --accent: 210 4% 96%;
+    --accent-foreground: 222 47% 11%;
+ 
+    --destructive: 348 83% 47%;
+    --destructive-foreground: 0 0% 100%;
 
-    --card: 240 10% 9%;
-    --card-foreground: 0 0% 96%;
- 
-    --popover: 240 10% 9%;
-    --popover-foreground: 0 0% 96%;
- 
-    /* Primary: Vibrant Emerald — the color of clean energy */
-    --primary: 152 76% 46%;
-    --primary-foreground: 240 10% 6%;
- 
-    --secondary: 240 6% 15%;
-    --secondary-foreground: 0 0% 80%;
- 
-    --muted: 240 6% 15%;
-    --muted-foreground: 240 5% 55%;
- 
-    --accent: 152 76% 46%;
-    --accent-foreground: 240 10% 6%;
- 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 210 100% 45%;
 
-    --border: 240 6% 18%;
-    --input: 240 6% 18%;
-    --ring: 152 76% 46%;
+    --status-online: 142 71% 45%;
+    --status-warning: 38 92% 50%;
+    --status-offline: 348 83% 47%;
  
-    --radius: 0.75rem;
+    --radius: 0.5rem;
   }
  
   .dark {
-    /* Sleek, deep dark blue-grey background */
     --background: 222 47% 7%;
+    --surface: 222 47% 9%;
+    --surface-muted: 217.2 32.6% 17.5%;
     --foreground: 210 40% 98%;
+    --foreground-muted: 215 20.2% 65.1%;
  
     --card: 222 47% 9%;
     --card-foreground: 210 40% 98%;
@@ -48,8 +55,8 @@
     --popover: 222 47% 9%;
     --popover-foreground: 210 40% 98%;
  
-    --primary: 160 84% 39%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 210 100% 65%;
+    --primary-foreground: 222 47% 11%;
  
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -57,15 +64,19 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
  
-    --accent: 160 84% 39%;
+    --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
  
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 348 83% 47%;
     --destructive-foreground: 210 40% 98%;
  
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 160 84% 39%;
+    --ring: 210 100% 65%;
+
+    --status-online: 142 71% 45%;
+    --status-warning: 38 92% 50%;
+    --status-offline: 348 83% 47%;
   }
 }
  
@@ -76,13 +87,4 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary;
   }
-}
-
-/* Custom Gradients and Glows */
-.glass-panel {
-  @apply bg-background/60 backdrop-blur-xl border border-border/50 shadow-sm;
-}
-
-.glow-primary {
-  box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.4);
 }

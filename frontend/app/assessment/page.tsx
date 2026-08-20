@@ -114,7 +114,7 @@ export default function AssessmentPage() {
   const CurrentComponent = STEPS[currentStep].component
 
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-950">
+    <div className="flex flex-1 overflow-hidden bg-zinc-950" style={{ height: "calc(100vh - 56px)" }}>
 
       {/* LEFT PANEL — motivational image with mission text */}
       <div
