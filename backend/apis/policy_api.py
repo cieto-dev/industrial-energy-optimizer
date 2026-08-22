@@ -1,7 +1,9 @@
-from fastapi import APIRouter, Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, ValidationError
 
 from auth import get_current_user
+from models.factory import Factory
+
 
 router = APIRouter(
     prefix="/policies",
@@ -10,42 +12,55 @@ router = APIRouter(
 
 
 class PolicyRequest(BaseModel):
-    industry: str
-    technology_id: str
+    """
+    Request wrapper for policy evaluation.
+
+    The API request model is intentionally independent from the
+    Factory domain model so the HTTP contract is not tightly coupled
+    to the internal domain model.
+    """
+
+    factory: dict
 
 
 @router.post("/evaluate")
-def evaluate_policy(request: PolicyRequest, current_user: str = Depends(get_current_user)):
-    from decision_engine.policy.policy_engine import PolicyEngine
-    from models.factory import Factory
-    
-    # Mocking a factory object from request for policy engine
-    factory = Factory(
-        factory_id="mock-id",
-        name="Mock Factory",
-        industry=request.industry,
-        state="Tamil Nadu", # Assume default or need from request
-        current_fuel="coal",
-        production_capacity_tpa=1000,
-        annual_operating_hours=8000,
-        boiler_capacity_tph=5.0,
-        boiler_efficiency_pct=75.0,
-        process_temperature_c=150.0,
-        is_msme=True
-    )
-    
-    policy_engine = PolicyEngine()
-    result = policy_engine.evaluate(factory)
-    
-    disclaimer = "Estimated combined benefit — subject to manual verification against scheme-specific convergence rules; individual scheme benefits are independently sourced, their combined stackability is not."
-    
-    return {
-        "status": "success",
-        "industry": request.industry,
-        "technology_id": request.technology_id,
-        "eligible_schemes": [scheme.model_dump() for scheme in result.eligible_schemes],
-        "total_estimated_benefit_inr": result.total_estimated_benefit_inr,
-        "total_benefit_verified": result.total_benefit_verified,
-        "disclaimer": disclaimer if not result.total_benefit_verified else "",
-        "message": "Policy evaluation completed"
-    }
+def evaluate_policy(
+    request: PolicyRequest,
+    current_user: str = Depends(get_current_user)
+):
+    """
+    Evaluate policy eligibility using the supplied factory profile.
+    """
+
+    try:
+        factory = Factory.model_validate(request.factory)
+
+        from decision_engine.policy.policy_engine import PolicyEngine
+
+        policy_engine = PolicyEngine()
+        result = policy_engine.evaluate(factory)
+
+        return {
+            "status": "success",
+            "factory": factory.model_dump(),
+            "policy_evaluation": result.to_dict(),
+            "message": "Policy evaluation completed"
+        }
+
+    except ValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail={
+                "message": "Invalid factory data",
+                "errors": exc.errors()
+            }
+        )
+
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "message": "Policy evaluation failed",
+                "error": str(exc)
+            }
+        )
