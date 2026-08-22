@@ -1,0 +1,764 @@
+{
+  "schema_version": "2.4.5",
+  "description": "Explainable, evidence-backed industry-to-technology recommendation layer for the Industrial Energy Transition Optimizer.",
+  "purpose": "Provides industry-specific technology classifications, reasons, source traceability, operational considerations and cluster recommendations. Hard engineering feasibility remains in technology_rules.json.",
+  "industries": {
+    "textile": {
+      "display_name": "Textile Manufacturing",
+      "source_context": [
+        {
+          "source": "NITI Aayog Roadmap for Green Transition of MSMEs",
+          "year": 2026,
+          "relevance": "Indian MSME textile energy and decarbonisation context"
+        },
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "Industrial heat electrification and technology suitability"
+        },
+        {
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications",
+          "year": 2024,
+          "relevance": "Biomass-based steam and heat pathways for textile MSMEs"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Suitable for low-temperature textile wet-processing, hot-water and drying-related heat where the required process temperature is within the technology's operating range.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "required_temperature_must_fit_heat_pump_operating_range",
+            "adequate_heat_source_required",
+            "temperature_lift_affects_performance",
+            "electrical_capacity_must_be_sufficient",
+            "economics_depend_on_electricity_price"
+          ],
+          "cluster_recommendations": [
+            "Prioritize textile wet-processing clusters with significant low-temperature steam or hot-water demand.",
+            "Consider pairing with thermal storage where process demand is variable.",
+            "Use renewable electricity where available to improve emissions performance."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Suitable for textile steam and hot-water applications where electrical capacity and process temperature requirements are compatible.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "high_electrical_demand",
+            "grid_capacity",
+            "electricity_tariff",
+            "steam_pressure_requirement",
+            "water_treatment"
+          ],
+          "cluster_recommendations": [
+            "Prioritize textile dyeing and wet-processing clusters with existing steam systems.",
+            "Assess demand charges and available sanctioned electrical capacity before selection.",
+            "Consider coupling with solar PV and thermal storage."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Biomass-based steam and heat are explicitly identified as a practical decarbonisation pathway for textile MSMEs, with potential to replace fossil-fuel heat where biomass supply is reliable.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "reliable_biomass_supply",
+            "seasonal_feedstock_variation",
+            "fuel_storage",
+            "fuel_handling",
+            "ash_handling",
+            "emissions_control",
+            "boiler_and_process_compatibility"
+          ],
+          "cluster_recommendations": [
+            "Prioritize textile clusters located near reliable agricultural-residue supply chains.",
+            "Consider multi-fuel boiler configurations to reduce seasonal supply risk.",
+            "Evaluate pellet/briquette logistics and delivered cost rather than only biomass commodity price."
+          ]
+        },
+        "solar_thermal": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Can provide useful low-to-moderate temperature heat for suitable textile processes, but performance depends on solar resource, available area and process load matching.",
+          "source": "Electrifying Industrial Heat in India (2026) / MNRE-GIZ biomass and green-heat context",
+          "operational_constraints": [
+            "solar_resource",
+            "available_space",
+            "weather_dependence",
+            "thermal_storage_for_continuity",
+            "temperature_match"
+          ],
+          "cluster_recommendations": [
+            "Prioritize sites with strong solar availability and sufficient roof or land area.",
+            "Use as a hybrid source with electric or biomass systems where continuous heat is required."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Solar PV is not a direct process-heat technology but can materially improve the economics and emissions profile of electrified textile heat systems.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "available_roof_or_land_area",
+            "solar_resource",
+            "grid_interconnection",
+            "storage_or_grid_dependency"
+          ],
+          "cluster_recommendations": [
+            "Use as an enabling technology for heat pumps and electric boilers.",
+            "Consider captive or group-captive renewable procurement where individual MSME scale is insufficient."
+          ]
+        },
+        "thermal_storage": {
+          "classification": "supporting",
+          "allowed": true,
+          "reason": "Useful for decoupling heat production from heat demand and improving the integration of intermittent renewable heat and electricity.",
+          "source": "Electrifying Industrial Heat in India (2026) / FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "storage_capacity",
+            "charge_temperature",
+            "discharge_temperature",
+            "heat_loss",
+            "process_load_profile"
+          ],
+          "cluster_recommendations": [
+            "Consider where textile production has variable or shift-based thermal demand."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Useful for recovering heat from dryers, thermic-fluid systems and other textile processes before replacing the remaining fossil heat demand.",
+          "source": "NITI Aayog Roadmap for Green Transition of MSMEs (2026) and textile efficiency evidence in project knowledge base",
+          "operational_constraints": [
+            "recoverable_waste_heat",
+            "temperature_match",
+            "heat_exchanger_compatibility",
+            "operating_profile"
+          ],
+          "cluster_recommendations": [
+            "Evaluate waste heat before sizing replacement heating equipment."
+          ]
+        }
+      }
+    },
+    "food_processing": {
+      "display_name": "Food Processing",
+      "source_context": [
+        {
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications",
+          "year": 2024,
+          "relevance": "Biomass green steam and heat in food-processing MSMEs"
+        },
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "Industrial electrification for low- and moderate-temperature heat"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Food-processing operations commonly include hot-water, drying, washing and other low-to-moderate temperature loads suitable for heat-pump integration.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "temperature_range",
+            "heat_source",
+            "hygienic_process_constraints",
+            "electricity_capacity"
+          ],
+          "cluster_recommendations": [
+            "Prioritize low-temperature washing, drying and hot-water applications.",
+            "Use waste heat as a potential heat source where available."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Suitable for food-processing steam and hot-water demand when electricity infrastructure is adequate.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "grid_capacity",
+            "electricity_tariff",
+            "steam_pressure",
+            "water_quality"
+          ],
+          "cluster_recommendations": [
+            "Prioritize plants with stable electrical infrastructure and manageable demand charges."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Biomass can provide green steam and process heat for food-processing MSMEs, particularly where agricultural residues are locally accessible.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "biomass_availability",
+            "seasonality",
+            "storage",
+            "fuel_handling",
+            "ash_management",
+            "emissions_control"
+          ],
+          "cluster_recommendations": [
+            "Prioritize agricultural-processing clusters with nearby biomass residues.",
+            "Assess delivered biomass cost and supply reliability."
+          ]
+        },
+        "solar_thermal": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Useful for low-temperature process heat and hot-water loads where solar availability and space are adequate.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "solar_resource",
+            "space",
+            "weather_dependence",
+            "storage"
+          ],
+          "cluster_recommendations": [
+            "Use for daytime hot-water and compatible thermal loads."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Can reduce the electricity cost and emissions intensity of electrified food-processing heat systems.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "space",
+            "solar_resource",
+            "interconnection",
+            "storage_or_grid_dependency"
+          ],
+          "cluster_recommendations": [
+            "Pair with heat pumps or electric boilers where feasible."
+          ]
+        },
+        "thermal_storage": {
+          "classification": "supporting",
+          "allowed": true,
+          "reason": "Can shift heat production and help integrate intermittent renewable electricity or solar heat.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "storage_capacity",
+            "charge_discharge_temperature",
+            "heat_loss"
+          ],
+          "cluster_recommendations": [
+            "Prioritize facilities with batch-based thermal demand."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Waste heat can reduce the amount of new heat supply required in food-processing facilities.",
+          "source": "Roadmap for Green Transition of MSMEs (2026)",
+          "operational_constraints": [
+            "recoverable_heat",
+            "temperature_match",
+            "operating_hours"
+          ],
+          "cluster_recommendations": [
+            "Evaluate heat recovery before replacing boilers or heaters."
+          ]
+        }
+      }
+    },
+    "chemical": {
+      "display_name": "Chemical Manufacturing",
+      "source_context": [
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "Wide range of industrial temperature requirements and electrification economics"
+        },
+        {
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications",
+          "year": 2024,
+          "relevance": "Biomass heat and steam for chemical MSMEs"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Applicable to low- and moderate-temperature chemical heating where process temperature and materials compatibility permit.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "process_temperature",
+            "temperature_lift",
+            "heat_source",
+            "process_safety",
+            "materials_compatibility"
+          ],
+          "cluster_recommendations": [
+            "Prioritize low-temperature utility and recovery applications rather than assuming suitability for all chemical processes."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "preferred_for_steam",
+          "allowed": true,
+          "reason": "Can provide steam and hot water for chemical processing where grid capacity and pressure requirements are compatible.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "grid_capacity",
+            "steam_pressure",
+            "electricity_cost",
+            "water_treatment"
+          ],
+          "cluster_recommendations": [
+            "Prioritize utility steam systems with predictable load profiles."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Biomass-based steam and heat are applicable in chemical MSMEs but require reliable fuel quality, handling and emissions-management arrangements.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "biomass_supply",
+            "fuel_quality",
+            "storage",
+            "ash_handling",
+            "emissions_control",
+            "process_safety"
+          ],
+          "cluster_recommendations": [
+            "Use primarily where a reliable industrial biomass supply chain exists."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Can provide low-carbon electricity for electrified utilities and auxiliary loads.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "space",
+            "interconnection",
+            "solar_resource"
+          ],
+          "cluster_recommendations": [
+            "Consider captive or group-captive renewable electricity for cluster-level cost reduction."
+          ]
+        },
+        "thermal_storage": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Can support load shifting and renewable integration where thermal demand can be decoupled from production.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "process_compatibility",
+            "temperature_requirement",
+            "storage_capacity"
+          ],
+          "cluster_recommendations": [
+            "Use where batch operations permit thermal buffering."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Chemical plants can have valuable waste-heat streams; recovering them can reduce replacement heat demand.",
+          "source": "Roadmap for Green Transition of MSMEs (2026)",
+          "operational_constraints": [
+            "temperature_match",
+            "corrosive_or_contaminated_streams",
+            "heat_exchanger_compatibility",
+            "continuous_operation"
+          ],
+          "cluster_recommendations": [
+            "Screen waste-heat opportunities before selecting new primary heating equipment."
+          ]
+        }
+      }
+    },
+    "pharmaceutical": {
+      "display_name": "Pharmaceutical Manufacturing",
+      "source_context": [
+        {
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications",
+          "year": 2024,
+          "relevance": "Biomass-based steam and heat in pharmaceutical MSMEs"
+        },
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "Electrification technologies for lower-temperature industrial heat"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "preferred_for_low_temperature",
+          "allowed": true,
+          "reason": "Suitable for lower-temperature hot-water, drying and utility heat where hygienic and process specifications permit.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "temperature_limit",
+            "heat_source",
+            "process_hygiene",
+            "electrical_capacity"
+          ],
+          "cluster_recommendations": [
+            "Prioritize low-temperature utility and process heat first."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Provides controllable steam and hot water for pharmaceutical processes where adequate electric capacity exists.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "grid_capacity",
+            "steam_pressure",
+            "water_quality",
+            "reliability"
+          ],
+          "cluster_recommendations": [
+            "Assess electrical reliability and backup requirements before full conversion."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Biomass can provide steam and heat, but pharmaceutical sites require careful fuel handling, emissions control and compliance with process/environmental requirements.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "fuel_quality",
+            "emissions_control",
+            "storage",
+            "supply_reliability",
+            "site_compliance"
+          ],
+          "cluster_recommendations": [
+            "Prefer applications where boiler-room separation and emissions-control infrastructure are practical."
+          ]
+        },
+        "solar_thermal": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Can serve compatible hot-water and low-temperature thermal loads when solar resource and space allow.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "solar_resource",
+            "space",
+            "storage",
+            "process_temperature"
+          ],
+          "cluster_recommendations": [
+            "Use as a supplemental rather than sole source for reliability-critical processes."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Can lower the carbon intensity and operating cost of electrically supplied utilities.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "solar_resource",
+            "space",
+            "interconnection"
+          ],
+          "cluster_recommendations": [
+            "Pair with electric boilers and heat pumps where appropriate."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Waste heat recovery can reduce utility energy demand before primary heating conversion.",
+          "source": "Roadmap for Green Transition of MSMEs (2026)",
+          "operational_constraints": [
+            "temperature_match",
+            "stream_cleanliness",
+            "heat_exchanger_compatibility"
+          ],
+          "cluster_recommendations": [
+            "Prioritize clean, recoverable heat streams."
+          ]
+        }
+      }
+    },
+    "paper": {
+      "display_name": "Paper and Pulp",
+      "source_context": [
+        {
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications",
+          "year": 2024,
+          "relevance": "Biomass steam and heat opportunities in paper MSMEs"
+        },
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "Electrification opportunities for industrial heat"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Applicable primarily to low-temperature utility or drying-related heat where temperature requirements are within the technology's range.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "temperature_range",
+            "heat_source",
+            "electrical_capacity"
+          ],
+          "cluster_recommendations": [
+            "Prioritize low-temperature recovery and utility applications."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Can replace fossil steam production where electricity supply and process economics are acceptable.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "high_electrical_demand",
+            "grid_capacity",
+            "steam_pressure",
+            "electricity_cost"
+          ],
+          "cluster_recommendations": [
+            "Evaluate grid and tariff constraints carefully."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Paper manufacturing can benefit from biomass-based heat and steam, particularly where compatible residues are available.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "biomass_supply",
+            "fuel_storage",
+            "fuel_handling",
+            "ash_handling",
+            "boiler_compatibility"
+          ],
+          "cluster_recommendations": [
+            "Prioritize paper clusters with strong local biomass or process-residue supply."
+          ]
+        },
+        "solar_thermal": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Potentially useful for compatible low-temperature heat loads but not a universal replacement for high-temperature paper-process demand.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "solar_resource",
+            "space",
+            "temperature_match",
+            "storage"
+          ],
+          "cluster_recommendations": [
+            "Use for compatible auxiliary heat rather than assuming full-process coverage."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Can reduce electricity expenditure and emissions for electrified equipment and auxiliaries.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "space",
+            "solar_resource",
+            "interconnection"
+          ],
+          "cluster_recommendations": [
+            "Consider captive or group-captive renewable procurement."
+          ]
+        },
+        "thermal_storage": {
+          "classification": "supporting",
+          "allowed": true,
+          "reason": "Can buffer compatible thermal loads and support integration of variable renewable sources.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "storage_capacity",
+            "temperature_match",
+            "heat_loss"
+          ],
+          "cluster_recommendations": [
+            "Use for demand profiles compatible with thermal buffering."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Waste heat recovery is particularly relevant in energy-intensive thermal operations and can reduce the required replacement heat supply.",
+          "source": "Roadmap for Green Transition of MSMEs (2026)",
+          "operational_constraints": [
+            "recoverable_heat",
+            "temperature_match",
+            "heat_exchanger_compatibility"
+          ],
+          "cluster_recommendations": [
+            "Assess recovery from exhaust and process streams before primary-fuel switching."
+          ]
+        }
+      }
+    },
+    "steel": {
+      "display_name": "Steel and Foundry",
+      "source_context": [
+        {
+          "source": "Electrifying Industrial Heat in India",
+          "year": 2026,
+          "relevance": "High-temperature electrification technologies"
+        },
+        {
+          "source": "FlexiHeat-DST",
+          "year": 2026,
+          "relevance": "Induction, resistance, arc and plasma technology selection"
+        },
+        {
+          "source": "CEEW Notes: Advancing India's Green Steel Transition",
+          "year": 2026,
+          "relevance": "MSME steel/DRI cluster decarbonisation and readiness/cost perspective"
+        }
+      ],
+      "technologies": {
+        "heat_pump": {
+          "classification": "not_preferred_for_primary_high_temperature_heat",
+          "allowed": false,
+          "reason": "Primary steel and foundry melting processes generally require temperatures well above the practical range of industrial heat pumps.",
+          "source": "Electrifying Industrial Heat in India (2026) / FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "high_process_temperature",
+            "temperature_capability"
+          ],
+          "cluster_recommendations": [
+            "Do not select for primary metal melting.",
+            "Consider only for auxiliary low-temperature heat where separately justified."
+          ]
+        },
+        "electric_boiler": {
+          "classification": "conditional_for_utility_heat",
+          "allowed": true,
+          "reason": "Can serve steam or hot-water utility loads but is not a substitute for high-temperature steel melting equipment.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "utility_only_for_relevant_processes",
+            "grid_capacity",
+            "electricity_cost"
+          ],
+          "cluster_recommendations": [
+            "Use for utility heat rather than core melting."
+          ]
+        },
+        "biomass_boiler": {
+          "classification": "conditional",
+          "allowed": true,
+          "reason": "Can serve compatible auxiliary steam or thermal requirements, but biomass combustion is not treated as a universal substitute for electric high-temperature furnaces.",
+          "source": "Decarbonizing MSMEs: Use of Biomass for Green Steam and Heat Applications (MNRE/GIZ/Grant Thornton)",
+          "operational_constraints": [
+            "fuel_supply",
+            "boiler_compatibility",
+            "emissions_control",
+            "application_temperature"
+          ],
+          "cluster_recommendations": [
+            "Restrict to compatible auxiliary heat applications."
+          ]
+        },
+        "induction_furnace": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Induction furnaces are well suited to high-temperature metal melting and heating, with direct electromagnetic heating, precise control and strong applicability in foundry and metal-processing operations.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "electrical_capacity",
+            "metal_charge_compatibility",
+            "power_quality",
+            "installation_cost",
+            "production_profile"
+          ],
+          "cluster_recommendations": [
+            "Prioritize foundry and metal-processing clusters with adequate electrical infrastructure.",
+            "Evaluate power quality and demand charges, not only energy tariffs."
+          ]
+        },
+        "resistance_furnace": {
+          "classification": "preferred",
+          "allowed": true,
+          "reason": "Resistance heating is suitable for controlled high-temperature heating and specialised furnace applications, particularly where uniform temperature is required.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "electrical_capacity",
+            "furnace_temperature",
+            "heating_uniformity",
+            "power_quality"
+          ],
+          "cluster_recommendations": [
+            "Prioritize applications requiring controlled and uniform heating rather than high-throughput scrap melting."
+          ]
+        },
+        "electric_arc_furnace": {
+          "classification": "preferred_for_steelmaking",
+          "allowed": true,
+          "reason": "Electric arc furnaces are established for high-temperature steelmaking and scrap-based melting and can materially reduce direct fossil-fuel use.",
+          "source": "FlexiHeat-DST (2026) / Electrifiying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "very_high_electrical_demand",
+            "grid_capacity",
+            "power_quality",
+            "scrap_feedstock",
+            "capital_cost"
+          ],
+          "cluster_recommendations": [
+            "Prioritize clusters with strong grid infrastructure and scrap availability."
+          ]
+        },
+        "plasma_technology": {
+          "classification": "advanced_conditional",
+          "allowed": true,
+          "reason": "Plasma technology can provide extremely high-temperature concentrated heat but is more specialised and should be evaluated for applications where its thermal characteristics justify the complexity.",
+          "source": "FlexiHeat-DST (2026)",
+          "operational_constraints": [
+            "high_electrical_demand",
+            "technology_complexity",
+            "capital_cost",
+            "specialised_process_requirements"
+          ],
+          "cluster_recommendations": [
+            "Consider for specialised high-temperature operations rather than as a default MSME option."
+          ]
+        },
+        "solar_pv": {
+          "classification": "preferred_as_enabler",
+          "allowed": true,
+          "reason": "Solar electricity can lower the electricity cost and emissions of electrified furnace technologies, although storage, grid and power-quality requirements remain important.",
+          "source": "Electrifying Industrial Heat in India (2026)",
+          "operational_constraints": [
+            "solar_resource",
+            "space",
+            "grid_or_storage_dependency",
+            "high_load_profile"
+          ],
+          "cluster_recommendations": [
+            "Explore group-captive or cluster-level renewable electricity procurement."
+          ]
+        },
+        "waste_heat_recovery": {
+          "classification": "preferred_efficiency_measure",
+          "allowed": true,
+          "reason": "Waste heat recovery can reduce thermal losses and offset auxiliary energy requirements, especially in energy-intensive metal-processing facilities.",
+          "source": "CEEW 2026 steel-cluster research / Roadmap for Green Transition of MSMEs",
+          "operational_constraints": [
+            "high_temperature_streams",
+            "heat_exchanger_design",
+            "process_integration",
+            "continuous_operation"
+          ],
+          "cluster_recommendations": [
+            "Screen waste-heat opportunities before adding new primary energy supply."
+          ]
+        }
+      }
+    }
+  }
+}
