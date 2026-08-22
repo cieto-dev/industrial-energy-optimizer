@@ -1,13 +1,28 @@
 """
-policy_engine.py — Policy evaluation orchestrator (Sprint 3.3).
+policy_engine.py — Policy evaluation + finance orchestration.
 
 Purpose
 -------
 Single entry point for the policy layer:
 
-    Factory → EligibilityChecker → SubsidyMatcher → PolicyEvaluationResult
+    Factory
+        ↓
+    EligibilityChecker
+        ↓
+    SubsidyMatcher
+        ↓
+    PolicyFinanceSummary
+        ↓
+    PolicyEvaluationResult
 
-Does not know HTTP, JSON file paths at call sites, or FastAPI.
+Design rules
+------------
+- Preserve the existing PolicyEvaluationResult contract.
+- Preserve EligibilityChecker and SubsidyMatcher responsibilities.
+- Do not duplicate policy/finance parameters here.
+- Finance values are derived only from matched scheme benefits.
+- Do not treat financing enablers such as guarantees as direct CAPEX cash.
+- Keep estimates clearly distinguishable from verified claims.
 """
 
 from __future__ import annotations
@@ -23,9 +38,59 @@ from decision_engine.policy.eligibility import (
 from decision_engine.policy.subsidy_matcher import (
     SchemeBenefit,
     SubsidyMatcher,
-    SubsidyMatchResult,
 )
 from models.factory import Factory, Quantity, SpecialCategory
+
+
+@dataclass
+class PolicyFinanceSummary:
+    """
+    Financial summary derived from eligible policy schemes.
+
+    This is intentionally a separate layer from policy eligibility.
+
+    The summary distinguishes:
+    - direct CAPEX reduction
+    - annual financing support
+    - financing/guarantee support
+    - total estimated direct benefit
+    - estimated net CAPEX
+
+    No claim is made that all benefits are stackable.
+    """
+
+    gross_capex_inr: float
+    capital_subsidy_inr: float = 0.0
+    annual_interest_support_inr: float = 0.0
+    guarantee_support_inr: float = 0.0
+    tax_incentive_inr: float = 0.0
+    cluster_support_inr: float = 0.0
+    other_direct_benefit_inr: float = 0.0
+    estimated_total_direct_benefit_inr: float = 0.0
+    estimated_net_capex_inr: float = 0.0
+
+    direct_benefit_verified: bool = False
+    stacking_verified: bool = False
+
+    notes: list[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "gross_capex_inr": self.gross_capex_inr,
+            "capital_subsidy_inr": self.capital_subsidy_inr,
+            "annual_interest_support_inr": self.annual_interest_support_inr,
+            "guarantee_support_inr": self.guarantee_support_inr,
+            "tax_incentive_inr": self.tax_incentive_inr,
+            "cluster_support_inr": self.cluster_support_inr,
+            "other_direct_benefit_inr": self.other_direct_benefit_inr,
+            "estimated_total_direct_benefit_inr": (
+                self.estimated_total_direct_benefit_inr
+            ),
+            "estimated_net_capex_inr": self.estimated_net_capex_inr,
+            "direct_benefit_verified": self.direct_benefit_verified,
+            "stacking_verified": self.stacking_verified,
+            "notes": list(self.notes),
+        }
 
 
 @dataclass
@@ -42,13 +107,18 @@ class PolicyEvaluationResult:
     ineligible_schemes: list[SchemeEligibility]
     insufficient_data_schemes: list[SchemeEligibility]
     estimated_total_benefit_inr: float
+
     combined_subsidy_ceiling_checked: bool = False
     combined_subsidy_ceiling_note: str = ""
     warnings: list[str] = field(default_factory=list)
+
     eligibility_summary: Optional[EligibilitySummary] = None
-    # Flag indicating whether estimated_total_benefit_inr is verified against
-    # a documented combined-subsidy ceiling. Propagated from SubsidyMatchResult.
+
+    # Existing matcher-level verification flag.
     total_benefit_verified: bool = False
+
+    # New finance summary.
+    finance_summary: Optional[PolicyFinanceSummary] = None
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -62,9 +132,16 @@ class PolicyEvaluationResult:
             "combined_subsidy_ceiling_checked": (
                 self.combined_subsidy_ceiling_checked
             ),
-            "combined_subsidy_ceiling_note": self.combined_subsidy_ceiling_note,
+            "combined_subsidy_ceiling_note": (
+                self.combined_subsidy_ceiling_note
+            ),
             "total_benefit_verified": self.total_benefit_verified,
             "warnings": list(self.warnings),
+            "finance_summary": (
+                self.finance_summary.to_dict()
+                if self.finance_summary is not None
+                else None
+            ),
             "eligible_schemes": [
                 {
                     "scheme_id": s.scheme_id,
@@ -109,10 +186,11 @@ class PolicyEvaluationResult:
 
 class PolicyEngine:
     """
-    Orchestrates eligibility checking and subsidy matching.
+    Orchestrates eligibility, subsidy matching and financial aggregation.
 
-    Public API for backend/apis/policy_api.py (Sprint 3.6) and
-    scripts/run_pipeline.py (Sprint 3.5).
+    Public API for:
+    - backend/apis/policy_api.py
+    - scripts/run_pipeline.py
     """
 
     def __init__(
@@ -123,9 +201,134 @@ class PolicyEngine:
         self._checker = checker or EligibilityChecker()
         self._matcher = matcher or SubsidyMatcher()
 
+    @staticmethod
+    def _build_finance_summary(
+        factory: Factory,
+        eligible_schemes: list[SchemeBenefit],
+        estimated_total_benefit_inr: float,
+        total_benefit_verified: bool,
+    ) -> PolicyFinanceSummary:
+        """
+        Aggregate scheme-level financial benefits into a finance summary.
+
+        Important:
+        - Capital subsidy reduces gross CAPEX.
+        - Interest support is an annual financing benefit, NOT a CAPEX
+          reduction.
+        - Guarantee support is treated as a financing enabler, NOT cash.
+        - Unknown/unsupported benefit types are kept in other_direct_benefit.
+        """
+
+        gross_capex = float(factory.project_cost_inr or 0.0)
+
+        capital_subsidy = 0.0
+        annual_interest_support = 0.0
+        guarantee_support = 0.0
+        tax_incentive = 0.0
+        cluster_support = 0.0
+        other_direct_benefit = 0.0
+
+        notes: list[str] = []
+
+        for scheme in eligible_schemes:
+            benefit_type = (scheme.benefit_type or "").strip().lower()
+
+            if benefit_type == "capital_subsidy":
+                capital_subsidy += max(
+                    float(scheme.capex_reduction_inr or 0.0),
+                    0.0,
+                )
+
+            elif benefit_type == "interest_subvention":
+                annual_interest_support += max(
+                    float(scheme.annual_financing_benefit_inr or 0.0),
+                    0.0,
+                )
+
+            elif benefit_type == "credit_guarantee":
+                # A guarantee improves financing access; it is not cash
+                # that should be subtracted from CAPEX.
+                guarantee_support += max(
+                    float(scheme.benefit_inr or 0.0),
+                    0.0,
+                )
+
+            elif benefit_type == "tax_incentive":
+                tax_incentive += max(
+                    float(scheme.benefit_inr or 0.0),
+                    0.0,
+                )
+
+            elif benefit_type == "cluster_support":
+                cluster_support += max(
+                    float(scheme.benefit_inr or 0.0),
+                    0.0,
+                )
+
+            else:
+                other_direct_benefit += max(
+                    float(scheme.capex_reduction_inr or 0.0),
+                    0.0,
+                )
+
+        # Only explicitly CAPEX-reducing benefits reduce net CAPEX.
+        estimated_net_capex = max(
+            gross_capex - capital_subsidy,
+            0.0,
+        )
+
+        notes.append(
+            "Net CAPEX subtracts only directly identified capital "
+            "subsidies; annual interest support and guarantees are "
+            "reported separately."
+        )
+
+        if eligible_schemes:
+            notes.append(
+                "Scheme stacking is not assumed unless the policy knowledge "
+                "base explicitly verifies that stacking is permitted."
+            )
+        else:
+            notes.append(
+                "No eligible financial schemes were matched."
+            )
+
+        if not total_benefit_verified:
+            notes.append(
+                "Estimated policy benefits are not treated as a verified "
+                "claimable combined amount."
+            )
+
+        return PolicyFinanceSummary(
+            gross_capex_inr=gross_capex,
+            capital_subsidy_inr=capital_subsidy,
+            annual_interest_support_inr=annual_interest_support,
+            guarantee_support_inr=guarantee_support,
+            tax_incentive_inr=tax_incentive,
+            cluster_support_inr=cluster_support,
+            other_direct_benefit_inr=other_direct_benefit,
+            estimated_total_direct_benefit_inr=max(
+                float(estimated_total_benefit_inr or 0.0),
+                0.0,
+            ),
+            estimated_net_capex_inr=estimated_net_capex,
+            direct_benefit_verified=total_benefit_verified,
+            stacking_verified=False,
+            notes=notes,
+        )
+
     def evaluate(self, factory: Factory) -> PolicyEvaluationResult:
         eligibility = self._checker.evaluate(factory)
         match_result = self._matcher.match(factory, eligibility)
+
+        finance_summary = self._build_finance_summary(
+            factory=factory,
+            eligible_schemes=match_result.eligible_schemes,
+            estimated_total_benefit_inr=(
+                match_result.estimated_total_benefit_inr
+            ),
+            total_benefit_verified=match_result.total_benefit_verified,
+        )
 
         return PolicyEvaluationResult(
             factory_id=factory.factory_id,
@@ -146,9 +349,10 @@ class PolicyEngine:
             combined_subsidy_ceiling_note=(
                 match_result.combined_subsidy_ceiling_note
             ),
-            warnings=match_result.warnings,
+            warnings=list(match_result.warnings),
             eligibility_summary=eligibility,
             total_benefit_verified=match_result.total_benefit_verified,
+            finance_summary=finance_summary,
         )
 
 
@@ -158,6 +362,7 @@ def tamil_nadu_textile_small_udyam_factory() -> Factory:
 
     Used by tests/test_policy.py for ROADMAP Sprint 3.3 gate assertions.
     """
+
     return Factory(
         factory_id="POLICY_GATE_TN_T1",
         name="TN Textile MSME Policy Gate",
