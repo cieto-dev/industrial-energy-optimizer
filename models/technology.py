@@ -6,11 +6,23 @@ economic, environmental, and deployment information required by the
 decision engine.
 
 Maps to docs/DOMAIN_MODEL.md §3.
+
+Biomass integration
+-------------------
+Unit 2.2 adds an optional Biomass Assessment to biomass-dependent
+technology candidates. The assessment is kept separate from the core
+technology definition so that the Technology model remains reusable
+for non-biomass technologies.
 """
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+if TYPE_CHECKING:
+    from models.biomass import BiomassAssessment
 
 
 class Technology(BaseModel):
@@ -90,7 +102,9 @@ class Technology(BaseModel):
 
     local_availability_dependent: bool = Field(
         ...,
-        description="Whether feasibility depends on local technology/fuel availability.",
+        description=(
+            "Whether feasibility depends on local technology/fuel availability."
+        ),
     )
 
     constraints: list[str] = Field(
@@ -101,6 +115,26 @@ class Technology(BaseModel):
     source_citation: str = Field(
         ...,
         description="Source supporting the technology data.",
+    )
+
+    # ------------------------------------------------------------------
+    # Unit 2.2 — Biomass Intelligence
+    # ------------------------------------------------------------------
+
+    biomass_assessment: "BiomassAssessment | None" = Field(
+        default=None,
+        description=(
+            "District-specific biomass intelligence result. "
+            "Populated for biomass-dependent technologies."
+        ),
+    )
+
+    biomass_required: bool = Field(
+        default=False,
+        description=(
+            "Whether this technology requires biomass intelligence "
+            "before being treated as technically suitable."
+        ),
     )
 
     @model_validator(mode="after")
@@ -139,6 +173,13 @@ class Technology(BaseModel):
         if min_capacity > max_capacity:
             raise ValueError(
                 "capacity_range minimum cannot exceed maximum."
+            )
+
+        # Biomass-dependent technology must have a biomass assessment
+        # before it can be considered locally validated.
+        if self.biomass_required and self.biomass_assessment is None:
+            raise ValueError(
+                "biomass_assessment is required when biomass_required=True."
             )
 
         return self
