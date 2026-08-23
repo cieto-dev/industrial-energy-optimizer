@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "updated_at": null,
+  "datasets": {
+    "tariffs": {
+      "active_path": "knowledge-base/master/tariffs.json",
+      "dataset_version": null,
+      "source_ids": [],
+      "source_date": null,
+      "accessed": null,
+      "status": "draft",
+      "confidence": 0.0,
+      "notes": "",
+      "payload_sha256": null,
+      "activated_at": null,
+      "backup_path": null
+    },
+    "policies": {
+      "active_path": "knowledge-base/policies/central_policies.json",
+      "dataset_version": null,
+      "source_ids": [],
+      "source_date": null,
+      "accessed": null,
+      "status": "draft",
+      "confidence": 0.0,
+      "notes": "",
+      "payload_sha256": null,
+      "activated_at": null,
+      "backup_path": null
+    },
+    "schemes": {
+      "active_path": "knowledge-base/finance/subsidies.json",
+      "dataset_version": null,
+      "source_ids": [],
+      "source_date": null,
+      "accessed": null,
+      "status": "draft",
+      "confidence": 0.0,
+      "notes": "",
+      "payload_sha256": null,
+      "activated_at": null,
+      "backup_path": null
+    },
+    "emission_factors": {
+      "active_path": "knowledge-base/emissions/emission_factors.json",
+      "dataset_version": null,
+      "source_ids": [],
+      "source_date": null,
+      "accessed": null,
+      "status": "draft",
+      "confidence": 0.0,
+      "notes": "",
+      "payload_sha256": null,
+      "activated_at": null,
+      "backup_path": null
+    },
+    "grid_factors": {
+      "active_path": "knowledge-base/emissions/grid_factors.json",
+      "dataset_version": null,
+      "source_ids": [],
+      "source_date": null,
+      "accessed": null,
+      "status": "draft",
+      "confidence": 0.0,
+      "notes": "",
+      "payload_sha256": null,
+      "activated_at": null,
+      "backup_path": null
+    }
+  }
+}
