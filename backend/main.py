@@ -17,7 +17,7 @@ from apis.optimization_api import router as optimization_router
 from apis.recommendation_api import router as recommendation_router
 from apis.report_api import router as report_router
 from apis.auth_api import router as auth_router
-
+from apis.geographic_api import router as geographic_router
 # NEW (Task 3.7)
 from apis.scenario_api import router as scenario_router
 
@@ -89,7 +89,7 @@ app.include_router(optimization_router)
 app.include_router(recommendation_router)
 app.include_router(auth_router)
 app.include_router(report_router)
-
+app.include_router(geographic_router)
 # NEW (Task 3.7)
 app.include_router(scenario_router)
 
