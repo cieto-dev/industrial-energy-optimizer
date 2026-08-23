@@ -8,7 +8,8 @@
         "source_id": "SRC003",
         "source_type": "IPCC-based",
         "ncv_source_id": "SRC004",
-        "ncv_source_note": "Non-coking coal"
+        "ncv_source_note": "Non-coking coal",
+        "accounting_boundary": "fossil"
     },
 
     "diesel": {
@@ -19,7 +20,8 @@
         "input_unit": "L/day",
         "source_id": "SRC003",
         "source_type": "IPCC-based",
-        "ncv_source_id": "SRC004"
+        "ncv_source_id": "SRC004",
+        "accounting_boundary": "fossil"
     },
 
     "lpg": {
@@ -30,7 +32,8 @@
         "input_unit": "kg/day",
         "source_id": "SRC003",
         "source_type": "IPCC-based",
-        "ncv_source_id": "SRC004"
+        "ncv_source_id": "SRC004",
+        "accounting_boundary": "fossil"
     },
 
     "natural_gas": {
@@ -42,18 +45,25 @@
         "source_id": "SRC003",
         "source_type": "IPCC-based",
         "ncv_source_id": "SRC004",
-        "ncv_source_note": "CNG / natural gas"
+        "ncv_source_note": "CNG / natural gas",
+        "accounting_boundary": "fossil"
     },
 
     "biomass": {
         "emission_factor": 100.0,
         "unit": "tCO2/TJ",
-        "ncv": null,
+        "ncv": 15.6,
         "ncv_unit": "TJ/kt",
         "input_unit": "kg/day",
         "source_id": "SRC001",
         "source_type": "IPCC-based, biogenic CO2",
-        "source_note": "Other Primary Solid Biomass"
+        "source_note": "Other Primary Solid Biomass (IPCC 2006 default). Gross combustion factor; project may treat biogenic CO₂ as carbon-neutral under MNRE/GIZ policy framing, but physical CO₂ is not zero.",
+        "ncv_source_id": "SRC004",
+        "ncv_source_note": "Typical air-dry agricultural residue / woodchip range used for Indian MSME planning (MNRE/GIZ context). Site-specific moisture/NCV must replace this default.",
+        "accounting_boundary": "biogenic_gross",
+        "policy_treatment": "often_treated_as_carbon_neutral",
+        "confidence": "medium",
+        "status": "estimated"
     },
 
     "biogas": {
@@ -65,17 +75,21 @@
         "source_id": "SRC001",
         "source_type": "IPCC-based, biogenic CO2",
         "ncv_source_id": "SRC002",
-        "ncv_range": "4500-5000 kcal/m3"
+        "ncv_range": "4500-5000 kcal/m3",
+        "accounting_boundary": "biogenic_gross",
+        "policy_treatment": "often_treated_as_carbon_neutral"
     },
+
     "furnace_oil": {
-    "emission_factor": 77.40,
-    "unit": "tCO2/TJ",
-    "ncv": 40.40,
-    "ncv_unit": "TJ/kt",
-    "input_unit": "kg/day",
-    "source_id": "SRC003",
-    "source_type": "IPCC-based",
-    "ncv_source_id": "SRC004",
-    "ncv_source_note": "Residual fuel oil, IPCC 2006 default"
-}
+        "emission_factor": 77.40,
+        "unit": "tCO2/TJ",
+        "ncv": 40.40,
+        "ncv_unit": "TJ/kt",
+        "input_unit": "kg/day",
+        "source_id": "SRC003",
+        "source_type": "IPCC-based",
+        "ncv_source_id": "SRC004",
+        "ncv_source_note": "Residual fuel oil, IPCC 2006 default",
+        "accounting_boundary": "fossil"
+    }
 }
