@@ -3,14 +3,14 @@ ranking.py — Sort MCDA-scored scenarios and attach rank + explainability.
 
 Purpose
 -------
-Produce the ranked scenario list required by ROADMAP Sprint 3.2.
+Produce the ranked scenario list required by ROADMAP Sprint 3.2 / Unit 2.9.
 Does not compute scores (mcda.py) and does not load weights (weights.py).
 
 Sort order
 ----------
 1. composite_score descending (higher MCDA score wins)
-2. objective_scores.risk descending (prefer lower operational risk)
-3. objective_scores.emissions descending
+2. objective_scores["risk"] descending (prefer lower operational risk)
+3. objective_scores["emissions"] descending
 4. raw_cost ascending (cheapest last-resort tie-break, never the primary key)
 
 Explainability
@@ -40,6 +40,7 @@ class RankedScenario:
     technology_sequence: list[str]
     composite_score: float
     objective_scores: dict[str, float]
+    criterion_scores: dict[str, float]
     raw_cost: float
     raw_emissions: float
     raw_risk: float
@@ -58,9 +59,12 @@ def _rank_reason(
     if item.scenario_id == recommended_id and item.scenario_id != cheapest_id:
         return (
             f"Ranked above the cheapest option because emissions score "
-            f"{scores[CRITERION_EMISSIONS]:.2f} and risk score "
-            f"{scores[CRITERION_RISK]:.2f} outweigh its cost score "
-            f"{scores[CRITERION_COST]:.2f} under the configured MCDA weights."
+            f"{scores.get(CRITERION_EMISSIONS, scores.get('emissions', 0)):.2f} "
+            f"and risk score "
+            f"{scores.get(CRITERION_RISK, scores.get('risk', 0)):.2f} "
+            f"outweigh its cost score "
+            f"{scores.get(CRITERION_COST, scores.get('cost', 0)):.2f} "
+            f"under the configured MCDA weights."
         )
     if item.scenario_id == recommended_id and item.scenario_id == cheapest_id:
         return (
@@ -71,13 +75,13 @@ def _rank_reason(
         return (
             f"Lowest lifecycle cost, but composite score "
             f"{item.composite_score:.3f} is below the recommended scenario "
-            f"because cost is only one of three MCDA criteria."
+            f"because cost is only one of the MCDA criteria."
         )
     return (
         f"Composite MCDA score {item.composite_score:.3f} "
-        f"(cost={scores[CRITERION_COST]:.2f}, "
-        f"emissions={scores[CRITERION_EMISSIONS]:.2f}, "
-        f"risk={scores[CRITERION_RISK]:.2f})."
+        f"(cost={scores.get(CRITERION_COST, scores.get('cost', 0)):.2f}, "
+        f"emissions={scores.get(CRITERION_EMISSIONS, scores.get('emissions', 0)):.2f}, "
+        f"risk={scores.get(CRITERION_RISK, scores.get('risk', 0)):.2f})."
     )
 
 
@@ -90,14 +94,18 @@ def rank_scenarios(scored: list[ScoredScenario]) -> list[RankedScenario]:
     if not scored:
         raise ValueError("Cannot rank an empty scenario list.")
 
-    cheapest_id = min(scored, key=lambda s: (s.raw_cost, s.scenario_id)).scenario_id
+    cheapest_id = min(
+        scored, key=lambda s: (s.raw_cost, s.scenario_id)
+    ).scenario_id
 
     ordered = sorted(
         scored,
         key=lambda s: (
             -s.composite_score,
-            -s.objective_scores[CRITERION_RISK],
-            -s.objective_scores[CRITERION_EMISSIONS],
+            -s.objective_scores.get(CRITERION_RISK, s.objective_scores.get("risk", 0)),
+            -s.objective_scores.get(
+                CRITERION_EMISSIONS, s.objective_scores.get("emissions", 0)
+            ),
             s.raw_cost,
             s.scenario_id,
         ),
@@ -113,6 +121,7 @@ def rank_scenarios(scored: list[ScoredScenario]) -> list[RankedScenario]:
                 technology_sequence=list(item.technology_sequence),
                 composite_score=item.composite_score,
                 objective_scores=dict(item.objective_scores),
+                criterion_scores=dict(item.criterion_scores),
                 raw_cost=item.raw_cost,
                 raw_emissions=item.raw_emissions,
                 raw_risk=item.raw_risk,

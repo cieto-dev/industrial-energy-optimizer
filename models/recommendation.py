@@ -1,7 +1,80 @@
+
 from pydantic import BaseModel, Field
 from typing import List, Any, Optional
 from datetime import datetime
 from decimal import Decimal
+
+
+class EvidenceSummary(BaseModel):
+    """
+    Transparent confidence and evidence assessment.
+
+    This is deliberately explicit so the recommendation never appears
+    as a black-box answer.
+    """
+
+    confidence_pct: float = Field(
+        ...,
+        ge=0,
+        le=100,
+        description="Overall research/evidence confidence percentage",
+    )
+
+    evidence_strength: str = Field(
+        ...,
+        description="Evidence strength label: Strong, Moderate, or Weak",
+    )
+
+    source_count: int = Field(
+        ...,
+        ge=0,
+        description="Number of distinct resolved evidence sources",
+    )
+
+    research_quality: str = Field(
+        ...,
+        description="Overall research quality: High, Medium, or Low",
+    )
+
+    field_validation: str = Field(
+        ...,
+        description="Field validation quality: High, Medium, or Low",
+    )
+
+    missing_citations: List[str] = Field(
+        default_factory=list,
+        description="Recommendation fields missing evidence citations",
+    )
+
+    broken_references: List[str] = Field(
+        default_factory=list,
+        description="Evidence references that could not be resolved",
+    )
+
+    invalid_datasets: List[str] = Field(
+        default_factory=list,
+        description="Datasets or records rejected by validation",
+    )
+
+    unsupported_recommendations: List[str] = Field(
+        default_factory=list,
+        description="Recommendation claims that lack sufficient support",
+    )
+
+    untraceable_parameters: List[str] = Field(
+        default_factory=list,
+        description="Parameters that cannot be traced to evidence",
+    )
+
+    field_results: List[dict[str, Any]] = Field(
+        default_factory=list,
+        description="Per-field evidence and traceability results",
+    )
+
+    scoring_factors: dict[str, float] = Field(
+        default_factory=dict,
+        description="Transparent confidence-score components",
+    )
 
 
 class RejectedScenarioExplanation(BaseModel):
@@ -84,6 +157,7 @@ class Recommendation(BaseModel):
     - Optimizer (3.2): MCDA ranking and scenario selection
     - Policy Engine (3.3): Eligibility and benefit estimation
     - Reliability Engine (3.1): Payback uncertainty and risk analysis
+    - Research Validation Framework (2.12): provenance and evidence quality
     """
 
     factory_id: str = Field(..., description="Factory identifier")
@@ -124,6 +198,18 @@ class Recommendation(BaseModel):
 
     # Complete Explanation
     explanation: Explanation = Field(..., description="Full recommendation explanation")
+
+    # ------------------------------------------------------------------
+    # Unit 2.12 — Research Validation Framework
+    # ------------------------------------------------------------------
+    evidence_summary: EvidenceSummary = Field(
+        ...,
+        description=(
+            "Transparent confidence and evidence assessment. "
+            "Every recommendation must expose its provenance, "
+            "validation status, and research quality."
+        ),
+    )
 
     # Metadata
     generated_at: datetime = Field(

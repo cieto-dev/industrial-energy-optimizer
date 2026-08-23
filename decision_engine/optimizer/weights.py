@@ -21,6 +21,10 @@ CRITERION_BIOMASS_DEPENDENCE = "biomass_dependence"
 CRITERION_CARBON_REDUCTION = "carbon_reduction"
 CRITERION_CONFIDENCE = "confidence"
 
+# Backward-compatible aliases used by ranking / reports / dashboard
+CRITERION_COST = "cost"
+CRITERION_EMISSIONS = "emissions"
+
 
 CRITERIA = (
     CRITERION_TECHNICAL,
@@ -39,14 +43,8 @@ CRITERIA = (
 
 
 # ---------------------------------------------------------------------------
-# Default weights
-# ---------------------------------------------------------------------------
-#
-# These are recommendation-engine defaults, not immutable policy constants.
-# They intentionally keep cost/finance important while giving substantial
-# weight to technical feasibility, decarbonisation, reliability and risk.
-#
-# Total = 1.00
+# Default weights (sum = 1.00)
+# Research-informed balance for Indian MSME energy-transition pathways.
 # ---------------------------------------------------------------------------
 
 DEFAULT_WEIGHTS = {
@@ -69,12 +67,8 @@ WEIGHT_SUM_TOLERANCE = 1e-9
 
 # ---------------------------------------------------------------------------
 # Direction of each criterion
-# ---------------------------------------------------------------------------
-#
-# True  -> higher raw value is better
-# False -> lower raw value is better
-#
-# The MCDA engine converts both forms into the same [0, 1] benefit scale.
+# True  -> higher raw value is better (benefit)
+# False -> lower raw value is better (cost-type)
 # ---------------------------------------------------------------------------
 
 CRITERION_IS_BENEFIT = {
@@ -121,24 +115,19 @@ class Weights:
     def __post_init__(self) -> None:
         for criterion in CRITERIA:
             value = getattr(self, criterion)
-
             if value < 0:
                 raise ValueError(
                     f"Weight '{criterion}' cannot be negative, got {value}."
                 )
 
         total = sum(getattr(self, criterion) for criterion in CRITERIA)
-
         if abs(total - 1.0) > WEIGHT_SUM_TOLERANCE:
             raise ValueError(
                 f"MCDA weights must sum to 1.0, got {total:.6f}."
             )
 
     def as_dict(self) -> dict[str, float]:
-        return {
-            criterion: getattr(self, criterion)
-            for criterion in CRITERIA
-        }
+        return {criterion: getattr(self, criterion) for criterion in CRITERIA}
 
     @classmethod
     def default(cls) -> "Weights":
@@ -150,17 +139,10 @@ class Weights:
         Build weights from a partial/full mapping.
 
         Supplied values replace the defaults. The result is normalized
-        automatically so users can provide relative priorities instead
-        of manually calculating a perfect 1.0 sum.
+        automatically so callers can provide relative priorities.
         """
-
         raw = {
-            criterion: float(
-                mapping.get(
-                    criterion,
-                    DEFAULT_WEIGHTS[criterion],
-                )
-            )
+            criterion: float(mapping.get(criterion, DEFAULT_WEIGHTS[criterion]))
             for criterion in CRITERIA
         }
 
@@ -171,16 +153,10 @@ class Weights:
                 )
 
         total = sum(raw.values())
-
         if total <= 0:
-            raise ValueError(
-                "At least one MCDA weight must be positive."
-            )
+            raise ValueError("At least one MCDA weight must be positive.")
 
-        normalized = {
-            criterion: value / total
-            for criterion, value in raw.items()
-        }
+        normalized = {c: v / total for c, v in raw.items()}
 
         return cls(
             technical=normalized[CRITERION_TECHNICAL],
@@ -188,24 +164,14 @@ class Weights:
             resource=normalized[CRITERION_RESOURCE],
             policy=normalized[CRITERION_POLICY],
             risk=normalized[CRITERION_RISK],
-            technology_maturity=normalized[
-                CRITERION_TECHNOLOGY_MATURITY
-            ],
+            technology_maturity=normalized[CRITERION_TECHNOLOGY_MATURITY],
             implementation_complexity=normalized[
                 CRITERION_IMPLEMENTATION_COMPLEXITY
             ],
-            supply_reliability=normalized[
-                CRITERION_SUPPLY_RELIABILITY
-            ],
-            electricity_dependence=normalized[
-                CRITERION_ELECTRICITY_DEPENDENCE
-            ],
-            biomass_dependence=normalized[
-                CRITERION_BIOMASS_DEPENDENCE
-            ],
-            carbon_reduction=normalized[
-                CRITERION_CARBON_REDUCTION
-            ],
+            supply_reliability=normalized[CRITERION_SUPPLY_RELIABILITY],
+            electricity_dependence=normalized[CRITERION_ELECTRICITY_DEPENDENCE],
+            biomass_dependence=normalized[CRITERION_BIOMASS_DEPENDENCE],
+            carbon_reduction=normalized[CRITERION_CARBON_REDUCTION],
             confidence=normalized[CRITERION_CONFIDENCE],
         )
 
@@ -213,4 +179,3 @@ class Weights:
 def default_weights() -> Weights:
     """Return the documented default MCDA weight set."""
     return Weights.default()
-

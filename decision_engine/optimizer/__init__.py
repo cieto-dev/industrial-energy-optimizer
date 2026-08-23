@@ -4,7 +4,7 @@ optimizer package — MCDA ranking of scored energy-transition scenarios.
 Public API
 ----------
 optimize()           orchestrator (weights → mcda → ranking)
-default_weights()    documented default cost / emissions / risk weights
+default_weights()    documented default 12-criterion weights
 ScenarioMetrics      input contract for one candidate pathway
 OptimizationResult   ranked output with explainability
 """

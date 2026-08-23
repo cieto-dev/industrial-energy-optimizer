@@ -1,45 +1,213 @@
+
 """
-report_generator.py — Report generation orchestrator (Sprint 3.4).
+report_generator.py — Recommendation report generation and explainability
+integration.
 
 Purpose
 -------
-Integrate outputs from Optimizer (3.2), Policy Engine (3.3), and Reliability
-Engine (3.1) to generate a comprehensive Recommendation object with
-human-readable explanations.
+Assemble the final Recommendation object from the Decision Engine outputs:
+
+- OptimizationResult
+- PolicyEvaluationResult
+- ReliabilitySweepResult
+- Scenario data
+
+The report layer is intentionally presentation-oriented. It does not perform
+new optimization, financial modelling, or technical feasibility calculations.
 
 Contract
 --------
-Input:  OptimizationResult, PolicyEvaluationResult, ReliabilitySweepResult,
-        baseline data, and scenario data
-Output: Recommendation model with why_selected, why_others_rejected,
-        and sensitivity_notes
+Input
+-----
+OptimizationResult
+PolicyEvaluationResult
+ReliabilitySweepResult
+Scenario mapping
 
-Key Requirements
+Output
+------
+Recommendation
+
+The Recommendation contains:
+
+- recommendation rationale
+- rejected-scenario explanations
+- policy-benefit summary
+- sensitivity / uncertainty information
+- confidence information when supplied by an explainability engine
+- caveats and supporting evidence when supplied by an explainability engine
+
+Design principles
+-----------------
+1. Keep the existing Recommendation schema compatible.
+2. Never silently replace engine-derived values with report-layer estimates.
+3. Keep explanations deterministic for identical engine outputs.
+4. Preserve provenance through scenario IDs and technology sequences.
+5. Treat policy stacking/combined benefits as estimates unless verified.
+6. Do not fabricate evidence or confidence values when the upstream
+   explainability contract is unavailable.
+
+Source alignment
 ----------------
-- why_selected: Explain why the recommended pathway was chosen, pulling from
-  MCDA output and policy eligibility
-- why_others_rejected: Specific reasons for each non-selected option, not generic
-- sensitivity_notes: Surface actual payback P10/P50/P90 and tornado ranking
-- All numbers must have plain-language explanations
-- estimated_total_benefit_inr must show total_benefit_verified status and disclaimer
+The project architecture defines the recommendation as the boundary between
+technical reality and decision-making. The reporting layer therefore consumes
+already-computed pathway, financial, policy, and reliability results and
+explains them rather than changing them.
+
+The current Recommendation model exposes the following explanation groups:
+
+- why_selected
+- why_others_rejected
+- policy_benefits
+- sensitivity_notes
+
+This file also supports richer explainability payloads through a defensive
+adapter so that a future/adjacent ExplainabilityEngine can be integrated
+without breaking the current Recommendation model.
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
 from datetime import datetime
+from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 from decision_engine.optimizer.optimization_engine import OptimizationResult
 from decision_engine.policy.policy_engine import PolicyEvaluationResult
 from decision_engine.reliability.reliability_engine import ReliabilitySweepResult
+
 from models.recommendation import (
-    Recommendation,
     Explanation,
-    RejectedScenarioExplanation,
     PolicyBenefitSummary,
+    Recommendation,
+    RejectedScenarioExplanation,
     SensitivityAnalysis,
 )
 from models.scenario import Scenario
+
+
+# ---------------------------------------------------------------------------
+# Small utility helpers
+# ---------------------------------------------------------------------------
+
+
+def _safe_float(value: Any, default: float = 0.0) -> float:
+    """Convert a value to float without allowing presentation code to fail."""
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _safe_int(value: Any, default: int = 0) -> int:
+    """Convert a value to int without allowing presentation code to fail."""
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _get_mapping_value(
+    obj: Any,
+    name: str,
+    default: Any = None,
+) -> Any:
+    """
+    Read an attribute from an object or a key from a mapping.
+
+    This lets the report generator tolerate dataclass/object/dict-based
+    explainability payloads.
+    """
+    if obj is None:
+        return default
+
+    if isinstance(obj, Mapping):
+        return obj.get(name, default)
+
+    return getattr(obj, name, default)
+
+
+def _format_percent(value: Any) -> str:
+    """Return a human-readable percentage."""
+    return f"{_safe_float(value):.1f}%"
+
+
+# ---------------------------------------------------------------------------
+# Explainability-engine compatibility helpers
+# ---------------------------------------------------------------------------
+
+
+def _resolve_explainability_payload(
+    explainability_result: Any,
+) -> Dict[str, Any]:
+    """
+    Normalize an optional ExplainabilityEngine result.
+
+    Supported input shapes
+    ----------------------
+    The function deliberately accepts several equivalent representations:
+
+    - None
+    - pydantic model
+    - dataclass
+    - dict-like object
+    - ordinary Python object exposing attributes
+
+    No explainability values are invented here. Missing fields remain None.
+
+    Expected richer fields, when available, include:
+    - why_selected
+    - why_others_rejected
+    - supporting_evidence
+    - policy_benefits
+    - sensitivity_notes
+    - confidence_score
+    - confidence_level
+    - caveats
+    """
+    if explainability_result is None:
+        return {}
+
+    field_names = (
+        "why_selected",
+        "why_others_rejected",
+        "supporting_evidence",
+        "policy_benefits",
+        "sensitivity_notes",
+        "confidence_score",
+        "confidence_level",
+        "caveats",
+    )
+
+    result: Dict[str, Any] = {}
+
+    for field_name in field_names:
+        value = _get_mapping_value(explainability_result, field_name, None)
+        if value is not None:
+            result[field_name] = value
+
+    return result
+
+
+def _normalize_string_list(value: Any) -> List[str]:
+    """Normalize strings or iterables into a deterministic string list."""
+    if value is None:
+        return []
+
+    if isinstance(value, str):
+        return [value]
+
+    if isinstance(value, Mapping):
+        return [str(value)]
+
+    try:
+        return [str(item) for item in value]
+    except TypeError:
+        return [str(value)]
+
+
+# ---------------------------------------------------------------------------
+# Why-selected generation
+# ---------------------------------------------------------------------------
 
 
 def _generate_why_selected(
@@ -48,76 +216,144 @@ def _generate_why_selected(
     recommended_scenario: Scenario,
 ) -> List[str]:
     """
-    Generate plain-language reasons for why the recommended scenario was selected.
+    Generate deterministic plain-language reasons for the recommendation.
 
-    Combines MCDA ranking rationale with policy eligibility benefits.
+    This is the compatibility fallback used when a richer explainability
+    object is not yet available upstream.
     """
-    reasons = []
+    reasons: List[str] = []
 
-    # MCDA-based reasons
     recommended = next(
-        s
-        for s in optimization_result.ranked_scenarios
-        if s.scenario_id == optimization_result.recommended_scenario_id
+        (
+            scenario
+            for scenario in optimization_result.ranked_scenarios
+            if scenario.scenario_id == optimization_result.recommended_scenario_id
+        ),
+        None,
+    )
+
+    if recommended is None:
+        return [
+            "The selected pathway is the optimizer's recommended feasible "
+            "scenario, but detailed ranking information was unavailable."
+        ]
+
+    reasons.append(
+        f"Ranked #{_safe_int(recommended.rank)} out of "
+        f"{len(optimization_result.ranked_scenarios)} candidate pathways "
+        "using multi-criteria analysis."
+    )
+
+    cost_score = _safe_float(
+        recommended.objective_scores.get("cost", 0.0)
+    )
+    emissions_score = _safe_float(
+        recommended.objective_scores.get("emissions", 0.0)
+    )
+    risk_score = _safe_float(
+        recommended.objective_scores.get("risk", 0.0)
     )
 
     reasons.append(
-        f"Ranked #{recommended.rank} out of {len(optimization_result.ranked_scenarios)} "
-        f"candidate pathways using multi-criteria analysis"
+        "Balanced objective scores were "
+        f"cost={cost_score:.2f}, "
+        f"emissions={emissions_score:.2f}, "
+        f"risk={risk_score:.2f}."
     )
 
-    # Explain the objective scores
-    cost_score = recommended.objective_scores.get("cost", 0)
-    emissions_score = recommended.objective_scores.get("emissions", 0)
-    risk_score = recommended.objective_scores.get("risk", 0)
-
-    reasons.append(
-        f"Achieved a balanced score across cost ({cost_score:.2f}), "
-        f"emissions reduction ({emissions_score:.2f}), and operational risk ({risk_score:.2f})"
-    )
-
-    # Explain if it's not the cheapest
-    if not optimization_result.recommended_is_cheapest:
+    if optimization_result.recommended_is_cheapest:
         reasons.append(
-            f"Selected over the cheapest option because it offers better "
-            f"environmental benefits and/or lower risk: {optimization_result.why_not_always_cheapest}"
+            "The recommended pathway is also the lowest-cost option among "
+            "the ranked alternatives."
         )
     else:
-        reasons.append(
-            f"This option is also the most cost-effective, making it a clear winner "
-            f"on both economic and environmental dimensions"
-        )
+        why_not_cheapest = str(
+            getattr(
+                optimization_result,
+                "why_not_always_cheapest",
+                "",
+            )
+            or ""
+        ).strip()
 
-    # Policy eligibility benefits
-    if policy_result.eligible and len(policy_result.eligible_schemes) > 0:
-        scheme_names = [s.display_name for s in policy_result.eligible_schemes]
-        reasons.append(
-            f"Eligible for {len(policy_result.eligible_schemes)} government financing schemes: "
-            f"{', '.join(scheme_names[:3])}"
-            + (f" and {len(scheme_names) - 3} others" if len(scheme_names) > 3 else "")
-        )
-
-        if policy_result.estimated_total_benefit_inr > 0:
-            benefit_millions = policy_result.estimated_total_benefit_inr / 1_000_000
+        if why_not_cheapest:
             reasons.append(
-                f"Estimated government support reduces effective project cost by "
-                f"approximately ₹{benefit_millions:.1f} million through subsidies and interest subventions"
+                "The recommendation is not purely cost-minimizing because "
+                f"{why_not_cheapest}"
+            )
+        else:
+            reasons.append(
+                "The recommendation trades some economic advantage for "
+                "stronger performance on the other optimization objectives."
             )
 
-    # Environmental benefits
-    if recommended_scenario.co2_reduction_pct > 0:
+    eligible_schemes = list(
+        getattr(policy_result, "eligible_schemes", None) or []
+    )
+
+    if getattr(policy_result, "eligible", False) and eligible_schemes:
+        scheme_names = [
+            str(getattr(scheme, "display_name", scheme))
+            for scheme in eligible_schemes
+        ]
+
+        preview = ", ".join(scheme_names[:3])
+
+        if len(scheme_names) > 3:
+            preview += f" and {len(scheme_names) - 3} others"
+
         reasons.append(
-            f"Reduces CO2 emissions by {recommended_scenario.co2_reduction_pct:.1f}%, "
-            f"contributing to climate compliance and sustainability goals"
+            f"Eligible policy schemes include: {preview}."
         )
 
-    if recommended_scenario.fossil_fuel_reduction_pct > 0:
+    benefit = _safe_float(
+        getattr(
+            policy_result,
+            "estimated_total_benefit_inr",
+            0.0,
+        )
+    )
+
+    if benefit > 0:
         reasons.append(
-            f"Decreases fossil fuel dependence by {recommended_scenario.fossil_fuel_reduction_pct:.1f}%, "
-            f"improving energy security and reducing exposure to fuel price volatility"
+            "The policy evaluation estimates additional financial support "
+            f"of approximately ₹{benefit:,.0f}, subject to the verification "
+            "status reported below."
+        )
+
+    co2_reduction = _safe_float(
+        getattr(
+            recommended_scenario,
+            "co2_reduction_pct",
+            0.0,
+        )
+    )
+
+    if co2_reduction > 0:
+        reasons.append(
+            f"Estimated CO2 reduction is {_format_percent(co2_reduction)}."
+        )
+
+    fossil_reduction = _safe_float(
+        getattr(
+            recommended_scenario,
+            "fossil_fuel_reduction_pct",
+            0.0,
+        )
+    )
+
+    if fossil_reduction > 0:
+        reasons.append(
+            "Estimated fossil-fuel reduction is "
+            f"{_format_percent(fossil_reduction)}."
         )
 
     return reasons
+
+
+# ---------------------------------------------------------------------------
+# Rejected scenario explanations
+# ---------------------------------------------------------------------------
 
 
 def _generate_why_others_rejected(
@@ -125,118 +361,355 @@ def _generate_why_others_rejected(
     scenarios: Dict[str, Scenario],
 ) -> List[RejectedScenarioExplanation]:
     """
-    Generate specific rejection reasons for each non-recommended scenario.
+    Explain each non-recommended scenario using its actual ranking metrics.
 
-    Focus on the key weakness rather than generic "less optimal" statements.
+    The explanation intentionally identifies a single leading weakness rather
+    than claiming that every alternative is universally inferior.
+
+    The 1.2 ratio is a presentation-layer heuristic only. It must not be
+    interpreted as a calibrated engineering or financial threshold.
     """
-    rejected = []
+    rejected: List[RejectedScenarioExplanation] = []
 
-    for ranked in optimization_result.ranked_scenarios:
-        if ranked.scenario_id == optimization_result.recommended_scenario_id:
+    ranked = list(optimization_result.ranked_scenarios)
+
+    if not ranked:
+        return rejected
+
+    recommended_ranked = next(
+        (
+            item
+            for item in ranked
+            if item.scenario_id == optimization_result.recommended_scenario_id
+        ),
+        ranked[0],
+    )
+
+    comparison_cost = max(
+        _safe_float(recommended_ranked.raw_cost),
+        0.0,
+    )
+    comparison_emissions = max(
+        _safe_float(recommended_ranked.raw_emissions),
+        0.0,
+    )
+    comparison_risk = max(
+        _safe_float(recommended_ranked.raw_risk),
+        0.0,
+    )
+
+    for ranked_scenario in ranked:
+        if (
+            ranked_scenario.scenario_id
+            == optimization_result.recommended_scenario_id
+        ):
             continue
 
-        scenario = scenarios.get(ranked.scenario_id)
+        scenario = scenarios.get(ranked_scenario.scenario_id)
+
         if scenario is None:
-            continue
+            # Preserve the ranking information even when the scenario
+            # dictionary is incomplete.
+            technology_sequence: List[str] = []
+        else:
+            technology_sequence = list(
+                getattr(
+                    scenario,
+                    "technology_sequence",
+                    [],
+                )
+                or []
+            )
 
-        # Determine the primary weakness
-        # NOTE: 1.2 (20% worse) is a presentation-layer heuristic for picking which
-        # weakness to surface in plain language — not a sourced/calibrated threshold.
-        weakness = "lower overall score"
-        if ranked.raw_cost > optimization_result.ranked_scenarios[0].raw_cost * 1.2:
+        weakness = "lower overall composite score"
+
+        raw_cost = _safe_float(ranked_scenario.raw_cost)
+        raw_emissions = _safe_float(ranked_scenario.raw_emissions)
+        raw_risk = _safe_float(ranked_scenario.raw_risk)
+
+        if comparison_cost > 0 and raw_cost > comparison_cost * 1.2:
             weakness = "significantly higher cost"
-        elif ranked.raw_emissions > optimization_result.ranked_scenarios[0].raw_emissions * 1.2:
-            weakness = "lower emissions reduction"
-        elif ranked.raw_risk > optimization_result.ranked_scenarios[0].raw_risk * 1.2:
+        elif (
+            comparison_emissions > 0
+            and raw_emissions > comparison_emissions * 1.2
+        ):
+            weakness = "higher emissions"
+        elif comparison_risk > 0 and raw_risk > comparison_risk * 1.2:
             weakness = "higher operational risk"
 
-        explanation = RejectedScenarioExplanation(
-            scenario_id=ranked.scenario_id,
-            technology_sequence=scenario.technology_sequence,
-            reason=f"Ranked #{ranked.rank} with {weakness}",
-            rank=ranked.rank,
-            composite_score=ranked.composite_score,
-            key_weakness=weakness,
+        rejected.append(
+            RejectedScenarioExplanation(
+                scenario_id=str(ranked_scenario.scenario_id),
+                technology_sequence=technology_sequence,
+                reason=(
+                    f"Ranked #{_safe_int(ranked_scenario.rank)} because "
+                    f"{weakness} reduced its overall decision score."
+                ),
+                rank=_safe_int(ranked_scenario.rank),
+                composite_score=_safe_float(
+                    ranked_scenario.composite_score
+                ),
+                key_weakness=weakness,
+            )
         )
-        rejected.append(explanation)
 
     return rejected
+
+
+# ---------------------------------------------------------------------------
+# Policy explanation
+# ---------------------------------------------------------------------------
 
 
 def _generate_policy_benefit_summary(
     policy_result: PolicyEvaluationResult,
 ) -> PolicyBenefitSummary:
     """
-    Generate policy benefit summary with verification status and disclaimer.
+    Build the policy section and preserve verification status.
 
-    Ensures the total_benefit_verified flag and disclaimer travel with the
-    estimated_total_benefit_inr value.
+    Individual policy benefits may be sourced independently while the total
+    stackable amount remains unverified. That distinction is intentionally
+    visible in the final report.
     """
-    eligible_scheme_names = [s.display_name for s in policy_result.eligible_schemes]
+    eligible_schemes = list(
+        getattr(policy_result, "eligible_schemes", None) or []
+    )
 
-    disclaimer = ""
-    if not policy_result.total_benefit_verified:
+    eligible_scheme_names = [
+        str(getattr(scheme, "display_name", scheme))
+        for scheme in eligible_schemes
+    ]
+
+    estimated_total = _safe_float(
+        getattr(
+            policy_result,
+            "estimated_total_benefit_inr",
+            0.0,
+        )
+    )
+
+    total_verified = bool(
+        getattr(
+            policy_result,
+            "total_benefit_verified",
+            False,
+        )
+    )
+
+    disclaimer = str(
+        getattr(
+            policy_result,
+            "total_benefit_disclaimer",
+            "",
+        )
+        or ""
+    ).strip()
+
+    if not disclaimer and not total_verified:
         disclaimer = (
-            "Estimated combined benefit — subject to manual verification against "
-            "scheme-specific convergence rules; individual scheme benefits are "
-            "independently sourced, their combined stackability is not."
+            "Estimated combined benefit — subject to manual verification "
+            "against scheme-specific convergence and stackability rules. "
+            "Individual scheme benefits may be sourced independently while "
+            "their combined total remains unverified."
         )
 
     return PolicyBenefitSummary(
         eligible_schemes=eligible_scheme_names,
-        estimated_total_benefit_inr=policy_result.estimated_total_benefit_inr,
-        total_benefit_verified=policy_result.total_benefit_verified,
+        estimated_total_benefit_inr=estimated_total,
+        total_benefit_verified=total_verified,
         disclaimer=disclaimer,
     )
+
+
+# ---------------------------------------------------------------------------
+# Sensitivity / reliability explanation
+# ---------------------------------------------------------------------------
 
 
 def _generate_sensitivity_analysis(
     reliability_result: ReliabilitySweepResult,
 ) -> SensitivityAnalysis:
     """
-    Generate sensitivity analysis from reliability engine output.
+    Convert reliability-engine outputs into report-friendly language.
 
-    Converts technical P10/P50/P90 and tornado ranking into plain language.
+    The spread-ratio thresholds below are only reporting labels. They are not
+    reliability-engine calibration thresholds.
     """
-    # Generate plain-language risk interpretation
-    # NOTE: 0.3 / 0.6 spread-ratio cutoffs below are presentation-layer heuristics
-    # for labeling low/moderate/high risk in the narrative — not sourced from the
-    # reliability engine's own thresholds, just chosen for readable tiering here.
-    if reliability_result.spread_ratio < 0.3:
-        risk_level = "low"
-        interpretation = (
-            f"Payback period is relatively stable (P10-P90 spread: {reliability_result.spread_ratio:.2f}). "
-            f"The recommendation is robust to typical market variations."
+    spread_ratio = _safe_float(
+        getattr(
+            reliability_result,
+            "spread_ratio",
+            0.0,
         )
-    elif reliability_result.spread_ratio < 0.6:
-        risk_level = "moderate"
+    )
+
+    p10 = _safe_float(
+        getattr(
+            reliability_result,
+            "payback_p10",
+            0.0,
+        )
+    )
+    p50 = _safe_float(
+        getattr(
+            reliability_result,
+            "payback_p50",
+            0.0,
+        )
+    )
+    p90 = _safe_float(
+        getattr(
+            reliability_result,
+            "payback_p90",
+            0.0,
+        )
+    )
+
+    if spread_ratio < 0.3:
         interpretation = (
-            f"Payback period has moderate uncertainty (P10-P90 spread: {reliability_result.spread_ratio:.2f}). "
-            f"Monitor key risk factors listed below during implementation."
+            f"Payback uncertainty is relatively low: P10={p10:.2f} years, "
+            f"P50={p50:.2f} years, P90={p90:.2f} years."
+        )
+    elif spread_ratio < 0.6:
+        interpretation = (
+            f"Payback uncertainty is moderate: P10={p10:.2f} years, "
+            f"P50={p50:.2f} years, P90={p90:.2f} years."
         )
     else:
-        risk_level = "high"
         interpretation = (
-            f"Payback period is sensitive to market conditions (P10-P90 spread: {reliability_result.spread_ratio:.2f}). "
-            f"Consider phased implementation or risk mitigation strategies."
+            f"Payback uncertainty is high: P10={p10:.2f} years, "
+            f"P50={p50:.2f} years, P90={p90:.2f} years. "
+            "Consider implementation or financing risk mitigation."
         )
 
-    # Extract top risk factors from OAT swings
-    sorted_risks = sorted(
-        reliability_result.oat_swings.items(), key=lambda x: x[1], reverse=True
+    oat_swings = dict(
+        getattr(
+            reliability_result,
+            "oat_swings",
+            {},
+        )
+        or {}
     )
-    # NOTE: 0.5 is a presentation-layer cutoff for "worth naming as a top risk
-    # factor" in the narrative — not a sourced/calibrated sensitivity threshold.
-    top_risk_factors = [var for var, swing in sorted_risks[:5] if swing > 0.5]
+
+    sorted_risks = sorted(
+        oat_swings.items(),
+        key=lambda item: _safe_float(item[1]),
+        reverse=True,
+    )
+
+    top_risk_factors = [
+        str(variable)
+        for variable, swing in sorted_risks[:5]
+        if _safe_float(swing) > 0.5
+    ]
 
     return SensitivityAnalysis(
-        payback_p10_years=reliability_result.payback_p10,
-        payback_p50_years=reliability_result.payback_p50,
-        payback_p90_years=reliability_result.payback_p90,
-        spread_ratio=reliability_result.spread_ratio,
+        payback_p10_years=p10,
+        payback_p50_years=p50,
+        payback_p90_years=p90,
+        spread_ratio=spread_ratio,
         top_risk_factors=top_risk_factors,
         risk_interpretation=interpretation,
     )
+
+
+# ---------------------------------------------------------------------------
+# Rich explainability overlays
+# ---------------------------------------------------------------------------
+
+
+def _apply_explainability_overlay(
+    explanation: Explanation,
+    explainability_result: Any,
+) -> Explanation:
+    """
+    Overlay richer ExplainabilityEngine output where fields fit the current
+    Recommendation contract.
+
+    Important:
+    ---------
+    The current Recommendation model is intentionally not mutated here.
+    Supporting evidence, confidence score, confidence level, and caveats are
+    therefore preserved only when/if the Recommendation model is later
+    extended to expose those fields.
+
+    The function does, however, use richer engine output for fields already
+    supported by the current model.
+    """
+    payload = _resolve_explainability_payload(explainability_result)
+
+    richer_why_selected = _normalize_string_list(
+        payload.get("why_selected")
+    )
+    if richer_why_selected:
+        explanation.why_selected = richer_why_selected
+
+    richer_rejected = payload.get("why_others_rejected")
+    if richer_rejected:
+        normalized_rejected: List[RejectedScenarioExplanation] = []
+
+        for item in richer_rejected:
+            if isinstance(item, RejectedScenarioExplanation):
+                normalized_rejected.append(item)
+                continue
+
+            scenario_id = str(
+                _get_mapping_value(item, "scenario_id", "")
+            )
+            technology_sequence = list(
+                _get_mapping_value(
+                    item,
+                    "technology_sequence",
+                    [],
+                )
+                or []
+            )
+            reason = str(
+                _get_mapping_value(
+                    item,
+                    "reason",
+                    "",
+                )
+            )
+            rank = _safe_int(
+                _get_mapping_value(item, "rank", 0)
+            )
+            composite_score = _safe_float(
+                _get_mapping_value(
+                    item,
+                    "composite_score",
+                    0.0,
+                )
+            )
+            key_weakness = str(
+                _get_mapping_value(
+                    item,
+                    "key_weakness",
+                    "",
+                )
+            )
+
+            if scenario_id:
+                normalized_rejected.append(
+                    RejectedScenarioExplanation(
+                        scenario_id=scenario_id,
+                        technology_sequence=technology_sequence,
+                        reason=reason,
+                        rank=rank,
+                        composite_score=composite_score,
+                        key_weakness=key_weakness,
+                    )
+                )
+
+        if normalized_rejected:
+            explanation.why_others_rejected = normalized_rejected
+
+    return explanation
+
+
+# ---------------------------------------------------------------------------
+# Public report builder
+# ---------------------------------------------------------------------------
 
 
 def generate_recommendation(
@@ -248,51 +721,95 @@ def generate_recommendation(
     policy_result: PolicyEvaluationResult,
     reliability_result: ReliabilitySweepResult,
     scenarios: Dict[str, Scenario],
+    explainability_result: Optional[Any] = None,
 ) -> Recommendation:
     """
-    Generate a comprehensive Recommendation from decision engine outputs.
+    Generate the final Recommendation object.
 
     Parameters
     ----------
-    factory_id : str
-        Factory identifier
-    factory_name : str
-        Factory name for display
-    industry : str
-        Industry sector
-    state : str
-        State location
-    optimization_result : OptimizationResult
-        Output from decision_engine.optimizer (3.2)
-    policy_result : PolicyEvaluationResult
-        Output from decision_engine.policy (3.3)
-    reliability_result : ReliabilitySweepResult
-        Output from decision_engine.reliability (3.1)
-    scenarios : Dict[str, Scenario]
-        Mapping of scenario_id to Scenario objects
+    factory_id:
+        Factory identifier.
+
+    factory_name:
+        Human-readable factory name.
+
+    industry:
+        Industrial sector.
+
+    state:
+        State/location.
+
+    optimization_result:
+        Output from the optimizer.
+
+    policy_result:
+        Output from the policy engine.
+
+    reliability_result:
+        Output from the reliability engine.
+
+    scenarios:
+        Mapping of scenario_id -> Scenario.
+
+    explainability_result:
+        Optional output from the standalone ExplainabilityEngine.
+
+        This argument is deliberately optional so the current pipeline keeps
+        working before the upstream explainability module is wired in.
 
     Returns
     -------
     Recommendation
-        Complete recommendation with human-readable explanations
+        Complete report-ready recommendation.
     """
-    # Get the recommended scenario
-    recommended_scenario = scenarios.get(optimization_result.recommended_scenario_id)
+    recommended_scenario_id = (
+        optimization_result.recommended_scenario_id
+    )
+
+    recommended_scenario = scenarios.get(
+        recommended_scenario_id
+    )
+
     if recommended_scenario is None:
         raise ValueError(
-            f"Recommended scenario {optimization_result.recommended_scenario_id} "
-            f"not found in scenarios dictionary"
+            f"Recommended scenario {recommended_scenario_id!r} "
+            "was not found in the scenarios dictionary."
         )
 
-    # Generate explanation components
+    recommended_ranked = next(
+        (
+            ranked
+            for ranked in optimization_result.ranked_scenarios
+            if ranked.scenario_id == recommended_scenario_id
+        ),
+        None,
+    )
+
+    if recommended_ranked is None:
+        raise ValueError(
+            f"Recommended scenario {recommended_scenario_id!r} "
+            "was not found in optimizer.ranked_scenarios."
+        )
+
     why_selected = _generate_why_selected(
-        optimization_result, policy_result, recommended_scenario
+        optimization_result=optimization_result,
+        policy_result=policy_result,
+        recommended_scenario=recommended_scenario,
     )
+
     why_others_rejected = _generate_why_others_rejected(
-        optimization_result, scenarios
+        optimization_result=optimization_result,
+        scenarios=scenarios,
     )
-    policy_benefits = _generate_policy_benefit_summary(policy_result)
-    sensitivity_notes = _generate_sensitivity_analysis(reliability_result)
+
+    policy_benefits = _generate_policy_benefit_summary(
+        policy_result=policy_result,
+    )
+
+    sensitivity_notes = _generate_sensitivity_analysis(
+        reliability_result=reliability_result,
+    )
 
     explanation = Explanation(
         why_selected=why_selected,
@@ -301,11 +818,9 @@ def generate_recommendation(
         sensitivity_notes=sensitivity_notes,
     )
 
-    # Get recommended scenario for MCDA data
-    recommended_ranked = next(
-        s
-        for s in optimization_result.ranked_scenarios
-        if s.scenario_id == optimization_result.recommended_scenario_id
+    explanation = _apply_explainability_overlay(
+        explanation=explanation,
+        explainability_result=explainability_result,
     )
 
     return Recommendation(
@@ -313,16 +828,95 @@ def generate_recommendation(
         factory_name=factory_name,
         industry=industry,
         state=state,
-        recommended_scenario_id=optimization_result.recommended_scenario_id,
-        recommended_technology_sequence=recommended_scenario.technology_sequence,
-        capex_total_inr=recommended_scenario.capex_total_inr,
-        annual_opex_inr=recommended_scenario.annual_opex_inr,
-        payback_range_years=recommended_scenario.payback_years,
-        co2_reduction_pct=recommended_scenario.co2_reduction_pct,
-        fossil_fuel_reduction_pct=recommended_scenario.fossil_fuel_reduction_pct,
-        composite_score=recommended_ranked.composite_score,
-        objective_scores=dict(recommended_ranked.objective_scores),
-        recommended_is_cheapest=optimization_result.recommended_is_cheapest,
+        recommended_scenario_id=recommended_scenario_id,
+        recommended_technology_sequence=list(
+            getattr(
+                recommended_scenario,
+                "technology_sequence",
+                [],
+            )
+            or []
+        ),
+        capex_total_inr=_safe_float(
+            getattr(
+                recommended_scenario,
+                "capex_total_inr",
+                0.0,
+            )
+        ),
+        annual_opex_inr=_safe_float(
+            getattr(
+                recommended_scenario,
+                "annual_opex_inr",
+                0.0,
+            )
+        ),
+        payback_range_years=tuple(
+            getattr(
+                recommended_scenario,
+                "payback_years",
+                (0.0, 0.0),
+            )
+            or (0.0, 0.0)
+        ),
+        co2_reduction_pct=_safe_float(
+            getattr(
+                recommended_scenario,
+                "co2_reduction_pct",
+                0.0,
+            )
+        ),
+        fossil_fuel_reduction_pct=_safe_float(
+            getattr(
+                recommended_scenario,
+                "fossil_fuel_reduction_pct",
+                0.0,
+            )
+        ),
+        composite_score=_safe_float(
+            recommended_ranked.composite_score
+        ),
+        objective_scores={
+            str(key): _safe_float(value)
+            for key, value in dict(
+                recommended_ranked.objective_scores
+            ).items()
+        },
+        recommended_is_cheapest=bool(
+            optimization_result.recommended_is_cheapest
+        ),
         explanation=explanation,
         generated_at=datetime.utcnow(),
     )
+
+
+# ---------------------------------------------------------------------------
+# Serialization helper
+# ---------------------------------------------------------------------------
+
+
+def recommendation_to_dict(
+    recommendation: Recommendation,
+) -> Dict[str, Any]:
+    """
+    Serialize the Recommendation in a Pydantic-version-compatible way.
+
+    FastAPI/Pydantic may serialize the model automatically, but keeping this
+    helper here makes report generation and testing deterministic and keeps
+    the JSON boundary explicit.
+    """
+    if hasattr(recommendation, "model_dump"):
+        return recommendation.model_dump()
+
+    if hasattr(recommendation, "dict"):
+        return recommendation.dict()
+
+    raise TypeError(
+        "Recommendation object does not expose model_dump() or dict()."
+    )
+
+
+__all__ = [
+    "generate_recommendation",
+    "recommendation_to_dict",
+]

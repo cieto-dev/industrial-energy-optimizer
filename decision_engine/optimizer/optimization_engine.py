@@ -1,5 +1,5 @@
 """
-optimization_engine.py — Orchestrator for Sprint 3.2 Optimizer / MCDA.
+optimization_engine.py — Orchestrator for Unit 2.9 / Sprint 3.2 Optimizer / MCDA.
 
 Purpose
 -------
@@ -10,19 +10,14 @@ can replace mcda.py without changing callers.
 Contract (docs/DECISION_ENGINE_ARCHITECTURE.md)
 -----------------------------------------------
 Input:  candidate scenarios already scored by economics/, emissions/,
-        and reliability/ (CAPEX/OPEX, pathway CO2, spread_ratio / risk).
+        reliability/, biomass/, policy/ etc.
 Output: ranked list with DOMAIN_MODEL objective_scores {cost, emissions, risk}
-        plus a recommended scenario_id.
+        plus the full 12-criterion scores and a recommended scenario_id.
 
-Critical (docs/ROADMAP.md Sprint 3.2)
--------------------------------------
+Critical
+--------
 Ranking must NOT always pick the cheapest scenario. The engine records
 an explicit explanation when the winner is not least-cost.
-
-Does not:
-- mutate BaselineProfile
-- call policy/ or reports/ (those are Sprint 3.3–3.4)
-- use an LLM to decide rank
 """
 
 from __future__ import annotations
@@ -68,6 +63,7 @@ class OptimizationResult:
                     "technology_sequence": row.technology_sequence,
                     "composite_score": row.composite_score,
                     "objective_scores": dict(row.objective_scores),
+                    "criterion_scores": dict(row.criterion_scores),
                     "raw_cost": row.raw_cost,
                     "raw_emissions": row.raw_emissions,
                     "raw_risk": row.raw_risk,
@@ -83,10 +79,12 @@ class OptimizationResult:
 def _as_metrics(item: Union[ScenarioMetrics, Mapping[str, Any]]) -> ScenarioMetrics:
     if isinstance(item, ScenarioMetrics):
         return item
+
     data = dict(item)
     sequence = data.get("technology_sequence") or data.get("technologies") or []
     if isinstance(sequence, str):
         sequence = [sequence]
+
     return ScenarioMetrics(
         scenario_id=str(data["scenario_id"]),
         technology_sequence=list(sequence),
@@ -97,6 +95,18 @@ def _as_metrics(item: Union[ScenarioMetrics, Mapping[str, Any]]) -> ScenarioMetr
         spread_ratio=data.get("spread_ratio"),
         risk_tier=data.get("risk_tier"),
         reliability_score_pct=data.get("reliability_score_pct"),
+        technical_score=data.get("technical_score"),
+        financial_score=data.get("financial_score"),
+        resource_score=data.get("resource_score"),
+        policy_score=data.get("policy_score"),
+        risk_score_value=data.get("risk_score_value") or data.get("risk_score"),
+        technology_maturity=data.get("technology_maturity"),
+        implementation_complexity=data.get("implementation_complexity"),
+        supply_reliability=data.get("supply_reliability"),
+        electricity_dependence=data.get("electricity_dependence"),
+        biomass_dependence=data.get("biomass_dependence"),
+        carbon_reduction=data.get("carbon_reduction"),
+        confidence_score=data.get("confidence_score"),
         financial=data.get("financial"),
         emission=data.get("emission"),
         risk_score=data.get("risk_score"),
@@ -115,6 +125,18 @@ def _as_metrics(item: Union[ScenarioMetrics, Mapping[str, Any]]) -> ScenarioMetr
                 "spread_ratio",
                 "risk_tier",
                 "reliability_score_pct",
+                "technical_score",
+                "financial_score",
+                "resource_score",
+                "policy_score",
+                "risk_score_value",
+                "technology_maturity",
+                "implementation_complexity",
+                "supply_reliability",
+                "electricity_dependence",
+                "biomass_dependence",
+                "carbon_reduction",
+                "confidence_score",
                 "financial",
                 "emission",
                 "risk_score",
@@ -131,9 +153,9 @@ def _cheapest_explanation(
     if recommended.scenario_id == cheapest.scenario_id:
         return (
             "Under these inputs the recommended scenario is also the cheapest. "
-            "That is allowed, but not required: the cost weight is "
-            f"{weights.cost:.0%}, not 100%. Re-rank with higher emissions or "
-            "risk weight to confirm the engine can select a more expensive "
+            "That is allowed, but not required: the financial weight is "
+            f"{weights.financial:.0%}, not 100%. Re-rank with higher carbon "
+            "or risk weight to confirm the engine can select a more expensive "
             "pathway."
         )
     return (
@@ -156,6 +178,7 @@ def optimize(
     candidates
         Iterable of ScenarioMetrics or dicts with at least scenario_id,
         cost (capex_inr / financial), emissions, and risk fields.
+        New 12-criterion fields are optional and fall back gracefully.
     weights
         Weights instance, mapping override, or None for the documented default.
     """
@@ -180,8 +203,9 @@ def optimize(
 
     notes = [
         f"Lifecycle cost = CAPEX + annual OPEX × {COST_HORIZON_YEARS:.0f} years.",
-        "objective_scores are min-max benefit scores in [0, 1] "
-        "(higher is better) for cost, emissions, and risk.",
+        "criterion_scores are min-max benefit scores in [0, 1] "
+        "(higher is better) for all 12 research criteria.",
+        "objective_scores keep the legacy {cost, emissions, risk} contract.",
         "Composite score is a weighted sum; it is not a least-cost sort.",
     ]
 
