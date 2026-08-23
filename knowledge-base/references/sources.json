@@ -478,5 +478,11 @@
     "organization": "International Energy Agency (IEA)",
     "year": 2026,
     "url": "https://www.iea.org/"
+  },
+  "SRC_CEA_GRID_FY2024_25": {
+  "title": "CO2 Baseline Database for the Indian Power Sector, Version 21.0",
+  "organization": "Central Electricity Authority, Government of India",
+  "year": 2025,
+  "url": "https://cea.nic.in/"
   }
 }

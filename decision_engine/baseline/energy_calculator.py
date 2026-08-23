@@ -8,7 +8,11 @@ from models.factory import Factory
 from decision_engine.baseline._units import standardize_daily_consumption
 from decision_engine.emissions.emission_engine import calculate_fuel_emissions
 from decision_engine.emissions.emission_factors import get_emission_factor
+from decision_engine.validation.validation_engine import (
+    ValidationEngine,
+)
 
+_VALIDATION_ENGINE = ValidationEngine()
 
 MJ_PER_KWH = 3.6
 MJ_PER_GJ = 1000.0
@@ -185,8 +189,6 @@ def calculate_annual_fuel_input_energy(
         round(annual_energy_tj, 9),
         emission_factor_data,
     )
-
-
 def calculate_energy_balance(
     factory: Factory,
     *,
@@ -265,6 +267,25 @@ def calculate_energy_balance(
     )
 
     residual_mj = annual_fuel_input_mj - reconstructed_input_mj
+
+    validation = _VALIDATION_ENGINE.validate_energy_balance(
+        input_energy_mj=annual_fuel_input_mj,
+        useful_energy_mj=annual_process_useful_heat_mj,
+        loss_components_mj={
+            "boiler_losses": annual_boiler_losses_mj,
+            "distribution_losses": annual_distribution_losses_mj,
+            "process_losses": annual_process_losses_mj,
+        },
+    )
+
+    if not validation.passed:
+        raise ValueError(
+            "Thermal energy balance validation failed: "
+            + "; ".join(
+                issue.message
+                for issue in validation.issues
+            )
+        )
 
     overall_efficiency = 0.0
     if annual_fuel_input_mj > 0:

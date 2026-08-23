@@ -238,6 +238,9 @@
   },
   "iea_heavy_industry_cement": {
     "source_id": "iea_heavy_industry_cement"
+  },
+  "SRC_CEA_GRID_FY2024_25": {
+  "source_id": "SRC_CEA_GRID_FY2024_25"
   }
 }
 

@@ -1,0 +1,86 @@
+{
+  "version": "1.0",
+  "purpose": "Task 3.1 validation and calibration defaults",
+  "policy": {
+    "no_silent_invention": true,
+    "conflicting_values_must_not_be_averaged": true,
+    "low_confidence_values_require_verification": true,
+    "proposed_values_are_not_live_subsidies": true,
+    "historical_values_must_be_labelled": true
+  },
+  "unit_system": {
+    "electricity_internal": "kWh",
+    "thermal_internal": "MJ",
+    "thermal_reporting": [
+      "MJ",
+      "GJ",
+      "TJ"
+    ],
+    "emissions_internal": "kgCO2e",
+    "emissions_reporting": "tCO2e",
+    "currency": "INR"
+  },
+  "conversions": {
+    "kwh_to_mj": 3.6,
+    "gj_to_mj": 1000.0,
+    "tj_to_mj": 1000000.0,
+    "kg_to_tonne": 0.001,
+    "kgco2e_to_tco2e": 0.001
+  },
+  "planning_assumptions": {
+    "grid_emission_factor": {
+      "value": 0.7117,
+      "unit": "kgCO2e/kWh",
+      "source_id": "SRC_CEA_GRID_FY2024_25",
+      "source_type": "government",
+      "status": "current",
+      "confidence": "high",
+      "notes": "CEA FY2024-25 weighted-average factor including renewable and captive injection; use the repository grid_factors.json as canonical source."
+    },
+    "boiler_efficiency": {
+      "value": 80.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "status": "estimated",
+      "confidence": "low",
+      "notes": "Planning default only. Replace with measured plant-specific efficiency when available."
+    },
+    "steam_distribution_efficiency": {
+      "value": 90.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "status": "estimated",
+      "confidence": "low",
+      "notes": "Planning default only. Do not present as a measured plant value."
+    },
+    "process_heat_utilization": {
+      "value": 95.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "status": "estimated",
+      "confidence": "low",
+      "notes": "Planning default only. Validate for the specific process."
+    },
+    "tariff_escalation_rate": {
+      "value": 5.0,
+      "unit": "pct_per_year",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "status": "estimated",
+      "confidence": "low",
+      "notes": "Scenario assumption only. Do not represent as an official tariff forecast."
+    },
+    "renewable_power_emission_factor": {
+      "value": 0.0,
+      "unit": "kgCO2e/kWh",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "status": "estimated",
+      "confidence": "medium",
+      "notes": "Use only when the selected accounting boundary explicitly treats the renewable electricity supply as zero operational emissions."
+    }
+  }
+}

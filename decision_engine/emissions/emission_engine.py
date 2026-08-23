@@ -1,5 +1,8 @@
+from decision_engine.validation.validation_engine import (
+    ValidationEngine,
+)
 from decision_engine.emissions.emission_factors import get_emission_factor
-
+_VALIDATION_ENGINE = ValidationEngine()
 
 def calculate_fuel_emissions(fuel, consumption_per_day):
     """
@@ -15,6 +18,26 @@ def calculate_fuel_emissions(fuel, consumption_per_day):
 
     ncv = data.get("ncv")
     emission_factor = data.get("emission_factor")
+
+    validation = _VALIDATION_ENGINE.validate_emission_factor(
+        parameter=f"{fuel}_emission_factor",
+        emission_factor=emission_factor,
+        emission_factor_unit=data["unit"],
+        category=(
+            "biogenic_combustion"
+            if data.get("source_type", "").lower().find("biogenic") >= 0
+            else "fossil_combustion"
+        ),
+    )
+
+    if not validation.passed:
+        raise ValueError(
+            "Emission-factor validation failed: "
+            + "; ".join(
+                issue.message
+                for issue in validation.issues
+            )
+        )
 
     if ncv is None:
         raise ValueError(

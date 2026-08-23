@@ -27,9 +27,40 @@ from decision_engine.emissions.emission_engine import (
 from decision_engine.emissions.emission_factors import (
     get_emission_factor,
 )
-
+from decision_engine.validation.validation_engine import ValidationEngine
 
 BASE_DIR = Path(__file__).resolve().parents[2]
+
+_VALIDATION_ENGINE = ValidationEngine(
+    references_root=(
+        BASE_DIR
+        / "knowledge-base"
+        / "references"
+    )
+)
+
+
+def _validate_grid_emission_factor(
+    grid_factor: float,
+) -> float:
+    grid_validation = _VALIDATION_ENGINE.validate_unit(
+        name="grid_emission_factor",
+        value=grid_factor,
+        unit="kgCO2e",
+        expected_unit="kgCO2e",
+        minimum=0.0,
+    )
+
+    if not grid_validation.passed:
+        raise ValueError(
+            "Grid emission factor validation failed: "
+            + "; ".join(
+                issue.message
+                for issue in grid_validation.issues
+            )
+        )
+
+    return grid_factor
 
 
 def _load_grid_emission_factor() -> tuple[float, str | None]:
@@ -51,7 +82,7 @@ def _load_grid_emission_factor() -> tuple[float, str | None]:
 
     if not grid_file.exists():
         # Preserve the project's previous fallback.
-        return 0.7117, None
+        return _validate_grid_emission_factor(0.7117), None
 
     try:
         import json
@@ -69,10 +100,14 @@ def _load_grid_emission_factor() -> tuple[float, str | None]:
             source_id = default_factor.get("source_id")
 
             if value is not None:
-                return float(value), source_id
+                return _validate_grid_emission_factor(
+                    float(value)
+                ), source_id
 
         if isinstance(default_factor, (float, int)):
-            return float(default_factor), None
+            return _validate_grid_emission_factor(
+                float(default_factor)
+            ), None
 
     except (
         OSError,
@@ -81,8 +116,7 @@ def _load_grid_emission_factor() -> tuple[float, str | None]:
     ):
         pass
 
-    return 0.7117, None
-
+    return _validate_grid_emission_factor(0.7117), None
 
 def _build_fuel_profile(
     factory: Factory,

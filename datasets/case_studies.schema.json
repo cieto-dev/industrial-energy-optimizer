@@ -1,0 +1,452 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cieto.dev/schemas/industrial-case-study.schema.json",
+  "title": "Industrial Energy Optimizer Industrial Case Study",
+  "description": "Schema for representative benchmark industrial factory case studies. Factory-level numeric values are benchmark assumptions unless explicitly sourced.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "case_id",
+    "name",
+    "sector",
+    "cluster",
+    "state",
+    "subsector",
+    "factory_type",
+    "production_description",
+    "operating_profile",
+    "baseline",
+    "site_context",
+    "constraints",
+    "candidate_pathways",
+    "evidence",
+    "data_quality"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+_[A-Z0-9]+_[0-9]{2}$",
+      "description": "Stable unique identifier, e.g. TXT_PANIPAT_01."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "sector": {
+      "type": "string",
+      "enum": [
+        "textile",
+        "food_processing",
+        "chemical",
+        "pharma",
+        "paper",
+        "steel_foundry",
+        "dairy",
+        "glass",
+        "cement"
+      ]
+    },
+    "cluster": {
+      "type": "string",
+      "minLength": 2
+    },
+    "state": {
+      "type": "string",
+      "minLength": 2
+    },
+    "subsector": {
+      "type": "string",
+      "minLength": 2
+    },
+    "factory_type": {
+      "type": "string",
+      "enum": [
+        "micro",
+        "small",
+        "medium",
+        "MSME",
+        "benchmark"
+      ]
+    },
+    "production_description": {
+      "type": "string",
+      "minLength": 10
+    },
+    "operating_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operating_hours_per_day",
+        "working_days_per_year"
+      ],
+      "properties": {
+        "operating_hours_per_day": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 24
+        },
+        "working_days_per_year": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 366
+        },
+        "shifts_per_day": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "seasonal_operation": {
+          "type": "boolean"
+        }
+      }
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_fuel",
+        "electricity_kwh_day",
+        "fuel_quantity_day",
+        "fuel_unit",
+        "process_temperature_c",
+        "heat_demand_type"
+      ],
+      "properties": {
+        "primary_fuel": {
+          "type": "string",
+          "enum": [
+            "coal",
+            "petcoke",
+            "furnace_oil",
+            "diesel",
+            "natural_gas",
+            "lpg",
+            "biomass",
+            "electricity",
+            "mixed"
+          ]
+        },
+        "secondary_fuel": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "electricity_kwh_day": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fuel_quantity_day": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fuel_unit": {
+          "type": "string",
+          "enum": [
+            "kg",
+            "tonne",
+            "litre",
+            "scm",
+            "m3",
+            "none"
+          ]
+        },
+        "process_temperature_c": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3000
+        },
+        "heat_demand_type": {
+          "type": "string",
+          "enum": [
+            "steam",
+            "hot_water",
+            "hot_air",
+            "direct_heat",
+            "furnace",
+            "kiln",
+            "melting",
+            "drying",
+            "multiple"
+          ]
+        },
+        "steam_pressure_bar": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        }
+      }
+    },
+    "site_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "biomass_availability",
+        "solar_potential",
+        "grid_constraint"
+      ],
+      "properties": {
+        "biomass_availability": {
+          "type": "string",
+          "enum": [
+            "very_low",
+            "low",
+            "moderate",
+            "high",
+            "very_high",
+            "unknown"
+          ]
+        },
+        "solar_potential": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "very_high",
+            "unknown"
+          ]
+        },
+        "grid_constraint": {
+          "type": "string",
+          "enum": [
+            "low",
+            "moderate",
+            "high",
+            "critical",
+            "unknown"
+          ]
+        },
+        "biomass_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "renewable_access": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "onsite_solar",
+            "open_access",
+            "group_captive",
+            "third_party",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "budget_inr",
+        "roof_area_m2",
+        "reliability_priority"
+      ],
+      "properties": {
+        "budget_inr": {
+          "type": "number",
+          "minimum": 0
+        },
+        "roof_area_m2": {
+          "type": "number",
+          "minimum": 0
+        },
+        "grid_capacity_kw": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "available_installation_area_m2": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "reliability_priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "downtime_tolerance": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "candidate_pathways": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pathway"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "data_quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "factory_data",
+        "recommendation",
+        "confidence"
+      ],
+      "properties": {
+        "factory_data": {
+          "type": "string",
+          "enum": [
+            "measured",
+            "reported",
+            "benchmark",
+            "synthetic"
+          ]
+        },
+        "recommendation": {
+          "type": "string",
+          "enum": [
+            "source_backed",
+            "derived",
+            "illustrative"
+          ]
+        },
+        "confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "assumption_note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "$defs": {
+      "pathway": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pathway_id",
+          "technologies",
+          "status",
+          "reason_codes"
+        ],
+        "properties": {
+          "pathway_id": {
+            "type": "string",
+            "minLength": 2
+          },
+          "technologies": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 2
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "candidate",
+              "preferred",
+              "not_preferred",
+              "infeasible"
+            ]
+          },
+          "reason_codes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 2
+            }
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "evidence": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "source_type",
+          "claim_scope"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 2
+          },
+          "source_type": {
+            "type": "string",
+            "enum": [
+              "government_report",
+              "government_press_release",
+              "research_report",
+              "research_paper",
+              "database",
+              "project_note",
+              "benchmark_assumption"
+            ]
+          },
+          "claim_scope": {
+            "type": "string",
+            "enum": [
+              "sector",
+              "cluster",
+              "state",
+              "technology",
+              "policy",
+              "resource",
+              "methodology",
+              "factory_assumption"
+            ]
+          },
+          "page_or_section": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "note": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
