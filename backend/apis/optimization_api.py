@@ -55,7 +55,7 @@ from importlib import import_module
 from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from knowledge_runtime import KnowledgeRepository
 
@@ -173,6 +173,13 @@ class OptimizationRequest(BaseModel):
     preferences: OptimizationPreferences = Field(
         default_factory=OptimizationPreferences
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def wrap_raw_factory(cls, data: Any) -> Any:
+        if isinstance(data, dict) and "factory" not in data:
+            return {"factory": data, "preferences": {}}
+        return data
 
 
 # ---------------------------------------------------------------------------

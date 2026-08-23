@@ -162,7 +162,7 @@ export function ReportDownload({ reportId }: ReportDownloadProps) {
         ["Spread Ratio", rec?.explanation?.sensitivity_notes?.spread_ratio ?? ""],
       ]
 
-      const csv = rows.map(r => r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n")
+      const csv = rows.map(r => r.map((cell: any) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n")
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
       const url = URL.createObjectURL(blob)
       const link = document.createElement("a")

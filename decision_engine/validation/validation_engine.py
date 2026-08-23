@@ -281,6 +281,23 @@ UNIT_ALIASES = {
     "m3": "m3",
     "nm3": "Nm3",
     "scm": "SCM",
+    "kgco2e/kwh": "kgCO2e/kWh",
+    "kgco2/kwh": "kgCO2/kWh",
+    "kgco2e_per_kwh": "kgCO2e/kWh",
+    "kgco2_per_kwh": "kgCO2/kWh",
+    "tco2/mwh": "tCO2/MWh",
+    "tco2e/mwh": "tCO2e/MWh",
+    "kgco2e/kg": "kgCO2e/kg",
+    "kgco2e/mj": "kgCO2e/MJ",
+    "kgco2/mj": "kgCO2/MJ",
+    "inr/kwh": "INR/kWh",
+    "inr/kvah": "INR/kVAh",
+    "inr/kg": "INR/kg",
+    "inr/litre": "INR/L",
+    "inr/l": "INR/L",
+    "inr/scm": "INR/SCM",
+    "inr/t": "INR/t",
+    "inr/tonne": "INR/t",
 }
 
 # ---------------------------------------------------------------------------
@@ -424,6 +441,8 @@ class UnitSystem:
     TIME_DIMENSION = "time"
     POWER_DIMENSION = "power"
     EMISSIONS_DIMENSION = "emissions"
+    EMISSION_FACTOR_DIMENSION = "emission_factor"
+    TARIFF_DIMENSION = "tariff"
 
     def __init__(self) -> None:
         self._dimensions = {
@@ -433,6 +452,19 @@ class UnitSystem:
             **{key: self.TIME_DIMENSION for key in TIME_TO_HOURS},
             **{key: self.POWER_DIMENSION for key in POWER_UNITS},
             **{key: self.EMISSIONS_DIMENSION for key in EMISSIONS_TO_KG},
+            "kgCO2e/kWh": self.EMISSION_FACTOR_DIMENSION,
+            "kgCO2/kWh": self.EMISSION_FACTOR_DIMENSION,
+            "tCO2/MWh": self.EMISSION_FACTOR_DIMENSION,
+            "tCO2e/MWh": self.EMISSION_FACTOR_DIMENSION,
+            "kgCO2e/kg": self.EMISSION_FACTOR_DIMENSION,
+            "kgCO2e/MJ": self.EMISSION_FACTOR_DIMENSION,
+            "kgCO2/MJ": self.EMISSION_FACTOR_DIMENSION,
+            "INR/kWh": self.TARIFF_DIMENSION,
+            "INR/kVAh": self.TARIFF_DIMENSION,
+            "INR/kg": self.TARIFF_DIMENSION,
+            "INR/L": self.TARIFF_DIMENSION,
+            "INR/SCM": self.TARIFF_DIMENSION,
+            "INR/t": self.TARIFF_DIMENSION,
         }
 
     def dimension(self, unit: str) -> str:
@@ -529,7 +561,9 @@ class AssumptionRecord:
     uncertainty: str | None = None
     notes: str | None = None
     source_date: str | None = None
-    applicability: str | None = None   # <-- add this line if missing
+    applicability: str | None = None
+    min_value: float | None = None
+    max_value: float | None = None
 
     def __post_init__(self) -> None:
         if not _clean_text(self.parameter):
@@ -1142,6 +1176,8 @@ class ValidationEngine:
         )
 
         return result
+
+    validate_assumption_record = validate_assumption
 
     # ------------------------------------------------------------------
     # Conflict detection

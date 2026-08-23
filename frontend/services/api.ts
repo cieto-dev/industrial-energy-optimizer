@@ -122,11 +122,11 @@ export const apiService = {
   async optimize(
     profile: FactoryProfile
   ): Promise<OptimizationResponse> {
-
+    const payload = (profile as any).factory ? profile : { factory: profile };
     const response =
       await apiClient.post<OptimizationResponse>(
         "/optimization/optimize",
-        profile
+        payload
       );
 
     return response.data;

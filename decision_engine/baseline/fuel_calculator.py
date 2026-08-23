@@ -155,9 +155,13 @@ def get_electricity_tariff_record(state: str) -> dict[str, Any]:
     # Prefer exact state match, then normalized lookup
     for entity_id, entity in entities.items():
         meta = entity.get("metadata", {})
+        param_obj = entity.get("parameters", {}).get("energy_charge_inr_per_kwh", {})
+        param_app = param_obj.get("applicability", {}) if isinstance(param_obj, dict) else {}
         entity_state = (
             meta.get("state")
             or entity.get("state")
+            or entity.get("applicability", {}).get("state")
+            or param_app.get("state")
             or entity_id
         )
         if str(entity_state).strip().lower() == state.lower():

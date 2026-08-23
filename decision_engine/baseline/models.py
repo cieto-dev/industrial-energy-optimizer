@@ -5,6 +5,20 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class CostCoverageLimitation(BaseModel):
+    """
+    Explicit model for electricity and energy cost coverage limitations.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    demand_charge_modeled: bool = False
+    cost_coverage: str = "energy_only"
+    cost_coverage_status: str = "incomplete_mvp"
+    limitation: str = ""
+    uncertainty_flags: list[str] = Field(default_factory=list)
+
+
 class EnergyBalance(BaseModel):
     """
     Research-backed current-state energy balance.

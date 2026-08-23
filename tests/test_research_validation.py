@@ -1,13 +1,9 @@
-
 from __future__ import annotations
 
-import pytest
 """
 Research-validation tests – Task 3.1 item 6
 Electricity cost coverage limitation must be surfaced.
 """
-
-from __future__ import annotations
 
 import pytest
 
@@ -23,15 +19,31 @@ from decision_engine.baseline.baseline_engine import (
 def _minimal_factory(**overrides):
     """Build a minimal Factory that satisfies the baseline engine."""
     base = {
+        "factory_id": "TEST-MIN-001",
+        "name": "Test Minimal Factory",
+        "industry": "textile",
         "state": "Tamil Nadu",
+        "district": "Coimbatore",
+        "production_per_day": {"value": 1000, "unit": "kg/day"},
+        "operating_hours_per_day": 8,
+        "operating_days_per_year": 300,
         "current_fuel": "coal",
         "fuel_consumption": {"value": 1000, "unit": "kg/day"},
         "electricity_consumption_kwh_day": 500,
-        "operating_days_per_year": 300,
-        # no contracted_demand_kva / maximum_demand_kva on purpose
+        "required_process_temperature_c": 180,
+        "roof_area_sqm": 1000,
+        "available_land_sqm": 500,
+        "budget_inr": 5000000,
+        "grid_reliability_pct": 95,
+        "msme_classification": "small",
+        "udyam_registered": True,
+        "annual_turnover_inr": 20000000,
+        "plant_and_machinery_or_equipment_investment_inr": 8000000,
+        "project_type": "energy_efficiency",
+        "project_cost_inr": 2000000,
+        "existing_or_new_project": "existing",
     }
     base.update(overrides)
-    # Construct according to your actual Factory model
     return Factory(**base)
 
 

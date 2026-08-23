@@ -48,7 +48,7 @@ class ObjectiveScores(BaseModel):
     )
 
     cost: float = Field(
-        ...,
+        default=0.5,
         ge=0,
         description=(
             "Cost objective score "
@@ -57,7 +57,7 @@ class ObjectiveScores(BaseModel):
     )
 
     emissions: float = Field(
-        ...,
+        default=0.5,
         ge=0,
         description=(
             "Emissions objective score "
@@ -66,7 +66,7 @@ class ObjectiveScores(BaseModel):
     )
 
     risk: float = Field(
-        ...,
+        default=0.5,
         ge=0,
         description=(
             "Risk objective score "

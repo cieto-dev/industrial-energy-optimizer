@@ -41,6 +41,8 @@ export interface ScenarioPathway {
   extra?: Record<string, unknown>
 }
 
+export type ScenarioMetrics = ScenarioPathway
+
 export interface ScenarioEvaluation {
   scenario_id: string
   technology_sequence: string[]
