@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useEffect, useMemo, useState } from "react"
-import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, BarChart3 } from "lucide-react"
+import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, BarChart3, Save, Check, Printer } from "lucide-react"
 import Link from "next/link"
 
 import { apiService } from "@/services/api"
+import { projectService } from "@/services/projectService"
 import { Recommendation } from "@/types/recommendation"
 
 import { RecommendationCard } from "@/components/dashboard/RecommendationCard"
@@ -37,6 +38,7 @@ export default function DashboardPage() {
     useState<ExtendedRecommendation | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isSaved, setIsSaved] = useState(false)
 
   const loadData = async () => {
     try {
@@ -44,9 +46,8 @@ export default function DashboardPage() {
       setError(null)
 
       const savedResult = localStorage.getItem("last_optimization")
-
-      let recId = "mock-id"
       let parsed: any = null
+      let recId = "mock-id"
 
       if (savedResult) {
         try {
@@ -54,56 +55,109 @@ export default function DashboardPage() {
           if (parsed.recommended_scenario_id) {
             recId = parsed.recommended_scenario_id
           }
-        } catch {
-          // Ignore invalid localStorage data and use fallback ID.
-        }
+        } catch { /* ignore */ }
       }
 
-      try {
-        const res = await apiService.getRecommendation(recId)
-        if (res.status === "success" && res.recommendation) {
-          setRecommendation(res.recommendation as ExtendedRecommendation)
-          return
-        }
-      } catch (backendErr) {
-        console.warn("Backend recommendation fetch warning, activating smart fallback", backendErr)
+      // ----------------------------------------------------------------
+      // User-entered factory identity — ALWAYS the ground truth
+      // ----------------------------------------------------------------
+      const toTitleCase = (str: string) => {
+        return str
+          .toLowerCase()
+          .split(' ')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      };
+
+      const factoryName = toTitleCase(parsed?.factory_name || "Industrial Decarbonization Unit")
+      const industry    = toTitleCase(parsed?.industry    || "general")
+      const state       = toTitleCase(parsed?.state       || "India")
+      const district    = toTitleCase(parsed?.district    || "")
+
+      // Industry → recommended technologies mapping
+      const industryTechMap: Record<string, string[]> = {
+        "pharmaceuticals":  ["Biomass Briquette Boiler", "Electric Heat Pumps (Low Temp)", "Solar Rooftop PV"],
+        "pharmaceutical":   ["Biomass Briquette Boiler", "Electric Heat Pumps (Low Temp)", "Solar Rooftop PV"],
+        "chemical":         ["Biomass Gasifier", "Solar Thermal", "High-Temp Heat Pump"],
+        "textile":          ["Biomass Boiler", "Solar Thermal CST", "Economizer"],
+        "ceramics":         ["Bio-CNG Burner", "Waste Heat Recovery (ORC)", "Oxy-Fuel Combustion"],
+        "metal":            ["Induction Billet Heating", "Rooftop Solar PV", "Recuperators"],
+        "forging":          ["Induction Billet Heating", "Rooftop Solar PV", "Recuperators"],
+        "foundry":          ["Electric Induction Melting", "Solar Thermal Core Drying"],
+        "leather":          ["Biomass Gasification", "Effluent Heat Recovery", "Solar Thermal Drying"],
+        "cement":           ["Waste Heat Recovery (WHRS)", "Biomass Co-firing"],
       }
+      const industryKey = industry.toLowerCase()
+      const techKey = Object.keys(industryTechMap).find(k => industryKey.includes(k))
+      const recommendedTechs = techKey
+        ? industryTechMap[techKey]
+        : ["Biomass Boiler", "Solar Thermal", "Energy Efficiency Upgrade"]
 
-      // Fallback synthesis based on active saved session
-      const factoryName = parsed?.factory_name || "Industrial Decarbonization Unit"
-      const industry = parsed?.industry || "textile"
-      const state = parsed?.state || "Gujarat"
-      const district = parsed?.district || "Morbi"
+      // State → applicable subsidy schemes
+      const stateSubsidyMap: Record<string, string[]> = {
+        "himachal pradesh": ["Himachal Industrial Investment Policy", "Central Capital Investment Subsidy"],
+        "uttar pradesh":    ["UP MSME Promotion Policy", "Leather Sector Modernization Scheme"],
+        "jammu & kashmir":  ["J&K New Industrial Policy (NCSS)", "Freight Subsidy Scheme"],
+        "punjab":           ["Punjab Industrial Power Subsidy", "BEE MSME Foundry Scheme"],
+        "haryana":          ["Haryana Bioenergy Policy Incentive", "CAQM Clean Fuel Subsidy"],
+        "gujarat":          ["Gujarat Industrial Green Incentive", "SATAT Bio-CBG Offtake"],
+        "tamil nadu":       ["TANGEDCO Green Open Access", "ADEETIE Energy Audit Grant"],
+        "maharashtra":      ["Maharashtra Industrial Policy", "MSME Energy Audit Grant"],
+        "rajasthan":        ["Rajasthan Solar Policy", "BEE Star Labelling Scheme"],
+        "karnataka":        ["Karnataka Renewable Energy Policy", "KREDL Green Energy Grant"],
+      }
+      const stateKey = state.toLowerCase()
+      const subsidyKey = Object.keys(stateSubsidyMap).find(k => stateKey.includes(k))
+      const subsidies = subsidyKey
+        ? stateSubsidyMap[subsidyKey]
+        : ["ADEETIE Scheme (BEE)", "SATAT Bio-Energy Scheme"]
 
-      const fallbackRec = {
-        factory_id: recId,
-        factory_name: factoryName,
-        industry: industry,
-        state: state,
-        district: district,
-        generated_at: new Date().toISOString(),
-        recommended_scenario_id: recId,
-        annual_cost_inr: 9200000,
-        annual_opex_inr: 4500000,
-        co2_reduction_pct: 65,
+      // Build a complete, user-data-driven recommendation as the base
+      const baseRec = {
+        factory_id:               recId,
+        factory_name:             factoryName,
+        industry:                 industry,
+        state:                    state,
+        district:                 district,
+        generated_at:             new Date().toISOString(),
+        recommended_scenario_id:  recId,
+        annual_cost_inr:          9200000,
+        annual_opex_inr:          4500000,
+        co2_reduction_pct:        65,
         fossil_fuel_reduction_pct: 70,
-        payback_years: [2.5, 3.8],
+        payback_years:            [2.5, 3.8],
         ranked_scenarios: [
           {
-            scenario_id: `${recId}-opt`,
-            technology_sequence: industry === "ceramics" ? ["Bio-CNG Burner", "Waste Heat Recovery (ORC)"] : industry === "metal" ? ["Induction Billet Heating", "Rooftop Solar PV"] : ["Biomass Boiler", "Solar Thermal CST"],
-            capex_total_inr: 22000000,
-            annual_opex_inr: 4200000,
-            fossil_fuel_reduction_pct: 72,
-            co2_reduction_pct: 68,
-            payback_years: [2.8, 3.4],
-            reliability_score_pct: 96,
-            financing_eligible_schemes: ["ADEETIE Scheme (BEE)", "SATAT Bio-Energy Scheme"],
-            objective_scores: { cost: 0.84, emissions: 0.88, risk: 0.22 },
+            scenario_id:                `${recId}-opt`,
+            technology_sequence:        recommendedTechs,
+            capex_total_inr:            22000000,
+            annual_opex_inr:            4200000,
+            fossil_fuel_reduction_pct:  72,
+            co2_reduction_pct:          68,
+            payback_years:              [2.8, 3.4],
+            reliability_score_pct:      96,
+            financing_eligible_schemes: subsidies,
+            objective_scores:           { cost: 0.84, emissions: 0.88, risk: 0.22 },
           }
         ],
       } as unknown as ExtendedRecommendation
-      setRecommendation(fallbackRec)
+
+      // Supplement with real backend analytics but NEVER override factory identity
+      try {
+        const res = await apiService.getRecommendation(recId)
+        if (res.status === "success" && res.recommendation) {
+          setRecommendation({
+            ...res.recommendation as ExtendedRecommendation,
+            factory_name: factoryName,
+            industry:     industry,
+            state:        state,
+            district:     district,
+          })
+          return
+        }
+      } catch { /* backend unavailable – use baseRec */ }
+
+      setRecommendation(baseRec)
     } catch (err) {
       console.error(err)
       setError("Error loading assessment data.")
@@ -164,6 +218,39 @@ export default function DashboardPage() {
     }
   }, [recommendation])
 
+  const handleSaveProject = () => {
+    if (!recommendation || isSaved) return
+    
+    const selectedScenario =
+      recommendation.scenario ??
+      recommendation.pathway ??
+      recommendation.ranked_scenarios?.[0] ??
+      recommendation.scenarios?.[0] ??
+      {}
+
+    projectService.addProject({
+      name: recommendation.factory_name || "Untitled Factory Assessment",
+      industry: recommendation.industry || "General",
+      state: recommendation.state || "Unknown",
+      district: recommendation.district || "Unknown",
+      capexInr: selectedScenario.capex_total_inr || 0,
+      annualSavingsInr: dashboardSummary.annualCost,
+      co2ReductionPct: dashboardSummary.fossilReduction,
+      paybackYears: dashboardSummary.payback,
+      status: "Completed",
+      technologies: selectedScenario.technology_sequence || ["Decarbonization Pathway"],
+      optimizationResult: {
+        recommended_scenario_id: recommendation.recommended_scenario_id || "mock-id",
+        factory_name: recommendation.factory_name,
+        industry: recommendation.industry,
+        state: recommendation.state,
+        district: recommendation.district,
+      },
+    })
+    
+    setIsSaved(true)
+  }
+
   if (isLoading) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center p-6">
@@ -215,12 +302,12 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-full bg-zinc-950 p-4 text-white sm:p-6">
+    <main className="min-h-full bg-background p-4 text-foreground sm:p-6">
       <div className="mx-auto max-w-7xl space-y-8">
         {/* Header */}
-        <section className="flex flex-col gap-4 border-b border-white/10 pb-6 lg:flex-row lg:items-end lg:justify-between">
+        <section className="flex flex-col gap-4 border-b border-border/40 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-500">
               <CheckCircle2 className="h-3.5 w-3.5" />
               Optimization completed
             </div>
@@ -229,23 +316,35 @@ export default function DashboardPage() {
               Recommendation Dashboard
             </h1>
 
-            <p className="mt-2 text-sm text-zinc-400 sm:text-base">
+            <p className="mt-2 text-sm text-muted-foreground sm:text-base">
               Factory{" "}
-              <span className="font-medium text-white">
+              <span className="font-medium text-foreground">
                 {recommendation.factory_name}
               </span>
               {" • "}
-              {recommendation.industry.charAt(0).toUpperCase() +
-                recommendation.industry.slice(1)}
+              {recommendation.industry}
               {" • "}
               {recommendation.state}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={handleSaveProject}
+              disabled={isSaved}
+              className={`inline-flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shadow-sm ${
+                isSaved 
+                  ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/30" 
+                  : "border border-border bg-background text-foreground hover:bg-surface-muted"
+              }`}
+            >
+              {isSaved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+              {isSaved ? "Saved to Projects" : "Save Project"}
+            </button>
             <Link
               href="/reports"
-              className="inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-300 transition hover:bg-emerald-500/20"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
             >
               <BarChart3 className="h-4 w-4" />
               View Full Report
@@ -253,7 +352,7 @@ export default function DashboardPage() {
             <button
               type="button"
               onClick={loadData}
-              className="inline-flex w-fit items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm font-medium text-zinc-200 transition hover:bg-white/[0.07]"
+              className="inline-flex w-fit items-center gap-2 rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
             >
               <RefreshCw className="h-4 w-4" />
               Refresh
@@ -264,7 +363,7 @@ export default function DashboardPage() {
         {/* KPI strip */}
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <Kpi
-            title="Recommended annual cost"
+            title="Total annual opex"
             value={`₹${dashboardSummary.annualCost.toLocaleString("en-IN")}`}
           />
           <Kpi
@@ -311,11 +410,11 @@ function Kpi({
   value: string
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-zinc-950/70 p-5 hover:border-emerald-500/30 transition-colors">
-      <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+    <div className="rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-primary/50 hover:shadow-md">
+      <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
         {title}
       </p>
-      <p className="mt-2 text-2xl font-bold text-white">{value}</p>
+      <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
     </div>
   )
 }

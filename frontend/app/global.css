@@ -4,77 +4,77 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --surface: 0 0% 100%;
-    --surface-muted: 210 4% 96%;
-    --foreground: 222 47% 11%;
-    --foreground-muted: 215 16% 47%;
+    --background: 0 0% 100%;       /* Pure White */
+    --surface: 210 20% 98%;        /* Off-white */
+    --surface-muted: 210 20% 95%;  /* Light Gray */
+    --foreground: 222 20% 15%;     /* Charcoal */
+    --foreground-muted: 215 15% 40%; /* Slate */
     
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222 20% 15%;
  
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222 20% 15%;
  
-    --primary: 210 100% 45%;
+    --primary: 222 20% 15%;        /* Charcoal / Graphite */
     --primary-foreground: 0 0% 100%;
  
-    --secondary: 210 4% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 222 20% 15%;
  
-    --muted: 210 4% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 15% 45%;
  
-    --accent: 210 4% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 210 100% 50%;        /* Electric Blue */
+    --accent-foreground: 0 0% 100%;
  
     --destructive: 348 83% 47%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 210 100% 45%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 222 20% 15%;
 
-    --status-online: 142 71% 45%;
+    --status-online: 152 76% 40%;  /* Emerald */
     --status-warning: 38 92% 50%;
     --status-offline: 348 83% 47%;
  
-    --radius: 0.5rem;
+    --radius: 0rem;                /* Sharp corners for enterprise feel */
   }
  
   .dark {
-    --background: 222 47% 7%;
-    --surface: 222 47% 9%;
-    --surface-muted: 217.2 32.6% 17.5%;
-    --foreground: 210 40% 98%;
-    --foreground-muted: 215 20.2% 65.1%;
+    --background: 225 15% 8%;      /* Very Dark Near-Black */
+    --surface: 225 15% 10%;        /* Graphite */
+    --surface-muted: 225 15% 14%;
+    --foreground: 210 20% 98%;
+    --foreground-muted: 215 15% 65%;
  
-    --card: 222 47% 9%;
-    --card-foreground: 210 40% 98%;
+    --card: 225 15% 10%;
+    --card-foreground: 210 20% 98%;
  
-    --popover: 222 47% 9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 225 15% 10%;
+    --popover-foreground: 210 20% 98%;
  
-    --primary: 210 100% 65%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 210 20% 98%;        /* White */
+    --primary-foreground: 225 15% 8%;
  
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 225 15% 14%;
+    --secondary-foreground: 210 20% 98%;
  
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 225 15% 14%;
+    --muted-foreground: 215 15% 65%;
  
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 210 100% 55%;        /* Electric Blue Accent */
+    --accent-foreground: 0 0% 100%;
  
     --destructive: 348 83% 47%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 210 20% 98%;
  
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 210 100% 65%;
+    --border: 225 15% 20%;         /* Slate Border */
+    --input: 225 15% 20%;
+    --ring: 210 20% 98%;
 
-    --status-online: 142 71% 45%;
+    --status-online: 152 76% 45%;  /* Emerald */
     --status-warning: 38 92% 50%;
     --status-offline: 348 83% 47%;
   }

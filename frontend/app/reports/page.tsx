@@ -64,20 +64,20 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="p-6">
+    <div className="min-h-full bg-background text-foreground p-6">
       <div className="mx-auto max-w-4xl space-y-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-white">Export Report</h1>
-          <p className="text-zinc-400 mt-1">Download the full recommendation report as PDF or Excel.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Export Report</h1>
+          <p className="text-muted-foreground mt-1">Download the full recommendation report as PDF or Excel.</p>
         </div>
 
-        <Card>
-          <CardHeader className="border-b border-zinc-800 pb-3">
+        <Card className="border-border/50 bg-card shadow-sm">
+          <CardHeader className="border-b border-border/40 pb-3">
             <CardTitle>Download</CardTitle>
           </CardHeader>
           <CardContent className="pt-5">
             <ReportDownload reportId={reportId} />
-            <p className="text-xs text-zinc-500 mt-4">
+            <p className="text-xs text-muted-foreground mt-4">
               The PDF report includes charts, policy details, and sensitivity analysis.
               The Excel file includes a scenario comparison sheet and raw figures for further analysis.
             </p>
@@ -85,7 +85,7 @@ export default function ReportsPage() {
         </Card>
 
         <div>
-          <h2 className="text-lg font-semibold mb-4 text-white">Report Preview</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">Report Preview</h2>
           <ReportPreview recommendation={recommendation} />
         </div>
       </div>

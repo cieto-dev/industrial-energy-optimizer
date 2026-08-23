@@ -46,7 +46,7 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
   return (
     <div className="space-y-6">
       {/* Report Section Navigation Tabs */}
-      <div className="flex flex-wrap gap-2 border-b border-zinc-800 pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-border/40 pb-3">
         {[
           { key: "executive", label: "Executive Summary", icon: FileText },
           { key: "technical", label: "Technical Engineering Report", icon: Layers },
@@ -56,10 +56,10 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
             key={tab.key}
             type="button"
             onClick={() => setActiveReportTab(tab.key as any)}
-            className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold transition-all ${
+            className={`flex items-center gap-2 rounded-md px-4 py-2.5 text-xs font-bold transition-all ${
               activeReportTab === tab.key
-                ? "bg-emerald-500 text-zinc-950 shadow-md shadow-emerald-500/25"
-                : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-surface-muted hover:text-foreground"
             }`}
           >
             {tab.label}
@@ -71,21 +71,21 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
       {activeReportTab === "executive" && (
         <div className="space-y-6">
           {/* Header summary */}
-          <Card>
-            <CardHeader className="border-b border-zinc-800 pb-4">
+          <Card className="border-border/50 bg-card shadow-sm">
+            <CardHeader className="border-b border-border/40 pb-4">
               <div className="flex justify-between items-start">
                 <div>
-                  <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                  <span className="text-[10px] uppercase font-bold tracking-widest text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
                     Executive Briefing
                   </span>
-                  <CardTitle className="text-2xl mt-2 text-white">{recommendation.factory_name}</CardTitle>
-                  <p className="text-sm text-zinc-400 mt-0.5">
+                  <CardTitle className="text-2xl mt-2 text-foreground tracking-tight">{recommendation.factory_name}</CardTitle>
+                  <p className="text-sm text-muted-foreground mt-0.5">
                     {recommendation.industry.charAt(0).toUpperCase() + recommendation.industry.slice(1)} Sector &bull; {recommendation.state}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-zinc-500">Generated Date</p>
-                  <p className="text-sm font-semibold text-zinc-300">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Generated Date</p>
+                  <p className="text-sm font-semibold text-foreground mt-0.5">
                     {new Date(recommendation.generated_at).toLocaleDateString("en-IN", {
                       day: "numeric",
                       month: "short",
@@ -95,24 +95,24 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="p-3 bg-zinc-900/60 rounded-xl border border-white/5">
-                <p className="text-xs text-zinc-400 flex items-center gap-1"><IndianRupee className="w-3.5 h-3.5 text-emerald-400" /> Total CAPEX</p>
-                <p className="font-bold text-base text-white mt-1">{formatCurrency(recommendation.capex_total_inr)}</p>
+            <CardContent className="pt-5 grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><IndianRupee className="w-3.5 h-3.5" /> Total CAPEX</p>
+                <p className="font-bold text-lg text-foreground mt-1">{formatCurrency(recommendation.capex_total_inr)}</p>
               </div>
-              <div className="p-3 bg-zinc-900/60 rounded-xl border border-white/5">
-                <p className="text-xs text-zinc-400 flex items-center gap-1"><TrendingDown className="w-3.5 h-3.5 text-emerald-400" /> CO₂ Reduction</p>
-                <p className="font-bold text-base text-emerald-400 mt-1">{recommendation.co2_reduction_pct.toFixed(1)}%</p>
+              <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5 text-emerald-500" /> CO₂ Reduction</p>
+                <p className="font-bold text-lg text-emerald-500 mt-1">{recommendation.co2_reduction_pct.toFixed(1)}%</p>
               </div>
-              <div className="p-3 bg-zinc-900/60 rounded-xl border border-white/5">
-                <p className="text-xs text-zinc-400 flex items-center gap-1"><Calendar className="w-3.5 h-3.5 text-emerald-400" /> Payback Period</p>
-                <p className="font-bold text-base text-white mt-1">
+              <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-blue-500" /> Payback Period</p>
+                <p className="font-bold text-lg text-foreground mt-1">
                   {recommendation.payback_range_years[0].toFixed(1)}–{recommendation.payback_range_years[1].toFixed(1)} yrs
                 </p>
               </div>
-              <div className="p-3 bg-zinc-900/60 rounded-xl border border-white/5">
-                <p className="text-xs text-zinc-400 flex items-center gap-1"><Award className="w-3.5 h-3.5 text-emerald-400" /> MCDA Score</p>
-                <p className="font-bold text-base text-emerald-300 mt-1">{(recommendation.composite_score * 100).toFixed(0)} / 100</p>
+              <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><Award className="w-3.5 h-3.5 text-amber-500" /> MCDA Score</p>
+                <p className="font-bold text-lg text-primary mt-1">{(recommendation.composite_score * 100).toFixed(0)} / 100</p>
               </div>
             </CardContent>
           </Card>
@@ -120,7 +120,7 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
           {/* Strategic Rationale */}
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-base text-white">Recommended Strategic Pathway</CardTitle>
+              <CardTitle className="text-base text-foreground">Recommended Strategic Pathway</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-lg font-bold capitalize mb-3 text-emerald-400">
@@ -128,7 +128,7 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
               </p>
               <ul className="space-y-2">
                 {recommendation.explanation.why_selected.map((r, i) => (
-                  <li key={i} className="text-sm text-zinc-300 flex items-start gap-2.5">
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-2.5">
                     <CheckCircle2 className="h-4 w-4 text-emerald-400 mt-0.5 shrink-0" />
                     <span>{r}</span>
                   </li>
@@ -139,32 +139,32 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
 
           {/* Scenario ranking overview */}
           {recommendation.explanation.why_others_rejected.length > 0 && (
-            <Card>
+            <Card className="border-border/50 bg-card shadow-sm">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base text-white">Alternative Scenario Comparison</CardTitle>
+                <CardTitle className="text-base text-foreground">Alternative Scenario Comparison</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="rounded-xl border border-white/10 overflow-x-auto">
+                <div className="rounded-xl border border-border/40 overflow-x-auto">
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-zinc-900/80">
-                        <TableHead className="w-16 text-center text-zinc-400">Rank</TableHead>
-                        <TableHead className="text-zinc-400">Pathway</TableHead>
-                        <TableHead className="text-right text-zinc-400">MCDA Score</TableHead>
-                        <TableHead className="text-zinc-400">Reason / Constraint</TableHead>
+                      <TableRow className="bg-surface-muted/50 border-b-border/40 hover:bg-surface-muted/50">
+                        <TableHead className="w-16 text-center text-muted-foreground">Rank</TableHead>
+                        <TableHead className="text-muted-foreground">Pathway</TableHead>
+                        <TableHead className="text-right text-muted-foreground">MCDA Score</TableHead>
+                        <TableHead className="text-muted-foreground">Reason / Constraint</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow className="bg-emerald-500/10 font-semibold border-b border-white/5">
-                        <TableCell className="text-center text-emerald-400 font-black">1</TableCell>
-                        <TableCell className="capitalize text-white">
+                      <TableRow className="bg-primary/5 font-semibold border-b border-border/40">
+                        <TableCell className="text-center text-primary font-black">1</TableCell>
+                        <TableCell className="capitalize text-foreground">
                           {recommendation.recommended_technology_sequence.join(" + ").replace(/_/g, " ")}
                         </TableCell>
-                        <TableCell className="text-right text-emerald-400">
+                        <TableCell className="text-right text-primary">
                           {(recommendation.composite_score * 100).toFixed(0)}
                         </TableCell>
                         <TableCell>
-                          <span className="inline-flex items-center rounded-full bg-emerald-500/20 px-2.5 py-0.5 text-xs font-bold text-emerald-300 border border-emerald-500/40">
+                          <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-[10px] font-bold tracking-widest uppercase text-primary border border-primary/30">
                             Recommended Optimal
                           </span>
                         </TableCell>
@@ -172,15 +172,15 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
                       {recommendation.explanation.why_others_rejected
                         .sort((a, b) => a.rank - b.rank)
                         .map((s) => (
-                          <TableRow key={s.scenario_id} className="border-b border-white/5 hover:bg-white/[0.02]">
-                            <TableCell className="text-center text-zinc-400">{s.rank}</TableCell>
-                            <TableCell className="capitalize text-zinc-300">
+                          <TableRow key={s.scenario_id} className="border-b border-border/40 hover:bg-surface-muted/30">
+                            <TableCell className="text-center text-muted-foreground">{s.rank}</TableCell>
+                            <TableCell className="capitalize text-foreground">
                               {s.technology_sequence.join(" + ").replace(/_/g, " ")}
                             </TableCell>
-                            <TableCell className="text-right font-medium text-zinc-300">
+                            <TableCell className="text-right font-medium text-foreground">
                               {(s.composite_score * 100).toFixed(0)}
                             </TableCell>
-                            <TableCell className="text-xs text-zinc-400">{s.key_weakness}</TableCell>
+                            <TableCell className="text-xs text-muted-foreground">{s.key_weakness}</TableCell>
                           </TableRow>
                         ))}
                     </TableBody>
@@ -195,42 +195,42 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
       {/* ── TAB 2: TECHNICAL REPORT ───────────────────────────────── */}
       {activeReportTab === "technical" && (
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="pb-3 border-b border-zinc-800">
-              <CardTitle className="text-base text-white flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-400" />
+          <Card className="border-border/50 bg-card shadow-sm">
+            <CardHeader className="pb-3 border-b border-border/40">
+              <CardTitle className="text-base text-foreground flex items-center gap-2">
+                <Zap className="h-5 w-5 text-amber-500" />
                 Process Engineering & Equipment Sizing
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               <div className="grid sm:grid-cols-3 gap-4">
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Target Process Temp</p>
-                  <p className="text-lg font-bold text-white mt-1">160°C - 210°C</p>
-                  <p className="text-[11px] text-zinc-500 mt-1">Steam & hot water thermal delivery</p>
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Target Process Temp</p>
+                  <p className="text-lg font-bold text-foreground mt-1">160°C - 210°C</p>
+                  <p className="text-xs text-muted-foreground mt-1">Steam & hot water thermal delivery</p>
                 </div>
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Recommended Boiler Capacity</p>
-                  <p className="text-lg font-bold text-emerald-400 mt-1">4.0 TPH Fluidized Bed</p>
-                  <p className="text-[11px] text-zinc-500 mt-1">Agro-pellet & briquette compliant</p>
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Recommended Boiler Capacity</p>
+                  <p className="text-lg font-bold text-primary mt-1">4.0 TPH Fluidized Bed</p>
+                  <p className="text-xs text-muted-foreground mt-1">Agro-pellet & briquette compliant</p>
                 </div>
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Solar Thermal Collector Area</p>
-                  <p className="text-lg font-bold text-sky-400 mt-1">1,200 m² Parabolic Trough</p>
-                  <p className="text-[11px] text-zinc-500 mt-1">Fits existing factory rooftop profile</p>
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Solar Thermal Collector Area</p>
+                  <p className="text-lg font-bold text-blue-500 mt-1">1,200 m² Parabolic Trough</p>
+                  <p className="text-xs text-muted-foreground mt-1">Fits existing factory rooftop profile</p>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/5 bg-zinc-900/40 p-4 space-y-3">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">Fuel Transition Specifications</h4>
+              <div className="rounded-xl border border-border/50 bg-surface-muted/30 p-4 space-y-3">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Fuel Transition Specifications</h4>
                 <div className="grid sm:grid-cols-2 gap-3 text-xs">
-                  <div className="p-3 bg-zinc-950 rounded-lg border border-white/5">
-                    <span className="text-zinc-500 font-semibold">Baseline Fossil Fuel:</span>
+                  <div className="p-3 bg-surface-muted rounded-lg border border-border/50">
+                    <span className="text-muted-foreground font-semibold">Baseline Fossil Fuel:</span>
                     <p className="text-red-400 font-bold mt-0.5">Coal (10 Tonnes/Day @ 4,000 kcal/kg)</p>
                   </div>
-                  <div className="p-3 bg-zinc-950 rounded-lg border border-white/5">
-                    <span className="text-zinc-500 font-semibold">Replacement Clean Fuel:</span>
-                    <p className="text-emerald-400 font-bold mt-0.5">Groundnut Shell & Mustard Straw Briquettes</p>
+                  <div className="p-3 bg-surface-muted rounded-lg border border-border/50">
+                    <span className="text-muted-foreground font-semibold">Replacement Clean Fuel:</span>
+                    <p className="text-emerald-500 font-bold mt-0.5">Groundnut Shell & Mustard Straw Briquettes</p>
                   </div>
                 </div>
               </div>
@@ -242,54 +242,54 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
       {/* ── TAB 3: FINANCIAL ANALYSIS ─────────────────────────────── */}
       {activeReportTab === "financial" && (
         <div className="space-y-6">
-          <Card>
-            <CardHeader className="pb-3 border-b border-zinc-800">
-              <CardTitle className="text-base text-white flex items-center gap-2">
-                <DollarSign className="h-5 w-5 text-emerald-400" />
+          <Card className="border-border/50 bg-card shadow-sm">
+            <CardHeader className="pb-3 border-b border-border/40">
+              <CardTitle className="text-base text-foreground flex items-center gap-2">
+                <DollarSign className="h-5 w-5 text-emerald-500" />
                 10-Year Discounted Cash Flow & NPV Model
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 space-y-4">
               <div className="grid sm:grid-cols-3 gap-4">
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Project Net Present Value (NPV)</p>
-                  <p className="text-lg font-bold text-emerald-400 mt-1">₹1.84 Crores</p>
-                  <p className="text-[11px] text-zinc-500 mt-1">At 10% Hurdle Discount Rate</p>
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Project Net Present Value (NPV)</p>
+                  <p className="text-lg font-bold text-emerald-500 mt-1">₹1.84 Crores</p>
+                  <p className="text-xs text-muted-foreground mt-1">At 10% Hurdle Discount Rate</p>
                 </div>
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Internal Rate of Return (IRR)</p>
-                  <p className="text-lg font-bold text-emerald-400 mt-1">31.4%</p>
-                  <p className="text-[11px] text-zinc-500 mt-1">Exceeds commercial hurdle rate</p>
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Internal Rate of Return (IRR)</p>
+                  <p className="text-lg font-bold text-emerald-500 mt-1">31.4%</p>
+                  <p className="text-xs text-muted-foreground mt-1">Exceeds commercial hurdle rate</p>
                 </div>
-                <div className="rounded-xl bg-zinc-900/60 p-4 border border-white/5">
-                  <p className="text-xs font-semibold text-zinc-400">Eligible Grant Subsidies</p>
-                  <p className="text-lg font-bold text-teal-300 mt-1">
+                <div className="rounded-xl bg-surface-muted p-4 border border-border/50">
+                  <p className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">Eligible Grant Subsidies</p>
+                  <p className="text-lg font-bold text-amber-500 mt-1">
                     {formatCurrency(recommendation.explanation.policy_benefits.estimated_total_benefit_inr)}
                   </p>
-                  <p className="text-[11px] text-zinc-500 mt-1">BEE ADEETIE + Tax Depreciation</p>
+                  <p className="text-xs text-muted-foreground mt-1">BEE ADEETIE + Tax Depreciation</p>
                 </div>
               </div>
 
               {/* Cash flow projection table */}
-              <div className="rounded-xl border border-white/10 overflow-x-auto">
+              <div className="rounded-xl border border-border/50 overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-zinc-900/80">
-                      <TableHead className="text-zinc-400">Period</TableHead>
-                      <TableHead className="text-right text-zinc-400">CAPEX Inflow/Outflow</TableHead>
-                      <TableHead className="text-right text-zinc-400">Annual Fuel Savings</TableHead>
-                      <TableHead className="text-right text-zinc-400">Net Annual Flow</TableHead>
-                      <TableHead className="text-right text-zinc-400">Cumulative Cash Flow</TableHead>
+                    <TableRow className="bg-surface-muted border-b border-border/40 hover:bg-surface-muted">
+                      <TableHead className="text-muted-foreground">Period</TableHead>
+                      <TableHead className="text-right text-muted-foreground">CAPEX Inflow/Outflow</TableHead>
+                      <TableHead className="text-right text-muted-foreground">Annual Fuel Savings</TableHead>
+                      <TableHead className="text-right text-muted-foreground">Net Annual Flow</TableHead>
+                      <TableHead className="text-right text-muted-foreground">Cumulative Cash Flow</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {cashFlows.map((row) => (
-                      <TableRow key={row.year} className="border-b border-white/5 text-xs">
-                        <TableCell className="font-semibold text-white">{row.year}</TableCell>
-                        <TableCell className="text-right text-zinc-300">{formatCurrency(row.capex)}</TableCell>
-                        <TableCell className="text-right text-emerald-400">{formatCurrency(row.savings)}</TableCell>
-                        <TableCell className="text-right font-medium text-white">{formatCurrency(row.netCash)}</TableCell>
-                        <TableCell className={`text-right font-bold ${row.cumulative >= 0 ? "text-emerald-400" : "text-zinc-400"}`}>
+                      <TableRow key={row.year} className="border-b border-border/40 text-xs hover:bg-surface-muted/30">
+                        <TableCell className="font-semibold text-foreground">{row.year}</TableCell>
+                        <TableCell className="text-right text-muted-foreground">{formatCurrency(row.capex)}</TableCell>
+                        <TableCell className="text-right text-emerald-500">{formatCurrency(row.savings)}</TableCell>
+                        <TableCell className="text-right font-medium text-foreground">{formatCurrency(row.netCash)}</TableCell>
+                        <TableCell className={`text-right font-bold ${row.cumulative >= 0 ? "text-emerald-500" : "text-muted-foreground"}`}>
                           {formatCurrency(row.cumulative)}
                         </TableCell>
                       </TableRow>
@@ -300,31 +300,31 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
 
               {/* Monte Carlo sensitivity notes */}
               {recommendation.explanation.sensitivity_notes && (
-                <div className="rounded-xl border border-emerald-500/20 bg-emerald-950/20 p-4">
-                  <h4 className="text-xs font-bold text-emerald-300 uppercase tracking-wider mb-2">
+                <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 mt-6">
+                  <h4 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest mb-3">
                     Monte Carlo Sensitivity Analysis (P10 / P50 / P90)
                   </h4>
                   <div className="grid sm:grid-cols-3 gap-3 text-xs">
-                    <div className="p-2.5 bg-zinc-900/80 rounded-lg border border-white/5">
-                      <span className="text-zinc-400">Optimistic (P10):</span>
-                      <p className="font-bold text-emerald-300 mt-0.5">
+                    <div className="p-2.5 bg-surface-muted rounded-lg border border-border/50">
+                      <span className="text-muted-foreground font-semibold">Optimistic (P10):</span>
+                      <p className="font-bold text-emerald-500 mt-1">
                         {recommendation.explanation.sensitivity_notes.payback_p10_years ?? 2.1} yrs payback
                       </p>
                     </div>
-                    <div className="p-2.5 bg-zinc-900/80 rounded-lg border border-white/5">
-                      <span className="text-zinc-400">Base Median (P50):</span>
-                      <p className="font-bold text-white mt-0.5">
+                    <div className="p-2.5 bg-surface-muted rounded-lg border border-border/50">
+                      <span className="text-muted-foreground font-semibold">Base Median (P50):</span>
+                      <p className="font-bold text-foreground mt-1">
                         {recommendation.explanation.sensitivity_notes.payback_p50_years ?? 3.4} yrs payback
                       </p>
                     </div>
-                    <div className="p-2.5 bg-zinc-900/80 rounded-lg border border-white/5">
-                      <span className="text-zinc-400">Adverse Volatility (P90):</span>
-                      <p className="font-bold text-amber-300 mt-0.5">
+                    <div className="p-2.5 bg-surface-muted rounded-lg border border-border/50">
+                      <span className="text-muted-foreground font-semibold">Adverse Volatility (P90):</span>
+                      <p className="font-bold text-amber-500 mt-1">
                         {recommendation.explanation.sensitivity_notes.payback_p90_years ?? 5.2} yrs payback
                       </p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-zinc-400 mt-2 italic">
+                  <p className="text-xs text-muted-foreground mt-3 italic pl-2 border-l-2 border-amber-500/20">
                     {recommendation.explanation.sensitivity_notes.risk_interpretation}
                   </p>
                 </div>

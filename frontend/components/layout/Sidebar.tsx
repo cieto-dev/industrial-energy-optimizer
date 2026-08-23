@@ -13,6 +13,7 @@ import {
   FolderKanban,
   ChevronRight,
   X,
+  ArrowRightLeft,
 } from "lucide-react"
 import { useSidebar } from "./SidebarContext"
 
@@ -40,6 +41,12 @@ const routes = [
     icon: Sliders,
     href: "/scenario-playground",
     desc: "Simulate what-if pathways",
+  },
+  {
+    label: "State Comparison",
+    icon: ArrowRightLeft,
+    href: "/comparison",
+    desc: "Compare geographical impact",
   },
   {
     label: "Reports",

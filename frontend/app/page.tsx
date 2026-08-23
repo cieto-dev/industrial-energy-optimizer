@@ -1,194 +1,381 @@
 "use client"
 
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
-import { ArrowRight, Leaf, Zap, Factory, TrendingDown, Wind, Sun } from "lucide-react"
-import { Sidebar } from "@/components/layout/Sidebar"
-import { Navbar } from "@/components/layout/Navbar"
+import { ArrowRight, Leaf, Zap, Factory, BarChart3, Database, ShieldCheck, Map, ChevronRight, Binary, Network, Globe, CheckCircle2 } from "lucide-react"
+import { motion } from "framer-motion"
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Legend
+} from "recharts"
+import { LandingNavbar } from "@/components/layout/LandingNavbar"
 
-const stats = [
-  { value: "9", label: "Industries Covered", sub: "Cement to Textile" },
-  { value: "65%", label: "Avg. CO₂ Reduction", sub: "Per optimized factory" },
-  { value: "₹2.1L Cr", label: "Subsidy Potential", sub: "Central + State schemes" },
-  { value: "3.4 Yr", label: "Avg. Payback Period", sub: "Across all scenarios" },
+// --- Mock Data for Charts ---
+const emissionsData = [
+  { month: "Jan", baseline: 4000, optimized: 4000 },
+  { month: "Feb", baseline: 4100, optimized: 3800 },
+  { month: "Mar", baseline: 3900, optimized: 3200 },
+  { month: "Apr", baseline: 4200, optimized: 2800 },
+  { month: "May", baseline: 4050, optimized: 2100 },
+  { month: "Jun", baseline: 4300, optimized: 1500 },
+  { month: "Jul", baseline: 4100, optimized: 1200 },
 ]
 
-const bento = [
-  {
-    col: "md:col-span-2",
-    bg: "bg-emerald-950/90",
-    tag: "AI Decision Engine",
-    title: "Zero fossil fuel. Real numbers.",
-    body: "Our multi-criteria engine evaluates solar thermal, biomass, electrification, heat pumps and more — then ranks them against your exact factory constraints.",
-    icon: <Zap className="h-7 w-7 text-emerald-400" />,
-    accent: "text-emerald-400",
-    badge: "MCDA Ranked",
-  },
-  {
-    col: "md:col-span-1",
-    bg: "bg-green-900/90",
-    tag: "Policy Matching",
-    title: "Find subsidies you didn't know existed.",
-    body: "Vector-search across central + state schemes to surface exact grants for your Udyam category, region & project type.",
-    icon: <Leaf className="h-7 w-7 text-green-300" />,
-    accent: "text-green-300",
-    badge: "Live KB",
-  },
-  {
-    col: "md:col-span-1",
-    bg: "bg-slate-800/90",
-    tag: "Emissions Engine",
-    title: "Track every tonne of CO₂ saved.",
-    body: "IPCC-based emission factors with grid-specific calculations for all Indian states.",
-    icon: <TrendingDown className="h-7 w-7 text-sky-400" />,
-    accent: "text-sky-400",
-    badge: "IPCC Aligned",
-  },
-  {
-    col: "md:col-span-2",
-    bg: "bg-zinc-900/90",
-    tag: "Financial Sensitivity",
-    title: "Payback ranges, not guesses.",
-    body: "Monte Carlo simulations on fuel price volatility give MSMEs bankable [low, high] payback bands — not a single optimistic number.",
-    icon: <Sun className="h-7 w-7 text-amber-400" />,
-    accent: "text-amber-400",
-    badge: "Monte Carlo",
-  },
+const roiData = [
+  { name: "Solar Thermal Array", capex: 120, opex_saving: 45 },
+  { name: "Biomass Gasifier", capex: 85, opex_saving: 35 },
+  { name: "Industrial Heat Pump", capex: 150, opex_saving: 60 },
 ]
 
-export default function Home() {
+export default function LandingPage() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+  if (!mounted) return null
+
   return (
-    <div className="flex h-screen overflow-hidden bg-zinc-950">
-      <Sidebar />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <Navbar />
-        <main className="flex-1 overflow-y-auto">
+    <div className="min-h-screen bg-background text-foreground selection:bg-accent/20 selection:text-accent font-sans">
+      <LandingNavbar />
 
-          {/* ── CINEMATIC HERO — full bleed photo background ─────── */}
-          <section
-            className="relative min-h-[90vh] flex flex-col justify-end overflow-hidden"
-            style={{
-              backgroundImage: "url('/hero_bg.jpg')",
-              backgroundSize: "cover",
-              backgroundPosition: "center 40%",
-            }}
+      {/* ── HERO SECTION ───────────────────────────────────────────── */}
+      {/* Premium Split Layout inspired by C3 AI Studio & Azure */}
+      <section className="relative min-h-[100svh] flex items-center pt-24 pb-12 overflow-hidden bg-background">
+
+        {/* Subtle Premium Background Mesh (Azure style) */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-accent/5 blur-[120px]" />
+          <div className="absolute bottom-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[100px]" />
+        </div>
+
+        <div className="max-w-[90rem] mx-auto px-6 w-full grid lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+
+          {/* Left: Massive Typography (C3 AI Style) */}
+          <div className="lg:col-span-6 flex flex-col justify-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-[clamp(2.5rem,4.5vw,5rem)] font-black tracking-[-0.04em] leading-[1.05] text-foreground mb-6"
+            >
+              The intelligence layer for industrial decarbonization.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+              className="text-lg md:text-xl text-foreground-muted mb-10 max-w-lg leading-relaxed font-medium"
+            >
+              Decisions engineered from physics, economics, and policy. The enterprise infrastructure for Indian MSMEs to build, deploy, and govern emission abatement roadmaps at scale.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+              className="flex items-center gap-4"
+            >
+              <Link
+                href="/assessment"
+                className="group flex h-14 items-center justify-center gap-3 bg-foreground px-8 text-sm font-bold text-background transition-colors hover:bg-foreground/90"
+              >
+                Deploy Engine
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                href="/dashboard"
+                className="group flex h-14 items-center justify-center gap-3 border border-border bg-surface px-8 text-sm font-bold text-foreground transition-colors hover:bg-surface-muted"
+              >
+                View Architecture
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* Right: High-Fidelity UI Mockup (C3 AI Studio Style) */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+            className="lg:col-span-6 relative"
           >
-            {/* Multi-layer dark overlay — strong at bottom for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-zinc-950/10" />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/80 via-transparent to-transparent" />
-
-            {/* Content — positioned at the bottom-left like AirCompany */}
-            <div className="relative z-10 max-w-6xl mx-auto w-full px-8 md:px-16 pb-20">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 backdrop-blur-sm px-4 py-1.5 text-sm font-medium text-emerald-400">
-                <span className="flex h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-                Decarbonization Platform for Indian MSMEs
-              </div>
-
-              <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-none text-white mb-6 max-w-4xl">
-                Powering India's<br />
-                <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-                  green transition.
-                </span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-zinc-300 max-w-2xl leading-relaxed mb-10">
-                The AI engine that tells every industrial MSME <strong className="text-white">exactly</strong> how to move from coal and fossil fuels to clean energy — with CAPEX, payback, CO₂ impact, and government subsidies calculated instantly.
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Link
-                  href="/assessment"
-                  className="inline-flex h-14 items-center gap-2 rounded-2xl bg-emerald-500 px-8 text-base font-bold text-zinc-950 shadow-2xl shadow-emerald-500/30 transition-all hover:scale-105 hover:bg-emerald-400"
-                >
-                  Start Factory Assessment
-                  <ArrowRight className="h-5 w-5" />
-                </Link>
-                <Link
-                  href="/dashboard"
-                  className="inline-flex h-14 items-center gap-2 rounded-2xl border border-white/20 bg-white/10 backdrop-blur-md px-8 text-base font-semibold text-white transition-all hover:bg-white/20"
-                >
-                  View Demo Dashboard
-                </Link>
-              </div>
-
-              {/* Stats row at the very bottom of hero */}
-              <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-white/10 rounded-2xl overflow-hidden border border-white/10 backdrop-blur-sm">
-                {stats.map((s) => (
-                  <div key={s.label} className="bg-zinc-950/60 backdrop-blur-md px-6 py-5">
-                    <p className="text-3xl font-black text-emerald-400">{s.value}</p>
-                    <p className="text-sm font-semibold text-white mt-1">{s.label}</p>
-                    <p className="text-xs text-zinc-400 mt-0.5">{s.sub}</p>
+            {/* The Mockup Container */}
+            <div className="rounded-xl border border-border bg-card shadow-2xl overflow-hidden flex flex-col h-[600px]">
+              {/* Fake Browser/App Header */}
+              <div className="h-12 border-b border-border bg-surface-muted flex items-center px-4 justify-between shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-border" />
+                    <div className="w-3 h-3 rounded-full bg-border" />
+                    <div className="w-3 h-3 rounded-full bg-border" />
                   </div>
-                ))}
+                  <div className="flex items-center gap-2 px-3 py-1 bg-background border border-border rounded-md">
+                    <Binary className="h-3 w-3 text-accent" />
+                    <span className="text-[10px] font-mono text-foreground-muted">cieto-studio / optimization-kernel</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-status-online">
+                    <div className="w-1.5 h-1.5 rounded-full bg-status-online animate-pulse" />
+                    Kernel Active
+                  </span>
+                </div>
               </div>
-            </div>
-          </section>
 
-          {/* ── BENTO CAPABILITIES ─────────────────────────────────── */}
-          <section className="bg-zinc-950 px-8 md:px-16 py-20">
-            <div className="max-w-6xl mx-auto">
-              <p className="text-xs font-bold uppercase tracking-widest text-emerald-500 mb-3">How It Works</p>
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-12 leading-tight">
-                From fossil fuel to <br />clean energy — in minutes.
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {bento.map((card) => (
-                  <div
-                    key={card.title}
-                    className={`${card.col} ${card.bg} border border-white/5 rounded-3xl p-8 flex flex-col justify-between min-h-[220px] group hover:scale-[1.015] transition-transform duration-300`}
-                  >
-                    <div>
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="h-12 w-12 rounded-2xl bg-black/30 flex items-center justify-center">
-                          {card.icon}
-                        </div>
-                        <span className={`text-xs font-bold uppercase tracking-wider ${card.accent} opacity-70`}>{card.badge}</span>
-                      </div>
-                      <p className="text-xs uppercase tracking-widest text-zinc-400 mb-2">{card.tag}</p>
-                      <h3 className="text-xl md:text-2xl font-bold text-white leading-snug mb-3">{card.title}</h3>
-                      <p className="text-sm text-zinc-400 leading-relaxed">{card.body}</p>
+              {/* App Body - Split Pane Layout */}
+              <div className="flex-1 flex overflow-hidden">
+                {/* Left Sidebar */}
+                <div className="w-48 border-r border-border bg-surface-muted/50 p-4 shrink-0 flex flex-col gap-6">
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-foreground-muted mb-3">Data Fusion</p>
+                    <ul className="space-y-2 text-xs font-semibold text-foreground">
+                      <li className="flex items-center gap-2 px-2 py-1.5 bg-background rounded border border-border shadow-sm"><Database className="h-3 w-3 text-accent" /> Telemetry</li>
+                      <li className="flex items-center gap-2 px-2 py-1.5 opacity-60"><Map className="h-3 w-3" /> GIS Atlas</li>
+                      <li className="flex items-center gap-2 px-2 py-1.5 opacity-60"><ShieldCheck className="h-3 w-3" /> Policy Index</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold uppercase tracking-widest text-foreground-muted mb-3">Agents</p>
+                    <ul className="space-y-2 text-xs font-semibold text-foreground">
+                      <li className="flex items-center gap-2 px-2 py-1.5 opacity-60"><Factory className="h-3 w-3" /> MCDA Solver</li>
+                      <li className="flex items-center gap-2 px-2 py-1.5 opacity-60"><BarChart3 className="h-3 w-3" /> Monte Carlo</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Main Content Area */}
+                <div className="flex-1 bg-background p-6 overflow-hidden flex flex-col">
+                  <div className="mb-6">
+                    <h2 className="text-xl font-black text-foreground">Live Abatement Telemetry</h2>
+                    <p className="text-xs text-foreground-muted mt-1">Real-time processing of Scope 1 & 2 emissions data against selected pathways.</p>
+                  </div>
+
+                  {/* Fake Data Visualization */}
+                  <div className="grid grid-cols-3 gap-4 mb-6 shrink-0">
+                    <div className="border border-border p-4 rounded-lg bg-surface shadow-sm">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-foreground-muted mb-1">Status</p>
+                      <p className="text-sm font-black text-status-online flex items-center gap-1.5"><CheckCircle2 className="h-3.5 w-3.5" /> Nominal</p>
+                    </div>
+                    <div className="border border-border p-4 rounded-lg bg-surface shadow-sm">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-foreground-muted mb-1">MCDA Confidence</p>
+                      <p className="text-xl font-black text-foreground">94.2%</p>
+                    </div>
+                    <div className="border border-border p-4 rounded-lg bg-surface shadow-sm">
+                      <p className="text-[9px] font-bold uppercase tracking-widest text-foreground-muted mb-1">Active Nodes</p>
+                      <p className="text-xl font-black text-foreground">1,204</p>
                     </div>
                   </div>
-                ))}
+
+                  <div className="flex-1 border border-border rounded-lg bg-surface-muted/30 relative overflow-hidden">
+                    {/* Abstract graph lines to look like an active chart */}
+                    <svg className="absolute inset-0 w-full h-full opacity-40 stroke-accent" preserveAspectRatio="none" viewBox="0 0 100 100">
+                      <path d="M0,80 Q20,20 40,60 T100,30" fill="none" strokeWidth="2" />
+                      <path d="M0,90 Q30,40 50,70 T100,50" fill="none" strokeWidth="1" className="stroke-foreground-muted opacity-50" />
+                    </svg>
+                    <div className="absolute bottom-4 left-4 right-4 flex justify-between text-[10px] font-mono text-foreground-muted">
+                      <span>t-60s</span>
+                      <span>t-30s</span>
+                      <span>t-0s (Live)</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </section>
+          </motion.div>
 
-          {/* ── MISSION STRIP ─────────────────────────────────────── */}
-          <section className="bg-emerald-500 px-8 md:px-16 py-16">
-            <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-black text-zinc-950 leading-tight">
-                  India's MSMEs emit <span className="underline decoration-wavy decoration-zinc-700/50">25% of industrial CO₂.</span>
-                  <br />We're changing that.
-                </h2>
-                <p className="mt-4 text-zinc-800 max-w-xl leading-relaxed">
-                  Every assessment run on this platform is a step toward a decarbonized industrial sector. We make clean energy transitions economically rational — not just aspirational.
-                </p>
+        </div>
+      </section>
+
+
+
+      {/* ── MASSIVE DATA VISUALIZATION SECTION (Soft Gray) ──────────── */}
+      <section className="py-40 bg-surface">
+        <div className="max-w-[90rem] mx-auto px-6">
+
+          <div className="max-w-4xl mb-24">
+            <h2 className="text-4xl md:text-6xl font-black tracking-tight text-foreground leading-[1.1] mb-6">
+              Infrastructure-grade intelligence for every industrial decision.
+            </h2>
+            <p className="text-xl text-foreground-muted font-medium max-w-2xl">
+              We process hundreds of variables—from regional biomass availability and grid tariffs to specific boiler efficiencies—to generate mathematically proven energy transitions.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+
+            {/* Bloomberg-Style Big Chart 1 */}
+            <div className="border border-border bg-background p-8 lg:p-12">
+              <div className="mb-12">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">Simulated Trajectory</p>
+                <h3 className="text-2xl font-black text-foreground">CO₂ Abatement Waterfall</h3>
+                <p className="text-sm text-foreground-muted mt-2">12-month projection comparing baseline operation vs. optimal MCDA pathway.</p>
               </div>
-              <Link href="/assessment" className="flex-shrink-0 inline-flex h-14 items-center gap-2 rounded-2xl bg-zinc-950 px-8 text-base font-bold text-emerald-400 transition-all hover:bg-zinc-800 hover:scale-105">
-                Run Your Assessment
-                <ArrowRight className="h-5 w-5" />
-              </Link>
-            </div>
-          </section>
-
-          {/* ── TECHNOLOGY TAGS ─────────────────────────────────────── */}
-          <section className="bg-zinc-900 px-8 md:px-16 py-14 border-t border-zinc-800">
-            <div className="max-w-6xl mx-auto">
-              <p className="text-center text-sm text-zinc-500 mb-8 uppercase tracking-widest">Technologies Evaluated by the Engine</p>
-              <div className="flex flex-wrap justify-center gap-4">
-                {["Solar Thermal", "Biomass Boiler", "Heat Pump", "Waste Heat Recovery", "Biogas", "Electrification", "Thermal Storage"].map((tech) => (
-                  <span key={tech} className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-5 py-2 text-sm font-medium text-emerald-400">
-                    <Wind className="h-3.5 w-3.5" />
-                    {tech}
-                  </span>
-                ))}
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={emissionsData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} tickFormatter={(v) => `${v / 1000}k`} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))", borderRadius: "0px", fontSize: "12px", border: "1px solid hsl(var(--border))" }}
+                      itemStyle={{ color: "hsl(var(--foreground))", fontWeight: "bold" }}
+                    />
+                    <Area type="step" dataKey="baseline" stroke="hsl(var(--foreground-muted))" strokeDasharray="4 4" fill="none" strokeWidth={2} name="Current Baseline" />
+                    <Area type="step" dataKey="optimized" stroke="hsl(var(--accent))" fillOpacity={0.1} fill="hsl(var(--accent))" strokeWidth={3} name="Optimized Pathway" />
+                  </AreaChart>
+                </ResponsiveContainer>
               </div>
             </div>
-          </section>
 
-        </main>
-      </div>
+            {/* Bloomberg-Style Big Chart 2 */}
+            <div className="border border-border bg-background p-8 lg:p-12">
+              <div className="mb-12">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-accent mb-2">Financial Engineering</p>
+                <h3 className="text-2xl font-black text-foreground">CAPEX Allocation & ROI</h3>
+                <p className="text-sm text-foreground-muted mt-2">Capital expenditure mapped against projected annual operational savings.</p>
+              </div>
+              <div className="h-[300px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={roiData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                    <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "hsl(var(--background))", borderColor: "hsl(var(--border))", borderRadius: "0px", fontSize: "12px" }}
+                      itemStyle={{ color: "hsl(var(--foreground))", fontWeight: "bold" }}
+                      cursor={{ fill: "hsl(var(--surface-muted))" }}
+                    />
+                    <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "20px", fontWeight: "bold" }} />
+                    <Bar dataKey="capex" name="CAPEX (₹ Lakhs)" fill="hsl(var(--foreground))" radius={[0, 0, 0, 0]} />
+                    <Bar dataKey="opex_saving" name="Annual OPEX Savings" fill="hsl(var(--accent))" radius={[0, 0, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ── CORE CAPABILITIES GRID (Dark Mode / Near Black) ──────────── */}
+      <section className="py-40 bg-foreground text-background">
+        <div className="max-w-[90rem] mx-auto px-6">
+          <div className="mb-24">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-background/50 border-b border-background/20 pb-1">
+              System Architecture
+            </span>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tight mt-6 max-w-3xl leading-[1.1]">
+              The core engines powering industrial-scale transition.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 border-t border-l border-background/10">
+            {[
+              {
+                title: "MCDA Optimization Engine",
+                desc: "Multi-criteria decision analysis evaluating dozens of technologies against specific thermal loads, capex limits, and operational hours.",
+              },
+              {
+                title: "Spatial Biomass Atlas",
+                desc: "District-level geographic intelligence mapping agricultural residue surplus and agro-pellet pricing across the subcontinent.",
+              },
+              {
+                title: "Policy Vector Search",
+                desc: "Real-time semantic matching against a vast index of BEE, MNRE, and state-level industrial subsidies to locate exact capital grants.",
+              },
+              {
+                title: "Monte Carlo Risk Simulator",
+                desc: "Stochastic modeling running 10,000+ localized fuel and grid price scenarios to calculate highly accurate P50 payback confidence bands.",
+              },
+              {
+                title: "Scenario Control Playground",
+                desc: "A live interface allowing engineers to manually override fuel costs, capex constraints, and schedules to compare alternative pathways.",
+              },
+              {
+                title: "Auditable Knowledge Base",
+                desc: "Fully transparent RAG pipeline referencing 200+ government circulars and IPCC emission factors to mathematically prove every recommendation.",
+              }
+            ].map((feature, i) => (
+              <div
+                key={i}
+                className="p-10 border-b border-r border-background/10 hover:bg-background/5 transition-colors"
+              >
+                <h3 className="text-xl font-bold mb-4 tracking-tight">{feature.title}</h3>
+                <p className="text-sm text-background/60 leading-relaxed font-medium">{feature.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BOTTOM CTA ────────────────────────────────────────────────────── */}
+      <section className="py-40 bg-background text-foreground border-b border-border">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h2 className="text-4xl md:text-6xl font-black tracking-tight leading-[1.1] mb-8">
+            Deploy industrial intelligence.
+          </h2>
+          <p className="text-xl text-foreground-muted mb-12 font-medium">
+            Join the vanguard of manufacturers using deterministic mathematics to reach Net Zero.
+          </p>
+          <Link
+            href="/assessment"
+            className="inline-flex h-16 items-center justify-center bg-foreground px-12 text-sm font-bold uppercase tracking-widest text-background transition-colors hover:bg-foreground/90"
+          >
+            Initiate Assessment Engine
+          </Link>
+        </div>
+      </section>
+
+      {/* ── FOOTER ─────────────────────────────────────────────────── */}
+      <footer className="bg-surface-muted py-16 text-foreground border-t border-border">
+        <div className="max-w-[90rem] mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
+          <div className="col-span-1 md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-6">
+              <span className="font-black text-xl tracking-tighter">CIETO</span>
+            </Link>
+            <p className="text-xs text-foreground-muted leading-relaxed max-w-xs font-medium">
+              Enterprise Infrastructure for Industrial Decarbonization.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted mb-6">Product</h4>
+            <ul className="space-y-4 text-sm font-semibold">
+              <li><Link href="/assessment" className="hover:text-accent transition-colors">Assessment Engine</Link></li>
+              <li><Link href="/dashboard" className="hover:text-accent transition-colors">Intelligence Dashboard</Link></li>
+              <li><Link href="/gis" className="hover:text-accent transition-colors">GIS Spatial Atlas</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted mb-6">Architecture</h4>
+            <ul className="space-y-4 text-sm font-semibold">
+              <li><span className="cursor-not-allowed">Monte Carlo Simulation</span></li>
+              <li><span className="cursor-not-allowed">Subsidy Vector Search</span></li>
+              <li><span className="cursor-not-allowed">MCDA Optimization</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground-muted mb-6">Operations</h4>
+            <ul className="space-y-4 text-sm font-semibold">
+              <li><span className="cursor-not-allowed">Documentation</span></li>
+              <li><span className="cursor-not-allowed">Security Compliance</span></li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-[90rem] mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-xs font-bold text-foreground-muted">
+          <p>© {new Date().getFullYear()} CIETO. Built for Smart India Hackathon 2025.</p>
+          <div className="flex items-center gap-2 mt-4 md:mt-0">
+            <span className="h-2 w-2 rounded-full bg-status-online" />
+            <span className="uppercase tracking-widest">All Systems Operational</span>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

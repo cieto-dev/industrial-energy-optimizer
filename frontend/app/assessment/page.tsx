@@ -14,6 +14,7 @@ import { EnergyInputForm } from "@/components/forms/EnergyInputForm"
 import { ProcessForm } from "@/components/forms/ProcessForm"
 import { ConstraintsForm } from "@/components/forms/ConstraintsForm"
 import { EligibilityForm } from "@/components/forms/EligibilityForm"
+import { LiveInsightsPanel } from "@/components/assessment/LiveInsightsPanel"
 
 const STEPS = [
   { id: "industry", title: "General", component: IndustryForm, fields: ["name", "industry", "state", "district"] },
@@ -26,6 +27,7 @@ const STEPS = [
 export default function AssessmentPage() {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const router = useRouter()
 
@@ -87,6 +89,7 @@ export default function AssessmentPage() {
 
   const onSubmit = async (data: FactoryProfileType) => {
     setIsSubmitting(true)
+    setIsAnalyzing(true)
     setSubmitError(null)
     try {
       const payload = {
@@ -94,13 +97,24 @@ export default function AssessmentPage() {
         factory_id: data.factory_id || `fac_${Math.random().toString(36).substr(2, 9)}`,
       }
       const response = await apiService.optimize(payload as any)
-      localStorage.setItem("last_optimization", JSON.stringify(response))
-      router.push("/dashboard")
+      
+      const enrichedResponse = {
+        ...response,
+        factory_name: data.name,
+        industry: data.industry,
+        state: data.state,
+        district: data.district,
+      }
+      localStorage.setItem("last_optimization", JSON.stringify(enrichedResponse))
+      
+      setTimeout(() => {
+        router.push("/dashboard")
+      }, 3500)
     } catch (error: any) {
       console.error("Submission failed", error)
       setSubmitError(error?.message ?? "Failed to submit assessment. Please check your inputs and try again.")
-    } finally {
       setIsSubmitting(false)
+      setIsAnalyzing(false)
     }
   }
 
@@ -113,109 +127,133 @@ export default function AssessmentPage() {
 
   const CurrentComponent = STEPS[currentStep].component
 
-  return (
-    <div className="flex flex-1 overflow-hidden bg-zinc-950" style={{ height: "calc(100vh - 56px)" }}>
-
-      {/* LEFT PANEL — motivational image with mission text */}
-      <div
-        className="hidden lg:flex relative w-[380px] flex-shrink-0 flex-col justify-end overflow-hidden"
-        style={{
-          backgroundImage: "url('/assessment_bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-zinc-950/30" />
-        {/* Mission text overlay */}
-        <div className="relative z-10 p-8 pb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 mb-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Step {currentStep + 1} of {STEPS.length}
-          </div>
-          <h2 className="text-3xl font-black text-white leading-tight mb-3">
-            Every watt counts<br />
-            <span className="text-emerald-400">toward zero.</span>
-          </h2>
-          <p className="text-sm text-zinc-400 leading-relaxed">
-            You're building the case for a cleaner, more profitable factory. The data you enter here powers our AI engine to find the best clean energy pathway for your exact operation.
-          </p>
-          {/* Step names */}
-          <div className="mt-8 space-y-2">
-            {STEPS.map((step, index) => (
-              <div key={step.id} className="flex items-center gap-3">
-                <div className={`h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                  index < currentStep ? "bg-emerald-500 text-zinc-950"
-                  : index === currentStep ? "border-2 border-emerald-500 text-emerald-400"
-                  : "border border-zinc-700 text-zinc-600"
-                }`}>
-                  {index < currentStep ? "✓" : index + 1}
-                </div>
-                <span className={`text-sm font-medium ${
-                  index === currentStep ? "text-white" : index < currentStep ? "text-emerald-400" : "text-zinc-600"
-                }`}>{step.title}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* RIGHT PANEL — form area */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Slim top bar */}
-        <div className="flex items-center justify-between px-8 py-4 border-b border-zinc-800 bg-zinc-950 flex-shrink-0">
-          <div className="flex items-center gap-3">
-            {/* Inline brand mark */}
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow-md shadow-emerald-500/30">
-              <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-zinc-950" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  if (isAnalyzing) {
+    return (
+      <div className="flex flex-col h-[calc(100vh-56px)] bg-background text-foreground items-center justify-center">
+        <div className="max-w-md w-full space-y-8 text-center p-8">
+          <div className="relative mx-auto h-24 w-24">
+            <div className="absolute inset-0 rounded-full border-t-2 border-primary animate-spin" />
+            <div className="absolute inset-2 rounded-full border-r-2 border-emerald-500 animate-spin flex items-center justify-center delay-150">
+               <svg viewBox="0 0 24 24" fill="none" className="h-8 w-8 text-primary" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M2 22 C6 18 14 10 22 2" />
                 <path d="M22 2 C22 14 12 22 2 22" fill="currentColor" fillOpacity="0.3"/>
               </svg>
             </div>
-            <div>
-              <p className="text-sm font-bold text-white leading-none">Factory Assessment</p>
-              <p className="text-xs text-zinc-500 mt-0.5">{STEPS[currentStep].title}</p>
-            </div>
           </div>
-          {/* Step progress pills */}
-          <div className="flex gap-1.5">
-            {STEPS.map((_, index) => (
-              <div
-                key={index}
-                className={`h-1.5 w-8 rounded-full transition-all duration-500 ${
-                  index <= currentStep ? "bg-emerald-500" : "bg-zinc-800"
-                }`}
-              />
-            ))}
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight mb-2">Analyzing Factory Profile</h2>
+            <p className="text-muted-foreground text-sm">Cross-referencing parameters with IPCC emission factors and state policies...</p>
+          </div>
+          <div className="space-y-4 text-left bg-surface-muted/50 p-6 rounded-xl border border-border/50 text-sm font-medium">
+             <div className="flex items-center gap-3 text-emerald-500"><span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"/> Evaluating thermodynamic constraints</div>
+             <div className="flex items-center gap-3 text-primary"><span className="h-2 w-2 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0.5s' }}/> Simulating decarbonization pathways</div>
+             <div className="flex items-center gap-3 text-sky-500"><span className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" style={{ animationDelay: '1s' }}/> Matching financial subsidies</div>
           </div>
         </div>
+      </div>
+    )
+  }
 
-        {/* Scrollable form area */}
-        <main className="flex-1 overflow-y-auto bg-zinc-950 p-8">
-          <div className="mx-auto max-w-xl">
-
-            {submitError && (
-              <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-start gap-2">
-                <span className="mt-0.5 flex-shrink-0">⚠</span>
-                <span>{submitError}</span>
+  return (
+    <div className="flex flex-col h-[calc(100vh-56px)] bg-background text-foreground overflow-hidden">
+      {/* Top Bar for Assessment */}
+      <div className="flex items-center justify-between px-8 py-4 border-b border-border/40 bg-card/50 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
+            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-primary-foreground" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 22 C6 18 14 10 22 2" />
+              <path d="M22 2 C22 14 12 22 2 22" fill="currentColor" fillOpacity="0.3"/>
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-sm font-bold text-foreground leading-none tracking-tight">Factory Assessment</h1>
+            <p className="text-xs text-muted-foreground mt-1">Configure your industrial profile</p>
+          </div>
+        </div>
+        
+        {/* Progress Tracker in Header */}
+        <div className="flex items-center gap-2">
+          {STEPS.map((step, index) => (
+            <div key={step.id} className="flex items-center gap-2">
+              <div
+                className={`flex items-center justify-center h-6 w-6 rounded-full text-[10px] font-bold transition-colors ${
+                  index < currentStep ? "bg-primary text-primary-foreground"
+                  : index === currentStep ? "bg-primary/20 text-primary border border-primary/30"
+                  : "bg-surface-muted text-muted-foreground border border-border/50"
+                }`}
+              >
+                {index < currentStep ? "✓" : index + 1}
               </div>
-            )}
+              {index < STEPS.length - 1 && (
+                <div className={`h-px w-4 ${index < currentStep ? "bg-primary" : "bg-border"}`} />
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
-            <FormProvider {...methods}>
-              <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
-                {/* Form card */}
-                <div className="rounded-2xl border border-zinc-800 bg-zinc-900/60 backdrop-blur-sm p-6 mb-6">
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-1 overflow-hidden">
+          
+          {/* LEFT WORKSPACE (Stepper + Form) */}
+          <div className="flex flex-1 overflow-hidden bg-background">
+            
+            {/* Stepper Sidebar */}
+            <div className="hidden md:flex flex-col w-64 border-r border-border/40 bg-surface/30 p-6 overflow-y-auto">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-6">Configuration Steps</h3>
+              <div className="space-y-1">
+                {STEPS.map((step, index) => (
+                  <button
+                    key={step.id}
+                    type="button"
+                    onClick={() => {
+                      // Optional: allow skipping back but not forward without validation
+                      if (index < currentStep) setCurrentStep(index)
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-all text-left ${
+                      index === currentStep 
+                        ? "bg-primary/10 text-primary" 
+                        : index < currentStep 
+                        ? "text-foreground hover:bg-surface-muted" 
+                        : "text-muted-foreground opacity-60 cursor-not-allowed"
+                    }`}
+                  >
+                    <div className={`h-2 w-2 rounded-full ${index === currentStep ? "bg-primary animate-pulse" : index < currentStep ? "bg-primary" : "bg-border"}`} />
+                    {step.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Main Form Area */}
+            <main className="flex-1 overflow-y-auto p-8 relative">
+              <div className="mx-auto max-w-2xl">
+                
+                <div className="mb-8">
+                  <h2 className="text-2xl font-semibold tracking-tight text-foreground">{STEPS[currentStep].title}</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Please provide accurate information to improve AI insights.</p>
+                </div>
+
+                {submitError && (
+                  <div className="mb-8 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive flex items-start gap-2">
+                    <span className="mt-0.5 flex-shrink-0 text-destructive">⚠</span>
+                    <span>{submitError}</span>
+                  </div>
+                )}
+
+                {/* The Form Component */}
+                <div className="mb-10">
                   <CurrentComponent />
                 </div>
 
-                {/* Navigation footer */}
-                <div className="flex justify-between items-center">
+                {/* Navigation Footer */}
+                <div className="flex items-center justify-between pt-6 border-t border-border/40 pb-10">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={prevStep}
                     disabled={currentStep === 0 || isSubmitting}
-                    className="border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+                    className="text-foreground border-border hover:bg-surface-muted"
                   >
                     ← Previous
                   </Button>
@@ -224,7 +262,7 @@ export default function AssessmentPage() {
                     <button
                       type="button"
                       onClick={nextStep}
-                      className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-6 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-400"
+                      className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shadow-sm"
                     >
                       Next Step →
                     </button>
@@ -232,21 +270,29 @@ export default function AssessmentPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-500 px-6 text-sm font-bold text-zinc-950 shadow-lg shadow-emerald-500/25 transition-all hover:scale-105 hover:bg-emerald-400 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-6 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
-                        <><span className="h-4 w-4 animate-spin rounded-full border-2 border-zinc-950 border-t-transparent" /> Analyzing...</>
+                        <><span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" /> Analyzing...</>
                       ) : (
                         <>Run Analysis →</>
                       )}
                     </button>
                   )}
                 </div>
-              </form>
-            </FormProvider>
+
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
+
+          {/* RIGHT PANEL: Live AI Insights */}
+          <div className="hidden lg:block w-[360px] flex-shrink-0 bg-card border-l border-border/40">
+            {/* The LiveInsightsPanel will automatically consume the FormProvider context */}
+            <LiveInsightsPanel />
+          </div>
+
+        </form>
+      </FormProvider>
     </div>
   )
 }

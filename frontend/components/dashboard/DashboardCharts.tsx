@@ -30,6 +30,7 @@ import {
   CheckCircle2,
   AlertCircle,
   HelpCircle,
+  MapPin,
 } from "lucide-react"
 
 type Scenario = {
@@ -87,7 +88,12 @@ type Recommendation = {
 }
 
 type Props = {
-  recommendation: Recommendation
+  recommendation: Recommendation & {
+    state?: string
+    district?: string
+    industry?: string
+    factory_name?: string
+  }
 }
 
 const numberValue = (...values: unknown[]) => {
@@ -310,7 +316,7 @@ export function DashboardCharts({ recommendation }: Props) {
   return (
     <section className="space-y-6">
       {/* Navigation tabs for analytics */}
-      <div className="flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-zinc-900/60 p-2 backdrop-blur-md">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-border/50 bg-surface-muted/60 p-2 backdrop-blur-md">
         {[
           { key: "overview", label: "Financial & Emissions Overview", icon: BarChart },
           { key: "energyflow", label: "Energy Flow & Sankey", icon: Zap },
@@ -324,7 +330,7 @@ export function DashboardCharts({ recommendation }: Props) {
             className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all ${
               activeTab === tab.key
                 ? "bg-emerald-500 text-zinc-950 shadow-lg shadow-emerald-500/25"
-                : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                : "text-muted-foreground hover:bg-surface-muted/50 hover:text-foreground"
             }`}
           >
             {tab.label}
@@ -337,14 +343,14 @@ export function DashboardCharts({ recommendation }: Props) {
         <div className="space-y-6">
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Annual Cost Comparison */}
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm">
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                     <IndianRupee className="h-5 w-5 text-emerald-400" />
                     Annual OPEX Comparison
                   </h2>
-                  <p className="text-xs text-zinc-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Baseline fossil fuel spend vs clean transition pathways
                   </p>
                 </div>
@@ -380,11 +386,12 @@ export function DashboardCharts({ recommendation }: Props) {
                     />
                     <Tooltip
                       contentStyle={{
-                        background: "#18181b",
-                        border: "1px solid rgba(255,255,255,.15)",
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
                         borderRadius: 12,
-                        color: "#fff",
+                        color: "hsl(var(--foreground))",
                       }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
                       formatter={(val: number) => [formatCurrency(val), "Annual Cost"]}
                     />
                     <Bar dataKey="annualCost" radius={[8, 8, 0, 0]}>
@@ -399,10 +406,10 @@ export function DashboardCharts({ recommendation }: Props) {
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-4 grid grid-cols-3 gap-3 pt-3 border-t border-white/5">
-                <div className="rounded-xl bg-white/[0.02] p-3 border border-white/5">
-                  <p className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Baseline</p>
-                  <p className="mt-1 text-sm font-bold text-zinc-300">{formatCurrency(baselineCost)}</p>
+              <div className="mt-4 grid grid-cols-3 gap-3 pt-3 border-t border-border/40">
+                <div className="rounded-xl bg-surface-muted/50 p-3 border border-border/40">
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Baseline</p>
+                  <p className="mt-1 text-sm font-bold text-foreground">{formatCurrency(baselineCost)}</p>
                 </div>
                 <div className="rounded-xl bg-emerald-500/10 p-3 border border-emerald-500/20">
                   <p className="text-[11px] uppercase tracking-wider text-emerald-400 font-semibold">Recommended</p>
@@ -416,14 +423,14 @@ export function DashboardCharts({ recommendation }: Props) {
             </div>
 
             {/* CO2 Emissions Comparison */}
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm">
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                     <TrendingDown className="h-5 w-5 text-emerald-400" />
                     Annual CO₂ Emissions Footprint
                   </h2>
-                  <p className="text-xs text-zinc-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Direct Scope 1 & Scope 2 emission reduction
                   </p>
                 </div>
@@ -458,11 +465,12 @@ export function DashboardCharts({ recommendation }: Props) {
                     />
                     <Tooltip
                       contentStyle={{
-                        background: "#18181b",
-                        border: "1px solid rgba(255,255,255,.15)",
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
                         borderRadius: 12,
-                        color: "#fff",
+                        color: "hsl(var(--foreground))",
                       }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
                       formatter={(val: number) => [`${val} Tonnes / Year`, "CO₂ Emissions"]}
                     />
                     <Bar dataKey="co2" radius={[8, 8, 0, 0]}>
@@ -477,15 +485,15 @@ export function DashboardCharts({ recommendation }: Props) {
                 </ResponsiveContainer>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-3 pt-3 border-t border-white/5">
-                <div className="rounded-xl bg-white/[0.02] p-3 border border-white/5">
-                  <p className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Annual Avoided Carbon</p>
+              <div className="mt-4 grid grid-cols-2 gap-3 pt-3 border-t border-border/40">
+                <div className="rounded-xl bg-surface-muted/50 p-3 border border-border/40">
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Annual Avoided Carbon</p>
                   <p className="mt-1 text-base font-bold text-emerald-400">
                     {Math.max(0, Math.round((baselineCo2 - recommendedCo2) / 1000))} Tonnes CO₂e/yr
                   </p>
                 </div>
-                <div className="rounded-xl bg-white/[0.02] p-3 border border-white/5">
-                  <p className="text-[11px] uppercase tracking-wider text-zinc-500 font-semibold">Equivalent Trees Planted</p>
+                <div className="rounded-xl bg-surface-muted/50 p-3 border border-border/40">
+                  <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">Equivalent Trees Planted</p>
                   <p className="mt-1 text-base font-bold text-teal-300">
                     ~{Math.round(Math.max(0, baselineCo2 - recommendedCo2) / 21).toLocaleString("en-IN")} trees/yr
                   </p>
@@ -496,8 +504,8 @@ export function DashboardCharts({ recommendation }: Props) {
 
           {/* Energy Breakdown & Subsidies Highlight */}
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-5 lg:col-span-1">
-              <h3 className="font-bold text-white text-sm mb-3">Fossil Fuel Decarbonization Share</h3>
+            <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-5 lg:col-span-1">
+              <h3 className="font-bold text-foreground text-sm mb-3">Fossil Fuel Decarbonization Share</h3>
               <div className="h-[200px] flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -517,13 +525,14 @@ export function DashboardCharts({ recommendation }: Props) {
                       <Cell fill="#27272a" />
                     </Pie>
                     <Tooltip
-                      contentStyle={{ background: "#18181b", borderRadius: 8, border: "1px solid #333" }}
+                      contentStyle={{ backgroundColor: "hsl(var(--card))", borderRadius: 8, border: "1px solid hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
                       formatter={(val: number) => [`${val.toFixed(1)}%`, "Share"]}
                     />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
-              <div className="flex justify-center gap-6 text-xs text-zinc-400">
+              <div className="flex justify-center gap-6 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div className="h-3 w-3 rounded-full bg-emerald-500" />
                   <span>Clean: {fossilReduction.toFixed(1)}%</span>
@@ -535,49 +544,108 @@ export function DashboardCharts({ recommendation }: Props) {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 lg:col-span-2 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <Award className="h-5 w-5 text-emerald-400" />
-                  <h3 className="font-bold text-white text-base">Government Schemes & Subsidies Match</h3>
-                </div>
-                <p className="text-xs text-zinc-300 leading-relaxed mb-4">
-                  Based on your factory's MSME classification, cluster, and equipment type, the following financial grant incentives apply:
-                </p>
-
-                <div className="grid sm:grid-cols-2 gap-3">
-                  <div className="rounded-xl border border-white/10 bg-zinc-900/80 p-3">
-                    <p className="text-xs font-semibold text-emerald-400">ADEETIE Scheme (BEE/MNRE)</p>
-                    <p className="text-xs text-zinc-400 mt-1">Direct investment grant up to ₹25 Lakhs for energy-efficient thermal machinery.</p>
+            {/* Dynamic State-Specific Subsidies Panel */}
+            {(() => {
+              const factoryState = (recommendation as any).state ?? ""
+              const stateKey = factoryState.toLowerCase()
+              const STATE_SCHEME_DB: Record<string, { name: string; scope: string; benefit: string; type: "state" | "central" }[]> = {
+                "himachal pradesh": [
+                  { name: "HP Industrial Investment Policy", scope: "Himachal Pradesh only", benefit: "Capital subsidy up to ₹30 Lakhs for industrial units in HP industrial estates", type: "state" },
+                  { name: "Central Capital Investment Subsidy (CCIS)", scope: "HP, J&K, Ladakh & NE States", benefit: "15–30% of P&M cost, max ₹3 Cr — applicable to new manufacturing units", type: "central" },
+                ],
+                "uttar pradesh": [
+                  { name: "UP MSME Promotion Policy", scope: "Uttar Pradesh registered MSME units", benefit: "25% capital subsidy on plant & equipment up to ₹1 Cr", type: "state" },
+                  { name: "Leather Sector Modernisation Scheme", scope: "Kanpur Leather Cluster, UP", benefit: "Technology upgrade grant up to ₹50 Lakhs per unit", type: "state" },
+                ],
+                "jammu & kashmir": [
+                  { name: "J&K New Industrial Policy (NCSS)", scope: "Jammu & Kashmir only", benefit: "Capital investment incentive + freight subsidy + interest subvention", type: "state" },
+                  { name: "Central Capital Investment Subsidy", scope: "J&K, HP & North-East States", benefit: "30% of Plant & Machinery investment, capped at ₹3 Cr", type: "central" },
+                ],
+                "punjab": [
+                  { name: "Punjab Industrial Power Subsidy", scope: "Punjab registered MSME units only", benefit: "₹1.50/unit reduction on industrial power tariff", type: "state" },
+                  { name: "BEE MSME Foundry Scheme", scope: "Punjab & Haryana forging clusters", benefit: "50% subsidy on energy audit and Detailed Project Report (DPR) costs", type: "central" },
+                ],
+                "haryana": [
+                  { name: "Haryana Bioenergy Policy Incentive", scope: "Haryana MSME units only", benefit: "Capital subsidy of ₹20 Lakhs on biomass-based thermal systems", type: "state" },
+                  { name: "CAQM Clean Fuel Subsidy", scope: "NCR + Haryana (CAQM designated zones)", benefit: "Transition incentive for replacing coal in NCR-zone factories", type: "central" },
+                ],
+                "gujarat": [
+                  { name: "Gujarat Industrial Green Incentive", scope: "Gujarat GPCB-registered units", benefit: "7% interest subvention on clean energy equipment loans", type: "state" },
+                  { name: "SATAT Bio-CBG Offtake Scheme", scope: "Pan-India (Gujarat as priority zone)", benefit: "Guaranteed offtake price for compressed biogas produced", type: "central" },
+                ],
+                "tamil nadu": [
+                  { name: "TANGEDCO Green Open Access", scope: "Tamil Nadu industrial units only", benefit: "Waiver on open access charges for renewable energy above 1 MW", type: "state" },
+                  { name: "ADEETIE Energy Audit Grant (BEE)", scope: "Tamil Nadu MSME clusters", benefit: "Direct investment grant up to ₹25 Lakhs for energy-efficient thermal machinery", type: "central" },
+                ],
+              }
+              const matchedKey = Object.keys(STATE_SCHEME_DB).find(k => stateKey.includes(k))
+              const schemes = matchedKey ? STATE_SCHEME_DB[matchedKey] : [
+                { name: "ADEETIE Scheme (BEE/MNRE)", scope: "Pan-India – All MSME industrial clusters", benefit: "Investment grant up to ₹25 Lakhs for energy-efficient thermal & electrical machinery.", type: "central" as const },
+                { name: "Section 32 – Accelerated Depreciation", scope: "Pan-India – All registered companies", benefit: "40% first-year tax depreciation on renewable boiler & solar installations.", type: "central" as const },
+              ]
+              return (
+                <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/20 p-5 lg:col-span-2 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <div className="flex items-center gap-2">
+                        <Award className="h-5 w-5 text-emerald-400" />
+                        <h3 className="font-bold text-foreground text-base">Government Schemes & Subsidies Match</h3>
+                      </div>
+                      {factoryState && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-primary/10 text-primary border border-primary/20 px-2 py-0.5 rounded-full">
+                          <MapPin className="w-2.5 h-2.5" />
+                          {factoryState}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed mb-4">
+                      The following schemes are confirmed applicable to factories in <strong className="text-foreground">{factoryState || "your region"}</strong> based on your MSME classification, equipment type, and cluster location:
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-3">
+                      {schemes.map((scheme, i) => (
+                        <div key={i} className="rounded-xl border border-border/50 bg-surface-muted/80 p-3">
+                          <div className="flex items-start justify-between gap-1 mb-1">
+                            <p className="text-xs font-semibold text-emerald-400">{scheme.name}</p>
+                            <span className={`flex-shrink-0 text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${
+                              scheme.type === "state"
+                                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                            }`}>
+                              {scheme.type === "state" ? "State" : "Central"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1 mb-1.5">
+                            <MapPin className="w-3 h-3 text-primary flex-shrink-0" />
+                            <p className="text-[10px] font-semibold text-primary">{scheme.scope}</p>
+                          </div>
+                          <p className="text-xs text-muted-foreground">{scheme.benefit}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="rounded-xl border border-white/10 bg-zinc-900/80 p-3">
-                    <p className="text-xs font-semibold text-emerald-400">Section 32 (Accelerated Dep.)</p>
-                    <p className="text-xs text-zinc-400 mt-1">40% first-year tax depreciation write-off on renewable boiler & solar installations.</p>
+                  <div className="mt-4 pt-3 border-t border-emerald-500/20 flex items-center justify-between">
+                    <span className="text-xs text-muted-foreground">Estimated Total Financial Benefit</span>
+                    <span className="text-base font-black text-emerald-300">
+                      {formatCurrency(recommendation.explanation?.policy_benefits?.estimated_total_benefit_inr ?? 2800000)}
+                    </span>
                   </div>
                 </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-emerald-500/20 flex items-center justify-between">
-                <span className="text-xs text-zinc-400">Estimated Total Financial Benefit</span>
-                <span className="text-base font-black text-emerald-300">
-                  {formatCurrency(recommendation.explanation?.policy_benefits?.estimated_total_benefit_inr ?? 2800000)}
-                </span>
-              </div>
-            </div>
+              )
+            })()}
           </div>
         </div>
       )}
 
       {/* ── TAB 2: ENERGY FLOW / SANKEY ───────────────────────────── */}
       {activeTab === "energyflow" && (
-        <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+        <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border/50 pb-4">
             <div>
-              <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                 <Zap className="h-6 w-6 text-emerald-400" />
                 Factory Energy Flow & Thermal Sankey Diagram
               </h2>
-              <p className="text-xs text-zinc-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Visual balance showing transition from fossil inputs to clean renewable thermal and electrical streams
               </p>
             </div>
@@ -588,20 +656,20 @@ export function DashboardCharts({ recommendation }: Props) {
           </div>
 
           {/* Interactive Responsive SVG Flow Diagram */}
-          <div className="relative w-full overflow-x-auto rounded-2xl border border-white/5 bg-zinc-950/80 p-6">
+          <div className="relative w-full overflow-x-auto rounded-2xl border border-border/40 bg-card/80 p-6">
             <div className="min-w-[700px] flex items-center justify-between gap-4 py-8">
               {/* Column 1: Primary Inputs */}
               <div className="flex flex-col gap-6 w-48">
-                <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 text-center">Energy Sources</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center">Energy Sources</div>
                 
                 <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 shadow-md">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
                       <Flame className="h-4 w-4" /> Biomass Residue
                     </span>
-                    <span className="text-xs font-extrabold text-white">55%</span>
+                    <span className="text-xs font-extrabold text-foreground">55%</span>
                   </div>
-                  <p className="text-[11px] text-zinc-400">12,500 kcal/kg input</p>
+                  <p className="text-[11px] text-muted-foreground">12,500 kcal/kg input</p>
                 </div>
 
                 <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 p-3.5 shadow-md">
@@ -609,9 +677,9 @@ export function DashboardCharts({ recommendation }: Props) {
                     <span className="text-xs font-bold text-sky-400 flex items-center gap-1.5">
                       <Zap className="h-4 w-4" /> Solar Thermal
                     </span>
-                    <span className="text-xs font-extrabold text-white">25%</span>
+                    <span className="text-xs font-extrabold text-foreground">25%</span>
                   </div>
-                  <p className="text-[11px] text-zinc-400">CST Rooftop Collectors</p>
+                  <p className="text-[11px] text-muted-foreground">CST Rooftop Collectors</p>
                 </div>
 
                 <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3.5 shadow-md">
@@ -619,16 +687,16 @@ export function DashboardCharts({ recommendation }: Props) {
                     <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                       <Zap className="h-4 w-4" /> Grid Electricity
                     </span>
-                    <span className="text-xs font-extrabold text-white">20%</span>
+                    <span className="text-xs font-extrabold text-foreground">20%</span>
                   </div>
-                  <p className="text-[11px] text-zinc-400">Green Open Access</p>
+                  <p className="text-[11px] text-muted-foreground">Green Open Access</p>
                 </div>
               </div>
 
               {/* Connecting Flow Lines (Animated) */}
               <div className="flex-1 flex flex-col justify-center items-center px-4 relative">
                 <div className="w-full h-1 bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-400 rounded-full animate-pulse my-4" />
-                <div className="text-[11px] font-semibold text-emerald-400 bg-zinc-900 border border-emerald-500/30 px-3 py-1 rounded-full shadow-lg">
+                <div className="text-[11px] font-semibold text-emerald-400 bg-surface-muted border border-emerald-500/30 px-3 py-1 rounded-full shadow-lg">
                   Conversion & Heat Exchanger Efficiency (86.4%)
                 </div>
                 <div className="w-full h-1 bg-gradient-to-r from-sky-500 via-emerald-500 to-teal-400 rounded-full animate-pulse my-4" />
@@ -636,20 +704,20 @@ export function DashboardCharts({ recommendation }: Props) {
 
               {/* Column 2: Equipment / Conversion */}
               <div className="flex flex-col gap-6 w-52">
-                <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 text-center">Conversion Core</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center">Conversion Core</div>
 
-                <div className="rounded-xl border border-white/20 bg-zinc-800/90 p-4 shadow-lg text-center">
-                  <p className="text-xs font-bold text-white">Dual-Fuel Biomass & Steam Boiler</p>
-                  <p className="text-[11px] text-emerald-400 font-medium mt-1">4.2 TPH @ 180°C</p>
-                  <div className="mt-2 text-[10px] bg-emerald-500/20 text-emerald-300 rounded px-2 py-0.5 inline-block">
+                <div className="rounded-xl border border-border/50 bg-card p-4 shadow-lg text-center">
+                  <p className="text-xs font-bold text-foreground">Dual-Fuel Biomass & Steam Boiler</p>
+                  <p className="text-[11px] text-emerald-500 font-medium mt-1">4.2 TPH @ 180°C</p>
+                  <div className="mt-2 text-[10px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 rounded px-2 py-0.5 inline-block border border-emerald-500/20">
                     Zero Coal Burn
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-white/20 bg-zinc-800/90 p-4 shadow-lg text-center">
-                  <p className="text-xs font-bold text-white">Heat Pump & Preheater</p>
-                  <p className="text-[11px] text-sky-300 font-medium mt-1">Waste Heat Recuperator</p>
-                  <div className="mt-2 text-[10px] bg-sky-500/20 text-sky-300 rounded px-2 py-0.5 inline-block">
+                <div className="rounded-xl border border-border/50 bg-card p-4 shadow-lg text-center">
+                  <p className="text-xs font-bold text-foreground">Heat Pump & Preheater</p>
+                  <p className="text-[11px] text-sky-500 font-medium mt-1">Waste Heat Recuperator</p>
+                  <div className="mt-2 text-[10px] bg-sky-500/10 text-sky-600 dark:text-sky-300 rounded px-2 py-0.5 inline-block border border-sky-500/20">
                     COP 3.8 Multiplier
                   </div>
                 </div>
@@ -658,49 +726,83 @@ export function DashboardCharts({ recommendation }: Props) {
               {/* Connecting Flow Lines */}
               <div className="flex-1 flex flex-col justify-center items-center px-4 relative">
                 <div className="w-full h-1 bg-gradient-to-r from-emerald-500 to-green-400 rounded-full my-4" />
-                <div className="text-[11px] font-semibold text-zinc-400">Process Distribution</div>
+                <div className="text-[11px] font-semibold text-muted-foreground">Process Distribution</div>
                 <div className="w-full h-1 bg-gradient-to-r from-zinc-600 to-red-400 rounded-full my-4 opacity-50" />
               </div>
 
               {/* Column 3: Useful Output & Loss Recovery */}
               <div className="flex flex-col gap-6 w-48">
-                <div className="text-xs font-bold uppercase tracking-wider text-zinc-500 text-center">Useful Process Delivery</div>
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground text-center">Useful Process Delivery</div>
 
                 <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/40 p-3.5 shadow-md">
                   <span className="text-xs font-bold text-emerald-300">Useful Steam & Hot Water</span>
-                  <p className="text-lg font-black text-white mt-1">82.5%</p>
-                  <p className="text-[11px] text-zinc-400">Dyeing & Finishing baths</p>
+                  <p className="text-lg font-black text-foreground mt-1">82.5%</p>
+                  <p className="text-[11px] text-muted-foreground">Dyeing & Finishing baths</p>
                 </div>
 
                 <div className="rounded-xl border border-teal-500/40 bg-teal-950/40 p-3.5 shadow-md">
                   <span className="text-xs font-bold text-teal-300">Motive / Shaft Power</span>
-                  <p className="text-lg font-black text-white mt-1">11.0%</p>
-                  <p className="text-[11px] text-zinc-400">Motors & Compressors</p>
+                  <p className="text-lg font-black text-foreground mt-1">11.0%</p>
+                  <p className="text-[11px] text-muted-foreground">Motors & Compressors</p>
                 </div>
 
-                <div className="rounded-xl border border-red-500/20 bg-zinc-900 p-2.5">
+                <div className="rounded-xl border border-red-500/20 bg-surface-muted p-2.5">
                   <span className="text-[11px] font-semibold text-red-400">Flue Gas / Radiant Losses</span>
-                  <p className="text-xs font-bold text-zinc-400 mt-0.5">6.5% (Economizer minimized)</p>
+                  <p className="text-xs font-bold text-muted-foreground mt-0.5">6.5% (Economizer minimized)</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02]">
-              <p className="text-xs text-zinc-400">Thermal Efficiency Gain</p>
+            <div className="p-4 rounded-xl border border-border/40 bg-surface-muted/50">
+              <p className="text-xs text-muted-foreground">Thermal Efficiency Gain</p>
               <p className="text-xl font-bold text-emerald-400 mt-1">+18.5%</p>
-              <p className="text-[11px] text-zinc-500 mt-0.5">vs aging uninsulated coal boiler</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">vs aging uninsulated coal boiler</p>
             </div>
-            <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02]">
-              <p className="text-xs text-zinc-400">Specific Energy Consumption (SEC)</p>
-              <p className="text-xl font-bold text-white mt-1">0.42 toe/ton</p>
-              <p className="text-[11px] text-zinc-500 mt-0.5">Meets PAT Cycle IV targets</p>
+            <div className="p-4 rounded-xl border border-border/40 bg-surface-muted/50">
+              <p className="text-xs text-muted-foreground">Specific Energy Consumption (SEC)</p>
+              <p className="text-xl font-bold text-foreground mt-1">0.42 toe/ton</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Meets PAT Cycle IV targets</p>
             </div>
-            <div className="p-4 rounded-xl border border-white/5 bg-white/[0.02]">
-              <p className="text-xs text-zinc-400">Daily Coal Displaced</p>
+            <div className="p-4 rounded-xl border border-border/40 bg-surface-muted/50">
+              <p className="text-xs text-muted-foreground">Daily Coal Displaced</p>
               <p className="text-xl font-bold text-teal-300 mt-1">8.5 Tonnes/Day</p>
-              <p className="text-[11px] text-zinc-500 mt-0.5">Replaced with local briquettes</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Replaced with local briquettes</p>
+            </div>
+          </div>
+
+          {/* Actionable Engineering Insights */}
+          <div className="rounded-2xl border border-emerald-200 dark:border-emerald-500/20 bg-emerald-50 dark:bg-emerald-950/20 p-5 mt-6">
+            <div className="flex items-center gap-2 mb-4">
+              <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <h3 className="font-bold text-emerald-900 dark:text-emerald-50 text-base">Actionable Engineering Insights</h3>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">1. Boiler Retrofit</h4>
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  Transition from pure coal to a dual-fuel biomass/steam boiler. This allows utilizing locally sourced briquettes, eliminating the heaviest carbon source while maintaining the required 180°C process heat.
+                </p>
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">2. Heat Recovery Implementation</h4>
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  Install a waste heat recuperator at the exhaust stack. By capturing flue gas losses (currently at 6.5%), you can pre-heat feedwater, resulting in a COP multiplier effect on overall system efficiency.
+                </p>
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">3. Solar Thermal Pre-heating</h4>
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  Deploy CST (Concentrated Solar Thermal) rooftop collectors to handle 25% of the base heating load. This directly feeds into dyeing/finishing baths, significantly lowering the primary boiler's workload during peak sun hours.
+                </p>
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">4. Electrical Sourcing</h4>
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  Shift motive loads (motors/compressors) to Green Open Access grid electricity. This takes advantage of TANGEDCO waivers and ensures the 20% electrical load is fully decarbonized.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -711,13 +813,13 @@ export function DashboardCharts({ recommendation }: Props) {
         <div className="space-y-6">
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Cumulative Net Cash Flow (Payback) */}
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm">
               <div className="mb-4">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                   <IndianRupee className="h-5 w-5 text-emerald-400" />
                   10-Year Cumulative Cash Flow Projection
                 </h2>
-                <p className="text-xs text-zinc-400 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Accounting for initial CAPEX, annual fuel savings, and maintenance
                 </p>
               </div>
@@ -740,7 +842,8 @@ export function DashboardCharts({ recommendation }: Props) {
                       tickFormatter={(val) => `₹${val}L`}
                     />
                     <Tooltip
-                      contentStyle={{ background: "#18181b", borderRadius: 12, border: "1px solid #333" }}
+                      contentStyle={{ backgroundColor: "hsl(var(--card))", borderRadius: 12, border: "1px solid hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
                       formatter={(val: number) => [`₹${val} Lakhs`, "Cumulative Net Cash Flow"]}
                     />
                     <Area type="monotone" dataKey="netCashFlow" stroke="#10b981" strokeWidth={3} fill="url(#cashflowGrad)" />
@@ -753,18 +856,18 @@ export function DashboardCharts({ recommendation }: Props) {
                   <ShieldCheck className="h-5 w-5 text-emerald-400" />
                   <span className="text-xs font-semibold text-emerald-300">Breakeven Payback Achieved:</span>
                 </div>
-                <span className="text-sm font-extrabold text-white">Year 3.1 (~37 Months)</span>
+                <span className="text-sm font-extrabold text-foreground">Year 3.1 (~37 Months)</span>
               </div>
             </div>
 
             {/* 10-Year Cumulative Carbon Avoidance */}
-            <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm">
               <div className="mb-4">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
                   <TrendingDown className="h-5 w-5 text-teal-400" />
                   10-Year Cumulative CO₂ Avoidance
                 </h2>
-                <p className="text-xs text-zinc-400 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Baseline emissions growth vs optimized clean energy trajectory
                 </p>
               </div>
@@ -781,7 +884,8 @@ export function DashboardCharts({ recommendation }: Props) {
                       tickFormatter={(val) => `${val} t`}
                     />
                     <Tooltip
-                      contentStyle={{ background: "#18181b", borderRadius: 12, border: "1px solid #333" }}
+                      contentStyle={{ backgroundColor: "hsl(var(--card))", borderRadius: 12, border: "1px solid hsl(var(--border))", color: "hsl(var(--foreground))" }}
+                      itemStyle={{ color: "hsl(var(--foreground))" }}
                       formatter={(val: number) => [`${val} Tonnes CO₂e`, ""]}
                     />
                     <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
@@ -793,7 +897,7 @@ export function DashboardCharts({ recommendation }: Props) {
 
               <div className="mt-4 flex items-center justify-between rounded-xl bg-teal-500/10 p-3.5 border border-teal-500/20">
                 <span className="text-xs text-teal-300 font-semibold">10-Year Total Carbon Abatement:</span>
-                <span className="text-sm font-extrabold text-white">
+                <span className="text-sm font-extrabold text-foreground">
                   {trajectoryData[trajectoryData.length - 1]?.avoidedCO2.toLocaleString("en-IN")} Tonnes CO₂e
                 </span>
               </div>
@@ -804,20 +908,20 @@ export function DashboardCharts({ recommendation }: Props) {
 
       {/* ── TAB 4: TECHNOLOGY COMPARISON MATRIX ───────────────────── */}
       {activeTab === "technologies" && (
-        <div className="rounded-2xl border border-white/10 bg-zinc-900/70 p-6 backdrop-blur-sm space-y-4">
+        <div className="rounded-2xl border border-border/50 bg-surface-muted/70 p-6 backdrop-blur-sm space-y-4">
           <div>
-            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+            <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
               <Layers className="h-6 w-6 text-emerald-400" />
               Technology Evaluation Matrix
             </h2>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Multi-criteria comparison across Indian industrial decarbonization technologies (TRL, Temperature range, Capex, and Subsidies)
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-xl border border-white/10">
-            <table className="w-full text-left text-xs text-zinc-300">
-              <thead className="bg-zinc-800/80 text-[11px] uppercase tracking-wider text-zinc-400 border-b border-white/10">
+          <div className="overflow-x-auto rounded-xl border border-border/50">
+            <table className="w-full text-left text-xs text-foreground">
+              <thead className="bg-surface-muted text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
                 <tr>
                   <th className="py-3 px-4">Technology</th>
                   <th className="py-3 px-4">TRL & Readiness</th>
@@ -828,26 +932,26 @@ export function DashboardCharts({ recommendation }: Props) {
                   <th className="py-3 px-4">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-border/50">
                 {techComparisonRows.map((tech) => (
-                  <tr key={tech.name} className="hover:bg-white/[0.02] transition-colors">
-                    <td className="py-3.5 px-4 font-semibold text-white">
+                  <tr key={tech.name} className="hover:bg-surface-muted/50 transition-colors">
+                    <td className="py-3.5 px-4 font-semibold text-foreground">
                       <div>{tech.name}</div>
-                      <div className="text-[10px] text-zinc-400 font-normal">{tech.category}</div>
+                      <div className="text-[10px] text-muted-foreground font-normal">{tech.category}</div>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-emerald-400">{tech.trl}</td>
-                    <td className="py-3.5 px-4 text-zinc-200">{tech.tempRange}</td>
-                    <td className="py-3.5 px-4 text-zinc-200">{tech.efficiency}</td>
-                    <td className="py-3.5 px-4 text-zinc-200">{tech.capexRange}</td>
-                    <td className="py-3.5 px-4 text-xs text-zinc-400">{tech.subsidies}</td>
+                    <td className="py-3.5 px-4 font-medium text-emerald-500">{tech.trl}</td>
+                    <td className="py-3.5 px-4 text-foreground">{tech.tempRange}</td>
+                    <td className="py-3.5 px-4 text-foreground">{tech.efficiency}</td>
+                    <td className="py-3.5 px-4 text-foreground">{tech.capexRange}</td>
+                    <td className="py-3.5 px-4 text-xs text-muted-foreground">{tech.subsidies}</td>
                     <td className="py-3.5 px-4">
                       <span
                         className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold ${
                           tech.status === "Recommended"
-                            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20"
                             : tech.status === "Evaluating"
-                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                            : "bg-zinc-800 text-zinc-400 border border-zinc-700"
+                            ? "bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/20"
+                            : "bg-surface-muted text-muted-foreground border border-border"
                         }`}
                       >
                         {tech.status === "Recommended" && <CheckCircle2 className="h-3 w-3" />}

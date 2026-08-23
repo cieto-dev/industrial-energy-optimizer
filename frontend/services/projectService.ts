@@ -20,49 +20,64 @@ export interface SavedProject {
 
 const DEFAULT_PROJECTS: SavedProject[] = [
   {
-    id: "proj-tn-textile-01",
+    id: "proj-baddi-pharma-01",
+    name: "Baddi Pharma Extractors Pvt. Ltd.",
+    industry: "Pharmaceuticals & Chemicals",
+    state: "Himachal Pradesh",
+    district: "Solan",
+    createdAt: "2026-08-10T10:30:00Z",
+    updatedAt: "2026-08-20T14:15:00Z",
+    capexInr: 12000000,
+    annualSavingsInr: 4400000,
+    co2ReductionPct: 62.5,
+    paybackYears: 2.7,
+    status: "Completed",
+    technologies: ["Biomass Boiler", "Heat Pump (Air Source)"],
+  },
+  {
+    id: "proj-kanpur-leather-02",
+    name: "Kanpur Tanneries & Leather Works",
+    industry: "Leather",
+    state: "Uttar Pradesh",
+    district: "Kanpur Nagar",
+    createdAt: "2026-08-15T09:00:00Z",
+    updatedAt: "2026-08-21T11:45:00Z",
+    capexInr: 28000000,
+    annualSavingsInr: 6200000,
+    co2ReductionPct: 48.0,
+    paybackYears: 4.5,
+    status: "Completed",
+    technologies: ["Solar Water Heater", "Waste Heat Recovery"],
+  },
+  {
+    id: "proj-jammu-food-03",
+    name: "Jammu Agro & Food Processing",
+    industry: "Food & Beverage",
+    state: "Jammu & Kashmir",
+    district: "Jammu",
+    createdAt: "2026-08-18T16:20:00Z",
+    updatedAt: "2026-08-22T08:10:00Z",
+    capexInr: 18500000,
+    annualSavingsInr: 5100000,
+    co2ReductionPct: 75.0,
+    paybackYears: 3.6,
+    status: "Completed",
+    technologies: ["Electric Boiler", "Solar PV Rooftop"],
+  },
+  {
+    id: "proj-tn-textile-04",
     name: "Coimbatore Textile Dyeing Unit #4",
     industry: "Textile",
     state: "Tamil Nadu",
     district: "Coimbatore",
     createdAt: "2026-08-10T10:30:00Z",
     updatedAt: "2026-08-20T14:15:00Z",
-    capexInr: 12000000,
-    annualSavingsInr: 4700000,
+    capexInr: 32000000,
+    annualSavingsInr: 10600000,
     co2ReductionPct: 68.5,
-    paybackYears: 3.2,
+    paybackYears: 3.0,
     status: "Completed",
     technologies: ["Biomass Gasifier", "Solar Thermal (CST)", "Economizer"],
-  },
-  {
-    id: "proj-morbi-ceramic-02",
-    name: "Morbi Tiles Vitrified Kiln #2",
-    industry: "Ceramics",
-    state: "Gujarat",
-    district: "Morbi",
-    createdAt: "2026-08-15T09:00:00Z",
-    updatedAt: "2026-08-21T11:45:00Z",
-    capexInr: 28000000,
-    annualSavingsInr: 9200000,
-    co2ReductionPct: 54.0,
-    paybackYears: 3.8,
-    status: "Completed",
-    technologies: ["Bio-CNG Burner Upgrade", "Waste Heat Recovery (ORC)"],
-  },
-  {
-    id: "proj-ludhiana-forging-03",
-    name: "Ludhiana Auto Forging Plant A",
-    industry: "Forging & Metal",
-    state: "Punjab",
-    district: "Ludhiana",
-    createdAt: "2026-08-18T16:20:00Z",
-    updatedAt: "2026-08-22T08:10:00Z",
-    capexInr: 18500000,
-    annualSavingsInr: 6100000,
-    co2ReductionPct: 72.0,
-    paybackYears: 2.9,
-    status: "Completed",
-    technologies: ["Induction Billet Heating", "Solar PV Rooftop"],
   },
 ]
 
@@ -75,7 +90,24 @@ export const projectService = {
       const stored = localStorage.getItem(STORAGE_KEY)
       if (stored) {
         const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Merge missing defaults into parsed
+          let modified = false
+          const currentIds = new Set(parsed.map((p: SavedProject) => p.id))
+          
+          DEFAULT_PROJECTS.forEach(defProj => {
+            if (!currentIds.has(defProj.id)) {
+              parsed.push(defProj)
+              modified = true
+            }
+          })
+          
+          if (modified) {
+            this.saveProjects(parsed)
+          }
+          
+          return parsed
+        }
       }
     } catch (e) {
       console.error("Failed to read saved projects from localStorage", e)

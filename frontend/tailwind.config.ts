@@ -82,12 +82,30 @@ const config: Config = {
           "0%": { transform: "translateY(20px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "drift": {
+          "0%": { transform: "translateX(0) translateY(0)" },
+          "50%": { transform: "translateX(-20px) translateY(10px)" },
+          "100%": { transform: "translateX(0) translateY(0)" },
+        },
+        "pan": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "slide-up": "slide-up 0.6s ease-out forwards",
+        "float-slow": "float 20s ease-in-out infinite",
+        "drift-slow": "drift 30s ease-in-out infinite",
+        "pan-slow": "pan 40s ease-in-out infinite",
+        "pulse-slow": "pulse 15s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
