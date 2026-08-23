@@ -63,7 +63,9 @@ def _three_pathways() -> list[ScenarioMetrics]:
             capex_inr=800_000,
             annual_opex_inr=800_000,
             pathway_co2_tonnes_year=900.0,
+            co2_reduction_pct=10.0,
             spread_ratio=0.55,
+            supply_reliability=90.0,
         ),
         ScenarioMetrics(
             scenario_id="balanced_biomass",
@@ -71,7 +73,9 @@ def _three_pathways() -> list[ScenarioMetrics]:
             capex_inr=2_800_000,
             annual_opex_inr=1_400_000,
             pathway_co2_tonnes_year=320.0,
+            co2_reduction_pct=60.0,
             spread_ratio=0.28,
+            supply_reliability=80.0,
         ),
         ScenarioMetrics(
             scenario_id="expensive_solar",
@@ -79,24 +83,26 @@ def _three_pathways() -> list[ScenarioMetrics]:
             capex_inr=4_500_000,
             annual_opex_inr=900_000,
             pathway_co2_tonnes_year=180.0,
+            co2_reduction_pct=90.0,
             spread_ratio=0.16,
+            supply_reliability=100.0,
         ),
     ]
 
 
 def test_default_weights_are_documented_and_sum_to_one():
     weights = default_weights()
-    assert weights.cost == pytest.approx(0.40)
-    assert weights.emissions == pytest.approx(0.35)
-    assert weights.risk == pytest.approx(0.25)
+    assert weights.financial == pytest.approx(0.12)
+    assert weights.carbon_reduction == pytest.approx(0.12)
+    assert weights.risk == pytest.approx(0.10)
     assert abs(sum(weights.as_dict().values()) - 1.0) < 1e-9
 
 
 def test_weights_reject_negative_and_unnormalised():
     with pytest.raises(ValueError):
-        Weights(cost=-0.1, emissions=0.6, risk=0.5)
+        Weights(financial=-0.1, carbon_reduction=0.6, risk=0.5)
     with pytest.raises(ValueError):
-        Weights(cost=0.5, emissions=0.5, risk=0.5)
+        Weights(financial=0.5, carbon_reduction=0.5, risk=0.5)
 
 
 def test_cheapest_is_cheap_fossil():
@@ -121,7 +127,7 @@ def test_default_mcda_does_not_pick_cheapest():
 
 
 def test_cost_only_weights_do_pick_cheapest():
-    result = optimize(_three_pathways(), weights=Weights.cost_only())
+    result = optimize(_three_pathways(), weights=Weights.from_mapping({"financial": 1.0}))
     assert result.recommended_scenario_id == "cheap_fossil"
     assert result.recommended_is_cheapest is True
 
@@ -129,7 +135,7 @@ def test_cost_only_weights_do_pick_cheapest():
 def test_emissions_heavy_weights_prefer_lowest_co2():
     result = optimize(
         _three_pathways(),
-        weights={"cost": 0.10, "emissions": 0.80, "risk": 0.10},
+        weights=Weights.from_mapping({"financial": 0.10, "carbon_reduction": 0.80, "risk": 0.10}),
     )
     assert result.recommended_scenario_id == "expensive_solar"
 
@@ -137,7 +143,8 @@ def test_emissions_heavy_weights_prefer_lowest_co2():
 def test_objective_scores_match_domain_model_keys():
     result = optimize(_three_pathways())
     for row in result.ranked_scenarios:
-        assert set(row.objective_scores) == set(CRITERIA)
+        assert set(row.objective_scores) == {"cost", "emissions", "risk"}
+        assert set(row.criterion_scores) == set(CRITERIA)
         for value in row.objective_scores.values():
             assert 0.0 <= value <= 1.0
         assert row.rank >= 1
@@ -184,6 +191,8 @@ def test_nested_engine_objects_are_accepted():
             financial=FakeFinancial(),
             emission=FakeEmission(),
             risk_score=FakeRiskHigh(),
+            co2_reduction_pct=20.0,
+            supply_reliability=90.0,
         ),
         ScenarioMetrics(
             scenario_id="nested_clean",
@@ -191,6 +200,8 @@ def test_nested_engine_objects_are_accepted():
             financial=FakeFinancialExpensive(),
             emission=FakeEmissionLow(),
             risk_score=FakeRiskLow(),
+            co2_reduction_pct=80.0,
+            supply_reliability=95.0,
         ),
     ]
     result = optimize(candidates)

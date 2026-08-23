@@ -68,7 +68,7 @@ without breaking the current Recommendation model.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 from decision_engine.optimizer.optimization_engine import OptimizationResult
@@ -886,7 +886,7 @@ def generate_recommendation(
             optimization_result.recommended_is_cheapest
         ),
         explanation=explanation,
-        generated_at=datetime.utcnow(),
+        generated_at=datetime.now(timezone.utc),
     )
 
 

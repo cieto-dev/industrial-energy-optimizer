@@ -1489,15 +1489,20 @@ class ValidationEngine:
                 parameter=parameter,
             )
 
-        try:
-            self.units.dimension(
-                emission_factor_unit
-            )
-        except UnitValidationError as exc:
+        valid_units = {
+            "kgCO2/TJ",
+            "tCO2/TJ",
+            "kgCO2/kWh",
+            "kgCO2e/kWh",
+            "kgCO2/kg",
+            "tCO2/t",
+            "kgCO2/GJ",
+        }
+        if emission_factor_unit not in valid_units:
             result.add_issue(
                 "INVALID_EMISSION_FACTOR_UNIT",
                 "error",
-                str(exc),
+                f"Unsupported unit: '{emission_factor_unit}'.",
                 parameter=parameter,
             )
 

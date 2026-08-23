@@ -9,6 +9,9 @@ from decision_engine.optimizer.mcda import (
     COST_HORIZON_YEARS,
     ScenarioMetrics,
     ScoredScenario,
+    _resolve_capex,
+    _resolve_opex,
+    _resolve_criterion,
     clear_mcda_cache,
     lifecycle_cost,
     score_scenarios,
@@ -257,17 +260,33 @@ def _metrics_cache_key(
     scenario_signature = []
 
     for metric in metrics:
+        capex = metric.capex_inr
+        if capex is None and metric.financial is not None:
+            capex = _resolve_capex(metric)
+
+        opex = metric.annual_opex_inr
+        if opex is None and metric.financial is not None:
+            opex = _resolve_opex(metric)
+
+        co2_reduction = metric.co2_reduction_pct
+        if co2_reduction is None and metric.emission is not None:
+            co2_reduction = _resolve_criterion(metric, "carbon_reduction")
+
+        spread = metric.spread_ratio
+        if spread is None and metric.risk_score is not None:
+            spread = _resolve_criterion(metric, "risk")
+
         scenario_signature.append(
             (
                 metric.scenario_id,
                 tuple(
                     metric.technology_sequence
                 ),
-                metric.capex_inr,
-                metric.annual_opex_inr,
+                capex,
+                opex,
                 metric.pathway_co2_tonnes_year,
-                metric.co2_reduction_pct,
-                metric.spread_ratio,
+                co2_reduction,
+                spread,
                 metric.risk_tier,
                 metric.reliability_score_pct,
                 metric.technical_score,

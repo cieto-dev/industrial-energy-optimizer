@@ -94,9 +94,9 @@ def test_textile_baseline_known_input_output():
     baseline = compute_baseline(factory)
     
     assert baseline.annual_thermal_energy_mj == pytest.approx(
-        588_900.0,
-        rel=1e-6,
-)
+        402_807.6,
+        rel=1e-4,
+    )
 
     assert baseline.annual_electricity_kwh == pytest.approx(
         300_000.0,

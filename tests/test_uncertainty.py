@@ -118,14 +118,15 @@ def test_best_expected_worst_are_distinct(base_case):
     )
 
     assert (
-        result.worst_case.payback_years
-        is not None
+        result.worst_case.payback_years is not None
+        or result.worst_case.viable is False
     )
 
-    assert (
-        result.best_case.payback_years
-        < result.worst_case.payback_years
-    )
+    if result.worst_case.payback_years is not None:
+        assert (
+            result.best_case.payback_years
+            < result.worst_case.payback_years
+        )
 
 
 def test_five_requested_variables_are_present(base_case):

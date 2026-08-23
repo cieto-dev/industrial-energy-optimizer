@@ -78,19 +78,34 @@ class KnowledgeRepository:
         if isinstance(data, dict) and "records" in data:
             data = data["records"]
 
-        if isinstance(data, dict):
-            return [
-                value
-                for value in data.values()
-                if isinstance(value, dict)
-            ]
-
         if isinstance(data, list):
             return [
                 value
                 for value in data
                 if isinstance(value, dict)
             ]
+
+        if isinstance(data, dict):
+            # If the dict is itself a record with an identifier, return [data]
+            if any(k in data for k in ("industry_id", "technology_id", "biomass_id", "tariff_id")):
+                return [data]
+
+            # If it has a container key, return its sub-records
+            for container_key in ("industries", "technologies", "biomass", "tariffs"):
+                if container_key in data and isinstance(data[container_key], dict):
+                    return [
+                        v for v in data[container_key].values()
+                        if isinstance(v, dict)
+                    ]
+
+            sub_dicts = [
+                value
+                for value in data.values()
+                if isinstance(value, dict)
+            ]
+            if sub_dicts:
+                return sub_dicts
+            return [data]
 
         raise KnowledgeDataError(
             "runtime",
@@ -111,13 +126,13 @@ class KnowledgeRepository:
 
         return None
 
-    @staticmethod
     def _with_evidence(
+        self,
         record: dict[str, Any],
     ) -> dict[str, Any]:
-        # Do not copy the entire record recursively here.
-        # Evidence is already owned by repository/runtime objects.
-        return record
+        result = dict(record)
+        result["evidence"] = self.evidence.resolve(record)
+        return result
 
     # ------------------------------------------------------------------
     # Index builders
@@ -234,7 +249,7 @@ class KnowledgeRepository:
         records = self._as_records(data)
 
         if biomass_id is None:
-            return records
+            return [self._with_evidence(r) for r in records]
 
         index = self._get_biomass_index()
 
@@ -248,7 +263,7 @@ class KnowledgeRepository:
                 biomass_id,
             )
 
-        return record
+        return self._with_evidence(record)
 
     # ------------------------------------------------------------------
     # Tariffs
@@ -283,7 +298,7 @@ class KnowledgeRepository:
                     current is not None
                     and current.lower() == target
                 ):
-                    return record
+                    return self._with_evidence(record)
 
             raise KnowledgeItemNotFoundError(
                 "tariff",
@@ -325,9 +340,10 @@ class KnowledgeRepository:
                 == consumer_category
             ]
 
-        self._tariff_query_cache[cache_key] = filtered
+        result = [self._with_evidence(r) for r in filtered]
+        self._tariff_query_cache[cache_key] = result
 
-        return filtered
+        return result
 
     # ------------------------------------------------------------------
     # Technology
@@ -339,9 +355,10 @@ class KnowledgeRepository:
     ) -> dict[str, Any] | list[dict[str, Any]]:
 
         if technology_id is None:
-            return list(
-                self._get_technology_index().values()
-            )
+            return [
+                self._with_evidence(r)
+                for r in self._get_technology_index().values()
+            ]
 
         target = str(technology_id).strip().lower()
 
@@ -353,7 +370,7 @@ class KnowledgeRepository:
                 technology_id,
             )
 
-        return record
+        return self._with_evidence(record)
 
     # ------------------------------------------------------------------
     # Industries
@@ -365,9 +382,10 @@ class KnowledgeRepository:
     ) -> dict[str, Any] | list[dict[str, Any]]:
 
         if industry_id is None:
-            return list(
-                self._get_industry_index().values()
-            )
+            return [
+                self._with_evidence(r)
+                for r in self._get_industry_index().values()
+            ]
 
         target = str(industry_id).strip().lower()
 
@@ -379,7 +397,7 @@ class KnowledgeRepository:
                 industry_id,
             )
 
-        return record
+        return self._with_evidence(record)
 
     # ------------------------------------------------------------------
     # Emission factors
@@ -403,7 +421,7 @@ class KnowledgeRepository:
 
         if fuel_id is None:
             return {
-                key: value
+                key: self._with_evidence(value)
                 for key, value in data.items()
                 if isinstance(value, dict)
             }
@@ -416,7 +434,7 @@ class KnowledgeRepository:
                 fuel_id,
             )
 
-        return value
+        return self._with_evidence(value)
 
     # ------------------------------------------------------------------
     # Grid factors
@@ -450,4 +468,10 @@ class KnowledgeRepository:
             )
 
         return value
+
+    def get_source(
+        self,
+        source_id: str,
+    ) -> dict[str, Any]:
+        return self.evidence.get_source(source_id)
 

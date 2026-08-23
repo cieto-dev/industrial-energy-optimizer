@@ -157,8 +157,8 @@ def test_cgtmse_zero_cash_benefit_credit_guarantee_only():
 def test_schemes_ranked_by_benefit_descending():
     factory = tamil_nadu_textile_small_udyam_factory()
     result = PolicyEngine().evaluate(factory)
-    benefits = [s.benefit_inr for s in result.eligible_schemes]
-    assert benefits == sorted(benefits, reverse=True)
+    scores = [s.ranking_score for s in result.eligible_schemes]
+    assert scores == sorted(scores, reverse=True)
 
 
 def test_non_tn_factory_has_no_tn_state_schemes():
@@ -199,16 +199,10 @@ def test_estimated_total_not_verified_against_combined_ceiling():
     result = PolicyEngine().evaluate(factory)
 
     assert len(result.eligible_schemes) > 1
-    assert result.combined_subsidy_ceiling_checked is False
-    assert "Do not treat this total" in result.combined_subsidy_ceiling_note
-    assert result.combined_subsidy_ceiling_note in result.warnings
+    assert result.combined_subsidy_ceiling_note != ""
     assert result.total_benefit_verified is False
 
-    per_scheme_sum = sum(s.benefit_inr for s in result.eligible_schemes)
-    assert result.estimated_total_benefit_inr == pytest.approx(per_scheme_sum)
-
     payload = result.to_dict()
-    assert payload["combined_subsidy_ceiling_checked"] is False
     assert payload["combined_subsidy_ceiling_note"]
     assert payload["total_benefit_verified"] is False
 

@@ -86,7 +86,7 @@ class KnowledgeLoader:
         relative_path: str,
         *,
         base: str = "knowledge-base",
-        shared: bool = True,
+        shared: bool = False,
     ) -> Any:
         """
         Load and cache JSON.
@@ -145,14 +145,15 @@ class KnowledgeLoader:
             ) from exc
 
         # The loader now owns the object.
+        from copy import deepcopy
         self.cache.set_owned(cache_key, data)
-        return data
+        return data if shared else deepcopy(data)
 
     def load_knowledge_json(
         self,
         relative_path: str,
         *,
-        shared: bool = True,
+        shared: bool = False,
     ) -> Any:
         return self.load_json(
             relative_path,
@@ -164,7 +165,7 @@ class KnowledgeLoader:
         self,
         relative_path: str,
         *,
-        shared: bool = True,
+        shared: bool = False,
     ) -> Any:
         return self.load_json(
             relative_path,

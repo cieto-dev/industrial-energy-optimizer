@@ -117,16 +117,16 @@ class SensitivityAnalysis(BaseModel):
     Monte Carlo uncertainty distribution.
     """
 
-    best_case: SensitivityCase
+    best_case: Optional[SensitivityCase] = None
 
-    expected_case: SensitivityCase
+    expected_case: Optional[SensitivityCase] = None
 
-    worst_case: SensitivityCase
+    worst_case: Optional[SensitivityCase] = None
 
     payback_range_years: tuple[
         Optional[float],
         Optional[float],
-    ]
+    ] = (None, None)
 
     payback_p10_years: float
 
@@ -194,7 +194,7 @@ class Recommendation(BaseModel):
 
     explanation: Explanation
 
-    evidence_summary: EvidenceSummary
+    evidence_summary: Optional[EvidenceSummary] = None
 
     generated_at: datetime = Field(
         default_factory=datetime.utcnow

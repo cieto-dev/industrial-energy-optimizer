@@ -52,11 +52,20 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-INDUSTRY_CONSTRAINTS_FILE = (
+_INDUSTRY_FILE = (
+    BASE_DIR
+    / "knowledge-base"
+    / "industries"
+    / "industry_constraints.json"
+)
+_CONSTRAINTS_FILE = (
     BASE_DIR
     / "knowledge-base"
     / "constraints"
     / "industry_constraints.json"
+)
+INDUSTRY_CONSTRAINTS_FILE = (
+    _INDUSTRY_FILE if _INDUSTRY_FILE.exists() else _CONSTRAINTS_FILE
 )
 
 
@@ -476,6 +485,7 @@ class IndustryConstraintEngine:
             "cluster_recommendations": cluster_recommendations,
             "technical_feasible": technical_feasible,
             "technical_reasons": technical_reason_list,
+            "reasons": [reason] if reason else [],
             "feasible": final_feasible,
         }
 
@@ -543,6 +553,8 @@ class IndustryConstraintEngine:
             )
 
         return results
+
+    evaluate_many = evaluate_technologies
 
     # ------------------------------------------------------------------
     # Preferred / allowed technologies

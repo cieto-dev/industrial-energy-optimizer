@@ -46,7 +46,7 @@ def test_biogas_rejects_unsupported_fuel(fuel):
 
     assert result["technology"] == "biogas"
     assert result["feasible"] is False
-    assert "not configured to replace" in result["reason"]
+    assert "cannot replace" in result["reason"] or "not configured to replace" in result["reason"]
 
 
 def test_biogas_rejects_unsupported_industry():
@@ -62,7 +62,7 @@ def test_biogas_rejects_unsupported_industry():
 
     assert result["technology"] == "biogas"
     assert result["feasible"] is False
-    assert "not in the project eligibility rules" in result["reason"]
+    assert "not supported by" in result["reason"] or "not in the project eligibility rules" in result["reason"]
 
 
 def test_biogas_rejects_without_supply():

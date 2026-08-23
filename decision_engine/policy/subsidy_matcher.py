@@ -1328,6 +1328,8 @@ class SubsidyMatcher:
         value = guarantee_block.get("value")
         if isinstance(value, (int, float)):
             coverage = float(value)
+        elif isinstance(guarantee_block.get("general"), dict) and "coverage_pct" in guarantee_block["general"]:
+            coverage = float(guarantee_block["general"]["coverage_pct"])
         else:
             research = guarantee_block.get("research", {})
             summary = str(

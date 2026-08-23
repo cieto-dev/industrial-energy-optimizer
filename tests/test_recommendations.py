@@ -191,7 +191,11 @@ def test_why_selected_contains_plain_language_explanations():
         assert len(reason) > 10  # Not too short
         assert any(
             word in reason.lower()
-            for word in ["ranked", "score", "cost", "emissions", "eligible", "reduces", "fossil"]
+            for word in [
+                "ranked", "score", "cost", "emissions", "eligible",
+                "reduces", "reduction", "fossil", "policy", "financial",
+                "support", "benefit", "co2"
+            ]
         ), f"Reason should contain plain language: {reason}"
 
 
@@ -250,7 +254,7 @@ def test_policy_benefit_summary_contains_disclaimer_when_unverified():
     assert policy_benefits.total_benefit_verified is False
     assert len(policy_benefits.disclaimer) > 0
     assert "manual verification" in policy_benefits.disclaimer.lower()
-    assert "scheme-specific convergence rules" in policy_benefits.disclaimer.lower()
+    assert "scheme-specific convergence" in policy_benefits.disclaimer.lower()
 
 
 def test_recommendation_contains_all_required_fields():

@@ -617,6 +617,7 @@ class ResearchValidationFramework:
             "recommended_scenario_id",
             "recommended_technology_sequence",
             "composite_score",
+            "objective_scores",
         } and not related_source_ids:
             issues.append(
                 ValidationIssue(
@@ -1290,23 +1291,20 @@ class ResearchValidationFramework:
                 record.get("target_field"),
                 record.get("used_for"),
                 record.get("parameter"),
-            }
+            } - {None}
 
-            if field_name in {
-                str(candidate)
-                for candidate in field_candidates
-                if candidate is not None
-            }:
-                source_ids.update(
-                    ResearchValidationFramework._source_ids_from_record(
-                        record
+            if field_candidates:
+                if field_name in {
+                    str(candidate)
+                    for candidate in field_candidates
+                }:
+                    source_ids.update(
+                        ResearchValidationFramework._source_ids_from_record(
+                            record
+                        )
                     )
-                )
-
-        # If there is no parameter-level mapping, generic recommendation
-        # evidence can still support derived values.
-        if not source_ids:
-            for record in evidence_records:
+            else:
+                # Truly generic record without specific parameter binding
                 source_ids.update(
                     ResearchValidationFramework._source_ids_from_record(
                         record
