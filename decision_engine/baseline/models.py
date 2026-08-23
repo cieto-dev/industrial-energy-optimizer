@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from typing import Any
@@ -85,6 +84,12 @@ class BaselineProfile(BaseModel):
       6. emissions.
 
     Pathways must be evaluated against this object without mutating it.
+
+    Cost coverage (Task 3.1 item 6)
+    ------------------------------
+    annual_electricity_cost_inr is energy-only (no demand charges).
+    See calculation_assumptions["electricity"]["cost_coverage_*"]
+    and the top-level coverage fields for the explicit limitation.
     """
 
     model_config = ConfigDict(frozen=True)
@@ -120,3 +125,30 @@ class BaselineProfile(BaseModel):
     # ---- Transparency ----
     calculation_assumptions: dict[str, Any] = Field(default_factory=dict)
     source_ids: list[str] = Field(default_factory=list)
+
+    # ---- Task 6: explicit cost-coverage surface ----
+    electricity_cost_coverage: str = Field(
+        default="energy_only",
+        description=(
+            "MVP coverage of the electricity cost figure. "
+            "'energy_only' means demand/fixed/duty charges are excluded."
+        ),
+    )
+    electricity_cost_coverage_status: str = Field(
+        default="incomplete_mvp",
+        description=(
+            "Status of the electricity cost figure. "
+            "'incomplete_mvp' indicates the value must not be treated "
+            "as a complete annual bill."
+        ),
+    )
+    electricity_cost_coverage_limitation: str = Field(
+        default=(
+            "MVP electricity cost excludes demand (kVA/kW) charges, "
+            "fixed charges and duty/surcharge because the Factory "
+            "contract does not supply contracted demand. Treat "
+            "annual_electricity_cost_inr as energy-only and therefore "
+            "incomplete for sites with material demand charges."
+        ),
+        description="Human-readable coverage limitation for reports and UI.",
+    )

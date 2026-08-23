@@ -516,31 +516,20 @@ class UnitSystem:
 # =============================================================================
 
 
+
 @dataclass(frozen=True)
 class AssumptionRecord:
-    """
-    Research-backed model parameter.
-
-    source_id should correspond to the repository reference registry when the
-    value is derived from project research.
-    """
-
     parameter: str
     value: float
     unit: str
-
-    source_id: Optional[str] = None
-    source_type: str = "unknown"
-    source_date: Optional[str] = None
-
-    status: str = "unknown"
-    confidence: str = "unknown"
-
-    uncertainty: Optional[str] = None
-    notes: str = ""
-
-    min_value: Optional[float] = None
-    max_value: Optional[float] = None
+    source_id: str
+    source_type: str
+    status: str
+    confidence: str
+    uncertainty: str | None = None
+    notes: str | None = None
+    source_date: str | None = None
+    applicability: str | None = None   # <-- add this line if missing
 
     def __post_init__(self) -> None:
         if not _clean_text(self.parameter):

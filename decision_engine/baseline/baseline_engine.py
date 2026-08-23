@@ -8,7 +8,7 @@ Flow
 Factory
   → Fuel input energy + thermal energy balance (validated)
   → Electricity demand
-  → Energy costs
+  → Energy costs (energy-only; demand charges excluded – Task 6)
   → Fuel + electricity emissions (correct daily → annual conversion)
   → FuelConsumptionProfile + EnergyBalance objects
   → BaselineProfile (with full provenance / assumptions)
@@ -19,6 +19,8 @@ Task-3.1 / research-policy rules applied here
 2. Grid emission factor accounting basis is explicit.
 3. Planning defaults carry evidence records (propagated from energy_calculator).
 4. Assumptions stay versioned and traceable; no silent fabrication.
+5. (Task 6) Electricity cost is energy-only; the coverage limitation is
+   surfaced as a first-class field and inside calculation_assumptions.
 """
 
 from __future__ import annotations
@@ -40,6 +42,7 @@ from decision_engine.baseline.fuel_calculator import (
 )
 from decision_engine.baseline.models import (
     BaselineProfile,
+    CostCoverageLimitation,
     EnergyBalance,
     FuelConsumptionProfile,
 )
@@ -221,7 +224,7 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
       ↓
     Useful heat + losses (validated energy balance)
       ↓
-    Fuel + electricity cost
+    Fuel + electricity cost  (energy-only; Task 6 coverage limitation)
       ↓
     Fuel + electricity emissions  (daily → annual conversion is explicit)
       ↓
@@ -241,7 +244,7 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
     ]
 
     # ------------------------------------------------------------------
-    # 2. Electricity
+    # 2. Electricity demand
     # ------------------------------------------------------------------
     annual_electricity_kwh = calculate_annual_electricity_demand(factory)
     annual_electricity_mj = calculate_annual_electricity_energy_mj(factory)
@@ -260,11 +263,51 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
         annual_electricity_kwh=annual_electricity_kwh,
     )
 
+    # Build the first-class CostCoverageLimitation object
+    cost_coverage = CostCoverageLimitation(
+        demand_charge_modeled=bool(
+            costs.get("demand_charge_modeled", False)
+        ),
+        cost_coverage=str(
+            costs.get("cost_coverage", "energy_only")
+        ),
+        cost_coverage_status=str(
+            costs.get("cost_coverage_status", "incomplete_mvp")
+        ),
+        limitation=str(
+            costs.get(
+                "cost_coverage_limitation",
+                costs.get(
+                    "demand_charge_note",
+                    (
+                        "MVP electricity cost excludes demand (kVA/kW) charges, "
+                        "fixed charges and electricity duty/surcharge because "
+                        "the Factory contract does not supply contracted_demand_kva "
+                        "or maximum_demand_kva. Treat annual_electricity_cost_inr "
+                        "as energy-only and therefore incomplete for sites with "
+                        "material demand charges."
+                    ),
+                ),
+            )
+        ),
+        uncertainty_flags=list(
+            costs.get(
+                "uncertainty_flags",
+                [
+                    "electricity_cost_excludes_demand_charges",
+                    "electricity_cost_excludes_fixed_charges",
+                    "electricity_cost_excludes_duty_surcharge",
+                    "annual_electricity_cost_is_energy_only",
+                ],
+            )
+        ),
+    )
+
     # ------------------------------------------------------------------
-    # 4. Fuel emissions  ★ CRITICAL UNIT FIX ★
+    # 4. Fuel emissions  ★ CRITICAL UNIT FIX (Task 1) ★
     # ------------------------------------------------------------------
-    # calculate_fuel_emissions() is defined to accept *daily* consumption
-    # and returns fields named *_day.  We therefore:
+    # calculate_fuel_emissions() accepts *daily* consumption and returns
+    # fields named *_day. We therefore:
     #   a) convert the factory quantity to daily units,
     #   b) call the emissions engine with that daily value,
     #   c) scale the daily CO₂ result by operating days to obtain annual.
@@ -273,6 +316,7 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
     # (dimensionally wrong by a factor of operating_days_per_year).
     fuel = factory.current_fuel.lower().strip()
     fuel_ef_data = get_emission_factor(fuel)
+    fuel_source_id = fuel_ef_data.get("source_id")
 
     from decision_engine.baseline._units import (
         standardize_daily_consumption,
@@ -284,26 +328,25 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
         fuel_ef_data["input_unit"],
     )
 
-    # Daily emissions (correct API usage)
     daily_fuel_emissions = calculate_fuel_emissions(
         fuel,
         daily_fuel_consumption,
     )
 
-    daily_fuel_co2_tonnes = float(daily_fuel_emissions["co2_tco2_day"])
+    daily_fuel_co2_tonnes = float(
+        daily_fuel_emissions["co2_tco2_day"]
+    )
 
-    # Explicit conversion to annual
     operating_days = float(factory.operating_days_per_year)
     annual_fuel_co2_tonnes = daily_fuel_co2_tonnes * operating_days
 
     # ------------------------------------------------------------------
-    # 5. Electricity emissions — explicit grid accounting basis
+    # 5. Electricity emissions — explicit grid accounting basis (Task 4)
     # ------------------------------------------------------------------
     grid_factor, grid_meta = _load_grid_emission_factor(
         basis=None  # project default; pass explicit basis when Factory supports it
     )
 
-    # Convenience aliases used by provenance / assumptions
     grid_source_id = grid_meta.get("source_id")
     grid_basis = (
         grid_meta.get("basis_key")
@@ -389,21 +432,23 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
     )
 
     # ------------------------------------------------------------------
-    # 10. Provenance
+    # 10. Provenance (source IDs)
     # ------------------------------------------------------------------
     source_ids: list[str] = []
 
-    fuel_source_id = fuel_ef_data.get("source_id")
-    if fuel_source_id:
-        source_ids.append(str(fuel_source_id))
-
-    if grid_source_id:
-        source_ids.append(str(grid_source_id))
+    for sid in (
+        costs.get("fuel_price_source_id"),
+        costs.get("electricity_tariff_source_id"),
+        fuel_source_id,
+        grid_source_id,
+    ):
+        if sid and str(sid) not in source_ids:
+            source_ids.append(str(sid))
 
     source_ids = sorted(set(source_ids))
 
     # ------------------------------------------------------------------
-    # 11. Assumptions / transparency (full evidence records)
+    # 11. Assumptions / transparency (full evidence records + Task 6)
     # ------------------------------------------------------------------
     thermal_assumptions = energy_balance_data.get("assumptions", {})
 
@@ -426,15 +471,33 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
             ),
         },
         "electricity": {
+            "annual_electricity_kwh": annual_electricity_kwh,
+            "electricity_tariff_inr_per_kwh": costs.get(
+                "electricity_tariff_inr_per_kwh"
+            ),
+            "electricity_tariff_source_id": costs.get(
+                "electricity_tariff_source_id"
+            ),
+            "electricity_tariff_status": costs.get(
+                "electricity_tariff_status"
+            ),
+            "electricity_tariff_confidence": costs.get(
+                "electricity_tariff_confidence"
+            ),
             "unit_conversion": "1 kWh = 3.6 MJ",
+            # Grid factor provenance (Task 4)
             "grid_emission_factor_kgco2e_per_kwh": grid_factor,
             "grid_emission_factor_basis": grid_basis,
             "grid_emission_factor_source_id": grid_source_id,
-            "grid_emission_factor_source_type": grid_meta.get("source_type"),
+            "grid_emission_factor_source_type": grid_meta.get(
+                "source_type"
+            ),
             "grid_emission_factor_reporting_year": grid_meta.get(
                 "reporting_year"
             ),
-            "grid_emission_factor_confidence": grid_meta.get("confidence"),
+            "grid_emission_factor_confidence": grid_meta.get(
+                "confidence"
+            ),
             "grid_emission_factor_status": grid_meta.get("status"),
             "grid_emission_factor_scope2_alignment": grid_meta.get(
                 "scope2_alignment"
@@ -447,12 +510,12 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
                 "grid_factors.json and can be selected once the Factory "
                 "contract exposes a selector. Factors are never averaged."
             ),
-            "cost_coverage_limitation": (
-                "MVP electricity cost excludes demand (kVA) charges "
-                "because the Factory contract does not supply contracted "
-                "demand. Treat annual_electricity_cost_inr as energy-only "
-                "and therefore incomplete for sites with material demand charges."
-            ),
+            # Task 6 – explicit coverage limitation
+            "demand_charge_modeled": cost_coverage.demand_charge_modeled,
+            "cost_coverage": cost_coverage.cost_coverage,
+            "cost_coverage_status": cost_coverage.cost_coverage_status,
+            "cost_coverage_limitation": cost_coverage.limitation,
+            "uncertainty_flags": list(cost_coverage.uncertainty_flags),
         },
         "fuel": {
             "fuel": fuel,
@@ -488,8 +551,18 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
                 "the physical factor here."
             ),
         },
+        "cost_coverage": {
+            "demand_charge_modeled": cost_coverage.demand_charge_modeled,
+            "cost_coverage": cost_coverage.cost_coverage,
+            "cost_coverage_status": cost_coverage.cost_coverage_status,
+            "cost_coverage_limitation": cost_coverage.limitation,
+            "uncertainty_flags": list(cost_coverage.uncertainty_flags),
+        },
     }
 
+    # ------------------------------------------------------------------
+    # 12. Final immutable BaselineProfile
+    # ------------------------------------------------------------------
     return BaselineProfile(
         annual_thermal_energy_mj=annual_useful_heat_mj,
         annual_electricity_kwh=annual_electricity_kwh,
@@ -499,6 +572,7 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
         annual_fuel_cost_inr=costs["annual_fuel_cost_inr"],
         annual_electricity_cost_inr=costs["annual_electricity_cost_inr"],
         annual_total_energy_cost_inr=costs["total_energy_cost_inr"],
+        cost_coverage=cost_coverage,  # first-class Task-6 field
         annual_fuel_co2_tonnes=annual_fuel_co2_tonnes,
         annual_electricity_co2_tonnes=annual_electricity_co2_tonnes,
         annual_co2_tonnes=annual_total_co2_tonnes,

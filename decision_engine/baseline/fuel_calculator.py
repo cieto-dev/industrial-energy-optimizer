@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -105,99 +104,124 @@ def get_fuel_price_record(fuel: str) -> dict[str, Any]:
             return {
                 "fuel": fuel,
                 "fuel_id": fuel_id,
-                "parameter": key,
                 "price": float(data["value"]),
                 "unit": _normalize_fuel_price_unit(
-                    str(data.get("unit", ""))
+                    data.get("unit", "")
                 ),
-                "status": data.get("status"),
-                "confidence": data.get("confidence"),
+                "status": data.get("status", "estimated"),
+                "confidence": data.get("confidence", "medium"),
                 "source_id": data.get("source_id"),
+                "source_type": data.get("source_type"),
+                "parameter_key": key,
             }
 
+    # Fallback: first price_* parameter that has a numeric value
     for key, data in parameters.items():
-        if (
-            key.startswith("price_")
-            and isinstance(data, dict)
-            and data.get("value") is not None
-        ):
+        if not key.startswith("price_"):
+            continue
+        if data and data.get("value") is not None:
             return {
                 "fuel": fuel,
                 "fuel_id": fuel_id,
-                "parameter": key,
                 "price": float(data["value"]),
                 "unit": _normalize_fuel_price_unit(
-                    str(data.get("unit", ""))
+                    data.get("unit", "")
                 ),
-                "status": data.get("status"),
-                "confidence": data.get("confidence"),
+                "status": data.get("status", "estimated"),
+                "confidence": data.get("confidence", "medium"),
                 "source_id": data.get("source_id"),
+                "source_type": data.get("source_type"),
+                "parameter_key": key,
             }
 
     raise ValueError(
-        f"No usable price record was found for fuel '{fuel}'."
+        f"No usable price parameter found for fuel '{fuel}' "
+        f"(fuel_id={fuel_id})."
     )
-
-
-def get_fuel_price(fuel: str) -> float:
-    """
-    Backward-compatible helper returning only the numeric price.
-    """
-    return get_fuel_price_record(fuel)["price"]
 
 
 def get_electricity_tariff_record(state: str) -> dict[str, Any]:
     """
-    Resolve an electricity energy charge for the supplied state.
+    Return the energy-charge (INR/kWh) record for the given state.
 
-    This intentionally does not add demand charges yet because Factory does
-    not currently expose contracted/maximum demand in kVA.
+    Demand charges are intentionally NOT returned here for the MVP
+    baseline path (see calculate_annual_energy_cost coverage note).
     """
-    tariffs_data = _load_json(ELEC_TARIFFS_FILE).get("entities", {})
+    state = state.strip()
 
-    for tariff_id, data in tariffs_data.items():
-        parameters = data.get("parameters", {})
+    data = _load_json(ELEC_TARIFFS_FILE)
+    entities = data.get("entities", {})
 
-        energy_charge = parameters.get(
-            "energy_charge_inr_per_kwh"
+    # Prefer exact state match, then normalized lookup
+    for entity_id, entity in entities.items():
+        meta = entity.get("metadata", {})
+        entity_state = (
+            meta.get("state")
+            or entity.get("state")
+            or entity_id
         )
+        if str(entity_state).strip().lower() == state.lower():
+            parameters = entity.get("parameters", {})
 
-        if energy_charge:
-            applicability = energy_charge.get(
-                "applicability",
-                {},
+            # Prefer energy_charge_kwh, then energy_charge, then any charge
+            for key in (
+                "energy_charge_kwh",
+                "energy_charge",
+                "energy_charge_inr_per_kwh",
+                "tariff_energy",
+            ):
+                charge_data = parameters.get(key)
+                if charge_data and charge_data.get("value") is not None:
+                    return {
+                        "state": state,
+                        "entity_id": entity_id,
+                        "charge": float(charge_data["value"]),
+                        "unit": charge_data.get(
+                            "unit", "INR/kWh"
+                        ),
+                        "status": charge_data.get(
+                            "status", "estimated"
+                        ),
+                        "confidence": charge_data.get(
+                            "confidence", "medium"
+                        ),
+                        "source_id": charge_data.get("source_id"),
+                        "source_type": charge_data.get(
+                            "source_type"
+                        ),
+                        "parameter_key": key,
+                    }
+
+            # Legacy kvah fallback (still energy-only)
+            energy_charge_kvah = parameters.get(
+                "energy_charge_kvah"
             )
-
-            if applicability.get("state") == state:
+            if (
+                energy_charge_kvah
+                and energy_charge_kvah.get("value") is not None
+            ):
                 return {
-                    "tariff_id": tariff_id,
-                    "charge": float(
-                        energy_charge["value"]
-                    ),
-                    "unit": "INR/kWh",
-                    "status": energy_charge.get("status"),
-                    "source_id": energy_charge.get("source_id"),
-                }
-
-        energy_charge_kvah = parameters.get(
-            "energy_charge_inr_per_kvah"
-        )
-
-        if energy_charge_kvah:
-            applicability = energy_charge_kvah.get(
-                "applicability",
-                {},
-            )
-
-            if applicability.get("state") == state:
-                return {
-                    "tariff_id": tariff_id,
+                    "state": state,
+                    "entity_id": entity_id,
                     "charge": float(
                         energy_charge_kvah["value"]
                     ),
-                    "unit": "INR/kVAh",
-                    "status": energy_charge_kvah.get("status"),
-                    "source_id": energy_charge_kvah.get("source_id"),
+                    "unit": energy_charge_kvah.get(
+                        "unit", "INR/kVAh"
+                    ),
+                    "status": energy_charge_kvah.get(
+                        "status", "estimated"
+                    ),
+                    "confidence": energy_charge_kvah.get(
+                        "confidence", "medium"
+                    ),
+                    "source_id": energy_charge_kvah.get(
+                        "source_id"
+                    ),
+                    "source_type": energy_charge_kvah.get(
+                        "source_type"
+                    ),
+                    "parameter_key": "energy_charge_kvah",
                 }
 
     raise ValueError(
@@ -237,13 +261,20 @@ def calculate_annual_energy_cost(
     """
     Calculate annual energy cost using the knowledge-base prices.
 
-    Backward compatibility:
-        annual_fuel_base and annual_electricity_kwh may still be supplied
-        by existing callers.
+    MVP coverage limitation (Task 3.1 item 6)
+    ----------------------------------------
+    Electricity cost is **energy-only** (INR/kWh × annual kWh).
+    Demand (kVA/kW) charges, fixed charges, and duty/surcharge are
+    deliberately excluded because the current Factory contract does
+    not supply contracted_demand_kva / maximum_demand_kva.
 
-    However, for robust unit handling, the preferred path is to call this
-    function with the Factory and let it derive annual fuel consumption from
-    Factory.fuel_consumption.
+    The returned dict therefore always contains:
+      - demand_charge_modeled = False
+      - cost_coverage = "energy_only"
+      - coverage_limitation / uncertainty notes
+
+    Callers MUST treat annual_electricity_cost_inr as incomplete for
+    any site that faces material demand charges.
     """
     fuel = factory.current_fuel.lower().strip()
 
@@ -254,14 +285,6 @@ def calculate_annual_energy_cost(
     # ------------------------------------------------------------------
     # Fuel quantity matching
     # ------------------------------------------------------------------
-    #
-    # The knowledge base stores fuel prices in physical price units.
-    # We therefore derive annual physical consumption from Factory unless
-    # an explicitly compatible annual_fuel_base was supplied.
-    #
-    # For backward compatibility, only use annual_fuel_base when it matches
-    # the price unit's intended basis.
-    #
     if price_unit == "INR/kg":
         annual_fuel_quantity = _annual_consumption_in_unit(
             factory,
@@ -294,7 +317,7 @@ def calculate_annual_energy_cost(
     annual_fuel_cost = fuel_price * annual_fuel_quantity
 
     # ------------------------------------------------------------------
-    # Electricity
+    # Electricity (energy-only by design for MVP)
     # ------------------------------------------------------------------
     if annual_electricity_kwh is None:
         annual_electricity_kwh = (
@@ -318,43 +341,46 @@ def calculate_annual_energy_cost(
         + annual_electricity_cost
     )
 
+    # Explicit coverage limitation (Task 6)
+    coverage_note = (
+        "MVP electricity cost is energy-only (INR/kWh × annual kWh). "
+        "Demand (kVA/kW) charges, fixed charges, electricity duty and "
+        "surcharges are excluded because the Factory contract does not "
+        "supply contracted_demand_kva or maximum_demand_kva. "
+        "Treat annual_electricity_cost_inr (and therefore "
+        "total_energy_cost_inr) as incomplete for any site that faces "
+        "material demand charges. Full bill modelling requires the "
+        "TariffEngine path with explicit demand inputs."
+    )
+
     return {
-        "annual_fuel_cost_inr": round(
-            annual_fuel_cost,
-            2,
-        ),
-        "annual_electricity_cost_inr": round(
-            annual_electricity_cost,
-            2,
-        ),
-        "total_energy_cost_inr": round(
-            total_energy_cost,
-            2,
-        ),
+        "annual_fuel_cost_inr": round(annual_fuel_cost, 2),
+        "annual_electricity_cost_inr": round(annual_electricity_cost, 2),
+        "total_energy_cost_inr": round(total_energy_cost, 2),
         "fuel": fuel,
-        "annual_fuel_quantity": round(
-            annual_fuel_quantity,
-            6,
-        ),
+        "annual_fuel_quantity": round(annual_fuel_quantity, 6),
         "fuel_price": fuel_price,
         "fuel_price_unit": price_unit,
         "fuel_price_status": fuel_record.get("status"),
-        "fuel_price_confidence": fuel_record.get(
-            "confidence"
-        ),
-        "fuel_price_source_id": fuel_record.get(
-            "source_id"
-        ),
+        "fuel_price_confidence": fuel_record.get("confidence"),
+        "fuel_price_source_id": fuel_record.get("source_id"),
         "electricity_tariff_inr_per_kwh": tariff,
-        "electricity_tariff_source_id": tariff_record.get(
-            "source_id"
-        ),
-        "electricity_tariff_status": tariff_record.get(
-            "status"
-        ),
+        "electricity_tariff_source_id": tariff_record.get("source_id"),
+        "electricity_tariff_status": tariff_record.get("status"),
+        "electricity_tariff_confidence": tariff_record.get("confidence"),
+        # ---- Task 6 coverage / uncertainty surface ----
         "demand_charge_modeled": False,
+        "cost_coverage": "energy_only",
+        "cost_coverage_status": "incomplete_mvp",
+        "cost_coverage_limitation": coverage_note,
         "demand_charge_note": (
             "Demand charges are not included because the current Factory "
             "contract does not contain contracted/maximum demand in kVA."
         ),
+        "uncertainty_flags": [
+            "electricity_cost_excludes_demand_charges",
+            "electricity_cost_excludes_fixed_charges",
+            "electricity_cost_excludes_duty_surcharge",
+            "annual_electricity_cost_is_energy_only",
+        ],
     }

@@ -1,0 +1,51 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-08-23",
+  "policy": {
+    "no_silent_invention": true,
+    "conflicting_values_must_not_be_averaged": true,
+    "low_confidence_values_require_verification": true,
+    "planning_defaults_are_not_measured_plant_values": true
+  },
+  "thermal_efficiency": {
+    "boiler_efficiency": {
+      "parameter": "boiler_efficiency",
+      "value": 80.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "source_date": "2026-04",
+      "status": "estimated",
+      "confidence": "low",
+      "uncertainty": "Site-specific; replace with measured boiler efficiency (direct or indirect method) when available. Typical industrial range 70–90 % depending on age, fuel and load.",
+      "applicability": "planning_default",
+      "notes": "Planning default only. Derived from common industrial steam-boiler performance cited in MNRE/GIZ and Energy Innovation 2026 context. Do not present as a measured plant value."
+    },
+    "steam_distribution_efficiency": {
+      "parameter": "steam_distribution_efficiency",
+      "value": 90.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "source_date": "2026-04",
+      "status": "estimated",
+      "confidence": "low",
+      "uncertainty": "Highly site-specific (insulation quality, condensate return, length of network). Replace with measured distribution losses when available.",
+      "applicability": "planning_default",
+      "notes": "Planning default only. Do not present as a measured plant value."
+    },
+    "process_heat_utilization": {
+      "parameter": "process_heat_utilization",
+      "value": 95.0,
+      "unit": "pct",
+      "source_id": "SRC_PROJECT_DEFAULTS",
+      "source_type": "project_research",
+      "source_date": "2026-04",
+      "status": "estimated",
+      "confidence": "low",
+      "uncertainty": "Process-specific. Validate against actual process heat demand and any unaccounted losses (radiant, flash, etc.).",
+      "applicability": "planning_default",
+      "notes": "Planning default only. Validate for the specific process."
+    }
+  }
+}
