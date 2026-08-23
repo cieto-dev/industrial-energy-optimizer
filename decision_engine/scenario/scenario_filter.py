@@ -1,497 +1,678 @@
 """
-Scenario filtering and combination rules.
+Scenario filtering and hard feasibility gating.
 
-Filters candidate technology pathways before validation.
+Unit 2.8 — Part 3
 
-The filter:
-- removes duplicate technologies within a pathway
-- removes duplicate pathways
-- removes explicitly incompatible technology combinations
-- checks industry eligibility when requested
-- preserves the original technology IDs in the output
-- uses technology_rules.json as the rule source
+Pipeline
+--------
+Candidate pathways
+        |
+        v
+Basic scenario filter
+        |
+        v
+Technical/resource constraint filter
+        |
+        v
+Policy filter
+        |
+        v
+ONLY feasible pathways
+        |
+        v
+Biomass / tariff / finance / optimization
 
-It does NOT calculate:
-- economics
-- emissions
-- ranking
-- payback
+This module deliberately rejects infeasible pathways early.
 
-Maps to:
-- decision_engine/scenario/
-- docs/DECISION_ENGINE_ARCHITECTURE.md
+It does NOT:
+    - rank scenarios
+    - calculate payback
+    - calculate MCDA scores
+    - choose the best scenario
+    - invent feasibility
 """
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Mapping, Optional
+
+from .constraint_policy_filter import (
+    ConstraintPolicyFilter,
+)
+from .policy_filter import (
+    PolicyScenarioFilter,
+)
 
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-RULES_FILE = (
+TECHNOLOGY_RULES_FILE = (
     BASE_DIR
     / "knowledge-base"
     / "constraints"
     / "technology_rules.json"
 )
 
+INDUSTRY_CONSTRAINTS_FILE = (
+    BASE_DIR
+    / "knowledge-base"
+    / "constraints"
+    / "industry_constraints.json"
+)
 
-# Known differences between factory/industry identifiers and
-# the identifiers currently used by technology_rules.json.
-INDUSTRY_ALIASES = {
-    "pharma": "pharmaceutical",
-    "food": "food_processing",
-}
+CENTRAL_POLICIES_FILE = (
+    BASE_DIR
+    / "knowledge-base"
+    / "policies"
+    / "central_policies.json"
+)
+
+STATE_POLICIES_FILE = (
+    BASE_DIR
+    / "knowledge-base"
+    / "policies"
+    / "state_policies.json"
+)
+
+ELIGIBILITY_RULES_FILE = (
+    BASE_DIR
+    / "knowledge-base"
+    / "policies"
+    / "eligibility_rules.json"
+)
+
+
+def _load_json(
+    file_path: Path,
+    *,
+    required: bool = True,
+) -> dict[str, Any]:
+
+    if not file_path.exists():
+
+        if required:
+            raise FileNotFoundError(
+                f"Knowledge-base file not found: "
+                f"{file_path}"
+            )
+
+        return {}
+
+    with file_path.open(
+        "r",
+        encoding="utf-8",
+    ) as file:
+
+        data = json.load(file)
+
+    if not isinstance(data, dict):
+        raise ValueError(
+            f"Expected JSON object in {file_path}"
+        )
+
+    return data
 
 
 def load_technology_rules() -> dict[str, dict[str, Any]]:
-    """Load technology compatibility rules from the knowledge base."""
-
-    with RULES_FILE.open("r", encoding="utf-8") as file:
-        return json.load(file)
-
-
-def _normalize_lookup_id(value: str) -> str:
     """
-    Normalize an ID only for rule lookup/comparison.
-
-    IMPORTANT:
-    This does NOT change the ID stored in the returned scenario.
+    Load the canonical technology rule base.
     """
 
-    return value.strip().lower()
+    data = _load_json(
+        TECHNOLOGY_RULES_FILE
+    )
+
+    return {
+        str(key): value
+        for key, value in data.items()
+        if isinstance(value, dict)
+    }
+
+
+def load_industry_constraints() -> dict[str, dict[str, Any]]:
+    """
+    Load industry-specific hard constraints when available.
+    """
+
+    data = _load_json(
+        INDUSTRY_CONSTRAINTS_FILE,
+        required=False,
+    )
+
+    if "industries" in data and isinstance(
+        data["industries"],
+        Mapping,
+    ):
+        data = data["industries"]
+
+    return {
+        str(key): value
+        for key, value in data.items()
+        if isinstance(value, dict)
+    }
+
+
+def load_policy_knowledge() -> dict[str, dict[str, Any]]:
+    """
+    Load policy knowledge-base objects.
+
+    Missing policy files are tolerated because the repository can be
+    technically usable before the policy KB is fully populated.
+    """
+
+    return {
+        "central_policies": _load_json(
+            CENTRAL_POLICIES_FILE,
+            required=False,
+        ),
+        "state_policies": _load_json(
+            STATE_POLICIES_FILE,
+            required=False,
+        ),
+        "eligibility_rules": _load_json(
+            ELIGIBILITY_RULES_FILE,
+            required=False,
+        ),
+    }
 
 
 def _technology_id(item: Any) -> str:
-    """
-    Extract a technology ID while preserving its original spelling.
-
-    Supported inputs:
-    - "TECH_WHR"
-    - {"technology_id": "TECH_WHR"}
-    - {"id": "TECH_WHR"}
-    - {"technology": "TECH_WHR"}
-    """
 
     if isinstance(item, str):
-        technology_id = item.strip()
+        value = item.strip()
 
-        if technology_id:
-            return technology_id
+        if value:
+            return value
 
-    elif isinstance(item, dict):
+    if isinstance(item, Mapping):
         value = (
             item.get("technology_id")
             or item.get("id")
             or item.get("technology")
+            or item.get("technology_name")
         )
 
         if isinstance(value, str):
-            technology_id = value.strip()
+            value = value.strip()
 
-            if technology_id:
-                return technology_id
+            if value:
+                return value
 
     raise ValueError(
-        f"Unable to determine technology ID from: {item!r}"
+        f"Unable to determine technology ID from: "
+        f"{item!r}"
     )
 
 
-def normalize_sequence(
-    sequence: Iterable[Any],
-) -> tuple[str, ...]:
-    """
-    Extract technology IDs while preserving their canonical spelling.
-    """
+def extract_sequence(
+    candidate: Any,
+) -> list[str]:
 
-    normalized = tuple(
-        _technology_id(item)
-        for item in sequence
+    if not isinstance(candidate, Mapping):
+        raise ValueError(
+            "Scenario candidate must be a dictionary."
+        )
+
+    values = candidate.get(
+        "technology_sequence"
     )
 
-    if not normalized:
+    if values is None:
+        values = candidate.get(
+            "technologies"
+        )
+
+    if values is None:
+        raise ValueError(
+            "Scenario candidate must contain "
+            "'technology_sequence' or 'technologies'."
+        )
+
+    if not isinstance(
+        values,
+        (list, tuple),
+    ):
+        raise ValueError(
+            "Technology sequence must be a list or tuple."
+        )
+
+    if not values:
         raise ValueError(
             "Technology sequence cannot be empty."
         )
 
-    return normalized
+    return [
+        _technology_id(item)
+        for item in values
+    ]
 
 
-def _extract_sequence(
-    candidate: Any,
-) -> tuple[str, ...]:
-    """Extract technology_sequence from a scenario candidate."""
-
-    if isinstance(candidate, dict):
-
-        sequence = candidate.get(
-            "technology_sequence"
-        )
-
-        if sequence is None:
-            sequence = candidate.get(
-                "technologies"
-            )
-
-        if sequence is None:
-            raise ValueError(
-                "Scenario candidate must contain "
-                "'technology_sequence'."
-            )
-
-        return normalize_sequence(sequence)
-
-    return normalize_sequence(candidate)
-
-
-def _rule_for_technology(
-    technology_id: str,
-    rules: dict[str, dict[str, Any]],
-) -> dict[str, Any] | None:
-    """
-    Find the technology rule using a normalized lookup ID.
-
-    This allows the domain model to preserve canonical IDs while the
-    current technology_rules.json uses lowercase identifiers.
-    """
-
-    lookup_id = _normalize_lookup_id(
-        technology_id
-    )
-
-    for rule_id, rule in rules.items():
-
-        if (
-            _normalize_lookup_id(
-                str(rule_id)
-            )
-            == lookup_id
-        ):
-            return rule
-
-    return None
-
-
-def _rule_id_exists(
-    technology_id: str,
-    rules: dict[str, dict[str, Any]],
-) -> bool:
-    """Return True when a technology has a rule entry."""
+def _normalise(
+    value: Any,
+) -> str:
 
     return (
-        _rule_for_technology(
-            technology_id,
-            rules,
-        )
-        is not None
+        str(value)
+        .strip()
+        .lower()
+        .replace("-", "_")
+        .replace(" ", "_")
     )
 
 
-def _normalized_rule_references(
-    values: Any,
-) -> set[str]:
+def _deduplicate_candidates(
+    candidates: list[dict[str, Any]],
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+]:
     """
-    Normalize technology IDs contained inside a rule list.
+    Remove structurally duplicate pathways before expensive checks.
 
-    Used only for comparison.
-    """
-
-    if not isinstance(values, list):
-        return set()
-
-    return {
-        _normalize_lookup_id(str(value))
-        for value in values
-        if value is not None
-    }
-
-
-def _has_explicit_incompatibility(
-    sequence: tuple[str, ...],
-    rules: dict[str, dict[str, Any]],
-) -> tuple[bool, str]:
-    """
-    Check explicitly declared incompatible technology pairs.
-
-    We intentionally DO NOT treat absence from compatible_with as
-    incompatibility. Only an explicit incompatible_with declaration
-    causes rejection.
+    Returns:
+        unique,
+        duplicates
     """
 
-    for index, technology_a in enumerate(sequence):
-
-        rules_a = _rule_for_technology(
-            technology_a,
-            rules,
-        )
-
-        if rules_a is None:
-            continue
-
-        incompatible_a = (
-            _normalized_rule_references(
-                rules_a.get(
-                    "incompatible_with",
-                    [],
-                )
-            )
-        )
-
-        lookup_a = _normalize_lookup_id(
-            technology_a
-        )
-
-        for technology_b in sequence[index + 1:]:
-
-            lookup_b = _normalize_lookup_id(
-                technology_b
-            )
-
-            # A explicitly says B is incompatible.
-            if lookup_b in incompatible_a:
-                return (
-                    True,
-                    (
-                        f"'{technology_a}' is incompatible "
-                        f"with '{technology_b}'."
-                    ),
-                )
-
-            # Check the reverse declaration too.
-            rules_b = _rule_for_technology(
-                technology_b,
-                rules,
-            )
-
-            if rules_b is None:
-                continue
-
-            incompatible_b = (
-                _normalized_rule_references(
-                    rules_b.get(
-                        "incompatible_with",
-                        [],
-                    )
-                )
-            )
-
-            if lookup_a in incompatible_b:
-                return (
-                    True,
-                    (
-                        f"'{technology_b}' is incompatible "
-                        f"with '{technology_a}'."
-                    ),
-                )
-
-    return False, ""
-
-
-def _industry_is_allowed(
-    sequence: tuple[str, ...],
-    industry: str | None,
-    rules: dict[str, dict[str, Any]],
-) -> tuple[bool, str]:
-    """
-    Check technology eligibility for the requested industry.
-
-    If an industry is not supplied, this check is skipped.
-    """
-
-    if industry is None:
-        return True, ""
-
-    cleaned_industry = (
-        industry.strip().lower()
-    )
-
-    industry_id = INDUSTRY_ALIASES.get(
-        cleaned_industry,
-        cleaned_industry,
-    )
-
-    for technology_id in sequence:
-
-        technology_rules = _rule_for_technology(
-            technology_id,
-            rules,
-        )
-
-        if technology_rules is None:
-            return (
-                False,
-                (
-                    f"No technology rules found for "
-                    f"'{technology_id}'."
-                ),
-            )
-
-        allowed_industries = {
-            str(value).strip().lower()
-            for value in technology_rules.get(
-                "allowed_industries",
-                [],
-            )
-        }
-
-        # Empty allowed_industries means the current KB does not
-        # restrict this technology by industry.
-        if not allowed_industries:
-            continue
-
-        if industry_id not in allowed_industries:
-            return (
-                False,
-                (
-                    f"Technology '{technology_id}' is not "
-                    f"configured for industry '{industry_id}'."
-                ),
-            )
-
-    return True, ""
-
-
-def filter_scenario_combinations(
-    candidates: Iterable[Any],
-    industry: str | None = None,
-    rules: dict[str, dict[str, Any]] | None = None,
-) -> list[dict[str, Any]]:
-    """
-    Remove duplicate and explicitly inconsistent scenario combinations.
-
-    Returns normalized candidate dictionaries containing:
-        technology_sequence
-
-    The original technology ID spelling is preserved.
-    """
-
-    if rules is None:
-        rules = load_technology_rules()
-
-    filtered: list[dict[str, Any]] = []
-
-    # Comparison keys use normalized IDs, but output preserves
-    # the canonical IDs supplied by the caller.
+    unique: list[dict[str, Any]] = []
+    duplicates: list[dict[str, Any]] = []
     seen: set[tuple[str, ...]] = set()
 
     for candidate in candidates:
 
         try:
-            sequence = _extract_sequence(
+            sequence = extract_sequence(
                 candidate
             )
+        except ValueError as exc:
 
-        except ValueError:
-            # Invalid candidate structure.
+            duplicates.append(
+                {
+                    "candidate": candidate,
+                    "reasons": [str(exc)],
+                }
+            )
             continue
 
-        comparison_sequence = tuple(
-            _normalize_lookup_id(
-                technology_id
-            )
-            for technology_id in sequence
+        key = tuple(
+            _normalise(item)
+            for item in sequence
         )
 
-        # ---------------------------------------------------------
-        # 1. No duplicate technology within one scenario
-        # ---------------------------------------------------------
+        if key in seen:
 
-        if (
-            len(comparison_sequence)
-            != len(set(comparison_sequence))
-        ):
-            continue
-
-        # ---------------------------------------------------------
-        # 2. No duplicate scenario pathway
-        # ---------------------------------------------------------
-
-        if comparison_sequence in seen:
-            continue
-
-        # ---------------------------------------------------------
-        # 3. Every technology must exist in the KB rules
-        # ---------------------------------------------------------
-
-        if any(
-            not _rule_id_exists(
-                technology_id,
-                rules,
+            duplicates.append(
+                {
+                    "candidate": candidate,
+                    "reasons": [
+                        "Duplicate scenario pathway."
+                    ],
+                }
             )
-            for technology_id in sequence
-        ):
+
             continue
 
-        # ---------------------------------------------------------
-        # 4. Explicit incompatibility check
-        # ---------------------------------------------------------
+        if len(key) != len(set(key)):
 
-        incompatible, _reason = (
-            _has_explicit_incompatibility(
-                sequence,
-                rules,
+            duplicates.append(
+                {
+                    "candidate": candidate,
+                    "reasons": [
+                        "Scenario contains duplicate technologies."
+                    ],
+                }
             )
+
+            continue
+
+        seen.add(key)
+        unique.append(candidate)
+
+    return unique, duplicates
+
+
+def filter_scenario_combinations(
+    candidates: list[dict[str, Any]],
+    *,
+    factory: Any = None,
+    industry: Optional[str] = None,
+    technology_rules: Optional[
+        dict[str, dict[str, Any]]
+    ] = None,
+    industry_constraints: Optional[
+        dict[str, dict[str, Any]]
+    ] = None,
+    central_policies: Optional[
+        dict[str, Any]
+    ] = None,
+    state_policies: Optional[
+        dict[str, Any]
+    ] = None,
+    eligibility_rules: Optional[
+        dict[str, Any]
+    ] = None,
+    apply_constraints: bool = True,
+    apply_policy_filter: bool = True,
+) -> list[dict[str, Any]]:
+    """
+    Main scenario gate.
+
+    Only scenarios which survive all enabled HARD filters are returned.
+
+    Stage 1
+        structural filtering
+
+    Stage 2
+        technical/resource/infrastructure filtering
+
+    Stage 3
+        policy/regulatory filtering
+
+    This function is intentionally conservative:
+    missing evidence for a hard dependency results in rejection rather
+    than a fake "feasible" scenario.
+    """
+
+    if not isinstance(
+        candidates,
+        list,
+    ):
+        candidates = list(candidates)
+
+    if technology_rules is None:
+        technology_rules = load_technology_rules()
+
+    if industry_constraints is None:
+        industry_constraints = load_industry_constraints()
+
+    policy_data = {}
+
+    if (
+        central_policies is None
+        or state_policies is None
+        or eligibility_rules is None
+    ):
+        policy_data = load_policy_knowledge()
+
+    if central_policies is None:
+        central_policies = policy_data.get(
+            "central_policies",
+            {},
         )
 
-        if incompatible:
-            continue
-
-        # ---------------------------------------------------------
-        # 5. Industry eligibility
-        # ---------------------------------------------------------
-
-        industry_allowed, _reason = (
-            _industry_is_allowed(
-                sequence,
-                industry,
-                rules,
-            )
+    if state_policies is None:
+        state_policies = policy_data.get(
+            "state_policies",
+            {},
         )
 
-        if not industry_allowed:
-            continue
+    if eligibility_rules is None:
+        eligibility_rules = policy_data.get(
+            "eligibility_rules",
+            {},
+        )
 
-        # Scenario has survived all filter rules.
-        seen.add(comparison_sequence)
+    # ---------------------------------------------------------
+    # Stage 1 — structural filtering
+    # ---------------------------------------------------------
 
-        if isinstance(candidate, dict):
+    unique_candidates, _duplicates = (
+        _deduplicate_candidates(
+            candidates
+        )
+    )
 
-            normalized_candidate = dict(
-                candidate
+    # ---------------------------------------------------------
+    # Stage 2 — technical/resource filtering
+    # ---------------------------------------------------------
+
+    technically_feasible = (
+        unique_candidates
+    )
+
+    rejected_for_constraints: list[
+        dict[str, Any]
+    ] = []
+
+    if apply_constraints:
+
+        engine = ConstraintPolicyFilter(
+            technology_rules=technology_rules,
+            industry_constraints=industry_constraints,
+        )
+
+        technically_feasible = []
+
+        for candidate in unique_candidates:
+
+            result = engine.evaluate_pathway(
+                candidate,
+                factory,
             )
 
-            # Preserve canonical IDs.
-            normalized_candidate[
-                "technology_sequence"
-            ] = list(sequence)
+            if result.feasible:
 
-        else:
-
-            normalized_candidate = {
-                "technology_sequence": list(
-                    sequence
+                technically_feasible.append(
+                    result.pathway
                 )
-            }
 
-        filtered.append(
-            normalized_candidate
+            else:
+
+                rejected_for_constraints.append(
+                    {
+                        "candidate": candidate,
+                        "reasons": (
+                            result.rejection_reasons
+                        ),
+                        "constraint_results": (
+                            result.pathway.get(
+                                "constraint_results",
+                                {},
+                            )
+                        ),
+                    }
+                )
+
+    # ---------------------------------------------------------
+    # Stage 3 — policy filtering
+    # ---------------------------------------------------------
+
+    policy_feasible = technically_feasible
+
+    if apply_policy_filter:
+
+        policy_engine = PolicyScenarioFilter(
+            central_policies=central_policies,
+            state_policies=state_policies,
+            eligibility_rules=eligibility_rules,
         )
 
-    return filtered
+        policy_feasible = []
+
+        for candidate in technically_feasible:
+
+            result = policy_engine.evaluate_pathway(
+                candidate,
+                factory,
+            )
+
+            if result.feasible:
+
+                policy_feasible.append(
+                    result.pathway
+                )
+
+            # Policy filtering should be applied as a hard gate only
+            # when a configured policy rule explicitly fails.
+            #
+            # Rejected candidates are intentionally not sent downstream.
+
+    return policy_feasible
 
 
 def filter_scenarios(
-    candidates: Iterable[Any],
-    industry: str | None = None,
+    candidates: list[dict[str, Any]],
+    *,
+    factory: Any = None,
+    industry: Optional[str] = None,
 ) -> list[dict[str, Any]]:
     """
-    Public convenience wrapper.
+    Backward-compatible public API.
+
+    Existing callers can continue using:
+
+        filter_scenarios(candidates)
+
+    New callers should pass the full factory so hard resource and policy
+    constraints can actually be evaluated.
     """
 
     return filter_scenario_combinations(
-        candidates=candidates,
+        candidates,
+        factory=factory,
         industry=industry,
+        apply_constraints=True,
+        apply_policy_filter=True,
     )
+
+
+def filter_with_rejections(
+    candidates: list[dict[str, Any]],
+    *,
+    factory: Any = None,
+    industry: Optional[str] = None,
+) -> tuple[
+    list[dict[str, Any]],
+    list[dict[str, Any]],
+]:
+    """
+    Full audit-friendly API.
+
+    Returns:
+        feasible_scenarios,
+        rejected_scenarios
+
+    Every rejected scenario includes stage and reasons.
+    """
+
+    technology_rules = load_technology_rules()
+    industry_constraints = (
+        load_industry_constraints()
+    )
+    policy_data = load_policy_knowledge()
+
+    unique_candidates, duplicates = (
+        _deduplicate_candidates(
+            candidates
+        )
+    )
+
+    rejected: list[dict[str, Any]] = list(
+        duplicates
+    )
+
+    # -------------------------------
+    # Constraint gate
+    # -------------------------------
+
+    constraint_engine = ConstraintPolicyFilter(
+        technology_rules=technology_rules,
+        industry_constraints=industry_constraints,
+    )
+
+    constraint_passed: list[
+        dict[str, Any]
+    ] = []
+
+    for candidate in unique_candidates:
+
+        result = constraint_engine.evaluate_pathway(
+            candidate,
+            factory,
+        )
+
+        if result.feasible:
+
+            constraint_passed.append(
+                result.pathway
+            )
+
+        else:
+
+            rejected.append(
+                {
+                    "candidate": candidate,
+                    "stage": "constraint_filter",
+                    "reasons": result.rejection_reasons,
+                    "constraint_results": (
+                        result.pathway.get(
+                            "constraint_results",
+                            {},
+                        )
+                    ),
+                }
+            )
+
+    # -------------------------------
+    # Policy gate
+    # -------------------------------
+
+    policy_engine = PolicyScenarioFilter(
+        central_policies=policy_data.get(
+            "central_policies",
+            {},
+        ),
+        state_policies=policy_data.get(
+            "state_policies",
+            {},
+        ),
+        eligibility_rules=policy_data.get(
+            "eligibility_rules",
+            {},
+        ),
+    )
+
+    feasible: list[
+        dict[str, Any]
+    ] = []
+
+    for candidate in constraint_passed:
+
+        result = policy_engine.evaluate_pathway(
+            candidate,
+            factory,
+        )
+
+        if result.feasible:
+
+            feasible.append(
+                result.pathway
+            )
+
+        else:
+
+            rejected.append(
+                {
+                    "candidate": candidate,
+                    "stage": "policy_filter",
+                    "reasons": result.rejection_reasons,
+                    "policy_results": {
+                        "passed": result.passed,
+                        "failed": result.failed,
+                    },
+                }
+            )
+
+    return feasible, rejected
+
+
+__all__ = [
+    "filter_scenario_combinations",
+    "filter_scenarios",
+    "filter_with_rejections",
+    "load_technology_rules",
+    "load_industry_constraints",
+    "load_policy_knowledge",
+]

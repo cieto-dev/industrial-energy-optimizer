@@ -27,8 +27,8 @@
       "Ranked #1 out of 2 candidate pathways using multi-criteria analysis",
       "Achieved a balanced score across cost (1.00), emissions reduction (1.00), and operational risk (1.00)",
       "This option is also the most cost-effective, making it a clear winner on both economic and environmental dimensions",
-      "Eligible for 6 government financing schemes: TN CAPITAL SUBSIDY, TN CLEAN TECHNOLOGY SUBSIDY, ADEETIE -- Assistance in Deploying Energy Efficient Technologies in Industries and Establishments and 3 others",
-      "Estimated government support reduces effective project cost by approximately \u20b97.1 million through subsidies and interest subventions",
+      "Eligible for 5 government financing schemes: ADEETIE -- Assistance in Deploying Energy Efficient Technologies in Industries and Establishments, Tamil Nadu Capital Subsidy, Tamil Nadu Clean Technology Subsidy and 2 others",
+      "Estimated government support reduces effective project cost by approximately \u20b96.1 million through subsidies and interest subventions",
       "Reduces CO2 emissions by 30.0%, contributing to climate compliance and sustainability goals",
       "Decreases fossil fuel dependence by 40.0%, improving energy security and reducing exposure to fuel price volatility"
     ],
@@ -46,30 +46,29 @@
     ],
     "policy_benefits": {
       "eligible_schemes": [
-        "TN CAPITAL SUBSIDY",
-        "TN CLEAN TECHNOLOGY SUBSIDY",
         "ADEETIE -- Assistance in Deploying Energy Efficient Technologies in Industries and Establishments",
+        "Tamil Nadu Capital Subsidy",
+        "Tamil Nadu Clean Technology Subsidy",
         "MSE-GIFT -- MSE Green Investment and Financing for Transformation",
-        "ZED -- MSME Sustainable (Zero Defect Zero Effect) Certification",
-        "CGTMSE -- Credit Guarantee Scheme for Micro and Small Enterprises"
+        "ZED -- MSME Sustainable (Zero Defect Zero Effect) Certification"
       ],
-      "estimated_total_benefit_inr": 7058000.0,
+      "estimated_total_benefit_inr": 6058000.0,
       "total_benefit_verified": false,
       "disclaimer": "Estimated combined benefit \u2014 subject to manual verification against scheme-specific convergence rules; individual scheme benefits are independently sourced, their combined stackability is not."
     },
     "sensitivity_notes": {
-      "payback_p10_years": 7.1009,
-      "payback_p50_years": 8.7454,
-      "payback_p90_years": 10.551,
-      "spread_ratio": 0.3945,
+      "payback_p10_years": 7.0372,
+      "payback_p50_years": 8.1992,
+      "payback_p90_years": 11.1719,
+      "spread_ratio": 0.5043,
       "top_risk_factors": [
         "capex_overrun",
         "fuel_price"
       ],
-      "risk_interpretation": "Payback period has moderate uncertainty (P10-P90 spread: 0.39). Monitor key risk factors listed below during implementation."
+      "risk_interpretation": "Payback period has moderate uncertainty (P10-P90 spread: 0.50). Monitor key risk factors listed below during implementation."
     }
   },
-  "generated_at": "2026-08-17T23:20:06.724580",
+  "generated_at": "2026-08-22T22:48:10.316248",
   "model_version": "1.0",
   "policy_benefit_verified": false,
   "policy_benefit_disclaimer": "Estimated combined benefit \u2014 subject to manual verification against scheme-specific convergence rules; individual scheme benefits are independently sourced, their combined stackability is not."

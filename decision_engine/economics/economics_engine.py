@@ -1,3 +1,4 @@
+from decision_engine.electricity import TariffEngine
 from dataclasses import dataclass, asdict
 
 from .capex import (
@@ -42,6 +43,14 @@ class FinancialModel:
 
     financially_viable: bool
 
+    electricity_tariff: str | None = None
+    discom: str | None = None
+    tod_tariff: bool | None = None
+    renewable_procurement: str | None = None
+    open_access_recommended: bool | None = None
+    grid_emission_factor: float | None = None
+    annual_grid_emissions: float | None = None
+
     def to_dict(self):
         return asdict(self)
 
@@ -82,7 +91,16 @@ def calculate_economics(
     baseline_annual_opex,
     proposed_opex,
     capacity=None,
-    usd_to_inr=None
+    usd_to_inr=None,
+
+    # -------- Electricity Tariff Inputs --------
+    state=None,
+    district=None,
+    annual_electricity_consumption=None,
+    connected_load_kw=None,
+    maximum_demand_kw=None,
+    renewable_option=None,
+    power_factor=0.95,
 ):
     """
     Calculate complete financial model
@@ -98,7 +116,48 @@ def calculate_economics(
         capacity=capacity,
         usd_to_inr=usd_to_inr
     )
+    electricity_result = None
 
+    if (
+        state is not None
+        and annual_electricity_consumption is not None
+    ):
+        try:
+
+            tariff_engine = TariffEngine()
+
+            electricity_result = (
+                tariff_engine.assess_factory(
+                    state=state,
+                    district=district,
+                    annual_consumption_kwh=(
+                        annual_electricity_consumption
+                    ),
+                    connected_load_kw=(
+                        connected_load_kw
+                    ),
+                    maximum_demand_kw=(
+                        maximum_demand_kw
+                    ),
+                    renewable_option=(
+                        renewable_option
+                    ),
+                    power_factor=power_factor,
+                )
+            )
+
+            proposed_opex["electricity_cost"] = (
+                electricity_result[
+                    "annual_electricity_cost"
+                ]
+            )
+
+        except Exception as exc:
+
+            print(
+                "Tariff Engine Warning:",
+                exc
+            )
     # ==================================================
     # 2. PROPOSED OPEX
     # ==================================================
@@ -232,5 +291,40 @@ def calculate_economics(
 
         financially_viable=(
             financially_viable
-        )
+        ),
+
+        electricity_tariff=(
+            electricity_result.get("electricity_tariff")
+            if electricity_result else None
+        ),
+
+        discom=(
+            electricity_result.get("discom")
+            if electricity_result else None
+        ),
+
+        tod_tariff=(
+            electricity_result.get("tod_tariff")
+            if electricity_result else None
+        ),
+
+        renewable_procurement=(
+            electricity_result.get("renewable_procurement")
+            if electricity_result else None
+        ),
+
+        open_access_recommended=(
+            electricity_result.get("open_access_recommended")
+            if electricity_result else None
+        ),
+
+        grid_emission_factor=(
+            electricity_result.get("grid_emission_factor")
+            if electricity_result else None
+        ),
+
+        annual_grid_emissions=(
+            electricity_result.get("annual_grid_emissions")
+            if electricity_result else None
+        ),
     )

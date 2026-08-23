@@ -1,53 +1,16 @@
-"""
-Scenario Generator.
 
-Generates meaningful candidate technology pathways from technically
-feasible technology outputs.
-
-Responsibilities
-----------------
-This module:
-    - accepts feasible technology outputs from the technology layer
-    - preserves technology/pathway provenance
-    - generates baseline, single-technology and meaningful hybrid pathways
-    - supports biomass-aware pathways
-    - preserves the existing biogas scenario functionality
-
-This module does NOT:
-    - calculate optimisation scores
-    - perform MCDA ranking
-    - calculate financial returns
-    - determine policy eligibility
-    - replace the constraint engine
-
-Architecture
-------------
-G1 technical engine
-        |
-        v
-feasible technology outputs
-        |
-        v
-Scenario Generator
-        |
-        v
-candidate pathways
-        |
-        v
-Optimizer / Finance / Impact
-
-The scenario contract remains intentionally lightweight so that the
-optimizer and pipeline do not need to change.
-"""
 
 from __future__ import annotations
 
 from itertools import combinations
 from typing import Any
 
+from .scenario_filter import filter_scenario_combinations
+from .scenario_validator import validate_scenario
+
 
 # ---------------------------------------------------------------------------
-# Technology extraction helpers
+# Generic technology helpers
 # ---------------------------------------------------------------------------
 
 
@@ -55,33 +18,24 @@ def _technology_id(item: Any) -> str:
     """
     Extract a technology identifier from supported input formats.
 
-    Supported examples
-    -------------------
+    Supported inputs
+    ----------------
     "heat_pump"
 
-    {
-        "technology_id": "heat_pump"
-    }
+    {"technology_id": "heat_pump"}
 
-    {
-        "id": "heat_pump"
-    }
+    {"id": "heat_pump"}
 
-    {
-        "technology": "heat_pump"
-    }
+    {"technology": "heat_pump"}
 
-    {
-        "technology_id": "biomass_boiler",
-        "technology_type": "biomass"
-    }
+    {"technology_name": "heat_pump"}
     """
 
     if isinstance(item, str):
-        technology_id = item.strip()
+        value = item.strip()
 
-        if technology_id:
-            return technology_id
+        if value:
+            return value
 
     if isinstance(item, dict):
         value = (
@@ -92,10 +46,10 @@ def _technology_id(item: Any) -> str:
         )
 
         if isinstance(value, str):
-            technology_id = value.strip()
+            value = value.strip()
 
-            if technology_id:
-                return technology_id
+            if value:
+                return value
 
     raise ValueError(
         f"Unable to determine technology ID from: {item!r}"
@@ -104,10 +58,10 @@ def _technology_id(item: Any) -> str:
 
 def _technology_type(item: Any) -> str:
     """
-    Infer the technology type.
+    Infer a technology/resource type.
 
-    Explicit type fields are preferred. If absent, the technology ID
-    is inspected for known biomass / biogas naming patterns.
+    Explicit metadata is preferred. The identifier is used only as a
+    fallback for common biomass/biogas naming patterns.
     """
 
     if isinstance(item, dict):
@@ -119,10 +73,10 @@ def _technology_type(item: Any) -> str:
         )
 
         if isinstance(explicit_type, str):
-            value = explicit_type.strip().lower()
+            explicit_type = explicit_type.strip().lower()
 
-            if value:
-                return value
+            if explicit_type:
+                return explicit_type
 
     technology_id = _technology_id(item).lower()
 
@@ -135,41 +89,47 @@ def _technology_type(item: Any) -> str:
     return "other"
 
 
-def _is_biomass_technology(item: Any) -> bool:
-    """Return True when the candidate represents biomass technology."""
-
-    return _technology_type(item) == "biomass"
-
-
-def _is_biogas_technology(item: Any) -> bool:
-    """Return True when the candidate represents biogas technology."""
-
-    return _technology_type(item) == "biogas"
-
-
 def _technology_record(item: Any) -> dict[str, Any]:
     """
-    Convert a supported technology input into a safe internal record.
+    Convert an upstream technology object into a stable internal record.
 
-    The original technical metadata is retained where possible so that
-    scenario provenance is not lost.
+    Existing metadata is retained to preserve provenance and allow later
+    modules to inspect upstream technical assumptions.
     """
 
     technology_id = _technology_id(item)
 
-    if isinstance(item, dict):
-        record = dict(item)
-    else:
-        record = {}
+    record = dict(item) if isinstance(item, dict) else {}
 
     record.setdefault("technology_id", technology_id)
-    record.setdefault("technology_type", _technology_type(item))
+    record.setdefault(
+        "technology_type",
+        _technology_type(item),
+    )
 
     return record
 
 
+def _is_biomass(item: Any) -> bool:
+    """Return True when the technology is biomass-based."""
+
+    return _technology_type(item) == "biomass"
+
+
+def _is_biogas(item: Any) -> bool:
+    """Return True when the technology is biogas-based."""
+
+    return _technology_type(item) == "biogas"
+
+
+def _normalised_id(value: str) -> str:
+    """Return a comparison-safe technology ID."""
+
+    return value.strip().lower()
+
+
 # ---------------------------------------------------------------------------
-# Normalisation
+# Normalisation utilities
 # ---------------------------------------------------------------------------
 
 
@@ -177,15 +137,18 @@ def normalize_feasible_technologies(
     feasible_technologies: list[Any],
 ) -> list[dict[str, Any]]:
     """
-    Normalize feasible technology inputs.
+    Normalise upstream feasible technology outputs.
 
-    Returns unique technology records while preserving the original
-    metadata associated with each candidate.
+    Invalid records are ignored rather than fabricated or repaired.
 
-    Deduplication is case-insensitive on technology_id.
+    Deduplication is case-insensitive on technology_id while preserving
+    the first supplied record.
     """
 
-    normalized: list[dict[str, Any]] = []
+    if feasible_technologies is None:
+        return []
+
+    normalised: list[dict[str, Any]] = []
     seen: set[str] = set()
 
     for item in feasible_technologies:
@@ -195,23 +158,77 @@ def normalize_feasible_technologies(
             continue
 
         technology_id = record["technology_id"]
-        comparison_id = technology_id.lower()
+        comparison_id = _normalised_id(technology_id)
 
         if comparison_id in seen:
             continue
 
         seen.add(comparison_id)
-        normalized.append(record)
+        normalised.append(record)
 
-    return normalized
+    return normalised
 
 
 # ---------------------------------------------------------------------------
-# Candidate pathway helpers
+# Biomass utilities
 # ---------------------------------------------------------------------------
 
 
-def _pathway(
+def _has_biomass_supply_metadata(
+    technology: dict[str, Any],
+) -> bool:
+    """
+    Determine whether biomass supply/resource metadata is present.
+
+    This is deliberately metadata detection only. It does NOT claim that
+    biomass is available or affordable; upstream technical/resource
+    modules remain the source of truth for those facts.
+    """
+
+    if not _is_biomass(technology):
+        return False
+
+    recognised_fields = {
+        "biomass_available",
+        "available_biomass",
+        "biomass_availability",
+        "resource_available",
+        "fuel_available",
+        "annual_biomass_tonnes",
+        "surplus_biomass_tonnes",
+        "biomass_supply_reliability",
+        "supply_reliability",
+        "transport_distance_km",
+        "delivered_biomass_cost",
+        "fuel_cost",
+        "biomass_source",
+    }
+
+    return any(
+        field in technology
+        for field in recognised_fields
+    )
+
+
+def _biomass_metadata(
+    technology: dict[str, Any],
+) -> dict[str, Any]:
+    """Create explainable biomass metadata for a pathway."""
+
+    return {
+        "biomass_aware": True,
+        "biomass_supply_metadata_present": (
+            _has_biomass_supply_metadata(technology)
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Pathway utilities
+# ---------------------------------------------------------------------------
+
+
+def build_pathway(
     technologies: list[dict[str, Any]],
     pathway_type: str,
     *,
@@ -219,14 +236,21 @@ def _pathway(
     metadata: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """
-    Build the stable pathway contract used by downstream modules.
+    Build the shared pathway representation.
 
-    Only technical/pathway information is included here. Economic and
-    optimisation fields remain downstream responsibilities.
+    Downstream finance/optimization metrics are intentionally omitted.
+
+    The resulting pathway is compatible with the project's shared
+    technology/pathway contract and retains provenance for explanation.
     """
 
     technology_ids = [
         technology["technology_id"]
+        for technology in technologies
+    ]
+
+    technology_types = [
+        technology.get("technology_type", "other")
         for technology in technologies
     ]
 
@@ -237,10 +261,7 @@ def _pathway(
         "feasible": True,
         "provenance": {
             "technology_ids": technology_ids,
-            "technology_types": [
-                technology.get("technology_type", "other")
-                for technology in technologies
-            ],
+            "technology_types": technology_types,
         },
     }
 
@@ -253,169 +274,27 @@ def _pathway(
     return pathway
 
 
-def _contains_type(
-    technologies: list[dict[str, Any]],
-    technology_type: str,
-) -> bool:
-    """Check whether a technology collection contains a given type."""
+def _scenario_key(candidate: dict[str, Any]) -> tuple[str, ...]:
+    """
+    Build a deterministic comparison key for duplicate scenarios.
 
-    return any(
-        technology.get("technology_type") == technology_type
-        for technology in technologies
+    Order is preserved because the technology sequence is meaningful for
+    some future pathway representations.
+    """
+
+    sequence = candidate.get(
+        "technology_sequence",
+        candidate.get("technologies", []),
     )
 
-
-def _has_biomass_metadata(
-    technology: dict[str, Any],
-) -> bool:
-    """
-    Detect whether a biomass candidate carries explicit resource /
-    supply-chain metadata.
-
-    This intentionally accepts several possible field names so the
-    scenario generator remains compatible with different BiomassEngine
-    output structures.
-    """
-
-    if not _is_biomass_technology(technology):
-        return False
-
-    biomass_fields = {
-        "biomass_available",
-        "available_biomass",
-        "biomass_availability",
-        "resource_available",
-        "fuel_available",
-        "annual_biomass_tonnes",
-        "surplus_biomass_tonnes",
-        "supply_reliability",
-        "biomass_supply_reliability",
-        "transport_distance_km",
-        "delivered_biomass_cost",
-        "fuel_cost",
-        "biomass_source",
-    }
-
-    return any(
-        field in technology
-        for field in biomass_fields
+    return tuple(
+        _normalised_id(_technology_id(item))
+        for item in sequence
     )
 
 
 # ---------------------------------------------------------------------------
-# Biomass-aware scenario generation
-# ---------------------------------------------------------------------------
-
-
-def _generate_biomass_scenarios(
-    technology_records: list[dict[str, Any]],
-    maximum_scenarios: int,
-) -> list[dict[str, Any]]:
-    """
-    Generate biomass-aware scenarios.
-
-    The BiomassEngine is expected to have already evaluated technical
-    biomass suitability/availability. This function therefore does not
-    recalculate biomass availability; it uses the supplied technical
-    output as the source of truth.
-
-    Scenario patterns:
-        1. biomass-only pathway
-        2. biomass + non-biomass hybrid
-        3. biomass + other compatible technology
-
-    No financial or optimisation calculations are performed.
-    """
-
-    scenarios: list[dict[str, Any]] = []
-
-    biomass = [
-        technology
-        for technology in technology_records
-        if _is_biomass_technology(technology)
-    ]
-
-    non_biomass = [
-        technology
-        for technology in technology_records
-        if not _is_biomass_technology(technology)
-    ]
-
-    if not biomass:
-        return scenarios
-
-    # ---------------------------------------------------------
-    # Biomass-only pathways
-    # ---------------------------------------------------------
-
-    for biomass_technology in biomass:
-        metadata = {
-            "biomass_aware": True,
-            "biomass_metadata_available": _has_biomass_metadata(
-                biomass_technology
-            ),
-        }
-
-        scenarios.append(
-            _pathway(
-                [biomass_technology],
-                pathway_type="biomass_only",
-                reason=(
-                    "Biomass technology supplied by the technical "
-                    "technology engine."
-                ),
-                metadata=metadata,
-            )
-        )
-
-        if len(scenarios) >= maximum_scenarios:
-            return scenarios[:maximum_scenarios]
-
-    # ---------------------------------------------------------
-    # Biomass hybrid pathways
-    # ---------------------------------------------------------
-
-    for biomass_technology in biomass:
-
-        for supporting_technology in non_biomass:
-
-            # Avoid creating a biomass + biogas pair automatically.
-            # Both are fuel-replacement pathways and are generally
-            # alternative thermal fuel choices rather than a meaningful
-            # default hybrid.
-            if _is_biogas_technology(supporting_technology):
-                continue
-
-            hybrid = [
-                biomass_technology,
-                supporting_technology,
-            ]
-
-            scenarios.append(
-                _pathway(
-                    hybrid,
-                    pathway_type="biomass_hybrid",
-                    reason=(
-                        "Biomass is combined with another feasible "
-                        "technology to form a mixed pathway."
-                    ),
-                    metadata={
-                        "biomass_aware": True,
-                        "biomass_metadata_available": (
-                            _has_biomass_metadata(biomass_technology)
-                        ),
-                    },
-                )
-            )
-
-            if len(scenarios) >= maximum_scenarios:
-                return scenarios[:maximum_scenarios]
-
-    return scenarios[:maximum_scenarios]
-
-
-# ---------------------------------------------------------------------------
-# Generic scenario generation
+# Meaningful candidate generation
 # ---------------------------------------------------------------------------
 
 
@@ -427,36 +306,41 @@ def generate_candidate_pathways(
     include_biomass_scenarios: bool = True,
 ) -> list[dict[str, Any]]:
     """
-    Generate 3–5 meaningful candidate technology pathways.
+    Generate a bounded set of meaningful candidate pathways.
 
-    Generation order
-    ----------------
-    1. Biomass-aware pathways, when biomass candidates are present.
-    2. Single-technology pathways.
-    3. Two-technology hybrid pathways.
+    Generation priority
+    -------------------
+    1. biomass-only pathway when biomass is technically available
+    2. other single-technology pathways
+    3. meaningful two-technology hybrids
 
-    Biomass is not treated as a special financial decision here. The
-    scenario engine simply preserves biomass-related technical
-    information supplied by the technology layer.
+    Important
+    ---------
+    This function does not perform feasibility validation itself.
+
+    It only combines technologies already supplied by the upstream
+    technical engine. Detailed filtering and validation happen later in
+    `generate_scenarios()`.
 
     Parameters
     ----------
     feasible_technologies:
-        Technical outputs that have already passed feasibility checks.
+        Technology outputs already considered technically feasible by the
+        upstream engineering layer.
 
     minimum_scenarios:
-        Minimum number of candidate pathways required.
+        Minimum number of final candidates requested.
 
     maximum_scenarios:
-        Maximum number of candidate pathways to return.
+        Hard upper bound to prevent uncontrolled combinatorial growth.
 
     include_biomass_scenarios:
-        Enables biomass-aware scenario generation.
+        Whether biomass-aware pathway ordering should be used.
 
     Returns
     -------
     list[dict[str, Any]]
-        Candidate pathways preserving technology provenance.
+        Candidate pathway records.
     """
 
     if minimum_scenarios < 1:
@@ -470,143 +354,461 @@ def generate_candidate_pathways(
             "minimum_scenarios."
         )
 
-    technology_records = normalize_feasible_technologies(
+    records = normalize_feasible_technologies(
         feasible_technologies
     )
 
-    if len(technology_records) < minimum_scenarios:
-        raise ValueError(
-            f"At least {minimum_scenarios} unique feasible technologies "
-            f"are required to generate {minimum_scenarios} "
-            f"candidate pathways."
-        )
+    if not records:
+        return []
 
     candidates: list[dict[str, Any]] = []
 
     # ---------------------------------------------------------
-    # 1. Biomass-aware scenarios
+    # 1. Biomass-only candidates
     # ---------------------------------------------------------
 
     if include_biomass_scenarios:
-        biomass_candidates = _generate_biomass_scenarios(
-            technology_records,
-            maximum_scenarios=maximum_scenarios,
-        )
 
-        for scenario in biomass_candidates:
-            if scenario not in candidates:
-                candidates.append(scenario)
+        biomass_records = [
+            record
+            for record in records
+            if _is_biomass(record)
+        ]
+
+        for biomass in biomass_records:
+
+            candidates.append(
+                build_pathway(
+                    [biomass],
+                    pathway_type="biomass_only",
+                    reason=(
+                        "Biomass pathway generated from a "
+                        "technically feasible biomass technology."
+                    ),
+                    metadata=_biomass_metadata(
+                        biomass
+                    ),
+                )
+            )
 
             if len(candidates) >= maximum_scenarios:
-                break
+                return candidates[:maximum_scenarios]
 
     # ---------------------------------------------------------
-    # 2. Single-technology pathways
+    # 2. Single technology candidates
     # ---------------------------------------------------------
 
-    if len(candidates) < maximum_scenarios:
+    for technology in records:
 
-        for technology in technology_records:
+        if _is_biomass(technology):
+            pathway_type = "biomass_only"
 
+        elif _is_biogas(technology):
+            pathway_type = "biogas_only"
+
+        else:
             pathway_type = "single_technology"
 
-            if _is_biomass_technology(technology):
-                pathway_type = "biomass_only"
+        candidate = build_pathway(
+            [technology],
+            pathway_type=pathway_type,
+            metadata={
+                "biomass_aware": _is_biomass(technology),
+                "biogas_aware": _is_biogas(technology),
+            },
+        )
 
-            elif _is_biogas_technology(technology):
-                pathway_type = "biogas_only"
+        candidates.append(candidate)
 
-            scenario = _pathway(
-                [technology],
-                pathway_type=pathway_type,
-                metadata={
-                    "biomass_aware": _is_biomass_technology(
-                        technology
-                    ),
-                    "biogas_aware": _is_biogas_technology(
-                        technology
-                    ),
-                },
+        if len(candidates) >= maximum_scenarios:
+            return candidates[:maximum_scenarios]
+
+    # ---------------------------------------------------------
+    # 3. Meaningful two-technology hybrids
+    # ---------------------------------------------------------
+
+    for technology_a, technology_b in combinations(
+        records,
+        2,
+    ):
+        a_biomass = _is_biomass(technology_a)
+        b_biomass = _is_biomass(technology_b)
+
+        a_biogas = _is_biogas(technology_a)
+        b_biogas = _is_biogas(technology_b)
+
+        # Biomass and biogas are both alternative fuel pathways.
+        # Do not manufacture a default hybrid between two fuel choices.
+        if (a_biomass and b_biogas) or (
+            a_biogas and b_biomass
+        ):
+            continue
+
+        if a_biomass or b_biomass:
+            pathway_type = "biomass_hybrid"
+
+        elif a_biogas or b_biogas:
+            pathway_type = "biogas_hybrid"
+
+        else:
+            pathway_type = "technology_hybrid"
+
+        metadata: dict[str, Any] = {
+            "biomass_aware": (
+                a_biomass or b_biomass
+            ),
+            "biogas_aware": (
+                a_biogas or b_biogas
+            ),
+        }
+
+        if a_biomass:
+            metadata.update(
+                _biomass_metadata(
+                    technology_a
+                )
             )
 
-            if scenario not in candidates:
-                candidates.append(scenario)
+        if b_biomass:
+            metadata.update(
+                _biomass_metadata(
+                    technology_b
+                )
+            )
 
-            if len(candidates) >= maximum_scenarios:
-                break
-
-    # ---------------------------------------------------------
-    # 3. Two-technology hybrids
-    # ---------------------------------------------------------
-
-    if len(candidates) < maximum_scenarios:
-
-        for technology_a, technology_b in combinations(
-            technology_records,
-            2,
-        ):
-
-            a_biomass = _is_biomass_technology(technology_a)
-            b_biomass = _is_biomass_technology(technology_b)
-
-            a_biogas = _is_biogas_technology(technology_a)
-            b_biogas = _is_biogas_technology(technology_b)
-
-            # Avoid pairing two alternative fuel technologies as a
-            # default hybrid because the scenario would usually not
-            # represent a meaningful pathway.
-            if (
-                (a_biomass and b_biogas)
-                or (a_biogas and b_biomass)
-            ):
-                continue
-
-            if a_biomass or b_biomass:
-                pathway_type = "biomass_hybrid"
-            elif a_biogas or b_biogas:
-                pathway_type = "biogas_hybrid"
-            else:
-                pathway_type = "technology_hybrid"
-
-            scenario = _pathway(
-                [technology_a, technology_b],
+        candidates.append(
+            build_pathway(
+                [
+                    technology_a,
+                    technology_b,
+                ],
                 pathway_type=pathway_type,
                 reason=(
-                    "Two technically feasible technologies are "
-                    "combined into a candidate pathway."
+                    "Hybrid pathway formed from two "
+                    "technically feasible technologies."
                 ),
-                metadata={
-                    "biomass_aware": (
-                        a_biomass or b_biomass
-                    ),
-                    "biogas_aware": (
-                        a_biogas or b_biogas
-                    ),
-                },
+                metadata=metadata,
             )
-
-            if scenario not in candidates:
-                candidates.append(scenario)
-
-            if len(candidates) >= maximum_scenarios:
-                break
-
-    # ---------------------------------------------------------
-    # 4. Minimum-scenario validation
-    # ---------------------------------------------------------
-
-    if len(candidates) < minimum_scenarios:
-        raise ValueError(
-            f"Only {len(candidates)} candidate pathways could "
-            f"be generated; required at least "
-            f"{minimum_scenarios}."
         )
+
+        if len(candidates) >= maximum_scenarios:
+            return candidates[:maximum_scenarios]
 
     return candidates[:maximum_scenarios]
 
 
 # ---------------------------------------------------------------------------
-# Backward-compatible Biogas scenario
+# Generation utilities
+# ---------------------------------------------------------------------------
+
+
+def deduplicate_scenarios(
+    scenarios: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """
+    Remove duplicate scenario pathways while preserving order.
+    """
+
+    unique: list[dict[str, Any]] = []
+    seen: set[tuple[str, ...]] = set()
+
+    for scenario in scenarios:
+
+        try:
+            key = _scenario_key(scenario)
+        except (TypeError, ValueError):
+            continue
+
+        if not key or key in seen:
+            continue
+
+        seen.add(key)
+        unique.append(scenario)
+
+    return unique
+
+
+def validate_scenario_list_structure(
+    scenarios: list[dict[str, Any]],
+) -> None:
+    """
+    Validate the structural shape expected by downstream modules.
+
+    Raises
+    ------
+    ValueError
+        When a scenario is malformed.
+    """
+
+    for index, scenario in enumerate(scenarios):
+
+        if not isinstance(scenario, dict):
+            raise ValueError(
+                f"Scenario at index {index} must be a dictionary."
+            )
+
+        sequence = scenario.get(
+            "technology_sequence"
+        )
+
+        if sequence is None:
+            sequence = scenario.get(
+                "technologies"
+            )
+
+        if not isinstance(sequence, list):
+            raise ValueError(
+                f"Scenario at index {index} must contain a "
+                "'technology_sequence' list."
+            )
+
+        if not sequence:
+            raise ValueError(
+                f"Scenario at index {index} contains no technologies."
+            )
+
+
+# ---------------------------------------------------------------------------
+# Final public API
+# ---------------------------------------------------------------------------
+
+
+def generate_scenarios(
+    feasible_technologies: list[Any],
+    *,
+    industry: str | None = None,
+    minimum_scenarios: int = 3,
+    maximum_scenarios: int = 5,
+    include_biomass_scenarios: bool = True,
+    strict: bool = False,
+) -> dict[str, Any]:
+    """
+    Final public Scenario Generator API.
+
+    Pipeline
+    --------
+    feasible technologies
+        -> generate candidates
+        -> deduplicate
+        -> scenario filter
+        -> scenario validation
+        -> validated feasible scenarios
+
+    Parameters
+    ----------
+    feasible_technologies:
+        Upstream technology outputs that are already technically feasible.
+
+    industry:
+        Optional factory industry identifier used by the scenario filter
+        when industry-specific technology rules are available.
+
+    minimum_scenarios:
+        Minimum number of VALID scenarios desired.
+
+    maximum_scenarios:
+        Maximum number of scenarios retained at each stage.
+
+    include_biomass_scenarios:
+        Enables biomass-aware candidate ordering.
+
+    strict:
+        If True, raise an exception when fewer than `minimum_scenarios`
+        valid scenarios survive.
+
+        If False, return all valid scenarios and an explanatory status.
+
+    Returns
+    -------
+    dict[str, Any]
+
+    Example
+    -------
+    {
+        "scenarios": [...],
+        "candidate_count": 5,
+        "filtered_count": 4,
+        "valid_count": 3,
+        "rejected_count": 2,
+        "feasible": True,
+        "status": "ok",
+        "rejections": [...]
+    }
+
+    Important
+    ---------
+    The returned `scenarios` list contains ONLY scenarios that survived
+    both filtering and validation.
+
+    No fabricated scenario is inserted merely to reach the requested
+    minimum.
+    """
+
+    if minimum_scenarios < 1:
+        raise ValueError(
+            "minimum_scenarios must be at least 1."
+        )
+
+    if maximum_scenarios < minimum_scenarios:
+        raise ValueError(
+            "maximum_scenarios cannot be smaller than "
+            "minimum_scenarios."
+        )
+
+    # ---------------------------------------------------------
+    # Stage 0 — normalise upstream inputs
+    # ---------------------------------------------------------
+
+    technology_records = normalize_feasible_technologies(
+        feasible_technologies
+    )
+
+    if not technology_records:
+        result = {
+            "scenarios": [],
+            "candidate_count": 0,
+            "filtered_count": 0,
+            "valid_count": 0,
+            "rejected_count": 0,
+            "feasible": False,
+            "status": "no_feasible_technologies",
+            "rejections": [],
+            "industry": industry,
+        }
+
+        if strict:
+            raise ValueError(
+                "No feasible technologies were supplied; "
+                "no scenarios can be generated."
+            )
+
+        return result
+
+    # ---------------------------------------------------------
+    # Stage 1 — candidate generation
+    # ---------------------------------------------------------
+
+    candidates = generate_candidate_pathways(
+        technology_records,
+        minimum_scenarios=minimum_scenarios,
+        maximum_scenarios=maximum_scenarios,
+        include_biomass_scenarios=include_biomass_scenarios,
+    )
+
+    candidates = deduplicate_scenarios(
+        candidates
+    )
+
+    validate_scenario_list_structure(
+        candidates
+    )
+
+    # ---------------------------------------------------------
+    # Stage 2 — scenario filtering
+    # ---------------------------------------------------------
+
+    filtered = filter_scenario_combinations(
+        candidates=candidates,
+        industry=industry,
+    )
+
+    filtered = deduplicate_scenarios(
+        filtered
+    )
+
+    # Keep the upper bound deterministic.
+    filtered = filtered[:maximum_scenarios]
+
+    # ---------------------------------------------------------
+    # Stage 3 — detailed validation
+    # ---------------------------------------------------------
+
+    valid_scenarios: list[dict[str, Any]] = []
+    rejected: list[dict[str, Any]] = []
+
+    for candidate in filtered:
+
+        is_valid, reasons = validate_scenario(
+            candidate
+        )
+
+        if is_valid:
+
+            # Force the downstream contract to explicitly state that
+            # this scenario survived the complete generation pipeline.
+            validated_candidate = dict(candidate)
+            validated_candidate["feasible"] = True
+            validated_candidate["validation"] = {
+                "valid": True,
+                "reasons": [],
+            }
+
+            valid_scenarios.append(
+                validated_candidate
+            )
+
+        else:
+
+            rejected.append(
+                {
+                    "stage": "validation",
+                    "candidate": candidate,
+                    "reasons": reasons,
+                }
+            )
+
+    # ---------------------------------------------------------
+    # Stage 4 — determine result state
+    # ---------------------------------------------------------
+
+    valid_count = len(valid_scenarios)
+
+    if valid_count >= minimum_scenarios:
+        status = "ok"
+        feasible = True
+
+    elif valid_count > 0:
+        status = "partial"
+        feasible = True
+
+    else:
+        status = "no_valid_scenarios"
+        feasible = False
+
+    # We do not invent additional scenarios when the validated
+    # set is smaller than the requested minimum.
+    if strict and valid_count < minimum_scenarios:
+        raise ValueError(
+            (
+                f"Scenario generation produced only "
+                f"{valid_count} valid scenario(s), but "
+                f"{minimum_scenarios} were requested."
+            )
+        )
+
+    return {
+        "scenarios": valid_scenarios[:maximum_scenarios],
+        "candidate_count": len(candidates),
+        "filtered_count": len(filtered),
+        "valid_count": valid_count,
+        "rejected_count": len(rejected),
+        "feasible": feasible,
+        "status": status,
+        "rejections": rejected,
+        "industry": industry,
+        "generator_config": {
+            "minimum_scenarios": minimum_scenarios,
+            "maximum_scenarios": maximum_scenarios,
+            "include_biomass_scenarios": (
+                include_biomass_scenarios
+            ),
+            "strict": strict,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# Backward-compatible Biogas API
 # ---------------------------------------------------------------------------
 
 
@@ -617,13 +819,11 @@ def generate_biogas_scenario(
     biogas_emission_factor_kg_co2_m3: float,
 ) -> dict[str, Any]:
     """
-    Generate the existing Biogas replacement scenario.
+    Preserve the existing standalone biogas scenario API.
 
-    This function is intentionally preserved for backward compatibility
-    with the existing prototype and any current callers.
-
-    It performs only the calculations already associated with the
-    biogas scenario. It does not interact with the biomass engine.
+    This remains intentionally independent from the generic scenario
+    orchestration API because it is a legacy/prototype calculation used
+    by existing callers.
     """
 
     if heat_demand_kwh_day < 0:
@@ -647,7 +847,8 @@ def generate_biogas_scenario(
         )
 
     required_input_energy_kwh_day = (
-        heat_demand_kwh_day / boiler_efficiency
+        heat_demand_kwh_day
+        / boiler_efficiency
     )
 
     biogas_required_m3_day = (
@@ -660,45 +861,28 @@ def generate_biogas_scenario(
         * biogas_emission_factor_kg_co2_m3
     )
 
-    co2_tco2_day = co2_kg_day / 1000.0
-
     return {
         "scenario": "biogas_replacement",
         "replacement_technology": "biogas",
         "heat_demand_kwh_day": heat_demand_kwh_day,
         "biogas_required_m3_day": biogas_required_m3_day,
         "co2_kg_day": co2_kg_day,
-        "co2_tco2_day": co2_tco2_day,
+        "co2_tco2_day": co2_kg_day / 1000.0,
         "feasible": True,
     }
 
 
 # ---------------------------------------------------------------------------
-# Optional convenience wrapper
+# Public exports
 # ---------------------------------------------------------------------------
-
-
-def generate_scenarios(
-    feasible_technologies: list[Any],
-    minimum_scenarios: int = 3,
-    maximum_scenarios: int = 5,
-) -> list[dict[str, Any]]:
-    """
-    Compatibility wrapper for callers that use a generic
-    `generate_scenarios(...)` function name.
-    """
-
-    return generate_candidate_pathways(
-        feasible_technologies=feasible_technologies,
-        minimum_scenarios=minimum_scenarios,
-        maximum_scenarios=maximum_scenarios,
-        include_biomass_scenarios=True,
-    )
 
 
 __all__ = [
     "normalize_feasible_technologies",
+    "build_pathway",
     "generate_candidate_pathways",
+    "deduplicate_scenarios",
+    "validate_scenario_list_structure",
     "generate_scenarios",
     "generate_biogas_scenario",
 ]

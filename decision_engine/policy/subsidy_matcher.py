@@ -140,6 +140,18 @@ _STATE_SCHEME_DESCRIPTORS: dict[str, dict[str, str]] = {
     },
 }
 
+STACK_GROUPS: dict[str, str] = {
+    "ADEETIE": "financing_interest_support",
+    "MSE_GIFT": "financing_interest_support",
+    "MSE_SPICE": "capital_subsidy_same_cost",
+    "ZED": "certification_support",
+    "CGTMSE": "credit_guarantee",
+    "PMEGP": "new_enterprise_margin_money",
+    "TN_CAPITAL_SUBSIDY": "state_capital_subsidy",
+    "TN_CLEAN_TECHNOLOGY_SUBSIDY": "state_capital_subsidy",
+    "CLCSS": "capital_subsidy_same_cost",
+}
+
 
 @dataclass(frozen=True)
 class CalculationResult:
@@ -988,7 +1000,7 @@ class SubsidyMatcher:
                 0.25 if not eligibility.verification_required else 0.60
             ),
             stackable=True,
-            stack_group="financing_interest_support",
+            stack_group=STACK_GROUPS.get("ADEETIE"),
         )
 
     def _benefit_mse_gift(
@@ -1095,7 +1107,7 @@ class SubsidyMatcher:
             ),
             verification_burden_score=0.60,
             stackable=True,
-            stack_group="financing_interest_support",
+            stack_group=STACK_GROUPS.get("MSE_GIFT"),
         )
 
     def _benefit_mse_spice(
@@ -1175,7 +1187,7 @@ class SubsidyMatcher:
             ),
             verification_burden_score=0.35,
             stackable=False,
-            stack_group="capital_subsidy_same_cost",
+            stack_group=STACK_GROUPS.get("MSE_SPICE"),
         )
 
     def _benefit_zed(
@@ -1266,7 +1278,7 @@ class SubsidyMatcher:
             eligibility_confidence_score=0.90,
             verification_burden_score=0.35,
             stackable=True,
-            stack_group="certification_support",
+            stack_group=STACK_GROUPS.get("ZED"),
         )
 
     def _benefit_cgtmse(
@@ -1398,7 +1410,7 @@ class SubsidyMatcher:
             eligibility_confidence_score=0.70,
             verification_burden_score=0.70,
             stackable=True,
-            stack_group="credit_guarantee",
+            stack_group=STACK_GROUPS.get("CGTMSE"),
         )
 
     @staticmethod
@@ -1579,7 +1591,7 @@ class SubsidyMatcher:
             eligibility_confidence_score=0.60,
             verification_burden_score=0.80,
             stackable=False,
-            stack_group="new_enterprise_margin_money",
+            stack_group=STACK_GROUPS.get("PMEGP"),
         )
 
     def _benefit_clcss(
@@ -1719,7 +1731,7 @@ class SubsidyMatcher:
             ),
             verification_burden_score=0.45,
             stackable=False,
-            stack_group="state_capital_subsidy",
+            stack_group=STACK_GROUPS.get(scheme_id),
         )
 
     @staticmethod
@@ -1837,25 +1849,22 @@ class SubsidyMatcher:
                 accepted.append(benefit)
                 continue
 
-            if (
-                group == "capital_subsidy_same_cost"
-                or group == "state_capital_subsidy"
-            ):
-                if any(
-                    existing.group
-                    in {
-                        "capital_subsidy_same_cost",
-                        "state_capital_subsidy",
-                    }
-                    for existing in self._accepted_group_keys(accepted)
-                ):
-                    stack_ok = False
-                    notes.append(
-                        f"{benefit.scheme_id} is not included in the "
-                        "verified aggregate because another capital subsidy "
-                        "already occupies the same CAPEX cost component."
-                    )
-                    continue
+            conflict = False
+            if group in seen_groups:
+                conflict = True
+            elif group in {"capital_subsidy_same_cost", "state_capital_subsidy"}:
+                if "capital_subsidy_same_cost" in seen_groups or "state_capital_subsidy" in seen_groups:
+                    conflict = True
+
+            if conflict:
+                stack_ok = False
+                notes.append(
+                    f"{benefit.scheme_id} is not included in the "
+                    f"verified aggregate because another scheme in the same "
+                    f"stack group '{group}' or a conflicting capital subsidy is already included. "
+                    "The highest-ranked scheme was prioritized."
+                )
+                continue
 
             accepted.append(benefit)
             if group:
@@ -1871,6 +1880,10 @@ class SubsidyMatcher:
                 "Complementary financing and guarantee supports remain "
                 "separately represented."
             )
+
+        if len(benefits) > 1:
+            for benefit in accepted:
+                benefit.verification_required = True
 
         return stack_ok, notes, accepted
 
@@ -2246,18 +2259,11 @@ class SubsidyMatcher:
 
         # Determine whether the data supports a verified combined total.
         # Multiple same-cost capital subsidies cannot be summed automatically.
-        combined_checked = len(accepted) <= 1
+        combined_checked = stack_ok
         combined_note = (
-            "Single supported monetary benefit; no multi-scheme "
-            "combined ceiling required."
-            if len(accepted) <= 1
-            else (
-                "Multiple benefits are present. The matcher applied explicit "
-                "stack-group conflict rules, but the knowledge base does not "
-                "provide a universal numeric combined-subsidy ceiling across "
-                "all central and state schemes. Therefore the aggregate is "
-                "policy-calculated, not a guaranteed claimable amount."
-            )
+            "Stacking validation passed successfully without conflicts."
+            if stack_ok
+            else "Stacking conflicts were resolved by dropping lower-ranked schemes."
         )
 
         total_verified = (

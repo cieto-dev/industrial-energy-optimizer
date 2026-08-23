@@ -1,39 +1,3 @@
-"""
-weights.py — MCDA criterion weights for cost / emissions / risk.
-
-Purpose
--------
-Store the relative importance of the three ranking objectives defined in
-docs/DOMAIN_MODEL.md §4 (`objective_scores`) and docs/ROADMAP.md Sprint 3.2.
-
-Weight policy (documented before implementation, per
-docs/DECISION_ENGINE_ARCHITECTURE.md open item)
-------------------------------------------------
-- **Default set:** one shared default for all 9 industries (Sprint 0 Decision 2:
-  a single recommendation engine, configuration-driven — not per-industry
-  weight tables in MVP).
-- **Adjustable:** callers may override via `Weights.from_mapping()` or by
-  passing a `Weights` instance into `optimization_engine.optimize()`.
-  Overrides are validated (non-negative, sum to 1.0). Unspecified keys keep
-  the documented defaults.
-- **Not fixed-hidden:** defaults are explicit constants below, not buried in
-  mcda.py. Changing priorities must change this module or an explicit override.
-- **Not least-cost-only:** cost is 40%, not 100%. Emissions + risk together
-  are 60%, which is what allows a more expensive pathway to outrank a cheap
-  high-emission / high-risk one.
-
-Criteria (higher benefit score = better, after mcda.py normalisation)
----------------------------------------------------------------------
-- cost      — better economics (lower lifecycle cost)
-- emissions — greater decarbonisation (lower pathway CO2)
-- risk      — lower operational / supply uncertainty (from reliability/)
-
-Dependency
-----------
-None. Downstream: mcda.py, optimization_engine.py.
-Does not import economics/, emissions/, or reliability/.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -41,103 +5,212 @@ from typing import Mapping
 
 
 # ---------------------------------------------------------------------------
-# Default weight set
+# Criterion names
 # ---------------------------------------------------------------------------
 
-CRITERION_COST = "cost"
-CRITERION_EMISSIONS = "emissions"
+CRITERION_TECHNICAL = "technical"
+CRITERION_FINANCIAL = "financial"
+CRITERION_RESOURCE = "resource"
+CRITERION_POLICY = "policy"
 CRITERION_RISK = "risk"
+CRITERION_TECHNOLOGY_MATURITY = "technology_maturity"
+CRITERION_IMPLEMENTATION_COMPLEXITY = "implementation_complexity"
+CRITERION_SUPPLY_RELIABILITY = "supply_reliability"
+CRITERION_ELECTRICITY_DEPENDENCE = "electricity_dependence"
+CRITERION_BIOMASS_DEPENDENCE = "biomass_dependence"
+CRITERION_CARBON_REDUCTION = "carbon_reduction"
+CRITERION_CONFIDENCE = "confidence"
 
-CRITERIA = (CRITERION_COST, CRITERION_EMISSIONS, CRITERION_RISK)
 
-# Sum must be 1.0. Cost is deliberately not dominant.
-DEFAULT_COST_WEIGHT = 0.40
-DEFAULT_EMISSIONS_WEIGHT = 0.35
-DEFAULT_RISK_WEIGHT = 0.25
+CRITERIA = (
+    CRITERION_TECHNICAL,
+    CRITERION_FINANCIAL,
+    CRITERION_RESOURCE,
+    CRITERION_POLICY,
+    CRITERION_RISK,
+    CRITERION_TECHNOLOGY_MATURITY,
+    CRITERION_IMPLEMENTATION_COMPLEXITY,
+    CRITERION_SUPPLY_RELIABILITY,
+    CRITERION_ELECTRICITY_DEPENDENCE,
+    CRITERION_BIOMASS_DEPENDENCE,
+    CRITERION_CARBON_REDUCTION,
+    CRITERION_CONFIDENCE,
+)
+
+
+# ---------------------------------------------------------------------------
+# Default weights
+# ---------------------------------------------------------------------------
+#
+# These are recommendation-engine defaults, not immutable policy constants.
+# They intentionally keep cost/finance important while giving substantial
+# weight to technical feasibility, decarbonisation, reliability and risk.
+#
+# Total = 1.00
+# ---------------------------------------------------------------------------
+
+DEFAULT_WEIGHTS = {
+    CRITERION_TECHNICAL: 0.12,
+    CRITERION_FINANCIAL: 0.12,
+    CRITERION_RESOURCE: 0.08,
+    CRITERION_POLICY: 0.06,
+    CRITERION_RISK: 0.10,
+    CRITERION_TECHNOLOGY_MATURITY: 0.08,
+    CRITERION_IMPLEMENTATION_COMPLEXITY: 0.06,
+    CRITERION_SUPPLY_RELIABILITY: 0.10,
+    CRITERION_ELECTRICITY_DEPENDENCE: 0.05,
+    CRITERION_BIOMASS_DEPENDENCE: 0.05,
+    CRITERION_CARBON_REDUCTION: 0.12,
+    CRITERION_CONFIDENCE: 0.06,
+}
 
 WEIGHT_SUM_TOLERANCE = 1e-9
+
+
+# ---------------------------------------------------------------------------
+# Direction of each criterion
+# ---------------------------------------------------------------------------
+#
+# True  -> higher raw value is better
+# False -> lower raw value is better
+#
+# The MCDA engine converts both forms into the same [0, 1] benefit scale.
+# ---------------------------------------------------------------------------
+
+CRITERION_IS_BENEFIT = {
+    CRITERION_TECHNICAL: True,
+    CRITERION_FINANCIAL: True,
+    CRITERION_RESOURCE: True,
+    CRITERION_POLICY: True,
+    CRITERION_RISK: False,
+    CRITERION_TECHNOLOGY_MATURITY: True,
+    CRITERION_IMPLEMENTATION_COMPLEXITY: False,
+    CRITERION_SUPPLY_RELIABILITY: True,
+    CRITERION_ELECTRICITY_DEPENDENCE: False,
+    CRITERION_BIOMASS_DEPENDENCE: False,
+    CRITERION_CARBON_REDUCTION: True,
+    CRITERION_CONFIDENCE: True,
+}
 
 
 @dataclass(frozen=True)
 class Weights:
     """
-    Normalised MCDA weights for the three DOMAIN_MODEL objectives.
+    Normalised MCDA weights.
 
-    All values are fractions in [0, 1] and must sum to 1.0.
+    Values are fractions in [0, 1] and must sum to 1.0.
     """
 
-    cost: float = DEFAULT_COST_WEIGHT
-    emissions: float = DEFAULT_EMISSIONS_WEIGHT
-    risk: float = DEFAULT_RISK_WEIGHT
+    technical: float = DEFAULT_WEIGHTS[CRITERION_TECHNICAL]
+    financial: float = DEFAULT_WEIGHTS[CRITERION_FINANCIAL]
+    resource: float = DEFAULT_WEIGHTS[CRITERION_RESOURCE]
+    policy: float = DEFAULT_WEIGHTS[CRITERION_POLICY]
+    risk: float = DEFAULT_WEIGHTS[CRITERION_RISK]
+    technology_maturity: float = DEFAULT_WEIGHTS[CRITERION_TECHNOLOGY_MATURITY]
+    implementation_complexity: float = DEFAULT_WEIGHTS[
+        CRITERION_IMPLEMENTATION_COMPLEXITY
+    ]
+    supply_reliability: float = DEFAULT_WEIGHTS[CRITERION_SUPPLY_RELIABILITY]
+    electricity_dependence: float = DEFAULT_WEIGHTS[
+        CRITERION_ELECTRICITY_DEPENDENCE
+    ]
+    biomass_dependence: float = DEFAULT_WEIGHTS[CRITERION_BIOMASS_DEPENDENCE]
+    carbon_reduction: float = DEFAULT_WEIGHTS[CRITERION_CARBON_REDUCTION]
+    confidence: float = DEFAULT_WEIGHTS[CRITERION_CONFIDENCE]
 
     def __post_init__(self) -> None:
-        for name in CRITERIA:
-            value = getattr(self, name)
+        for criterion in CRITERIA:
+            value = getattr(self, criterion)
+
             if value < 0:
                 raise ValueError(
-                    f"Weight '{name}' cannot be negative, got {value}."
+                    f"Weight '{criterion}' cannot be negative, got {value}."
                 )
-        total = self.cost + self.emissions + self.risk
+
+        total = sum(getattr(self, criterion) for criterion in CRITERIA)
+
         if abs(total - 1.0) > WEIGHT_SUM_TOLERANCE:
             raise ValueError(
-                f"Weights must sum to 1.0, got {total:.6f} "
-                f"(cost={self.cost}, emissions={self.emissions}, "
-                f"risk={self.risk})."
+                f"MCDA weights must sum to 1.0, got {total:.6f}."
             )
 
     def as_dict(self) -> dict[str, float]:
         return {
-            CRITERION_COST: self.cost,
-            CRITERION_EMISSIONS: self.emissions,
-            CRITERION_RISK: self.risk,
+            criterion: getattr(self, criterion)
+            for criterion in CRITERIA
         }
 
     @classmethod
     def default(cls) -> "Weights":
-        """Documented MVP default set (adjustable, not industry-specific)."""
         return cls()
 
     @classmethod
     def from_mapping(cls, mapping: Mapping[str, float]) -> "Weights":
         """
-        Build weights from a partial or full mapping.
+        Build weights from a partial/full mapping.
 
-        Missing keys fall back to the documented defaults, then the result
-        is re-normalised so the three values still sum to 1.0. This lets a
-        factory owner emphasise emissions without having to restate every
-        weight.
+        Supplied values replace the defaults. The result is normalized
+        automatically so users can provide relative priorities instead
+        of manually calculating a perfect 1.0 sum.
         """
+
         raw = {
-            CRITERION_COST: float(
-                mapping.get(CRITERION_COST, DEFAULT_COST_WEIGHT)
-            ),
-            CRITERION_EMISSIONS: float(
-                mapping.get(CRITERION_EMISSIONS, DEFAULT_EMISSIONS_WEIGHT)
-            ),
-            CRITERION_RISK: float(
-                mapping.get(CRITERION_RISK, DEFAULT_RISK_WEIGHT)
-            ),
+            criterion: float(
+                mapping.get(
+                    criterion,
+                    DEFAULT_WEIGHTS[criterion],
+                )
+            )
+            for criterion in CRITERIA
         }
+
+        for criterion, value in raw.items():
+            if value < 0:
+                raise ValueError(
+                    f"Weight '{criterion}' cannot be negative, got {value}."
+                )
+
         total = sum(raw.values())
+
         if total <= 0:
-            raise ValueError("At least one weight must be positive.")
+            raise ValueError(
+                "At least one MCDA weight must be positive."
+            )
+
+        normalized = {
+            criterion: value / total
+            for criterion, value in raw.items()
+        }
+
         return cls(
-            cost=raw[CRITERION_COST] / total,
-            emissions=raw[CRITERION_EMISSIONS] / total,
-            risk=raw[CRITERION_RISK] / total,
+            technical=normalized[CRITERION_TECHNICAL],
+            financial=normalized[CRITERION_FINANCIAL],
+            resource=normalized[CRITERION_RESOURCE],
+            policy=normalized[CRITERION_POLICY],
+            risk=normalized[CRITERION_RISK],
+            technology_maturity=normalized[
+                CRITERION_TECHNOLOGY_MATURITY
+            ],
+            implementation_complexity=normalized[
+                CRITERION_IMPLEMENTATION_COMPLEXITY
+            ],
+            supply_reliability=normalized[
+                CRITERION_SUPPLY_RELIABILITY
+            ],
+            electricity_dependence=normalized[
+                CRITERION_ELECTRICITY_DEPENDENCE
+            ],
+            biomass_dependence=normalized[
+                CRITERION_BIOMASS_DEPENDENCE
+            ],
+            carbon_reduction=normalized[
+                CRITERION_CARBON_REDUCTION
+            ],
+            confidence=normalized[CRITERION_CONFIDENCE],
         )
-
-    @classmethod
-    def cost_only(cls) -> "Weights":
-        """
-        Degenerate set used only to demonstrate least-cost ranking.
-
-        Production recommendations must not use this. Tests use it to prove
-        that default weights and cost-only weights produce different winners.
-        """
-        return cls(cost=1.0, emissions=0.0, risk=0.0)
 
 
 def default_weights() -> Weights:
-    """Public helper matching the ROADMAP item for a default weight set."""
+    """Return the documented default MCDA weight set."""
     return Weights.default()
+
