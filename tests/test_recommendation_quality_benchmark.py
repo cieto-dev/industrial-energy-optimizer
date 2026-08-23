@@ -1328,44 +1328,60 @@ def _technology_family_match(
     """
     Flexible technology-family matching.
 
-    A recommendation passes if it belongs to an acceptable family supported by research.
+    Example:
+        biomass_boiler -> biomass
+        waste_heat_recovery -> heat_recovery
     """
 
     technology = technology.lower().strip()
 
-    family_map = {
-        # Biomass family
-        "biomass": "biomass_family",
-        "biomass_boiler": "biomass_family",
-        "multi_fuel_boiler": "biomass_family",
-
-        # Thermal efficiency family
-        "heat_recovery": "efficiency_family",
-        "waste_heat_recovery": "efficiency_family",
-        "steam_optimization": "efficiency_family",
-        "steam_system_optimization": "efficiency_family",
-        "efficiency": "efficiency_family",
-        "efficiency_improvements": "efficiency_family",
-        "efficient_kiln": "efficiency_family",
-        "high_efficiency_reheating": "efficiency_family",
-
-        # Electrification family
-        "induction_furnace": "electrification_family",
-        "electric_resistance": "electrification_family",
-        "resistance_furnace": "electrification_family",
-        "renewable_electricity": "electrification_family",
-        "electrification": "electrification_family",
-        "electric_boiler": "electrification_family",
-        "industrial_heat_pump": "electrification_family",
+    aliases = {
+        "biomass_boiler": {"biomass", "biomass_boiler", "multi_fuel_boiler"},
+        "multi_fuel_boiler": {
+            "biomass",
+            "biomass_boiler",
+            "multi_fuel_boiler",
+        },
+        "waste_heat_recovery": {
+            "heat_recovery",
+            "waste_heat_recovery",
+        },
+        "efficient_kiln": {
+            "efficient_kiln",
+            "efficiency",
+            "high_efficiency_reheating",
+        },
+        "high_efficiency_reheating": {
+            "high_efficiency_reheating",
+            "efficiency",
+        },
+        "induction_furnace": {
+            "induction_furnace",
+            "electric_resistance",
+        },
+        "industrial_heat_pump": {
+            "industrial_heat_pump",
+            "heat_pump",
+        },
+        "electric_boiler": {
+            "electric_boiler",
+            "electrification",
+        },
+        "renewable_electricity": {
+            "renewable_electricity",
+            "solar_pv",
+            "green_electricity",
+        },
     }
 
-    expected_families = set()
-    for item in expected_technologies:
-        item_lower = item.lower().strip()
-        expected_families.add(family_map.get(item_lower, item_lower))
+    expected = set()
 
-    tech_family = family_map.get(technology, technology)
-    return tech_family in expected_families
+    for item in expected_technologies:
+        expected.update(
+            aliases.get(item.lower(), {item.lower()})
+        )
+
+    return technology in expected
 
 
 def _selected_pathway_suitability(
@@ -1506,20 +1522,19 @@ def test_co2_reduction_within_research_band(case: BenchmarkScenario):
 
     output = run_benchmark(case)
 
-    selected_co2 = output["selected"].scored.metrics.co2_reduction_pct
+    selected_co2 = output["selected"].co2_reduction_pct
 
     assert selected_co2 is not None
 
-    # Use tolerance bands rather than exact values
     assert (
-        (case.research.co2_reduction_min_pct - 15.0)
+        case.research.co2_reduction_min_pct
         <= selected_co2
-        <= (case.research.co2_reduction_max_pct + 15.0)
+        <= case.research.co2_reduction_max_pct
     ), (
         f"{case.industry}: CO2 reduction {selected_co2:.1f}% "
-        f"outside research tolerance band "
-        f"{case.research.co2_reduction_min_pct - 15.0:.1f}%–"
-        f"{case.research.co2_reduction_max_pct + 15.0:.1f}%"
+        f"outside research band "
+        f"{case.research.co2_reduction_min_pct:.1f}%–"
+        f"{case.research.co2_reduction_max_pct:.1f}%"
     )
 
 
@@ -1540,16 +1555,15 @@ def test_expected_cost_savings_band(case: BenchmarkScenario):
 
     saving_pct = output["saving_pct"]
 
-    assert saving_pct > 0.0, f"{case.industry}: must have positive savings"
-
-    # Use tolerance bands rather than exact values
     assert (
-        (case.research.cost_saving_min_pct - 10.0)
+        case.research.cost_saving_min_pct
         <= saving_pct
-        <= (case.research.cost_saving_max_pct + 30.0)
+        <= case.research.cost_saving_max_pct
     ), (
         f"{case.industry}: calculated annual cost saving "
-        f"{saving_pct:.1f}% outside tolerant band"
+        f"{saving_pct:.1f}% outside expected band "
+        f"{case.research.cost_saving_min_pct:.1f}%–"
+        f"{case.research.cost_saving_max_pct:.1f}%"
     )
 
 
@@ -1578,11 +1592,7 @@ def test_payback_is_recoverable_within_research_range(
         if candidate.scenario_id == selected.scenario_id
     )
 
-    annual_saving_inr = (
-        case.baseline_annual_opex
-        if hasattr(case, "baseline_annual_opex")
-        else case.baseline_annual_opex_inr
-    ) - next(
+    annual_saving_inr = case.baseline_annual_opex_inr - next(
         candidate.annual_opex_inr
         for candidate in case.candidate_scenarios
         if candidate.scenario_id == selected.scenario_id
@@ -1597,11 +1607,15 @@ def test_payback_is_recoverable_within_research_range(
         selected_capex / annual_saving_inr
     )
 
-    # Use more realistic criteria: positive and within a reasonable timeframe
-    assert payback_years > 0, "Payback must be positive"
-    assert payback_years <= 15.0, (
+    assert (
+        case.research.payback_min_years
+        <= payback_years
+        <= case.research.payback_max_years
+    ), (
         f"{case.industry}: payback {payback_years:.2f} years "
-        f"is unrealistically long (> 15 years)"
+        f"outside expected benchmark range "
+        f"{case.research.payback_min_years:.2f}–"
+        f"{case.research.payback_max_years:.2f} years"
     )
 
 
@@ -1728,10 +1742,10 @@ def test_cement_is_not_treated_as_fully_decarbonizable_by_fuel_switch():
 
     output = run_benchmark(cement)
 
-    assert output["selected"].scored.metrics.co2_reduction_pct < 50.0
+    assert output["selected"].co2_reduction_pct < 50.0
 
 
-def test_steel_rerolling_prefers_appropriate_technology_family():
+def test_steel_rerolling_prefers_electrification_family():
     """
     Research-quality check for the 1100–1250°C rerolling benchmark.
     """
@@ -1749,22 +1763,21 @@ def test_steel_rerolling_prefers_appropriate_technology_family():
         for tech in output["selected"].technology_sequence
     }
 
-    acceptable_family = {
+    electrification_family = {
         "induction_furnace",
         "electric_resistance",
         "renewable_electricity",
-        "high_efficiency_reheating",
-        "heat_recovery",
-        "efficiency",
     }
 
-    assert technologies.intersection(acceptable_family), (
-        "Steel re-rolling benchmark should retain an acceptable heating "
-        "transition option supported by research."
+    assert technologies.intersection(
+        electrification_family
+    ), (
+        "Steel re-rolling benchmark should retain an electrical/heating "
+        "transition option because the research case is high-temperature."
     )
 
 
-def test_foundry_prefers_acceptable_family():
+def test_foundry_prefers_induction_family():
     """
     Research-quality check for foundry metal melting.
     """
@@ -1782,16 +1795,9 @@ def test_foundry_prefers_acceptable_family():
         for tech in output["selected"].technology_sequence
     }
 
-    acceptable_family = {
-        "induction_furnace",
-        "resistance_furnace",
-        "heat_recovery",
-        "efficiency_improvements",
-        "efficiency",
-    }
-
-    assert technologies.intersection(acceptable_family), (
-        "Foundry benchmark should prefer an acceptable family supported by research."
+    assert "induction_furnace" in technologies, (
+        "Foundry benchmark should prefer induction-family melting "
+        "technology."
     )
 
 
@@ -1915,7 +1921,7 @@ def test_benchmark_summary_has_nine_results():
     for result in results:
         assert result["selected"].scenario_id
         assert result["selected"].technology_sequence
-        assert result["selected"].scored.metrics.co2_reduction_pct is not None
+        assert result["selected"].co2_reduction_pct is not None
         assert result["saving_pct"] >= 0.0
         assert result["suitability"] >= 0.0
         assert result["suitability"] <= 1.0
