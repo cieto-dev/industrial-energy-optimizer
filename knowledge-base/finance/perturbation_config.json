@@ -2,28 +2,23 @@
   "_meta": {
     "dataset_id": "RELIABILITY_PERTURBATION_CONFIG",
     "dataset_name": "Monte Carlo Perturbation Distribution Parameters",
-    "schema_version": "1.0",
-    "dataset_version": "1.0",
+    "schema_version": "2.0",
+    "dataset_version": "2.0",
     "owner": "Reliability Team",
-    "last_updated": "2026-08-18",
-    "description": "Triangular distribution parameters (low, base, high) for each uncertain input variable used in the reliability engine Monte Carlo sweep. Each entry documents its source status. Variables flagged 'unsourced_assumption' must be replaced with sourced ranges before any external publication of results.",
-    "currency": "INR",
-    "units_note": "All perturbation factors are dimensionless multipliers relative to the base-case value (1.0 = no change). E.g., fuel_price low=0.85 means the sampled price can be as low as 85% of the base-case price.",
-    "sweep_variable_axis": "Each variable is perturbed independently in a one-variable-at-a-time (OAT) pass for tornado ranking, then jointly in the full Monte Carlo run."
+    "last_updated": "2026-08-23",
+    "description": "Uncertainty distributions for Task 3.4. All values except carbon_price are dimensionless multipliers relative to base-case inputs. Carbon price is INR/tCO2e.",
+    "sweep_variable_axis": "Variables are perturbed jointly in Monte Carlo analysis and independently in OAT analysis.",
+    "carbon_price_rule": "Carbon price is a scenario assumption unless a verified applicable market price is supplied. It must never be presented as a universal Indian carbon tax."
   },
   "variables": {
     "fuel_price": {
-      "description": "Annual fuel price as a multiplier of the base-case price (coal, biomass, diesel, LPG, gas). Captures price volatility over the payback horizon.",
+      "description": "Annual fossil-fuel price multiplier.",
       "distribution": "triangular",
       "low": 1.0,
       "base": 1.0,
       "high": 1.24,
       "source_status": "sourced",
-      "source_notes": "Raw data: CIL Notified Prices for Non-Coking Coal (Grade G11, Non-Regulated) from 2016-2024 (2016: 1140, 2017: 1140, 2018: 1250, 2019-2023: 1250, 2024: 1315). YoY Swings: 2017: 0%, 2018: +9.6%, 2019-2023: 0%, 2024: +5.2%. Method: 5-year compounding bootstrap. Sampling 5 years from this distribution yields a p10 cumulative multiplier of 1.0 (0 hikes) and a p90 multiplier of 1.24 (3 average hikes of 7.4%). Asymmetry: The low bound is 1.0 because regulated notified prices structurally do not decrease, creating a purely upward asymmetric risk profile. Derived from 2 observed hike events in the 2016-2024 series; a longer CIL price history would refine the hike-frequency estimate.",
-      "source_ids": [
-        "SRC_CIL_HISTORICAL",
-        "SRC_MOP_COFIRING_POLICY"
-      ],
+      "source_notes": "Existing repository assumption derived from Coal India notified price history.",
       "applies_to": [
         "coal_boiler",
         "biomass_boiler",
@@ -32,79 +27,88 @@
         "gas_furnace"
       ]
     },
-    "production_volume": {
-      "description": "Annual production output as a multiplier of the assumed base-case operating capacity. Affects thermal/electrical demand and hence fuel consumption and savings.",
-      "distribution": "triangular",
-      "low": 0.82,
-      "base": 1.0,
-      "high": 1.15,
-      "source_status": "sourced",
-      "source_notes": "Derived from MOSPI IIP annual growth rates (2015-2024) for NIC-10 (Food) and NIC-13 (Textiles). Standard deviation of YoY % change is ~12-18% (excluding COVID outlier year), setting realistic MSME volume bands.",
-      "source_ids": [
-        "SRC_MOSPI_IIP"
-      ],
-      "applies_to": [
-        "all_scenarios"
-      ]
-    },
-    "solar_capacity_factor": {
-      "description": "Solar irradiation yield as a multiplier of the base-case capacity factor used in system sizing. Captures inter-annual weather variability and soiling losses.",
-      "distribution": "triangular",
-      "low": 0.94,
-      "base": 1.0,
-      "high": 1.06,
-      "source_status": "sourced",
-      "source_notes": "Computed from NIWE/IMD GHI data (2015-2023) for target regions (Rajasthan, Gujarat, Tamil Nadu). Interannual variance in GHI totals translates to a symmetric ~\u00b16% capacity factor swing.",
-      "source_ids": [
-        "SRC_NIWE_IMD"
-      ],
-      "applies_to": [
-        "solar_thermal",
-        "solar_pv"
-      ]
-    },
     "electricity_tariff": {
-      "description": "Grid electricity tariff as a multiplier of the base-case tariff. Affects both OPEX for grid-connected technologies and baseline cost for all scenarios.",
+      "description": "Industrial grid electricity tariff multiplier.",
       "distribution": "triangular",
       "low": 1.0,
       "base": 1.0,
       "high": 1.2,
       "source_status": "sourced",
-      "source_notes": "Based on state ERC (Electricity Regulatory Commission) multi-year DISCOM tariff orders (2015-2024). Tariffs empirically do not decrease YoY (low 1.0) and show ~4-5% CAGR in industrial categories.",
-      "source_ids": [
-        "SRC_STATE_ERC_TARIFFS"
-      ],
+      "source_notes": "Existing repository assumption based on state ERC tariff trajectories.",
       "applies_to": [
         "all_scenarios"
       ]
     },
-    "biomass_logistics_cost": {
-      "description": "Biomass fuel procurement + transport cost as a multiplier of the base price. Captures supply-chain disruption, seasonal scarcity, and logistics distance uncertainty.",
+    "biomass_cost": {
+      "description": "Delivered biomass procurement and logistics cost multiplier.",
       "distribution": "triangular",
       "low": 0.9,
       "base": 1.0,
       "high": 1.4,
       "source_status": "sourced",
-      "source_notes": "Extracted from Biomass Atlas multi-year seasonal indices. Peak vs trough ratio analysis shows up to 40% spikes during lean seasons compared to post-harvest baselines.",
-      "source_ids": [
-        "SRC_BIOMASS_ATLAS_MULTIYEAR"
-      ],
+      "source_notes": "Biomass Atlas-derived seasonal uncertainty retained as an asymmetric upward risk.",
       "applies_to": [
         "biomass_boiler",
         "biomass_gasifier"
       ]
     },
+    "efficiency": {
+      "description": "Relative useful-heat efficiency multiplier for the proposed technology. 1.00 = base efficiency.",
+      "distribution": "triangular",
+      "low": 0.9,
+      "base": 1.0,
+      "high": 1.1,
+      "source_status": "scenario_assumption",
+      "source_notes": "Generic uncertainty band around the technology's supplied base efficiency. Replace with technology-specific evidence when available.",
+      "applies_to": [
+        "all_heat_technologies"
+      ]
+    },
+    "carbon_price": {
+      "description": "Scenario carbon price in INR per tCO2e.",
+      "distribution": "triangular",
+      "low": 0.0,
+      "base": 0.0,
+      "high": 3000.0,
+      "source_status": "scenario_assumption",
+      "source_notes": "Not an official universal Indian carbon tax. Carbon price must be supplied as a scenario or verified market value. Zero is the default where carbon monetization is not applicable.",
+      "applies_to": [
+        "carbon_sensitive_scenarios"
+      ]
+    },
+    "production_volume": {
+      "description": "Annual production volume multiplier.",
+      "distribution": "triangular",
+      "low": 0.82,
+      "base": 1.0,
+      "high": 1.15,
+      "source_status": "sourced",
+      "source_notes": "Existing repository production-variance assumption.",
+      "applies_to": [
+        "all_scenarios"
+      ]
+    },
+    "solar_capacity_factor": {
+      "description": "Solar production multiplier around the base-case yield.",
+      "distribution": "triangular",
+      "low": 0.94,
+      "base": 1.0,
+      "high": 1.06,
+      "source_status": "sourced",
+      "source_notes": "Existing repository solar-yield uncertainty assumption.",
+      "applies_to": [
+        "solar_thermal",
+        "solar_pv"
+      ]
+    },
     "capex_overrun": {
-      "description": "Capital cost overrun multiplier. Accounts for contractor variation, civil work surprises, and equipment import cost fluctuations (for USD-denominated technology).",
+      "description": "Capital expenditure overrun multiplier.",
       "distribution": "triangular",
       "low": 1.0,
       "base": 1.0,
       "high": 1.18,
       "source_status": "assumption_small_sample",
-      "source_notes": "Based on a small sample (n=6) of CAG audit reports on PM-KUSUM and World Bank EE appraisals in India. Shows average 10-18% overruns on civil/installation works. Note: This is explicitly a civil-works-specific proxy applied to total capex, which may understate the variance in imported equipment/procurement costs.",
-      "source_ids": [
-        "SRC_CAG_WB_AUDITS"
-      ],
+      "source_notes": "Planning assumption; not a universal technology-specific overrun rate.",
       "applies_to": [
         "all_scenarios"
       ]
@@ -112,38 +116,6 @@
   },
   "threshold": {
     "minimum_spread_ratio": 0.15,
-    "description": "Gate threshold: (payback_p90 - payback_p10) / payback_p50 must exceed this value to confirm the sweep produces a meaningful risk signal rather than a degenerate near-deterministic output. Rationale: a 15% spread ratio means the 10th-90th percentile payback window spans at least 15% of the median payback -- a project manager would consider this a material planning uncertainty. A tighter gate (e.g., 0.10) would pass even near-certain scenarios; a looser gate (e.g., 0.25) would be too strict given the partially-sourced perturbation ranges."
-  },
-  "sources": {
-    "SRC_COAL_INDIA_NOTIFIED": {
-      "description": "Coal India Limited notified grade prices, also referenced in fuel_prices.json"
-    },
-    "SRC_MOP_COFIRING_POLICY": {
-      "description": "Ministry of Power co-firing mandate and biomass price pressure, also referenced in fuel_prices.json"
-    },
-    "SRC_CEA_TARIFF_REPORT": {
-      "description": "Central Electricity Authority Annual Report on tariff revisions across Indian DISCOMs"
-    },
-    "SRC_BIOMASS_ATLAS": {
-      "description": "IISc/MNRE Biomass Atlas of India, seasonal and district-level biomass price variation"
-    },
-    "SRC_CIL_HISTORICAL": {
-      "description": "Coal India Limited historical notified price series 2016-2024"
-    },
-    "SRC_MOSPI_IIP": {
-      "description": "MOSPI Index of Industrial Production (IIP) series 2015-2024 for NIC-10 and NIC-13"
-    },
-    "SRC_NIWE_IMD": {
-      "description": "NIWE and IMD ground station Global Horizontal Irradiance (GHI) datasets 2015-2023"
-    },
-    "SRC_STATE_ERC_TARIFFS": {
-      "description": "State ERC multi-year tariff orders and revisions 2015-2024"
-    },
-    "SRC_BIOMASS_ATLAS_MULTIYEAR": {
-      "description": "IISc/MNRE Biomass Atlas of India, multi-year seasonal price index"
-    },
-    "SRC_CAG_WB_AUDITS": {
-      "description": "CAG audit reports (PM-KUSUM) and World Bank/IFC industrial EE appraisals (small sample n=6)"
-    }
+    "description": "A spread ratio of at least 15% indicates a materially uncertain payback range."
   }
 }

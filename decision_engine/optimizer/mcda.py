@@ -1,7 +1,11 @@
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Any, Iterable, Optional
+
+import numpy as np
 
 from decision_engine.optimizer.weights import (
     CRITERION_BIOMASS_DEPENDENCE,
@@ -23,23 +27,14 @@ from decision_engine.optimizer.weights import (
 )
 
 
-# Retained for compatibility with the existing optimizer.
 COST_HORIZON_YEARS = 10.0
 
 
 @dataclass
 class ScenarioMetrics:
-    """
-    Raw inputs for one candidate pathway.
-
-    New research-informed criteria are intentionally optional so older
-    scenario outputs remain usable while the upstream modules are migrated.
-    """
-
     scenario_id: str
     technology_sequence: list[str] = field(default_factory=list)
 
-    # Existing economic / emissions / reliability fields
     capex_inr: Optional[float] = None
     annual_opex_inr: Optional[float] = None
     pathway_co2_tonnes_year: Optional[float] = None
@@ -48,7 +43,6 @@ class ScenarioMetrics:
     risk_tier: Optional[str] = None
     reliability_score_pct: Optional[float] = None
 
-    # New MCDA dimensions (0–100 scale preferred)
     technical_score: Optional[float] = None
     financial_score: Optional[float] = None
     resource_score: Optional[float] = None
@@ -62,19 +56,15 @@ class ScenarioMetrics:
     carbon_reduction: Optional[float] = None
     confidence_score: Optional[float] = None
 
-    # Duck-typed upstream model objects
     financial: Any = None
     emission: Any = None
     risk_score: Any = None
 
-    # Anything else passed by upstream modules
     extra: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class ScoredScenario:
-    """One scenario after multi-criteria scoring."""
-
     scenario_id: str
     technology_sequence: list[str]
 
@@ -84,8 +74,6 @@ class ScoredScenario:
 
     criterion_raw_values: dict[str, float]
     criterion_scores: dict[str, float]
-
-    # Kept for backward compatibility with existing dashboard/code.
     objective_scores: dict[str, float]
 
     composite_score: float
@@ -135,12 +123,14 @@ def _clamp_score(
     criterion: str,
     scenario_id: str,
 ) -> float:
-    """Enforce the [0, 100] convention for manually supplied MCDA scores."""
+
     if not 0.0 <= value <= 100.0:
         raise ValueError(
-            f"Scenario '{scenario_id}' criterion '{criterion}' "
-            f"must be between 0 and 100, got {value}."
+            f"Scenario '{scenario_id}' criterion "
+            f"'{criterion}' must be between 0 and 100, "
+            f"got {value}."
         )
+
     return value
 
 
@@ -190,23 +180,32 @@ def _resolve_opex(metrics: ScenarioMetrics) -> float:
     return opex
 
 
-def lifecycle_cost(metrics: ScenarioMetrics) -> float:
-    """Lower lifecycle cost is better."""
+@lru_cache(maxsize=4096)
+def _lifecycle_cost_cached(
+    capex: float,
+    annual_opex: float,
+) -> float:
     return (
-        _resolve_capex(metrics)
-        + _resolve_opex(metrics) * COST_HORIZON_YEARS
+        capex
+        + annual_opex * COST_HORIZON_YEARS
+    )
+
+
+def lifecycle_cost(metrics: ScenarioMetrics) -> float:
+    return _lifecycle_cost_cached(
+        _resolve_capex(metrics),
+        _resolve_opex(metrics),
     )
 
 
 def raw_emissions_metric(metrics: ScenarioMetrics) -> float:
-    """
-    Lower emissions are better.
-    Absolute pathway CO2 is preferred.
-    """
     pathway = metrics.pathway_co2_tonnes_year
 
     if pathway is None:
-        pathway = _attr(metrics.emission, "pathway_co2_tonnes_year")
+        pathway = _attr(
+            metrics.emission,
+            "pathway_co2_tonnes_year",
+        )
 
     if pathway is not None:
         if pathway < 0:
@@ -214,6 +213,7 @@ def raw_emissions_metric(metrics: ScenarioMetrics) -> float:
                 f"Scenario '{metrics.scenario_id}' pathway CO2 "
                 "cannot be negative."
             )
+
         return pathway
 
     reduction = metrics.co2_reduction_pct
@@ -227,22 +227,18 @@ def raw_emissions_metric(metrics: ScenarioMetrics) -> float:
 
     if reduction is None:
         raise ValueError(
-            f"Scenario '{metrics.scenario_id}' is missing emissions."
+            f"Scenario '{metrics.scenario_id}' "
+            "is missing emissions."
         )
 
-    return max(0.0, 100.0 - reduction)
+    return max(
+        0.0,
+        100.0 - reduction,
+    )
 
 
 def raw_risk_metric(metrics: ScenarioMetrics) -> float:
-    """
-    Lower risk is better.
 
-    Preferred source order:
-      1. explicit risk_score_value
-      2. spread_ratio
-      3. risk tier
-      4. inverted reliability score
-    """
     if metrics.risk_score_value is not None:
         return _clamp_score(
             float(metrics.risk_score_value),
@@ -251,20 +247,29 @@ def raw_risk_metric(metrics: ScenarioMetrics) -> float:
         )
 
     spread = metrics.spread_ratio
+
     if spread is None:
-        spread = _attr(metrics.risk_score, "spread_ratio")
+        spread = _attr(
+            metrics.risk_score,
+            "spread_ratio",
+        )
 
     if spread is not None:
         if spread < 0:
             raise ValueError(
-                f"Scenario '{metrics.scenario_id}' spread_ratio "
-                "cannot be negative."
+                f"Scenario '{metrics.scenario_id}' "
+                "spread_ratio cannot be negative."
             )
+
         return spread
 
     tier = metrics.risk_tier
+
     if tier is None:
-        tier = _str_attr(metrics.risk_score, "overall_tier")
+        tier = _str_attr(
+            metrics.risk_score,
+            "overall_tier",
+        )
 
     if tier:
         values = {
@@ -273,23 +278,34 @@ def raw_risk_metric(metrics: ScenarioMetrics) -> float:
             "HIGH": 40.0,
             "VERY_HIGH": 60.0,
         }
+
         key = tier.upper()
+
         if key not in values:
             raise ValueError(
-                f"Scenario '{metrics.scenario_id}' has unknown risk tier "
-                f"'{tier}'."
+                f"Scenario '{metrics.scenario_id}' "
+                f"has unknown risk tier '{tier}'."
             )
+
         return values[key]
 
     reliability = metrics.reliability_score_pct
+
     if reliability is None:
-        reliability = _attr(metrics.risk_score, "reliability_score_pct")
+        reliability = _attr(
+            metrics.risk_score,
+            "reliability_score_pct",
+        )
 
     if reliability is not None:
-        return max(0.0, 100.0 - reliability)
+        return max(
+            0.0,
+            100.0 - reliability,
+        )
 
     raise ValueError(
-        f"Scenario '{metrics.scenario_id}' is missing risk information."
+        f"Scenario '{metrics.scenario_id}' "
+        "is missing risk information."
     )
 
 
@@ -297,10 +313,7 @@ def _resolve_criterion(
     metrics: ScenarioMetrics,
     criterion: str,
 ) -> Optional[float]:
-    """
-    Resolve a criterion from direct fields first, then useful upstream
-    nested objects, then derived values where appropriate.
-    """
+
     direct_map = {
         CRITERION_TECHNICAL: metrics.technical_score,
         CRITERION_FINANCIAL: metrics.financial_score,
@@ -308,15 +321,22 @@ def _resolve_criterion(
         CRITERION_POLICY: metrics.policy_score,
         CRITERION_RISK: metrics.risk_score_value,
         CRITERION_TECHNOLOGY_MATURITY: metrics.technology_maturity,
-        CRITERION_IMPLEMENTATION_COMPLEXITY: metrics.implementation_complexity,
-        CRITERION_SUPPLY_RELIABILITY: metrics.supply_reliability,
-        CRITERION_ELECTRICITY_DEPENDENCE: metrics.electricity_dependence,
-        CRITERION_BIOMASS_DEPENDENCE: metrics.biomass_dependence,
-        CRITERION_CARBON_REDUCTION: metrics.carbon_reduction,
-        CRITERION_CONFIDENCE: metrics.confidence_score,
+        CRITERION_IMPLEMENTATION_COMPLEXITY:
+            metrics.implementation_complexity,
+        CRITERION_SUPPLY_RELIABILITY:
+            metrics.supply_reliability,
+        CRITERION_ELECTRICITY_DEPENDENCE:
+            metrics.electricity_dependence,
+        CRITERION_BIOMASS_DEPENDENCE:
+            metrics.biomass_dependence,
+        CRITERION_CARBON_REDUCTION:
+            metrics.carbon_reduction,
+        CRITERION_CONFIDENCE:
+            metrics.confidence_score,
     }
 
     direct = direct_map.get(criterion)
+
     if direct is not None:
         return _clamp_score(
             float(direct),
@@ -324,7 +344,6 @@ def _resolve_criterion(
             scenario_id=metrics.scenario_id,
         )
 
-    # Common aliases accepted from upstream models.
     alias_map = {
         CRITERION_TECHNICAL: (
             "technical_score",
@@ -382,16 +401,24 @@ def _resolve_criterion(
         ),
     }
 
-    aliases = alias_map.get(criterion, ())
-    nested_sources = (
+    aliases = alias_map.get(
+        criterion,
+        (),
+    )
+
+    sources = (
         metrics.financial,
         metrics.emission,
         metrics.risk_score,
         metrics.extra,
     )
 
-    for source in nested_sources:
-        value = _attr(source, *aliases)
+    for source in sources:
+        value = _attr(
+            source,
+            *aliases,
+        )
+
         if value is not None:
             return _clamp_score(
                 value,
@@ -399,18 +426,19 @@ def _resolve_criterion(
                 scenario_id=metrics.scenario_id,
             )
 
-    # Derived fallbacks
     if criterion == CRITERION_RISK:
         return raw_risk_metric(metrics)
 
     if criterion == CRITERION_CARBON_REDUCTION:
         reduction = metrics.co2_reduction_pct
+
         if reduction is None:
             reduction = _attr(
                 metrics.emission,
                 "reduction_pct",
                 "co2_reduction_pct",
             )
+
         if reduction is not None:
             return _clamp_score(
                 reduction,
@@ -420,11 +448,13 @@ def _resolve_criterion(
 
     if criterion == CRITERION_SUPPLY_RELIABILITY:
         reliability = metrics.reliability_score_pct
+
         if reliability is None:
             reliability = _attr(
                 metrics.risk_score,
                 "reliability_score_pct",
             )
+
         if reliability is not None:
             return _clamp_score(
                 reliability,
@@ -435,168 +465,281 @@ def _resolve_criterion(
     return None
 
 
-def _default_from_legacy(metrics: ScenarioMetrics, criterion: str) -> float:
-    """
-    Compatibility fallback for older pathway contracts.
+def _default_from_legacy(
+    metrics: ScenarioMetrics,
+    criterion: str,
+) -> float:
 
-    We derive a few criteria from existing fields rather than inventing
-    false precision.
-    """
     if criterion == CRITERION_FINANCIAL:
         cost = lifecycle_cost(metrics)
-        # Higher score for lower cost (simple inverse scaling)
-        return 1.0 / (1.0 + cost / 1_000_000.0) * 100.0
+
+        return (
+            1.0
+            / (1.0 + cost / 1_000_000.0)
+            * 100.0
+        )
 
     if criterion == CRITERION_TECHNICAL:
-        return 100.0  # already passed technical filter
+        return 100.0
 
-    if criterion == CRITERION_RESOURCE:
-        return 50.0
-
-    if criterion == CRITERION_POLICY:
-        return 50.0
-
-    if criterion == CRITERION_TECHNOLOGY_MATURITY:
-        return 50.0
-
-    if criterion == CRITERION_IMPLEMENTATION_COMPLEXITY:
-        return 50.0
-
-    if criterion == CRITERION_ELECTRICITY_DEPENDENCE:
-        return 50.0
-
-    if criterion == CRITERION_BIOMASS_DEPENDENCE:
-        return 50.0
-
-    if criterion == CRITERION_CONFIDENCE:
+    if criterion in {
+        CRITERION_RESOURCE,
+        CRITERION_POLICY,
+        CRITERION_TECHNOLOGY_MATURITY,
+        CRITERION_IMPLEMENTATION_COMPLEXITY,
+        CRITERION_ELECTRICITY_DEPENDENCE,
+        CRITERION_BIOMASS_DEPENDENCE,
+        CRITERION_CONFIDENCE,
+    }:
         return 50.0
 
     raise ValueError(
-        f"Scenario '{metrics.scenario_id}' is missing criterion "
-        f"'{criterion}'."
+        f"Scenario '{metrics.scenario_id}' is missing "
+        f"criterion '{criterion}'."
     )
 
 
-def _resolve_all_criteria(metrics: ScenarioMetrics) -> dict[str, float]:
-    values: dict[str, float] = {}
-
-    for criterion in CRITERIA:
-        value = _resolve_criterion(metrics, criterion)
-        if value is None:
-            value = _default_from_legacy(metrics, criterion)
-        values[criterion] = float(value)
-
-    return values
-
-
-def _normalize(
-    raw_values: list[float],
-    *,
-    benefit: bool,
-) -> list[float]:
+def _resolve_all_criteria(
+    metrics: ScenarioMetrics,
+) -> dict[str, float]:
     """
-    Min-max normalization to [0, 1].
-
-    Benefit criterion: (x - min) / (max - min)
-    Cost criterion:    (max - x) / (max - min)
-
-    Equal values receive 1.0 for every scenario (no discriminating info).
+    Resolve every criterion exactly once per scenario.
     """
-    if not raw_values:
-        return []
+    return {
+        criterion: float(
+            _resolve_criterion(
+                metrics,
+                criterion,
+            )
+            if _resolve_criterion(
+                metrics,
+                criterion,
+            ) is not None
+            else _default_from_legacy(
+                metrics,
+                criterion,
+            )
+        )
+        for criterion in CRITERIA
+    }
 
-    minimum = min(raw_values)
-    maximum = max(raw_values)
 
-    if maximum - minimum <= 0:
-        return [1.0] * len(raw_values)
+def _criteria_matrix(
+    metrics_list: list[ScenarioMetrics],
+) -> np.ndarray:
+    """
+    Build an N x 12 NumPy matrix.
 
-    if benefit:
-        return [(value - minimum) / (maximum - minimum) for value in raw_values]
+    Critical optimization:
+    each scenario is resolved once, rather than once per criterion.
+    """
+    rows = []
 
-    return [(maximum - value) / (maximum - minimum) for value in raw_values]
+    for metrics in metrics_list:
+        row = []
+
+        for criterion in CRITERIA:
+            value = _resolve_criterion(
+                metrics,
+                criterion,
+            )
+
+            if value is None:
+                value = _default_from_legacy(
+                    metrics,
+                    criterion,
+                )
+
+            row.append(float(value))
+
+        rows.append(row)
+
+    return np.asarray(
+        rows,
+        dtype=np.float64,
+    )
+
+
+def _vectorized_normalize(
+    values: np.ndarray,
+    benefit_mask: np.ndarray,
+) -> np.ndarray:
+    """
+    Vectorized min-max normalization.
+
+    values shape = [n_scenarios, n_criteria]
+    """
+    minimum = values.min(axis=0)
+    maximum = values.max(axis=0)
+
+    spread = maximum - minimum
+
+    normalized = np.ones_like(
+        values,
+        dtype=np.float64,
+    )
+
+    variable = spread > 0
+
+    if np.any(variable):
+        benefit_values = (
+            values[:, variable]
+            - minimum[variable]
+        ) / spread[variable]
+
+        cost_values = (
+            maximum[variable]
+            - values[:, variable]
+        ) / spread[variable]
+
+        normalized[:, variable] = np.where(
+            benefit_mask[variable],
+            benefit_values,
+            cost_values,
+        )
+
+    return normalized
+
+
+@lru_cache(maxsize=8)
+def _benefit_mask() -> np.ndarray:
+    return np.asarray(
+        [
+            bool(
+                CRITERION_IS_BENEFIT[
+                    criterion
+                ]
+            )
+            for criterion in CRITERIA
+        ],
+        dtype=bool,
+    )
 
 
 def score_scenarios(
     candidates: Iterable[ScenarioMetrics],
     weights: Optional[Weights] = None,
 ) -> list[ScoredScenario]:
-    """
-    Normalize all criteria and compute the weighted MCDA composite score.
 
-    Returns scenarios in input order. It does not sort them.
-    """
     metrics_list = list(candidates)
 
     if not metrics_list:
-        raise ValueError("MCDA requires at least one scenario.")
-
-    seen: set[str] = set()
-    for metrics in metrics_list:
-        if metrics.scenario_id in seen:
-            raise ValueError(
-                f"Duplicate scenario_id '{metrics.scenario_id}'."
-            )
-        seen.add(metrics.scenario_id)
-
-    resolved_weights = weights or default_weights()
-
-    raw_by_criterion = {
-        criterion: [
-            _resolve_all_criteria(metrics)[criterion]
-            for metrics in metrics_list
-        ]
-        for criterion in CRITERIA
-    }
-
-    normalized_by_criterion = {
-        criterion: _normalize(
-            raw_by_criterion[criterion],
-            benefit=CRITERION_IS_BENEFIT[criterion],
+        raise ValueError(
+            "MCDA requires at least one scenario."
         )
-        for criterion in CRITERIA
-    }
+
+    scenario_ids = [
+        metrics.scenario_id
+        for metrics in metrics_list
+    ]
+
+    if len(scenario_ids) != len(set(scenario_ids)):
+        raise ValueError(
+            "Duplicate scenario_id detected."
+        )
+
+    resolved_weights = (
+        weights
+        or default_weights()
+    )
+
+    matrix = _criteria_matrix(
+        metrics_list
+    )
+
+    normalized = _vectorized_normalize(
+        matrix,
+        _benefit_mask(),
+    )
+
+    weight_vector = np.asarray(
+        [
+            getattr(
+                resolved_weights,
+                criterion,
+            )
+            for criterion in CRITERIA
+        ],
+        dtype=np.float64,
+    )
+
+    composite_scores = normalized @ weight_vector
 
     scored: list[ScoredScenario] = []
 
-    for index, metrics in enumerate(metrics_list):
+    for index, metrics in enumerate(
+        metrics_list
+    ):
+        criterion_raw_values = {
+            criterion: float(
+                matrix[index, column]
+            )
+            for column, criterion
+            in enumerate(CRITERIA)
+        }
+
         criterion_scores = {
-            criterion: round(normalized_by_criterion[criterion][index], 6)
-            for criterion in CRITERIA
+            criterion: round(
+                float(
+                    normalized[
+                        index,
+                        column,
+                    ]
+                ),
+                6,
+            )
+            for column, criterion
+            in enumerate(CRITERIA)
         }
 
-        composite = sum(
-            getattr(resolved_weights, criterion) * criterion_scores[criterion]
-            for criterion in CRITERIA
-        )
-
-        # Compatibility objective scores for older consumers
         objective_scores = {
-            "cost": criterion_scores[CRITERION_FINANCIAL],
-            "emissions": criterion_scores[CRITERION_CARBON_REDUCTION],
-            "risk": criterion_scores[CRITERION_RISK],
+            "cost": criterion_scores[
+                CRITERION_FINANCIAL
+            ],
+            "emissions": criterion_scores[
+                CRITERION_CARBON_REDUCTION
+            ],
+            "risk": criterion_scores[
+                CRITERION_RISK
+            ],
         }
-
-        raw_cost = lifecycle_cost(metrics)
-        raw_emissions = raw_emissions_metric(metrics)
-        raw_risk = raw_risk_metric(metrics)
 
         scored.append(
             ScoredScenario(
                 scenario_id=metrics.scenario_id,
-                technology_sequence=list(metrics.technology_sequence),
-                raw_cost=raw_cost,
-                raw_emissions=raw_emissions,
-                raw_risk=raw_risk,
-                criterion_raw_values={
-                    criterion: raw_by_criterion[criterion][index]
-                    for criterion in CRITERIA
-                },
+                technology_sequence=list(
+                    metrics.technology_sequence
+                ),
+                raw_cost=lifecycle_cost(
+                    metrics
+                ),
+                raw_emissions=raw_emissions_metric(
+                    metrics
+                ),
+                raw_risk=raw_risk_metric(
+                    metrics
+                ),
+                criterion_raw_values=criterion_raw_values,
                 criterion_scores=criterion_scores,
                 objective_scores=objective_scores,
-                composite_score=round(composite, 6),
+                composite_score=round(
+                    float(
+                        composite_scores[index]
+                    ),
+                    6,
+                ),
                 metrics=metrics,
             )
         )
 
     return scored
+
+
+def clear_mcda_cache() -> None:
+    """
+    Clear function-level memoization.
+
+    Useful in tests or when a runtime configuration changes.
+    """
+    _lifecycle_cost_cached.cache_clear()
+    _benefit_mask.cache_clear()

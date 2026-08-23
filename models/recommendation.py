@@ -1,218 +1,203 @@
-
 from pydantic import BaseModel, Field
 from typing import List, Any, Optional
 from datetime import datetime
-from decimal import Decimal
 
 
 class EvidenceSummary(BaseModel):
-    """
-    Transparent confidence and evidence assessment.
-
-    This is deliberately explicit so the recommendation never appears
-    as a black-box answer.
-    """
-
     confidence_pct: float = Field(
         ...,
         ge=0,
         le=100,
-        description="Overall research/evidence confidence percentage",
     )
 
-    evidence_strength: str = Field(
-        ...,
-        description="Evidence strength label: Strong, Moderate, or Weak",
-    )
-
+    evidence_strength: str
     source_count: int = Field(
         ...,
         ge=0,
-        description="Number of distinct resolved evidence sources",
     )
 
-    research_quality: str = Field(
-        ...,
-        description="Overall research quality: High, Medium, or Low",
-    )
-
-    field_validation: str = Field(
-        ...,
-        description="Field validation quality: High, Medium, or Low",
-    )
+    research_quality: str
+    field_validation: str
 
     missing_citations: List[str] = Field(
-        default_factory=list,
-        description="Recommendation fields missing evidence citations",
+        default_factory=list
     )
 
     broken_references: List[str] = Field(
-        default_factory=list,
-        description="Evidence references that could not be resolved",
+        default_factory=list
     )
 
     invalid_datasets: List[str] = Field(
-        default_factory=list,
-        description="Datasets or records rejected by validation",
+        default_factory=list
     )
 
     unsupported_recommendations: List[str] = Field(
-        default_factory=list,
-        description="Recommendation claims that lack sufficient support",
+        default_factory=list
     )
 
     untraceable_parameters: List[str] = Field(
-        default_factory=list,
-        description="Parameters that cannot be traced to evidence",
+        default_factory=list
     )
 
-    field_results: List[dict[str, Any]] = Field(
-        default_factory=list,
-        description="Per-field evidence and traceability results",
+    field_results: List[
+        dict[str, Any]
+    ] = Field(
+        default_factory=list
     )
 
-    scoring_factors: dict[str, float] = Field(
-        default_factory=dict,
-        description="Transparent confidence-score components",
+    scoring_factors: dict[
+        str,
+        float,
+    ] = Field(
+        default_factory=dict
     )
 
 
 class RejectedScenarioExplanation(BaseModel):
-    """Detailed explanation for why a non-recommended scenario was rejected."""
+    scenario_id: str
 
-    scenario_id: str = Field(..., description="ID of the rejected scenario")
-    technology_sequence: List[str] = Field(
-        ..., description="Technologies in the rejected pathway"
-    )
-    reason: str = Field(..., description="Primary reason for rejection")
-    rank: int = Field(..., description="Final rank in MCDA scoring")
-    composite_score: float = Field(..., description="Overall MCDA score")
-    key_weakness: str = Field(
-        ..., description="Specific weakness (e.g., 'higher cost', 'lower emissions reduction')"
-    )
+    technology_sequence: List[str]
+
+    reason: str
+
+    rank: int
+
+    composite_score: float
+
+    key_weakness: str
 
 
 class PolicyBenefitSummary(BaseModel):
-    """Summary of policy benefits for the recommended scenario."""
+    eligible_schemes: List[str]
 
-    eligible_schemes: List[str] = Field(
-        ..., description="IDs of eligible financing schemes"
-    )
-    estimated_total_benefit_inr: float = Field(
-        ..., description="Sum of individual scheme benefits"
-    )
-    total_benefit_verified: bool = Field(
-        default=False,
-        description="Whether total is verified against combined-subsidy ceiling",
-    )
-    disclaimer: str = Field(
-        default="Estimated combined benefit — subject to manual verification against scheme-specific convergence rules; individual scheme benefits are independently sourced, their combined stackability is not.",
-        description="Disclaimer text when total_benefit_verified is False",
+    estimated_total_benefit_inr: float
+
+    total_benefit_verified: bool = False
+
+    disclaimer: str = (
+        "Estimated combined benefit — subject to manual "
+        "verification against scheme-specific convergence rules."
     )
 
 
-class SensitivityAnalysis(BaseModel):
-    """Reliability engine sensitivity analysis results."""
-
-    payback_p10_years: float = Field(
-        ..., description="Optimistic payback (10th percentile)"
-    )
-    payback_p50_years: float = Field(..., description="Median payback (50th percentile)")
-    payback_p90_years: float = Field(
-        ..., description="Adverse payback (90th percentile)"
-    )
-    spread_ratio: float = Field(
-        ..., description="Payback uncertainty spread (P90-P10)/P50"
-    )
-    top_risk_factors: List[str] = Field(
-        ..., description="Top drivers of payback variability (tornado ranking)"
-    )
-    risk_interpretation: str = Field(
-        ..., description="Plain-language interpretation of risk level"
-    )
-
-
-class Explanation(BaseModel):
-    """Comprehensive explanation for the recommendation."""
-
-    why_selected: List[str] = Field(
-        ..., description="Reasons for choosing the recommended pathway"
-    )
-    why_others_rejected: List[RejectedScenarioExplanation] = Field(
-        ..., description="Detailed reasons for rejecting alternatives"
-    )
-    policy_benefits: PolicyBenefitSummary = Field(
-        ..., description="Summary of applicable policy benefits"
-    )
-    sensitivity_notes: SensitivityAnalysis = Field(
-        ..., description="Reliability and sensitivity analysis results"
-    )
-
-
-class Recommendation(BaseModel):
-    """
-    Complete recommendation report for industrial energy transition.
-
-    Integrates outputs from:
-    - Optimizer (3.2): MCDA ranking and scenario selection
-    - Policy Engine (3.3): Eligibility and benefit estimation
-    - Reliability Engine (3.1): Payback uncertainty and risk analysis
-    - Research Validation Framework (2.12): provenance and evidence quality
-    """
-
-    factory_id: str = Field(..., description="Factory identifier")
-    factory_name: str = Field(..., description="Factory name")
-    industry: str = Field(..., description="Industry sector")
-    state: str = Field(..., description="State location")
-
-    recommended_scenario_id: str = Field(
-        ..., description="ID of the recommended pathway"
-    )
-    recommended_technology_sequence: List[str] = Field(
-        ..., description="Technologies in the recommended pathway"
-    )
-
-    # Economic Summary
-    capex_total_inr: float = Field(..., description="Total capital expenditure (INR)")
-    annual_opex_inr: float = Field(..., description="Annual operating expenditure (INR)")
-    payback_range_years: tuple[float, float] = Field(
-        ..., description="Simple payback range [low, high] years"
-    )
-
-    # Environmental Summary
-    co2_reduction_pct: float = Field(
-        ..., description="CO2 emissions reduction percentage"
-    )
-    fossil_fuel_reduction_pct: float = Field(
-        ..., description="Fossil fuel consumption reduction percentage"
-    )
-
-    # MCDA Summary
-    composite_score: float = Field(..., description="Overall MCDA score")
-    objective_scores: dict[str, float] = Field(
-        ..., description="Individual objective scores (cost, emissions, risk)"
-    )
-    recommended_is_cheapest: bool = Field(
-        ..., description="Whether recommended is also the least-cost option"
-    )
-
-    # Complete Explanation
-    explanation: Explanation = Field(..., description="Full recommendation explanation")
-
-    # ------------------------------------------------------------------
-    # Unit 2.12 — Research Validation Framework
-    # ------------------------------------------------------------------
-    evidence_summary: EvidenceSummary = Field(
+class SensitivityCase(BaseModel):
+    label: str = Field(
         ...,
         description=(
-            "Transparent confidence and evidence assessment. "
-            "Every recommendation must expose its provenance, "
-            "validation status, and research quality."
+            "Best case, Expected, or Worst case"
         ),
     )
 
-    # Metadata
-    generated_at: datetime = Field(
-        default_factory=datetime.utcnow, description="Report generation timestamp"
+    payback_years: Optional[float] = Field(
+        None,
+        description=(
+            "Deterministic simple payback under this scenario."
+        ),
     )
-    model_version: str = Field(default="1.0", description="Recommendation model version")
+
+    annual_savings_inr: Optional[float] = None
+
+    annual_carbon_cost_inr: float = 0.0
+
+    factors: dict[
+        str,
+        float,
+    ] = Field(
+        default_factory=dict
+    )
+
+    viable: bool
+
+
+class SensitivityAnalysis(BaseModel):
+    """
+    Full Task 3.4 sensitivity result.
+
+    Combines deterministic planning scenarios with the
+    Monte Carlo uncertainty distribution.
+    """
+
+    best_case: SensitivityCase
+
+    expected_case: SensitivityCase
+
+    worst_case: SensitivityCase
+
+    payback_range_years: tuple[
+        Optional[float],
+        Optional[float],
+    ]
+
+    payback_p10_years: float
+
+    payback_p50_years: float
+
+    payback_p90_years: float
+
+    spread_ratio: float
+
+    top_risk_factors: List[str]
+
+    risk_interpretation: str
+
+    dominant_factor: Optional[str] = None
+
+    carbon_price_is_scenario_assumption: bool = True
+
+
+class Explanation(BaseModel):
+    why_selected: List[str]
+
+    why_others_rejected: List[
+        RejectedScenarioExplanation
+    ]
+
+    policy_benefits: PolicyBenefitSummary
+
+    sensitivity_notes: SensitivityAnalysis
+
+
+class Recommendation(BaseModel):
+    factory_id: str
+
+    factory_name: str
+
+    industry: str
+
+    state: str
+
+    recommended_scenario_id: str
+
+    recommended_technology_sequence: List[str]
+
+    capex_total_inr: float
+
+    annual_opex_inr: float
+
+    payback_range_years: tuple[
+        float,
+        float,
+    ]
+
+    co2_reduction_pct: float
+
+    fossil_fuel_reduction_pct: float
+
+    composite_score: float
+
+    objective_scores: dict[
+        str,
+        float,
+    ]
+
+    recommended_is_cheapest: bool
+
+    explanation: Explanation
+
+    evidence_summary: EvidenceSummary
+
+    generated_at: datetime = Field(
+        default_factory=datetime.utcnow
+    )
+
+    model_version: str = "1.1"

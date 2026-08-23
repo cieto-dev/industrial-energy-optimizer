@@ -1,7 +1,7 @@
+
 from __future__ import annotations
 
-from copy import deepcopy
-from typing import Any
+from typing import Any, Iterable
 
 from .evidence import EvidenceResolver
 from .errors import KnowledgeDataError, KnowledgeItemNotFoundError
@@ -12,18 +12,11 @@ class KnowledgeRepository:
     """
     Single runtime access layer for project knowledge.
 
-    The decision engine should depend on this class instead of directly
-    opening JSON files.
-
-    Supported access patterns include:
-
-        repo.get_biomass(...)
-        repo.get_tariff(...)
-        repo.get_technology(...)
-        repo.get_industry(...)
-        repo.get_emission_factor(...)
-        repo.get_grid_factor(...)
-        repo.get_source(...)
+    Performance layer:
+    - lazy dataset loading
+    - indexed lookups
+    - cached filtered query results
+    - no repeated linear scans for common IDs
     """
 
     PATHS = {
@@ -42,52 +35,127 @@ class KnowledgeRepository:
         self.loader = loader or KnowledgeLoader()
         self.evidence = EvidenceResolver(self.loader)
 
+        # Lazy indexes. None means "not built yet".
+        self._technology_index: dict[str, dict[str, Any]] | None = None
+        self._industry_index: dict[str, dict[str, Any]] | None = None
+        self._biomass_index: dict[str, dict[str, Any]] | None = None
+
+        self._tariff_query_cache: dict[
+            tuple[str | None, str | None, str | None],
+            list[dict[str, Any]],
+        ] = {}
+
     # ------------------------------------------------------------------
-    # Generic loader access
+    # Generic access
     # ------------------------------------------------------------------
 
-    def load_knowledge(self, relative_path: str) -> Any:
-        """Load any knowledge-base JSON through the centralized loader."""
+    def load_knowledge(
+        self,
+        relative_path: str,
+    ) -> Any:
         return self.loader.load_knowledge_json(relative_path)
 
-    def load_dataset(self, relative_path: str) -> Any:
-        """Load any converted dataset JSON through the centralized loader."""
+    def load_dataset(
+        self,
+        relative_path: str,
+    ) -> Any:
         return self.loader.load_dataset_json(relative_path)
 
     def clear_cache(self) -> None:
-        """Clear the runtime knowledge cache."""
         self.loader.clear_cache()
 
+        self._technology_index = None
+        self._industry_index = None
+        self._biomass_index = None
+        self._tariff_query_cache.clear()
+
     # ------------------------------------------------------------------
-    # Biomass
+    # Helpers
     # ------------------------------------------------------------------
 
-    def get_biomass(
-        self,
-        biomass_id: str | None = None,
-    ) -> dict[str, Any] | list[dict[str, Any]]:
-        """
-        Read the converted Biomass Atlas dataset.
-
-        The converted dataset is preserved as-is. This method supports
-        optional filtering when records expose a recognizable ID/name field.
-        """
-        data = self.loader.load_dataset_json("converted/biomass_atlas.json")
-
+    @staticmethod
+    def _as_records(data: Any) -> list[dict[str, Any]]:
         if isinstance(data, dict) and "records" in data:
-            records = data["records"]
-        else:
-            records = self._as_records(data)
+            data = data["records"]
 
-        if biomass_id is None:
+        if isinstance(data, dict):
             return [
-                self._with_evidence(record)
-                for record in records
+                value
+                for value in data.values()
+                if isinstance(value, dict)
             ]
+
+        if isinstance(data, list):
+            return [
+                value
+                for value in data
+                if isinstance(value, dict)
+            ]
+
+        raise KnowledgeDataError(
+            "runtime",
+            "expected JSON object/list containing records",
+        )
+
+    @staticmethod
+    def _first_identifier(
+        record: dict[str, Any],
+        candidates: Iterable[str],
+    ) -> str | None:
+        for key in candidates:
+            value = record.get(key)
+            if value is None:
+                continue
+
+            return str(value)
+
+        return None
+
+    @staticmethod
+    def _with_evidence(
+        record: dict[str, Any],
+    ) -> dict[str, Any]:
+        # Do not copy the entire record recursively here.
+        # Evidence is already owned by repository/runtime objects.
+        return record
+
+    # ------------------------------------------------------------------
+    # Index builders
+    # ------------------------------------------------------------------
+
+    def _build_index(
+        self,
+        records: list[dict[str, Any]],
+        identifier_fields: tuple[str, ...],
+    ) -> dict[str, dict[str, Any]]:
+        index: dict[str, dict[str, Any]] = {}
 
         for record in records:
             identifier = self._first_identifier(
                 record,
+                identifier_fields,
+            )
+
+            if identifier is None:
+                continue
+
+            index[identifier.lower()] = record
+
+        return index
+
+    def _get_biomass_index(
+        self,
+    ) -> dict[str, dict[str, Any]]:
+        if self._biomass_index is None:
+            data = self.loader.load_dataset_json(
+                "converted/biomass_atlas.json",
+                shared=True,
+            )
+
+            records = self._as_records(data)
+
+            self._biomass_index = self._build_index(
+                records,
                 (
                     "biomass_id",
                     "id",
@@ -97,13 +165,90 @@ class KnowledgeRepository:
                 ),
             )
 
-            if identifier == biomass_id:
-                return self._with_evidence(record)
+        return self._biomass_index
 
-        raise KnowledgeItemNotFoundError(
-            "biomass",
-            biomass_id,
+    def _get_technology_index(
+        self,
+    ) -> dict[str, dict[str, Any]]:
+        if self._technology_index is None:
+            records = [
+                record
+                for item in self.loader.load_json_directory(
+                    "technologies",
+                    base="knowledge-base",
+                )
+                for record in self._as_records(item)
+            ]
+
+            self._technology_index = self._build_index(
+                records,
+                (
+                    "technology_id",
+                    "id",
+                    "technology",
+                    "name",
+                ),
+            )
+
+        return self._technology_index
+
+    def _get_industry_index(
+        self,
+    ) -> dict[str, dict[str, Any]]:
+        if self._industry_index is None:
+            records = [
+                record
+                for item in self.loader.load_json_directory(
+                    "industries",
+                    base="knowledge-base",
+                )
+                for record in self._as_records(item)
+            ]
+
+            self._industry_index = self._build_index(
+                records,
+                (
+                    "industry_id",
+                    "id",
+                    "industry",
+                    "name",
+                ),
+            )
+
+        return self._industry_index
+
+    # ------------------------------------------------------------------
+    # Biomass
+    # ------------------------------------------------------------------
+
+    def get_biomass(
+        self,
+        biomass_id: str | None = None,
+    ) -> dict[str, Any] | list[dict[str, Any]]:
+
+        data = self.loader.load_dataset_json(
+            "converted/biomass_atlas.json",
+            shared=True,
         )
+
+        records = self._as_records(data)
+
+        if biomass_id is None:
+            return records
+
+        index = self._get_biomass_index()
+
+        record = index.get(
+            str(biomass_id).strip().lower()
+        )
+
+        if record is None:
+            raise KnowledgeItemNotFoundError(
+                "biomass",
+                biomass_id,
+            )
+
+        return record
 
     # ------------------------------------------------------------------
     # Tariffs
@@ -117,24 +262,44 @@ class KnowledgeRepository:
         discom_id: str | None = None,
         consumer_category: str | None = None,
     ) -> dict[str, Any] | list[dict[str, Any]]:
+
         data = self.loader.load_knowledge_json(
-            self.PATHS["tariffs"]
+            self.PATHS["tariffs"],
+            shared=True,
         )
 
         records = self._as_records(data)
 
         if tariff_id is not None:
+            target = str(tariff_id).strip().lower()
+
             for record in records:
+                current = self._first_identifier(
+                    record,
+                    ("tariff_id", "id"),
+                )
+
                 if (
-                    record.get("tariff_id") == tariff_id
-                    or record.get("id") == tariff_id
+                    current is not None
+                    and current.lower() == target
                 ):
-                    return self._with_evidence(record)
+                    return record
 
             raise KnowledgeItemNotFoundError(
                 "tariff",
                 tariff_id,
             )
+
+        cache_key = (
+            state_id,
+            discom_id,
+            consumer_category,
+        )
+
+        cached = self._tariff_query_cache.get(cache_key)
+
+        if cached is not None:
+            return cached
 
         filtered = records
 
@@ -156,51 +321,39 @@ class KnowledgeRepository:
             filtered = [
                 record
                 for record in filtered
-                if record.get("consumer_category") == consumer_category
+                if record.get("consumer_category")
+                == consumer_category
             ]
 
-        return [
-            self._with_evidence(record)
-            for record in filtered
-        ]
+        self._tariff_query_cache[cache_key] = filtered
+
+        return filtered
 
     # ------------------------------------------------------------------
-    # Technologies
+    # Technology
     # ------------------------------------------------------------------
 
     def get_technology(
         self,
         technology_id: str | None = None,
     ) -> dict[str, Any] | list[dict[str, Any]]:
-        records = self._load_json_directory("technologies")
 
         if technology_id is None:
-            return [
-                self._with_evidence(record)
-                for record in records
-            ]
-
-        for record in records:
-            identifier = self._first_identifier(
-                record,
-                (
-                    "technology_id",
-                    "id",
-                    "technology",
-                    "name",
-                ),
+            return list(
+                self._get_technology_index().values()
             )
 
-            if (
-                isinstance(identifier, str)
-                and identifier.lower() == technology_id.lower()
-            ):
-                return self._with_evidence(record)
+        target = str(technology_id).strip().lower()
 
-        raise KnowledgeItemNotFoundError(
-            "technology",
-            technology_id,
-        )
+        record = self._get_technology_index().get(target)
+
+        if record is None:
+            raise KnowledgeItemNotFoundError(
+                "technology",
+                technology_id,
+            )
+
+        return record
 
     # ------------------------------------------------------------------
     # Industries
@@ -210,35 +363,23 @@ class KnowledgeRepository:
         self,
         industry_id: str | None = None,
     ) -> dict[str, Any] | list[dict[str, Any]]:
-        records = self._load_json_directory("industries")
 
         if industry_id is None:
-            return [
-                self._with_evidence(record)
-                for record in records
-            ]
-
-        for record in records:
-            identifier = self._first_identifier(
-                record,
-                (
-                    "industry_id",
-                    "id",
-                    "industry",
-                    "name",
-                ),
+            return list(
+                self._get_industry_index().values()
             )
 
-            if (
-                isinstance(identifier, str)
-                and identifier.lower() == industry_id.lower()
-            ):
-                return self._with_evidence(record)
+        target = str(industry_id).strip().lower()
 
-        raise KnowledgeItemNotFoundError(
-            "industry",
-            industry_id,
-        )
+        record = self._get_industry_index().get(target)
+
+        if record is None:
+            raise KnowledgeItemNotFoundError(
+                "industry",
+                industry_id,
+            )
+
+        return record
 
     # ------------------------------------------------------------------
     # Emission factors
@@ -247,9 +388,11 @@ class KnowledgeRepository:
     def get_emission_factor(
         self,
         fuel_id: str | None = None,
-    ) -> dict[str, Any] | dict[str, dict[str, Any]]:
+    ) -> dict[str, Any]:
+
         data = self.loader.load_knowledge_json(
-            self.PATHS["emission_factors"]
+            self.PATHS["emission_factors"],
+            shared=True,
         )
 
         if not isinstance(data, dict):
@@ -259,31 +402,21 @@ class KnowledgeRepository:
             )
 
         if fuel_id is None:
-            result: dict[str, dict[str, Any]] = {}
+            return {
+                key: value
+                for key, value in data.items()
+                if isinstance(value, dict)
+            }
 
-            for key, value in data.items():
-                if not isinstance(value, dict):
-                    continue
+        value = data.get(fuel_id)
 
-                result[key] = self._with_evidence(value)
-
-            return result
-
-        if fuel_id not in data:
+        if not isinstance(value, dict):
             raise KnowledgeItemNotFoundError(
                 "emission_factor",
                 fuel_id,
             )
 
-        value = data[fuel_id]
-
-        if not isinstance(value, dict):
-            raise KnowledgeDataError(
-                self.PATHS["emission_factors"],
-                f"record '{fuel_id}' is not a JSON object",
-            )
-
-        return self._with_evidence(value)
+        return value
 
     # ------------------------------------------------------------------
     # Grid factors
@@ -292,149 +425,29 @@ class KnowledgeRepository:
     def get_grid_factor(
         self,
         factor_id: str | None = None,
-    ) -> dict[str, Any] | dict[str, Any]:
+    ) -> dict[str, Any]:
+
         data = self.loader.load_knowledge_json(
-            self.PATHS["grid_factors"]
+            self.PATHS["grid_factors"],
+            shared=True,
         )
 
         if not isinstance(data, dict):
             raise KnowledgeDataError(
                 self.PATHS["grid_factors"],
-                "expected a JSON object",
+                "expected a JSON object keyed by factor ID",
             )
 
         if factor_id is None:
-            return deepcopy(data)
+            return data
 
-        if factor_id not in data:
+        value = data.get(factor_id)
+
+        if value is None:
             raise KnowledgeItemNotFoundError(
                 "grid_factor",
                 factor_id,
             )
 
-        value = data[factor_id]
+        return value
 
-        if isinstance(value, dict):
-            return self._with_evidence(value)
-
-        return {
-            "value": value,
-            "evidence": self.evidence.resolve(value),
-        }
-
-    # ------------------------------------------------------------------
-    # Evidence / source access
-    # ------------------------------------------------------------------
-
-    def get_source(
-        self,
-        source_id: str,
-    ) -> dict[str, Any]:
-        return self.evidence.get_source(source_id)
-
-    def get_evidence(
-        self,
-        record: Any,
-    ) -> list[dict[str, Any]]:
-        return self.evidence.resolve(record)
-
-    # ------------------------------------------------------------------
-    # Internal helpers
-    # ------------------------------------------------------------------
-
-    def _load_json_directory(
-        self,
-        directory_name: str,
-    ) -> list[dict[str, Any]]:
-        directory = self.loader.resolve_knowledge_path(directory_name)
-
-        if not directory.exists():
-            raise KnowledgeDataError(
-                directory_name,
-                "knowledge-base directory does not exist",
-            )
-
-        if not directory.is_dir():
-            raise KnowledgeDataError(
-                directory_name,
-                "expected a directory",
-            )
-
-        records: list[dict[str, Any]] = []
-
-        for path in sorted(directory.glob("*.json")):
-            relative_path = path.relative_to(
-                self.loader.knowledge_base_dir
-            )
-
-            data = self.loader.load_knowledge_json(
-                str(relative_path)
-            )
-
-            if isinstance(data, dict):
-                records.append(data)
-
-            elif isinstance(data, list):
-                records.extend(
-                    item
-                    for item in data
-                    if isinstance(item, dict)
-                )
-
-        return records
-
-    @staticmethod
-    def _as_records(
-        data: Any,
-    ) -> list[dict[str, Any]]:
-        if isinstance(data, list):
-            return [
-                item
-                for item in data
-                if isinstance(item, dict)
-            ]
-
-        if isinstance(data, dict):
-            records: list[dict[str, Any]] = []
-
-            for key, value in data.items():
-                if isinstance(value, dict):
-                    record = dict(value)
-                    record.setdefault("id", key)
-                    records.append(record)
-
-            return records
-
-        raise KnowledgeDataError(
-            "runtime dataset",
-            "expected a JSON object or JSON array",
-        )
-
-    @staticmethod
-    def _first_identifier(
-        record: dict[str, Any],
-        fields: tuple[str, ...],
-    ) -> Any:
-        for field in fields:
-            value = record.get(field)
-
-            if value is not None:
-                return value
-
-        return None
-
-    def _with_evidence(
-        self,
-        record: dict[str, Any],
-    ) -> dict[str, Any]:
-        """
-        Return a defensive copy plus resolved evidence.
-
-        Records without source_id are still valid; they simply receive
-        an empty evidence list.
-        """
-        result = deepcopy(record)
-
-        result["evidence"] = self.evidence.resolve(result)
-
-        return result

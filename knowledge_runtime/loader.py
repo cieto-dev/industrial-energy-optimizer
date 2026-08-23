@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 import json
@@ -10,10 +11,13 @@ from .errors import KnowledgeDataError, KnowledgeFileNotFoundError
 
 class KnowledgeLoader:
     """
-    Runtime loader for the project's knowledge sources.
+    Runtime loader for project knowledge sources.
 
-    The loader centralizes filesystem access and JSON parsing.
-    Application/decision-engine code should not open knowledge files directly.
+    Performance improvements:
+    - parsed JSON is cached
+    - directory datasets are loaded lazily
+    - shared cached reads avoid unnecessary deep-copy overhead
+    - filesystem access is centralized
     """
 
     def __init__(
@@ -30,13 +34,11 @@ class KnowledgeLoader:
 
         self.cache = cache or KnowledgeCache()
 
-    def resolve_project_path(self, relative_path: str) -> Path:
-        """
-        Resolve a path relative to the repository root.
+    # ------------------------------------------------------------------
+    # Path handling
+    # ------------------------------------------------------------------
 
-        This is restricted to the repository root so callers cannot use
-        '..' to escape the project directory.
-        """
+    def resolve_project_path(self, relative_path: str) -> Path:
         candidate = (self.project_root / relative_path).resolve()
 
         try:
@@ -50,7 +52,6 @@ class KnowledgeLoader:
         return candidate
 
     def resolve_knowledge_path(self, relative_path: str) -> Path:
-        """Resolve a path relative to knowledge-base/."""
         candidate = (self.knowledge_base_dir / relative_path).resolve()
 
         try:
@@ -64,7 +65,6 @@ class KnowledgeLoader:
         return candidate
 
     def resolve_dataset_path(self, relative_path: str) -> Path:
-        """Resolve a path relative to datasets/."""
         candidate = (self.datasets_dir / relative_path).resolve()
 
         try:
@@ -77,23 +77,30 @@ class KnowledgeLoader:
 
         return candidate
 
+    # ------------------------------------------------------------------
+    # JSON loading
+    # ------------------------------------------------------------------
+
     def load_json(
         self,
         relative_path: str,
         *,
         base: str = "knowledge-base",
+        shared: bool = True,
     ) -> Any:
         """
-        Load a JSON document with caching.
+        Load and cache JSON.
 
-        base:
-            "knowledge-base" -> knowledge-base/
-            "datasets"       -> datasets/
-            "project"        -> repository root
+        shared=True is intended for read-only internal access and avoids
+        deepcopy on cache hits.
         """
         cache_key = f"{base}:{relative_path}"
 
-        cached = self.cache.get(cache_key)
+        if shared:
+            cached = self.cache.get_shared(cache_key)
+        else:
+            cached = self.cache.get(cache_key)
+
         if cached is not None:
             return cached
 
@@ -137,22 +144,124 @@ class KnowledgeLoader:
                 f"unable to read file: {exc}",
             ) from exc
 
-        self.cache.set(cache_key, data)
+        # The loader now owns the object.
+        self.cache.set_owned(cache_key, data)
         return data
 
-    def load_knowledge_json(self, relative_path: str) -> Any:
-        """Convenience wrapper for knowledge-base JSON."""
+    def load_knowledge_json(
+        self,
+        relative_path: str,
+        *,
+        shared: bool = True,
+    ) -> Any:
         return self.load_json(
             relative_path,
             base="knowledge-base",
+            shared=shared,
         )
 
-    def load_dataset_json(self, relative_path: str) -> Any:
-        """Convenience wrapper for converted dataset JSON."""
+    def load_dataset_json(
+        self,
+        relative_path: str,
+        *,
+        shared: bool = True,
+    ) -> Any:
         return self.load_json(
             relative_path,
             base="datasets",
+            shared=shared,
         )
+
+    # ------------------------------------------------------------------
+    # Lazy directory loading
+    # ------------------------------------------------------------------
+
+    def list_json_files(
+        self,
+        relative_directory: str,
+        *,
+        base: str = "knowledge-base",
+    ) -> tuple[str, ...]:
+        """
+        Return JSON filenames without opening/parsing them.
+
+        This is the first stage of lazy loading.
+        """
+        if base == "knowledge-base":
+            directory = self.resolve_knowledge_path(relative_directory)
+        elif base == "datasets":
+            directory = self.resolve_dataset_path(relative_directory)
+        else:
+            raise KnowledgeDataError(
+                relative_directory,
+                f"unsupported directory base: '{base}'",
+            )
+
+        if not directory.exists():
+            raise KnowledgeFileNotFoundError(
+                f"{base}/{relative_directory}"
+            )
+
+        if not directory.is_dir():
+            raise KnowledgeDataError(
+                f"{base}/{relative_directory}",
+                "expected a directory",
+            )
+
+        return tuple(
+            sorted(
+                path.name
+                for path in directory.glob("*.json")
+                if path.is_file()
+            )
+        )
+
+    def load_json_directory(
+        self,
+        relative_directory: str,
+        *,
+        base: str = "knowledge-base",
+    ) -> list[Any]:
+        """
+        Load all JSON files in a directory lazily on first request.
+
+        The resulting list is cached as one aggregate object.
+        """
+        aggregate_key = (
+            f"{base}:__directory__:{relative_directory}"
+        )
+
+        cached = self.cache.get_shared(aggregate_key)
+        if cached is not None:
+            return cached
+
+        files = self.list_json_files(
+            relative_directory,
+            base=base,
+        )
+
+        values: list[Any] = []
+
+        for filename in files:
+            relative_file = (
+                f"{relative_directory}/{filename}"
+            )
+
+            values.append(
+                self.load_json(
+                    relative_file,
+                    base=base,
+                    shared=True,
+                )
+            )
+
+        self.cache.set_owned(
+            aggregate_key,
+            values,
+        )
+
+        return values
 
     def clear_cache(self) -> None:
         self.cache.clear()
+
