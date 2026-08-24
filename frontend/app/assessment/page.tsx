@@ -29,6 +29,7 @@ export default function AssessmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const lastStepChangeTime = React.useRef(0)
   const router = useRouter()
 
   const methods = useForm<FactoryProfileType>({
@@ -79,12 +80,18 @@ export default function AssessmentPage() {
     const isStepValid = await trigger(fieldsToValidate)
     
     if (isStepValid) {
-      setCurrentStep(prev => Math.min(prev + 1, STEPS.length - 1))
+      setCurrentStep(prev => {
+        lastStepChangeTime.current = Date.now()
+        return Math.min(prev + 1, STEPS.length - 1)
+      })
     }
   }
 
   const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 0))
+    setCurrentStep(prev => {
+      lastStepChangeTime.current = Date.now()
+      return Math.max(prev - 1, 0)
+    })
   }
 
   const onSubmit = async (data: FactoryProfileType) => {
@@ -108,7 +115,7 @@ export default function AssessmentPage() {
       localStorage.setItem("last_optimization", JSON.stringify(enrichedResponse))
       
       setTimeout(() => {
-        router.push("/dashboard")
+        router.push("/report")
       }, 3500)
     } catch (error: any) {
       console.error("Submission failed", error)
@@ -193,7 +200,20 @@ export default function AssessmentPage() {
       </div>
 
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="flex flex-1 overflow-hidden">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (currentStep === STEPS.length - 1) {
+              if (Date.now() - lastStepChangeTime.current < 500) {
+                return; // Prevent accidental double-click / rapid Enter submission
+              }
+              handleSubmit(onSubmit, onInvalid)(e);
+            } else {
+              nextStep();
+            }
+          }}
+          className="flex flex-1 overflow-hidden"
+        >
           
           {/* LEFT WORKSPACE (Stepper + Form) */}
           <div className="flex flex-1 overflow-hidden bg-background">
