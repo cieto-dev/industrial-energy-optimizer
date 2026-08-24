@@ -3,7 +3,7 @@ import { Inter } from "next/font/google"
 import "./global.css"
 import { ThemeProvider } from "@/components/theme/ThemeProvider"
 import { ErrorBoundary } from "@/components/layout/ErrorBoundary"
-import { SidebarProvider } from "@/components/layout/SidebarContext"
+
 import { LayoutWrapper } from "@/components/layout/LayoutWrapper"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -28,11 +28,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ErrorBoundary>
-            <SidebarProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
-            </SidebarProvider>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
           </ErrorBoundary>
         </ThemeProvider>
       </body>

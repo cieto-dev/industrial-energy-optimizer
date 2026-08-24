@@ -3,21 +3,23 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Zap, Menu, X, ArrowRight } from "lucide-react"
+import { Zap, Menu, X, Search, ArrowRight } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navLinks = [
-  { name: "Features", href: "/#features" },
-  { name: "Technology", href: "/#technology" },
+  { name: "Features", href: "/features" },
+  { name: "Technology", href: "/technology" },
   { name: "Story", href: "/story" },
-  { name: "Subsidies", href: "/#subsidies" },
-  { name: "Knowledge Base", href: "/#knowledge-base" },
+  { name: "Subsidies", href: "/subsidies" },
+  { name: "Knowledge Base", href: "/knowledge-base" },
+  { name: "Conventions", href: "/conventions" },
 ]
 
 export function LandingNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isFullScreenMenuOpen, setIsFullScreenMenuOpen] = useState(false)
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -28,104 +30,184 @@ export function LandingNavbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Lock body scroll when menus are open
+  useEffect(() => {
+    if (isFullScreenMenuOpen || isRightSidebarOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isFullScreenMenuOpen, isRightSidebarOpen])
+
+  const isDarkHeader = isFullScreenMenuOpen || (!isScrolled && pathname === '/') || pathname === '/story';
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${pathname === '/story' ? 'dark' : ''} ${
-        isScrolled
-          ? pathname === '/story'
-            ? "bg-black/50 backdrop-blur-md border-b border-white/10 text-white"
-            : "bg-background/70 backdrop-blur-md border-b border-border shadow-sm"
-          : pathname === '/story' 
-            ? "bg-transparent border-transparent text-white"
-            : "bg-transparent border-transparent"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform group-hover:scale-105">
-            <Zap size={22} className="fill-current" />
-          </div>
-          <div className="flex flex-col">
-            <span className={`font-bold text-xl tracking-tight leading-none ${pathname === '/story' ? 'text-white' : 'text-foreground'}`}>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
+          isFullScreenMenuOpen
+            ? "bg-[#181a1b] border-transparent text-white"
+            : pathname === '/story'
+            ? "bg-black/40 backdrop-blur-md border-white/10 text-white"
+            : !isScrolled && pathname === '/'
+            ? "bg-black/20 backdrop-blur-lg border-white/10 text-white"
+            : "bg-background/90 backdrop-blur-md border-border/50 text-foreground shadow-sm"
+        }`}
+      >
+        <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group z-[60]" onClick={() => { setIsFullScreenMenuOpen(false); setIsRightSidebarOpen(false); }}>
+            <Zap size={22} className={isDarkHeader ? "text-white" : "text-foreground"} />
+            <span className={`font-medium text-xl tracking-tight ${isDarkHeader ? 'text-white' : 'text-foreground'}`}>
               CIETO
             </span>
-            <span className="text-[10px] font-semibold text-primary uppercase tracking-widest mt-0.5">
-              Energy Platform
-            </span>
-          </div>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                pathname === '/story' 
-                  ? 'text-white/70 hover:text-white' 
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {link.name}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Actions */}
-        <div className="hidden md:flex items-center gap-4">
-          <ThemeToggle />
-          <Link
-            href="/dashboard"
-            className="group inline-flex h-10 items-center justify-center rounded-lg bg-primary px-6 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105"
-          >
-            Dashboard
-            <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
-        </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden flex items-center gap-4">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`p-2 ${pathname === '/story' ? 'text-white' : 'text-foreground'}`}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-20 left-0 right-0 bg-background border-b border-border shadow-lg p-6 flex flex-col gap-4 md:hidden"
-          >
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="text-base font-medium text-foreground py-2 border-b border-border/50"
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link
-              href="/dashboard"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="mt-4 flex h-12 items-center justify-center rounded-lg bg-primary px-6 text-base font-semibold text-primary-foreground"
+          {/* Actions */}
+          <div className="flex items-center gap-4 z-[60]">
+            <button 
+              onClick={() => { setIsRightSidebarOpen(true); setIsFullScreenMenuOpen(false); }}
+              className={`hidden md:inline-flex h-10 items-center justify-center border ${
+                isDarkHeader 
+                  ? 'border-white/70 text-white hover:bg-white/10' 
+                  : 'border-black/20 text-black hover:bg-black/5'
+              } px-6 text-sm font-medium transition-colors rounded-sm`}
             >
-              Dashboard
-            </Link>
+              Get Started
+            </button>
+            
+            <div className={`flex items-center border ${isDarkHeader ? 'border-white/70' : 'border-black/20'} rounded-sm`}>
+              <button className={`p-2.5 border-r ${isDarkHeader ? 'border-white/70 text-white hover:bg-white/10' : 'border-black/20 text-black hover:bg-black/5'} transition-colors`}>
+                <Search size={18} strokeWidth={1.5} />
+              </button>
+              <button
+                onClick={() => {
+                  if (isRightSidebarOpen) {
+                    setIsRightSidebarOpen(false);
+                  } else {
+                    setIsFullScreenMenuOpen(!isFullScreenMenuOpen);
+                  }
+                }}
+                className={`p-2.5 ${isDarkHeader ? 'text-white hover:bg-white/10' : 'text-black hover:bg-black/5'} transition-colors ${isFullScreenMenuOpen || isRightSidebarOpen ? 'bg-white text-black hover:bg-white' : ''}`}
+              >
+                {isFullScreenMenuOpen || isRightSidebarOpen ? (
+                  <X size={18} strokeWidth={1.5} className={isFullScreenMenuOpen || isRightSidebarOpen ? 'text-black' : ''} />
+                ) : (
+                  <Menu size={18} strokeWidth={1.5} />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Full Screen Menu */}
+      <AnimatePresence>
+        {isFullScreenMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-[#181a1b] text-white pt-24 px-6 md:px-12 overflow-y-auto"
+          >
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 pb-24">
+              {/* Navigation Tabs */}
+              <div className="md:col-span-12">
+                <h3 className="text-xs font-semibold text-white/50 tracking-widest mb-6 uppercase">Navigation</h3>
+                <div className="flex flex-col gap-4">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setIsFullScreenMenuOpen(false)}
+                      className="text-3xl md:text-4xl font-normal text-white hover:text-white/80 transition-colors flex items-center gap-2 group w-fit"
+                    >
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xl">↳</span>
+                      <span className="-ml-6 group-hover:ml-0 transition-all">{link.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+
+      {/* Right Sidebar - Get Started */}
+      <AnimatePresence>
+        {isRightSidebarOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+              onClick={() => setIsRightSidebarOpen(false)}
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-lg bg-white overflow-y-auto"
+            >
+              <div className="p-6 md:p-12 min-h-full flex flex-col pt-24">
+                <button 
+                  onClick={() => setIsRightSidebarOpen(false)}
+                  className="absolute top-6 left-6 p-2 text-black/50 hover:text-black transition-colors"
+                >
+                  <X size={24} strokeWidth={1} />
+                </button>
+                
+                <div className="mb-16"></div>
+                
+                <h2 className="text-3xl md:text-4xl font-medium text-black mb-4 leading-tight">
+                  Demo Environment Login
+                </h2>
+                
+                <p className="text-sm text-black/60 mb-12">
+                  Access the CIETO interactive platform. Use the demo credentials below to explore our features.
+                </p>
+                
+                <form className="flex flex-col gap-8 flex-grow" onSubmit={(e) => { e.preventDefault(); window.location.href = '/dashboard'; }}>
+                  {[
+                    { label: 'Email Address', type: 'email' },
+                    { label: 'Password', type: 'password' },
+                  ].map((field) => (
+                    <div key={field.label} className="relative group">
+                      <label className="absolute left-0 top-0 text-[10px] font-semibold tracking-widest uppercase text-black/50 group-focus-within:text-black transition-colors">
+                        {field.label}: <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type={field.type} 
+                        className="w-full bg-transparent border-b border-black/20 pt-6 pb-2 text-black focus:outline-none focus:border-black transition-colors"
+                        required
+                      />
+                    </div>
+                  ))}
+                  
+                  <div className="mt-2 p-5 bg-black/5 rounded-sm">
+                    <p className="text-[10px] font-bold text-black/50 mb-2 uppercase tracking-widest">Demo Credentials</p>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-sm text-black/80 font-medium">Email: <span className="font-mono bg-white px-1.5 py-0.5 rounded text-black border border-black/10 ml-2">demo@cieto.com</span></p>
+                      <p className="text-sm text-black/80 font-medium">Password: <span className="font-mono bg-white px-1.5 py-0.5 rounded text-black border border-black/10 ml-2">demo123</span></p>
+                    </div>
+                  </div>
+                  
+                  <button type="submit" className="mt-8 bg-black text-white py-4 px-12 font-medium hover:bg-black/90 transition-colors w-fit self-end">
+                    Login
+                  </button>
+                </form>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

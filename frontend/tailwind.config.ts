@@ -95,6 +95,15 @@ const config: Config = {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
+        },
+        "zoom": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+          "100%": { transform: "scale(1)" },
+        },
+        "scan": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(100vh)" },
         }
       },
       animation: {
@@ -106,6 +115,8 @@ const config: Config = {
         "drift-slow": "drift 30s ease-in-out infinite",
         "pan-slow": "pan 40s ease-in-out infinite",
         "pulse-slow": "pulse 15s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "zoom-slow": "zoom 40s ease-in-out infinite",
+        "scan": "scan 3s ease-in-out infinite",
       },
     },
   },
