@@ -1,0 +1,230 @@
+<mxfile host="app.diagrams.net" modified="2026-08-25T09:00:00.000Z" agent="CIETO" version="24.7.6" type="device">
+  <diagram id="api-flow" name="API Flow">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══ TITLE ═══ -->
+        <mxCell id="t1" value="API Flow &#8212; Frontend &#8596; Backend Communication" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=18;fontStyle=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="250" y="10" width="700" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" value="REST API request/response patterns between Next.js and FastAPI" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#666666;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="300" y="38" width="600" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ SWIMLANE BACKGROUNDS ═══ -->
+        <mxCell id="swim1" value="" style="rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=15;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="220" height="810" as="geometry" />
+        </mxCell>
+        <mxCell id="swim1l" value="FRONTEND (Next.js)" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#4a86c8;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="60" y="75" width="180" height="15" as="geometry" />
+        </mxCell>
+
+        <mxCell id="swim2" value="" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;opacity=15;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="70" width="270" height="810" as="geometry" />
+        </mxCell>
+        <mxCell id="swim2l" value="API ENDPOINTS" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#b89e38;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="400" y="75" width="150" height="15" as="geometry" />
+        </mxCell>
+
+        <mxCell id="swim3" value="" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=15;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="690" y="70" width="220" height="810" as="geometry" />
+        </mxCell>
+        <mxCell id="swim3l" value="BACKEND (FastAPI)" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#6a9c59;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="710" y="75" width="180" height="15" as="geometry" />
+        </mxCell>
+
+        <mxCell id="swim4" value="" style="rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;opacity=15;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="70" width="180" height="810" as="geometry" />
+        </mxCell>
+        <mxCell id="swim4l" value="ENGINE" style="text;html=1;align=center;fontSize=10;fontStyle=1;fontColor=#7c5e99;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="75" width="100" height="15" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 1: OPTIMIZATION ═══ -->
+        <mxCell id="f1_label" value="&#9312; Optimization Flow" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1a" value="&lt;b&gt;User Submits&lt;/b&gt;&lt;br&gt;Factory Profile Form" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="125" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1b" value="&lt;b&gt;POST /optimization/run&lt;/b&gt;&lt;br&gt;Body: Factory JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;fontStyle=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="125" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1c" value="&lt;b&gt;Validate &amp;amp; Route&lt;/b&gt;&lt;br&gt;optimization_api.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="125" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1d" value="&lt;b&gt;Decision Engine&lt;/b&gt;&lt;br&gt;Full Pipeline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="125" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1e" value="&lt;b&gt;Response: 200 OK&lt;/b&gt;&lt;br&gt;Recommendation JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;dashed=1;dashPattern=5 3;" vertex="1" parent="1">
+          <mxGeometry x="360" y="200" width="230" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1f" value="&lt;b&gt;Display Results&lt;/b&gt;&lt;br&gt;Dashboard + Charts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="200" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Flow 1 Edges -->
+        <mxCell id="f1e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f1a" target="f1b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f1b" target="f1c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1e3" style="rounded=1;html=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="f1c" target="f1d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f1e4" style="rounded=1;html=1;strokeWidth=1;strokeColor=#82b366;dashed=1;" edge="1" parent="1" source="f1d" target="f1e">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1070" y="225" />
+              <mxPoint x="930" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="f1e5" style="rounded=1;html=1;strokeWidth=1;strokeColor=#6c8ebf;dashed=1;" edge="1" parent="1" source="f1e" target="f1f">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 2: TECHNOLOGIES ═══ -->
+        <mxCell id="f2_label" value="&#9313; Technology Lookup" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="280" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f2a" value="&lt;b&gt;Load Technologies&lt;/b&gt;&lt;br&gt;For industry dropdown" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="305" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f2b" value="&lt;b&gt;GET /technologies/&lt;/b&gt;&lt;br&gt;?industry=textile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="305" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f2c" value="&lt;b&gt;Query KB&lt;/b&gt;&lt;br&gt;technology_api.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="305" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f2e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f2a" target="f2b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f2e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f2b" target="f2c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 3: SCENARIOS ═══ -->
+        <mxCell id="f3_label" value="&#9314; Scenario Comparison" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="385" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f3a" value="&lt;b&gt;Compare Pathways&lt;/b&gt;&lt;br&gt;Side-by-side view" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="410" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f3b" value="&lt;b&gt;GET /recommendations/&lt;/b&gt;&lt;br&gt;?factory_id=..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="410" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f3c" value="&lt;b&gt;Fetch Ranked&lt;/b&gt;&lt;br&gt;recommendation_api.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="410" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f3e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f3a" target="f3b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f3e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f3b" target="f3c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 4: REPORTS ═══ -->
+        <mxCell id="f4_label" value="&#9315; Report Download" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="490" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f4a" value="&lt;b&gt;Download Report&lt;/b&gt;&lt;br&gt;PDF or Excel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="515" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f4b" value="&lt;b&gt;GET /reports/{id}&lt;/b&gt;&lt;br&gt;Accept: application/pdf" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="515" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f4c" value="&lt;b&gt;Generate File&lt;/b&gt;&lt;br&gt;report_api.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="515" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f4d" value="&lt;b&gt;Report Engine&lt;/b&gt;&lt;br&gt;PDF / Excel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="515" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f4e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f4a" target="f4b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f4e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f4b" target="f4c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f4e3" style="rounded=1;html=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="f4c" target="f4d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 5: POLICY ═══ -->
+        <mxCell id="f5_label" value="&#9316; Policy Eligibility Check" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="595" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f5a" value="&lt;b&gt;Check Subsidies&lt;/b&gt;&lt;br&gt;Available schemes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="620" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f5b" value="&lt;b&gt;POST /policy/check&lt;/b&gt;&lt;br&gt;Body: Factory + Scenario" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="620" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f5c" value="&lt;b&gt;Eligibility Check&lt;/b&gt;&lt;br&gt;policy_api.py" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="620" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f5d" value="&lt;b&gt;Policy Engine&lt;/b&gt;&lt;br&gt;Subsidy Matcher" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="620" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f5e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f5a" target="f5b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f5e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f5b" target="f5c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f5e3" style="rounded=1;html=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="f5c" target="f5d">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 6: AUTH ═══ -->
+        <mxCell id="f6_label" value="&#9317; Authentication" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="700" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f6a" value="&lt;b&gt;Login / Register&lt;/b&gt;&lt;br&gt;Credentials form" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="725" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f6b" value="&lt;b&gt;POST /auth/login&lt;/b&gt;&lt;br&gt;POST /auth/register" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="725" width="230" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f6c" value="&lt;b&gt;Auth Handler&lt;/b&gt;&lt;br&gt;JWT token issue" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="725" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="f6e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#d6b656;" edge="1" parent="1" source="f6a" target="f6b">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f6e2" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f6b" target="f6c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FLOW 7: HEALTH ═══ -->
+        <mxCell id="f7_label" value="&#9318; Health Check" style="text;html=1;align=left;fontSize=11;fontStyle=1;fontColor=#333333;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="800" width="200" height="18" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f7b" value="&lt;b&gt;GET /health/&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="360" y="825" width="230" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="f7c" value="&lt;b&gt;Status OK&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;fontSize=10;arcSize=12;" vertex="1" parent="1">
+          <mxGeometry x="710" y="825" width="180" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="f7e1" style="rounded=1;html=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="f7b" target="f7c">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
