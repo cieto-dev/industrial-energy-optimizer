@@ -57,11 +57,6 @@ dist/
 *.ckpt
 *.onnx
 
-# Data (only if you DON'T want to version datasets)
-data/
-outputs/
-results/
-
 # Frontend / Node.js
 node_modules/
 frontend/node_modules/
@@ -69,3 +64,43 @@ frontend/node_modules/
 frontend/.next/
 out/
 .vercel
+
+# Ruff
+.ruff_cache/
+
+# Pyright
+.pyright/
+
+# UV (Python package manager)
+.uv/
+
+# Pytype
+.pytype/
+
+# Python version manager
+.python-version
+
+# Hatch
+.hatch/
+
+# PDM
+.pdm-python
+
+# direnv
+.direnv/
+
+# Python wheel metadata
+pip-wheel-metadata/
+
+# Coverage
+.coverage.*
+
+# Cache
+.cache/
+
+# Windows
+Thumbs.db
+
+# Test environments
+.tox/
+.nox/
