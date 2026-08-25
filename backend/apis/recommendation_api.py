@@ -263,62 +263,65 @@ def _default_candidate_pathways(
 
     budget = request.budget_inr or 12_000_000.0
     industry = request.industry.lower()
+    temp = request.required_process_temperature_c or 100.0
+    roof = request.roof_area_sqm or 100.0
 
     technology_map = {
-        "textile": ["biomass", "solar_thermal", "heat_pump", "waste_heat_recovery"],
-        "cement": ["waste_heat_recovery", "electrification", "solar_thermal"],
-        "chemical": ["biomass", "solar_thermal", "heat_pump", "biogas"],
-        "dairy": ["solar_thermal", "heat_pump", "biogas", "biomass"],
-        "food_processing": ["solar_thermal", "biomass", "heat_pump", "biogas"],
-        "glass": ["electrification", "waste_heat_recovery", "biomass"],
-        "paper": ["biomass", "biogas", "waste_heat_recovery", "solar_thermal"],
-        "pharmaceutical": ["solar_thermal", "heat_pump", "biomass"],
-        "steel": ["waste_heat_recovery", "electrification", "biomass"],
+        "textile": [["biomass", "waste_heat_recovery"], ["solar_thermal", "thermal_storage"], ["heat_pump"]],
+        "cement": [["waste_heat_recovery", "electrification"], ["biomass"], ["solar_thermal"]],
+        "chemical": [["biomass", "thermal_storage"], ["solar_thermal", "heat_pump"], ["biogas"]],
+        "dairy": [["solar_thermal", "thermal_storage"], ["heat_pump"], ["biogas", "biomass"]],
+        "food_processing": [["solar_thermal", "heat_pump"], ["biomass", "waste_heat_recovery"], ["biogas"]],
+        "glass": [["electrification", "waste_heat_recovery"], ["biomass"], ["solar_thermal"]],
+        "paper": [["biomass", "waste_heat_recovery"], ["biogas"], ["solar_thermal"]],
+        "pharmaceutical": [["solar_thermal", "heat_pump"], ["biomass", "thermal_storage"], ["electrification"]],
+        "steel": [["waste_heat_recovery", "electrification"], ["biomass"], ["cogeneration"]],
     }
 
-    technologies = technology_map.get(
+    technology_combinations = technology_map.get(
         industry,
-        ["biomass", "solar_thermal", "heat_pump"],
+        [["biomass", "thermal_storage"], ["solar_thermal", "heat_pump"], ["waste_heat_recovery"]]
     )
 
     candidates: list[Dict[str, Any]] = []
 
-    for index, technology in enumerate(technologies):
-        capex_factor = 0.60 + (index * 0.12)
-        opex_factor = 0.040 + (index * 0.006)
-
-        co2_reduction = max(
-            10.0,
-            min(80.0, 30.0 + (index * 12.0)),
-        )
-
-        reliability = max(
-            60.0,
-            92.0 - (index * 6.0),
-        )
-
-        risk_tier = (
-            "low"
-            if index == 0
-            else "moderate"
-            if index <= 2
-            else "high"
-        )
-
+    for index, combination in enumerate(technology_combinations):
+        capex_factor = 0.50 + (index * 0.15)
+        # Penalize solar capex if roof area is small
+        if "solar_thermal" in combination and roof < 500:
+            capex_factor += 0.3
+            
+        opex_factor = 0.030 + (index * 0.01)
+        
+        # Base CO2 reduction dynamically adjusted based on temp suitability
+        base_co2 = 80.0 - (index * 15.0)
+        if "heat_pump" in combination and temp > 160:
+            base_co2 -= 40.0 # Heat pumps efficiency drops significantly at high temps
+        if "biomass" in combination:
+            base_co2 += 10.0 # Bonus for biomass
+            
+        co2_reduction = max(10.0, min(95.0, base_co2))
+        
+        # Reliability dynamically adjusted based on tech
+        reliability = max(50.0, 95.0 - (index * 8.0))
+        if "waste_heat_recovery" in combination:
+            reliability += 4.0
+            
+        risk_tier = "low" if reliability >= 85 else "moderate" if reliability >= 70 else "high"
+        
+        scenario_id_str = "_".join(combination)
+        
         candidates.append(
             {
-                "scenario_id": f"scenario_{technology}",
-                "technology_sequence": [technology],
+                "scenario_id": f"scenario_{scenario_id_str}",
+                "technology_sequence": combination,
                 "capex_inr": budget * capex_factor,
                 "annual_opex_inr": budget * opex_factor,
-                "pathway_co2_tonnes_year": max(
-                    100.0,
-                    1200.0 - (index * 180.0),
-                ),
-                "co2_reduction_pct": co2_reduction,
-                "spread_ratio": 0.25 + (index * 0.08),
+                "pathway_co2_tonnes_year": max(100.0, 1000.0 - (co2_reduction * 10.0)),
+                "co2_reduction_pct": round(co2_reduction, 1),
+                "spread_ratio": 0.20 + (index * 0.05),
                 "risk_tier": risk_tier,
-                "reliability_score_pct": reliability,
+                "reliability_score_pct": min(99.0, round(reliability, 1)),
             }
         )
 

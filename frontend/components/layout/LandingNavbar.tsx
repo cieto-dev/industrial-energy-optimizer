@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Zap, Menu, X, Search, ArrowRight } from "lucide-react"
+import { Zap, Menu, X, Search, ArrowRight, Activity } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -114,24 +114,102 @@ export function LandingNavbar() {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-40 bg-[#181a1b] text-white pt-24 px-6 md:px-12 overflow-y-auto"
           >
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 pb-24">
-              {/* Navigation Tabs */}
-              <div className="md:col-span-12">
-                <h3 className="text-xs font-semibold text-white/50 tracking-widest mb-6 uppercase">Navigation</h3>
-                <div className="flex flex-col gap-4">
+            <div className="max-w-[90rem] mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 pb-24 border-t border-white/10 pt-12">
+              
+              {/* Column 1: Navigation Tabs */}
+              <div className="md:col-span-3 border-r border-white/10 pr-8">
+                <h3 className="text-[10px] font-semibold text-white/50 tracking-widest mb-8 uppercase">Navigation</h3>
+                <div className="flex flex-col gap-6">
                   {navLinks.map((link) => (
                     <Link
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsFullScreenMenuOpen(false)}
-                      className="text-3xl md:text-4xl font-normal text-white hover:text-white/80 transition-colors flex items-center gap-2 group w-fit"
+                      className="text-2xl font-normal text-white hover:text-white/80 transition-colors flex items-center gap-2 group w-fit"
                     >
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xl">↳</span>
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-xl text-white/50">↳</span>
                       <span className="-ml-6 group-hover:ml-0 transition-all">{link.name}</span>
                     </Link>
                   ))}
                 </div>
               </div>
+
+              {/* Column 2: MCDA Explainer (Interactive) */}
+              <div className="md:col-span-4 border-r border-white/10 pr-8">
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-[10px] font-semibold text-white/50 tracking-widest uppercase">Platform Intelligence</h3>
+                  <span className="text-[10px] font-semibold text-white/30 tracking-widest uppercase hover:text-white transition-colors cursor-pointer flex items-center gap-1">Read Whitepaper <ArrowRight className="w-3 h-3" /></span>
+                </div>
+                
+                <div className="group relative overflow-hidden rounded-lg bg-white/5 border border-white/10 transition-all hover:bg-white/10 hover:border-white/20 p-6 h-[400px] flex flex-col justify-end">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay group-hover:scale-105 group-hover:opacity-40 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#181a1b] via-[#181a1b]/80 to-transparent" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <h4 className="text-xl font-medium mb-3">Understanding MCDA Scores</h4>
+                    <p className="text-sm text-white/70 leading-relaxed mb-4">
+                      Our Multi-Criteria Decision Analysis (MCDA) engine ranks technologies by simultaneously weighing CAPEX, emissions impact, reliability, and thermodynamic feasibility. No single metric rules them all.
+                    </p>
+                    <button className="text-xs font-medium border-b border-white pb-0.5 hover:text-white/70 transition-colors">
+                      Interactive Walkthrough
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column 3: Payback Explainer */}
+              <div className="md:col-span-3 border-r border-white/10 pr-8">
+                <div className="flex justify-between items-center mb-8">
+                  <h3 className="text-[10px] font-semibold text-white/50 tracking-widest uppercase">Financial Models</h3>
+                </div>
+
+                <div className="group relative overflow-hidden rounded-lg bg-white/5 border border-white/10 transition-all hover:bg-white/10 hover:border-white/20 p-6 h-[400px] flex flex-col justify-end">
+                  <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay group-hover:scale-105 group-hover:opacity-40 transition-all duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#181a1b] via-[#181a1b]/80 to-transparent" />
+                  
+                  <div className="relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <Activity className="w-5 h-5 text-white" />
+                    </div>
+                    <h4 className="text-xl font-medium mb-3">Accelerating Payback</h4>
+                    <p className="text-sm text-white/70 leading-relaxed mb-4">
+                      Payback periods aren't static. Learn how leveraging state subsidies, carbon credits, and optimizing operational hours can cut your ROI timeframe by up to 40%.
+                    </p>
+                    <button className="text-xs font-medium border-b border-white pb-0.5 hover:text-white/70 transition-colors">
+                      Explore Scenarios
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Column 4: Quick Links */}
+              <div className="md:col-span-2">
+                <h3 className="text-[10px] font-semibold text-white/50 tracking-widest mb-8 uppercase">Quick Links</h3>
+                <ul className="flex flex-col gap-4">
+                  {[
+                    "About CIETO",
+                    "Engineering Blog",
+                    "Investor Relations",
+                    "Letters from the CEO",
+                    "Data Privacy",
+                    "Security Center",
+                    "Grid Partners",
+                    "Learning Hub",
+                    "Customer Success",
+                    "Contact Us"
+                  ].map((item) => (
+                    <li key={item}>
+                      <Link href="#" className="text-sm text-white/70 hover:text-white transition-colors">
+                        {item}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
             </div>
           </motion.div>
         )}

@@ -21,7 +21,7 @@ import {
   ZoomOut,
   Maximize
 } from "lucide-react"
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
+import MapViewWrapper from "./MapViewWrapper"
 
 export interface IndustrialCluster {
   id: string
@@ -337,64 +337,11 @@ export function GisMapComponent() {
           {/* Interactive Geographic Representation */}
           <div className="relative my-6 py-6 px-4 bg-background rounded-xl border border-border/40 flex flex-col items-center justify-center">
             
-            <TransformWrapper
-              initialScale={1}
-              minScale={0.5}
-              maxScale={4}
-              centerOnInit
-            >
-              {({ zoomIn, zoomOut, resetTransform }) => (
-                <>
-                  <div className="absolute top-2 right-2 z-50 flex flex-col gap-1.5 bg-card/80 backdrop-blur-md p-1 border border-border rounded-md shadow-sm">
-                    <button onClick={() => zoomIn()} className="p-1 hover:bg-surface-muted rounded text-foreground transition-colors"><ZoomIn className="w-4 h-4" /></button>
-                    <button onClick={() => zoomOut()} className="p-1 hover:bg-surface-muted rounded text-foreground transition-colors"><ZoomOut className="w-4 h-4" /></button>
-                    <button onClick={() => resetTransform()} className="p-1 hover:bg-surface-muted rounded text-foreground transition-colors"><Maximize className="w-4 h-4" /></button>
-                  </div>
-
-                  <TransformComponent wrapperStyle={{ width: "100%", maxWidth: "500px", height: "300px" }}>
-                    {/* Schematic India Map Canvas with District Points */}
-                    <div className="w-[500px] h-[300px] relative border border-primary/10 rounded-2xl bg-gradient-to-b from-surface-muted to-background p-4 flex items-center justify-center">
-                      {/* Map grid lines overlay */}
-                      <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] rounded-2xl" />
-
-                      {/* District Cluster Markers positioned geographically */}
-                      {filteredClusters.map((cluster) => {
-                        // Map lat/lng roughly to coordinates inside the 500x300 canvas
-                        // India bounds approx: Lat 8.4 to 35.5, Lng 68.7 to 97.25
-                        const leftPct = ((cluster.lng - 68) / (85 - 68)) * 80 + 10
-                        const topPct = ((34 - cluster.lat) / (34 - 8)) * 80 + 10
-                        const isSelected = selectedCluster.id === cluster.id
-
-                        return (
-                          <button
-                            key={cluster.id}
-                            onClick={() => setSelectedCluster(cluster)}
-                            style={{ left: `${Math.min(90, Math.max(10, leftPct))}%`, top: `${Math.min(90, Math.max(10, topPct))}%` }}
-                            className={`absolute -translate-x-1/2 -translate-y-1/2 group flex items-center transition-all z-20 ${
-                              isSelected ? "scale-125 z-30" : "hover:scale-110"
-                            }`}
-                          >
-                            <div
-                              className={`h-7 w-7 rounded-full flex items-center justify-center shadow-lg transition-all ${
-                                isSelected
-                                  ? "bg-primary text-primary-foreground ring-4 ring-primary/40"
-                                  : "bg-surface-muted text-primary border border-primary/50 hover:bg-primary hover:text-primary-foreground"
-                              }`}
-                            >
-                              <MapPin className="h-4 w-4" />
-                            </div>
-                            {/* Tooltip on hover */}
-                            <div className="absolute left-8 top-1/2 -translate-y-1/2 hidden group-hover:flex whitespace-nowrap bg-card border border-border/50 px-2.5 py-1 rounded-md text-[10px] font-semibold text-foreground shadow-xl z-30">
-                              {cluster.name}
-                            </div>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </TransformComponent>
-                </>
-              )}
-            </TransformWrapper>
+            <MapViewWrapper 
+              clusters={filteredClusters} 
+              selectedCluster={selectedCluster} 
+              onSelectCluster={setSelectedCluster} 
+            />
 
             {/* Map watermark / compass */}
             <div className="absolute right-4 bottom-4 text-[11px] text-muted-foreground font-mono pointer-events-none">
