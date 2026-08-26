@@ -9,7 +9,7 @@ import { LayoutWrapper } from "@/components/layout/LayoutWrapper"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CIETO Energy Platform",
+  title: "Urjiva Energy Platform",
   description: "AI-powered clean energy transition platform for Indian MSMEs",
 }
 

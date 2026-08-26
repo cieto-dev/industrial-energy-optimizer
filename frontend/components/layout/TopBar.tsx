@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, Home, ChevronRight, User, LogIn, LogOut, Sparkles, Zap } from "lucide-react"
+import { Menu, Home, ChevronRight, User, LogIn, LogOut, Sparkles } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
+import { UrjivaLogo } from "@/components/ui/UrjivaLogo"
 
 import { AuthModal } from "@/components/auth/AuthModal"
 
@@ -77,10 +78,8 @@ export function TopBar() {
 
           {isHome && (
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground shadow-md">
-                <Zap className="h-3.5 w-3.5 text-background" />
-              </div>
-              <span className="text-sm font-bold text-foreground tracking-tight">CIETO</span>
+              <UrjivaLogo className="w-7 h-7" />
+              <span className="text-sm font-bold text-foreground tracking-tight">Urjiva</span>
             </div>
           )}
         </div>

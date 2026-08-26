@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Zap, Menu, X, Search, ArrowRight, Activity } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
+import { UrjivaLogo } from "@/components/ui/UrjivaLogo"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navLinks = [
@@ -59,10 +60,10 @@ export function LandingNavbar() {
       >
         <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group z-[60]" onClick={() => { setIsFullScreenMenuOpen(false); setIsRightSidebarOpen(false); }}>
-            <Zap size={22} className={isDarkHeader ? "text-white" : "text-foreground"} />
+          <Link href="/" className="flex items-center gap-2 z-50">
+            <UrjivaLogo className="w-8 h-8" />
             <span className={`font-medium text-xl tracking-tight ${isDarkHeader ? 'text-white' : 'text-foreground'}`}>
-              CIETO
+              Urjiva
             </span>
           </Link>
 
@@ -190,7 +191,7 @@ export function LandingNavbar() {
                 <h3 className="text-[10px] font-semibold text-white/50 tracking-widest mb-8 uppercase">Quick Links</h3>
                 <ul className="flex flex-col gap-4">
                   {[
-                    "About CIETO",
+                    "About Urjiva",
                     "Engineering Blog",
                     "Investor Relations",
                     "Letters from the CEO",
@@ -249,7 +250,7 @@ export function LandingNavbar() {
                 </h2>
                 
                 <p className="text-sm text-black/60 mb-12">
-                  Access the CIETO interactive platform. Use the demo credentials below to explore our features.
+                  Access the Urjiva interactive platform. Use the demo credentials below to explore our features.
                 </p>
                 
                 <form className="flex flex-col gap-8 flex-grow" onSubmit={(e) => { e.preventDefault(); window.location.href = '/dashboard'; }}>
