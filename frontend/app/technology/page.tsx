@@ -282,7 +282,7 @@ const TechCard = ({ tech }: { tech: any }) => {
               className="mt-8 flex justify-end"
             >
               <span className="text-xs font-bold text-foreground uppercase tracking-widest flex items-center gap-2 group-hover:text-accent transition-colors">
-                Run Simulation in CIETO <ArrowRight className="w-4 h-4" />
+                Run Simulation in Urjiva <ArrowRight className="w-4 h-4" />
               </span>
             </motion.div>
           )}
@@ -322,7 +322,7 @@ export default function TechnologyPage() {
             transition={{ delay: 0.2 }}
             className="text-xl text-foreground-muted font-medium max-w-3xl mx-auto leading-relaxed"
           >
-            CIETO does not just list equipment. We dynamically model the thermodynamics, CAPEX, and local grid constraints of over 40 distinct abatement technologies to mathematically prove the optimal transition.
+            Urjiva does not just list equipment. We dynamically model the thermodynamics, CAPEX, and local grid constraints of over 40 distinct abatement technologies to mathematically prove the optimal transition.
           </motion.p>
         </div>
 

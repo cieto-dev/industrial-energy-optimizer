@@ -434,7 +434,7 @@ function Chapter6() {
   )
 }
 
-/* ── CHAPTER 07: How CIETO Thinks (CIETO Vision) ────────────────────────────────────────── */
+/* ── CHAPTER 07: How Urjiva Thinks (Urjiva Vision) ────────────────────────────────────────── */
 function Chapter7() {
   const steps = [
     { icon: Factory, label: "Factory Telemetry" },
@@ -454,7 +454,7 @@ function Chapter7() {
       </div>
 
       <div className="max-w-[90rem] mx-auto px-6 relative z-10">
-        <h2 className="text-4xl md:text-6xl font-black mb-40 text-center text-white drop-shadow-lg">How CIETO Thinks</h2>
+        <h2 className="text-4xl md:text-6xl font-black mb-40 text-center text-white drop-shadow-lg">How Urjiva Thinks</h2>
         
         <div className="relative flex flex-col md:flex-row justify-between items-center max-w-5xl mx-auto gap-12 md:gap-0">
           {/* Subtle glowing connecting line */}
@@ -574,7 +574,7 @@ function FinalChapter() {
         </h1>
         
         <p className="text-xl md:text-2xl text-black/60 font-medium max-w-3xl mx-auto leading-relaxed mb-16">
-          CIETO combines engineering, economics, policy intelligence, geospatial data, and scientific evidence into a single industrial decision engine built for the next generation of manufacturing.
+          Urjiva combines engineering, economics, policy intelligence, geospatial data, and scientific evidence into a single industrial decision engine built for the next generation of manufacturing.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

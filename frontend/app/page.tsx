@@ -381,7 +381,7 @@ export default function LandingPage() {
               Pan-India Incentive Schemes.
             </h2>
             <p className="text-xl text-foreground-muted font-medium mb-8 leading-relaxed">
-              The Indian government has deployed billions in capital subsidies for decarbonisation. CIETO tracks, indexes, and computes eligibility for every scheme in real-time.
+              The Indian government has deployed billions in capital subsidies for decarbonisation. Urjiva tracks, indexes, and computes eligibility for every scheme in real-time.
             </p>
           </div>
           <div className="bg-surface border border-border rounded-2xl p-6 shadow-sm">
@@ -475,7 +475,7 @@ export default function LandingPage() {
               href="/story"
               className="inline-flex h-16 items-center justify-center bg-surface border border-border px-12 text-sm font-bold uppercase tracking-widest text-foreground transition-colors hover:bg-surface-muted shadow-sm rounded-sm"
             >
-              Read the CIETO Story
+              Read the Urjiva Story
             </Link>
           </div>
         </div>
@@ -486,7 +486,7 @@ export default function LandingPage() {
         <div className="max-w-[90rem] mx-auto px-6 grid md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <span className="font-black text-xl tracking-tighter">CIETO</span>
+              <span className="font-black text-xl tracking-tighter">Urjiva</span>
             </Link>
             <p className="text-xs text-foreground-muted leading-relaxed max-w-xs font-medium">
               Enterprise Infrastructure for Industrial Decarbonization.
@@ -517,7 +517,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="max-w-[90rem] mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-xs font-bold text-foreground-muted">
-          <p>© {new Date().getFullYear()} CIETO. Built for Smart India Hackathon 2025.</p>
+          <p>© {new Date().getFullYear()} Urjiva. Built for Smart India Hackathon 2025.</p>
           <div className="flex items-center gap-2 mt-4 md:mt-0">
             <span className="h-2 w-2 rounded-full bg-status-online" />
             <span className="uppercase tracking-widest">All Systems Operational</span>

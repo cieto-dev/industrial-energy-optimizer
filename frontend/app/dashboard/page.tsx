@@ -19,7 +19,7 @@ const products = [
   {
     id: "assessment",
     title: "Input Assessment",
-    description: "Profile your factory's baseline energy consumption, operational constraints, and existing infrastructure to initialize the CIETO engine.",
+    description: "Profile your factory's baseline energy consumption, operational constraints, and existing infrastructure to initialize the Urjiva engine.",
     icon: FileText,
     href: "/assessment",
     color: "bg-emerald-500/10 text-emerald-500",
@@ -97,7 +97,7 @@ export default function PlatformHubPage() {
           </h1>
         </div>
         <p className="text-lg text-foreground-muted max-w-2xl">
-          Welcome to the CIETO Intelligence Layer. Select an engine to begin your industrial decarbonization analysis.
+          Welcome to the Urjiva Intelligence Layer. Select an engine to begin your industrial decarbonization analysis.
         </p>
       </div>
 

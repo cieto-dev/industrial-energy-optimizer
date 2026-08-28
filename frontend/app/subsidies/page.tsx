@@ -79,7 +79,7 @@ export default function SubsidiesPage() {
             </div>
           </motion.div>
 
-          {/* Phase 2: CIETO Eligibility Engine */}
+          {/* Phase 2: Urjiva Eligibility Engine */}
           <motion.div 
             style={{ opacity: engineOpacity, scale: engineScale }}
             className="absolute inset-0 flex flex-col items-center justify-center z-20 bg-background/90 backdrop-blur-sm"
@@ -93,7 +93,7 @@ export default function SubsidiesPage() {
                   Eligibility Computed.
                 </h2>
                 <p className="text-xl text-foreground-muted font-medium">
-                  CIETO's semantic engine automatically indexes policies against your factory's telemetry.
+                  Urjiva's semantic engine automatically indexes policies against your factory's telemetry.
                 </p>
               </div>
 

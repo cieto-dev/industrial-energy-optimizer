@@ -81,7 +81,7 @@ export default function ConventionsPage() {
                             </p>
                             
                             <div className="mt-6 bg-background rounded-lg p-4 border border-border">
-                              <h4 className="text-[10px] font-bold uppercase tracking-widest text-foreground mb-2">How CIETO Incorporates This</h4>
+                              <h4 className="text-[10px] font-bold uppercase tracking-widest text-foreground mb-2">How Urjiva Incorporates This</h4>
                               <p className="text-sm text-foreground-muted font-medium flex items-start gap-2">
                                 <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
                                 Our optimizer mathematically binds these policy constraints into the objective function, ensuring that recommended pathways automatically comply with or financially benefit from this regulation.

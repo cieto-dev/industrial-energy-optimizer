@@ -99,7 +99,7 @@ export function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModalProps) {
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500 text-zinc-950 font-black text-xs">
               CI
             </div>
-            <span className="text-sm font-bold tracking-tight text-white">CIETO Industrial Access</span>
+            <span className="text-sm font-bold tracking-tight text-white">Urjiva Industrial Access</span>
           </div>
           <h3 className="text-xl font-bold text-white mt-3">
             {mode === "login" ? "Sign in to your account" : "Create an account"}

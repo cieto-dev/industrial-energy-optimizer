@@ -890,7 +890,7 @@ export function DashboardCharts({ recommendation }: Props) {
                     />
                     <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
                     <Line type="monotone" dataKey="baselineCO2" name="Baseline (Business As Usual)" stroke="#ef4444" strokeWidth={2.5} strokeDasharray="4 4" dot={false} />
-                    <Line type="monotone" dataKey="optimizedCO2" name="CIETO Optimized Pathway" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: "#10b981" }} />
+                    <Line type="monotone" dataKey="optimizedCO2" name="Urjiva Optimized Pathway" stroke="#10b981" strokeWidth={3} dot={{ r: 4, fill: "#10b981" }} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>

@@ -35,7 +35,7 @@ export default function FeaturesPage() {
               Inside the <br/>Intelligence Engine.
             </h1>
             <p className="text-lg text-white/60 font-medium">
-              Watch how CIETO processes millions of data points to generate a deterministic decarbonization pathway.
+              Watch how Urjiva processes millions of data points to generate a deterministic decarbonization pathway.
             </p>
           </div>
         </div>
