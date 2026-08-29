@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 
@@ -123,14 +124,16 @@ export function ShowcaseGallery() {
                     </h2>
                   </motion.div>
                   
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 0.4 }}
-                    className="shrink-0 w-16 h-16 bg-foreground/5 hover:bg-foreground text-foreground hover:text-background backdrop-blur-md flex items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110 border border-border"
-                  >
-                    <ArrowRight strokeWidth={1.5} className="w-8 h-8" />
-                  </motion.button>
+                  <Link href={`/architecture/${activeFeature.id}`} passHref>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.5, duration: 0.4 }}
+                      className="shrink-0 w-16 h-16 bg-foreground/5 hover:bg-foreground text-foreground hover:text-background backdrop-blur-md flex items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110 border border-border cursor-pointer"
+                    >
+                      <ArrowRight strokeWidth={1.5} className="w-8 h-8" />
+                    </motion.div>
+                  </Link>
                 </div>
               </div>
             </motion.div>

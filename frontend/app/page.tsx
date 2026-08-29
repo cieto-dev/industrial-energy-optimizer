@@ -87,6 +87,11 @@ export default function LandingPage() {
 
 
 
+      {/* ── CORE CAPABILITIES (Interactive Showcase) ─────────────────────────── */}
+      <div id="features">
+        <ShowcaseGallery />
+      </div>
+
       {/* ── MASSIVE DATA VISUALIZATION SECTION ──────────────────────── */}
       <section className="relative py-40 bg-background overflow-hidden border-b border-border">
         {/* Clean, Premium Geometric Background */}
@@ -160,11 +165,6 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-
-      {/* ── CORE CAPABILITIES (Interactive Showcase) ─────────────────────────── */}
-      <div id="features">
-        <ShowcaseGallery />
-      </div>
 
       {/* ── TECHNOLOGY LIBRARY ────────────────────────────────────────────── */}
       <section id="technology" className="relative py-32 bg-surface-muted overflow-hidden border-b border-border">
