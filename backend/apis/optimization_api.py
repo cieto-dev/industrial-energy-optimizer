@@ -1048,7 +1048,7 @@ def _run_optimizer(
         }
 
     try:
-        result = optimize(
+        result = optimize_function(
             candidates,
             weights=preferences.weights,
         )

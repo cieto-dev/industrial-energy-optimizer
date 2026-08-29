@@ -14,17 +14,20 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from decision_engine.geographic.geographic_intelligence import (  # noqa: E402
-    GeographicIntelligence,
-)
+try:
+    from decision_engine.geographic.geographic_intelligence import (  # noqa: E402
+        GeographicIntelligence,
+    )
+except ImportError:
+    GeographicIntelligence = None
 
 
 router = APIRouter(
-    prefix="/api/geographic",
+    prefix="/geographic",
     tags=["Geographic Intelligence"],
 )
 
-engine = GeographicIntelligence(repo_root=PROJECT_ROOT)
+engine = GeographicIntelligence(repo_root=PROJECT_ROOT) if GeographicIntelligence else None
 
 
 @router.get("/profile")

@@ -28,9 +28,9 @@ from sqlalchemy import (
     Float,
     Boolean,
     Integer,
-    DateTime,
     create_engine,
     inspect,
+    Index,
 )
 from sqlalchemy.sql import func
 
@@ -87,6 +87,7 @@ biomass_atlas_table = Table(
     Column("longitude", Float, nullable=True),
     Column("source", Text, nullable=True),
     Column("created_at", DateTime, server_default=func.now()),
+    Index("ix_biomass_state_district", "state", "district"),
 )
 
 district_coordinates_table = Table(
@@ -97,6 +98,7 @@ district_coordinates_table = Table(
     Column("latitude", Float, nullable=True),
     Column("longitude", Float, nullable=True),
     Column("created_at", DateTime, server_default=func.now()),
+    Index("ix_district_coords", "state", "district"),
 )
 
 industrial_fuels_table = Table(
@@ -139,6 +141,7 @@ electricity_tariffs_table = Table(
     Column("data_status", Text, nullable=True),
     Column("source_type", Text, nullable=True),
     Column("created_at", DateTime, server_default=func.now()),
+    Index("ix_tariffs_state_discom", "state", "discom"),
 )
 
 defaults_table = Table(
