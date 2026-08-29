@@ -1,7 +1,7 @@
 # 🎤 URJIVA — Technical Approach Presentation Speech
 
 > **Slide:** Technical Approach (Slide 3 of 6)
-> **Speaker:** You
+> **Speaker:** PARAS SHARMA
 > **Event:** Smart India Hackathon 2026
 > **Project:** URJIVA — Industrial Energy Transition Optimizer
 > **Team:** UDYAM
