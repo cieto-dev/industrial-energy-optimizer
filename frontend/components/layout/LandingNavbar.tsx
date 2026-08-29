@@ -7,6 +7,7 @@ import { Zap, Menu, X, Search, ArrowRight, Activity } from "lucide-react"
 import { ThemeToggle } from "@/components/theme/ThemeToggle"
 import { UrjivaLogo } from "@/components/ui/UrjivaLogo"
 import { motion, AnimatePresence } from "framer-motion"
+import { useTheme } from "next-themes"
 
 const navLinks = [
   { name: "Features", href: "/features" },
@@ -21,7 +22,14 @@ export function LandingNavbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isFullScreenMenuOpen, setIsFullScreenMenuOpen] = useState(false)
   const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false)
+  const [isBannerVisible, setIsBannerVisible] = useState(true)
+  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+  const { theme, setTheme } = useTheme()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,41 +56,69 @@ export function LandingNavbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${
-          isFullScreenMenuOpen
-            ? "bg-[#181a1b] border-transparent text-white"
-            : pathname === '/story'
-            ? "bg-black/40 backdrop-blur-md border-white/10 text-white"
-            : !isScrolled && pathname === '/'
-            ? "bg-black/20 backdrop-blur-lg border-white/10 text-white"
-            : "bg-background/90 backdrop-blur-md border-border/50 text-foreground shadow-sm"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex flex-col ${
+          isFullScreenMenuOpen || isRightSidebarOpen
+            ? "bg-background text-foreground"
+            : isScrolled
+            ? "bg-background/20 backdrop-blur-md text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.05)] border-b border-border/20"
+            : "bg-transparent text-white"
         }`}
       >
-        <div className="w-full px-6 md:px-12 h-16 flex items-center justify-between">
+        <AnimatePresence>
+          {isBannerVisible && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className={`text-xs py-2.5 px-6 md:px-8 flex justify-between items-center overflow-hidden shrink-0 transition-colors ${
+                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                  ? "bg-white/10 backdrop-blur-sm text-white/90 border-b border-white/10"
+                  : "bg-transparent text-foreground/90 border-b border-border/20"
+              }`}
+            >
+              <p>
+                Read CEO's <Link href="/story" className="underline underline-offset-2 opacity-90 hover:opacity-100 transition-opacity font-medium">Letter on Industrial Net-Zero</Link>
+              </p>
+              <button onClick={() => setIsBannerVisible(false)} className="opacity-60 hover:opacity-100 transition-opacity ml-4 shrink-0">
+                <X size={14} strokeWidth={2} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <div className="w-full px-6 md:px-8 h-16 shrink-0 flex items-center justify-between border-b border-transparent">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 z-50">
-            <UrjivaLogo className="w-8 h-8" />
-            <span className={`font-medium text-xl tracking-tight ${isDarkHeader ? 'text-white' : 'text-foreground'}`}>
+          <Link href="/" className="flex items-center gap-2 z-50 group">
+            <UrjivaLogo className="w-6 h-6 opacity-90 group-hover:opacity-100 transition-opacity" />
+            <span className="font-medium text-lg tracking-wide opacity-90 group-hover:opacity-100 transition-opacity">
               Urjiva
             </span>
           </Link>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 z-[60]">
+          <div className="flex items-center gap-3 z-[60]">
             <button 
               onClick={() => { setIsRightSidebarOpen(true); setIsFullScreenMenuOpen(false); }}
-              className={`hidden md:inline-flex h-10 items-center justify-center border ${
-                isDarkHeader 
-                  ? 'border-white/70 text-white hover:bg-white/10' 
-                  : 'border-black/20 text-black hover:bg-black/5'
-              } px-6 text-sm font-medium transition-colors rounded-sm`}
+              className={`hidden md:inline-flex h-9 items-center justify-center px-6 text-[13px] font-medium transition-colors border ${
+                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                  ? "bg-white text-black hover:bg-white/90 border-transparent"
+                  : "bg-background text-foreground hover:bg-surface-muted border-border"
+              }`}
             >
               Get Started
             </button>
             
-            <div className={`flex items-center border ${isDarkHeader ? 'border-white/70' : 'border-black/20'} rounded-sm`}>
-              <button className={`p-2.5 border-r ${isDarkHeader ? 'border-white/70 text-white hover:bg-white/10' : 'border-black/20 text-black hover:bg-black/5'} transition-colors`}>
-                <Search size={18} strokeWidth={1.5} />
+            <div className={`flex items-center rounded-sm overflow-hidden h-9 border ${
+              !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                ? "bg-white text-black border-transparent"
+                : "bg-background text-foreground border-border"
+            }`}>
+              <button className={`px-3 h-full flex items-center justify-center transition-colors border-r ${
+                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                  ? "hover:bg-black/5 border-black/10"
+                  : "hover:bg-surface-muted border-border"
+              }`}>
+                <Search size={16} strokeWidth={2} />
               </button>
               <button
                 onClick={() => {
@@ -92,12 +128,16 @@ export function LandingNavbar() {
                     setIsFullScreenMenuOpen(!isFullScreenMenuOpen);
                   }
                 }}
-                className={`p-2.5 ${isDarkHeader ? 'text-white hover:bg-white/10' : 'text-black hover:bg-black/5'} transition-colors ${isFullScreenMenuOpen || isRightSidebarOpen ? 'bg-white text-black hover:bg-white' : ''}`}
+                className={`px-3 h-full flex items-center justify-center transition-colors ${
+                  !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                    ? "hover:bg-black/5"
+                    : "hover:bg-surface-muted"
+                }`}
               >
                 {isFullScreenMenuOpen || isRightSidebarOpen ? (
-                  <X size={18} strokeWidth={1.5} className={isFullScreenMenuOpen || isRightSidebarOpen ? 'text-black' : ''} />
+                  <X size={18} strokeWidth={2} />
                 ) : (
-                  <Menu size={18} strokeWidth={1.5} />
+                  <Menu size={18} strokeWidth={2} />
                 )}
               </button>
             </div>
@@ -211,6 +251,37 @@ export function LandingNavbar() {
                 </ul>
               </div>
 
+            </div>
+
+            {/* System Preferences / Theme Toggle footer inside the menu */}
+            <div className="max-w-[90rem] mx-auto mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div className="flex items-center gap-6">
+                 <span className="text-[10px] font-semibold text-white/50 tracking-widest uppercase">System Interface Theme</span>
+                 {mounted && (
+                   <div className="flex bg-white/5 rounded-sm p-1 border border-white/10">
+                     <button 
+                       onClick={() => setTheme("dark")} 
+                       className={`px-6 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'dark' ? 'bg-white text-black shadow-sm' : 'text-white/60 hover:text-white'}`}
+                     >
+                       Dark
+                     </button>
+                     <button 
+                       onClick={() => setTheme("light")} 
+                       className={`px-6 py-1.5 text-[11px] font-bold uppercase tracking-wider transition-colors ${theme === 'light' ? 'bg-white text-black shadow-sm' : 'text-white/60 hover:text-white'}`}
+                     >
+                       Light
+                     </button>
+                   </div>
+                 )}
+              </div>
+              
+              <div className="flex items-center gap-3">
+                 <span className="flex items-center justify-center h-2 w-2 relative">
+                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75 animate-ping"></span>
+                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                 </span>
+                 <span className="text-[10px] font-semibold text-white/50 tracking-widest uppercase">All Systems Nominal</span>
+              </div>
             </div>
           </motion.div>
         )}
