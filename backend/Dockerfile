@@ -16,6 +16,8 @@ COPY models/ ./models/
 COPY decision_engine/ ./decision_engine/
 COPY knowledge_runtime/ ./knowledge_runtime/
 COPY knowledge-base/ ./knowledge-base/
+COPY digital_twin/ ./digital_twin/
+COPY datasets/ ./datasets/
 
 # Start the app from the backend directory
 WORKDIR /src/backend
