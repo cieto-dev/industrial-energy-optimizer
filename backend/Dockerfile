@@ -1,16 +1,24 @@
 FROM python:3.14-slim AS builder
 
-WORKDIR /app
-COPY requirements.txt .
+WORKDIR /src/backend
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
 FROM python:3.14-slim
 
-WORKDIR /app
 COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 
-COPY . .
+WORKDIR /src
+# Copy exactly what is needed while preserving directory structure
+COPY backend/ ./backend/
+COPY models/ ./models/
+COPY decision_engine/ ./decision_engine/
+COPY knowledge_runtime/ ./knowledge_runtime/
+COPY knowledge-base/ ./knowledge-base/
+
+# Start the app from the backend directory
+WORKDIR /src/backend
 
 EXPOSE 8000
 
