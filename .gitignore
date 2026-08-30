@@ -104,3 +104,6 @@ Thumbs.db
 # Test environments
 .tox/
 .nox/
+
+ postman/
+.postman/

@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useTheme } from "next-themes"
 
 const navLinks = [
+  { name: "Industrial Intelligence", href: "/industrial-intelligence" },
   { name: "Features", href: "/features" },
   { name: "Technology", href: "/technology" },
   { name: "Story", href: "/story" },
@@ -57,7 +58,9 @@ export function LandingNavbar() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex flex-col ${
-          isFullScreenMenuOpen || isRightSidebarOpen
+          isFullScreenMenuOpen
+            ? "bg-[#181a1b] text-white border-transparent"
+            : isRightSidebarOpen
             ? "bg-background text-foreground"
             : isScrolled
             ? "bg-background/20 backdrop-blur-md text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.05)] border-b border-border/20"
@@ -71,7 +74,9 @@ export function LandingNavbar() {
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               className={`text-xs py-2.5 px-6 md:px-8 flex justify-between items-center overflow-hidden shrink-0 transition-colors ${
-                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                isFullScreenMenuOpen
+                  ? "bg-[#181a1b] text-white/90 border-b border-transparent"
+                  : !isScrolled && !isRightSidebarOpen
                   ? "bg-white/10 backdrop-blur-sm text-white/90 border-b border-white/10"
                   : "bg-transparent text-foreground/90 border-b border-border/20"
               }`}
@@ -100,7 +105,9 @@ export function LandingNavbar() {
             <button 
               onClick={() => { setIsRightSidebarOpen(true); setIsFullScreenMenuOpen(false); }}
               className={`hidden md:inline-flex h-9 items-center justify-center px-6 text-[13px] font-medium transition-colors border ${
-                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                isFullScreenMenuOpen
+                  ? "bg-transparent text-white hover:bg-white/10 border-white/20"
+                  : !isScrolled && !isRightSidebarOpen
                   ? "bg-white text-black hover:bg-white/90 border-transparent"
                   : "bg-background text-foreground hover:bg-surface-muted border-border"
               }`}
@@ -108,13 +115,17 @@ export function LandingNavbar() {
               Get Started
             </button>
             
-            <div className={`flex items-center rounded-sm overflow-hidden h-9 border ${
-              !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+            <div className={`flex items-center rounded-sm overflow-hidden h-9 border transition-colors ${
+              isFullScreenMenuOpen
+                ? "bg-transparent text-white border-white/20"
+                : !isScrolled && !isRightSidebarOpen
                 ? "bg-white text-black border-transparent"
                 : "bg-background text-foreground border-border"
             }`}>
               <button className={`px-3 h-full flex items-center justify-center transition-colors border-r ${
-                !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                isFullScreenMenuOpen
+                  ? "hover:bg-white/10 border-white/20"
+                  : !isScrolled && !isRightSidebarOpen
                   ? "hover:bg-black/5 border-black/10"
                   : "hover:bg-surface-muted border-border"
               }`}>
@@ -129,7 +140,9 @@ export function LandingNavbar() {
                   }
                 }}
                 className={`px-3 h-full flex items-center justify-center transition-colors ${
-                  !isScrolled && !isFullScreenMenuOpen && !isRightSidebarOpen
+                  isFullScreenMenuOpen
+                    ? "hover:bg-white/10"
+                    : !isScrolled && !isRightSidebarOpen
                     ? "hover:bg-black/5"
                     : "hover:bg-surface-muted"
                 }`}

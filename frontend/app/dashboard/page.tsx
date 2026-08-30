@@ -12,7 +12,7 @@ import {
   FolderKanban, 
   FileBarChart,
   ChevronRight,
-  Sparkles
+  Network
 } from "lucide-react"
 
 const products = [
@@ -84,22 +84,32 @@ export default function PlatformHubPage() {
   const [activeTab, setActiveTab] = useState("products")
 
   return (
-    <div className="min-h-full bg-background p-6 md:p-12 font-sans">
-      
-      {/* Header section */}
-      <div className="max-w-6xl mx-auto mb-12">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-accent/10 rounded-lg">
-            <Sparkles className="w-6 h-6 text-accent" />
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
-            Platform Hub
-          </h1>
-        </div>
-        <p className="text-lg text-foreground-muted max-w-2xl">
-          Welcome to the Urjiva Intelligence Layer. Select an engine to begin your industrial decarbonization analysis.
-        </p>
+    <div className="min-h-full bg-background relative font-sans">
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
+          backgroundSize: '2rem 2rem',
+        }}></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-[100px]"></div>
       </div>
+
+      <div className="relative z-10 p-6 md:p-12">
+        {/* Header section */}
+        <div className="max-w-6xl mx-auto mb-12">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="p-2 bg-accent/10 rounded-lg">
+              <Network className="w-6 h-6 text-accent" />
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+              Platform Hub
+            </h1>
+          </div>
+          <p className="text-lg text-foreground-muted max-w-2xl">
+            Welcome to the Urjiva Intelligence Layer. Select an engine to begin your industrial decarbonization analysis.
+          </p>
+        </div>
 
       {/* Tabs */}
       <div className="max-w-6xl mx-auto">
@@ -188,6 +198,7 @@ export default function PlatformHubPage() {
         </AnimatePresence>
       </div>
 
+      </div>
     </div>
   )
 }

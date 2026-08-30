@@ -33,14 +33,14 @@ def test_root_exposes_request_id(client: TestClient) -> None:
 
 
 def test_geographic_profile_requires_state(client: TestClient) -> None:
-    response = client.get("/api/geographic/profile")
+    response = client.get("/geographic/profile")
 
     assert response.status_code == 422
 
 
 def test_geographic_profile_rejects_empty_state(client: TestClient) -> None:
     response = client.get(
-        "/api/geographic/profile",
+        "/geographic/profile",
         params={"state": ""},
     )
 
@@ -48,19 +48,19 @@ def test_geographic_profile_rejects_empty_state(client: TestClient) -> None:
 
 
 def test_geographic_electricity_requires_state(client: TestClient) -> None:
-    response = client.get("/api/geographic/electricity")
+    response = client.get("/geographic/electricity")
 
     assert response.status_code == 422
 
 
 def test_geographic_renewables_requires_state(client: TestClient) -> None:
-    response = client.get("/api/geographic/renewables")
+    response = client.get("/geographic/renewables")
 
     assert response.status_code == 422
 
 
 def test_geographic_biomass_requires_state(client: TestClient) -> None:
-    response = client.get("/api/geographic/biomass")
+    response = client.get("/geographic/biomass")
 
     assert response.status_code == 422
 
@@ -69,7 +69,7 @@ def test_geographic_clusters_accepts_optional_filters(
     client: TestClient,
 ) -> None:
     response = client.get(
-        "/api/geographic/clusters",
+        "/geographic/clusters",
         params={
             "state": "Tamil Nadu",
             "district": "Coimbatore",
@@ -86,7 +86,7 @@ def test_geographic_profile_response_is_json(
     client: TestClient,
 ) -> None:
     response = client.get(
-        "/api/geographic/profile",
+        "/geographic/profile",
         params={"state": "Tamil Nadu"},
     )
 

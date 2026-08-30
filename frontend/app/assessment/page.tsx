@@ -3,6 +3,7 @@ import React, { useState } from "react"
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
+import { Factory, Cpu, Network } from "lucide-react"
 
 import { Button } from "@/components/reports/common/Button"
 
@@ -36,10 +37,10 @@ export default function AssessmentPage() {
     resolver: zodResolver(FactoryProfileSchema),
     mode: "onTouched",
     defaultValues: {
-      name: "TN Textile MSME Demo",
-      industry: "textile",
-      state: "Tamil Nadu",
-      district: "Coimbatore",
+      name: "Shivalik Pharmaceuticals Pvt. Ltd.",
+      industry: "pharma",
+      state: "Himachal Pradesh",
+      district: "Baddi",
       production_per_day: { value: 500, unit: "kg" },
       operating_hours_per_day: 16,
       operating_days_per_year: 300,
@@ -162,16 +163,24 @@ export default function AssessmentPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)] bg-background text-foreground overflow-hidden">
-      {/* Top Bar for Assessment */}
-      <div className="flex items-center justify-between px-8 py-4 border-b border-border/40 bg-card/50 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
-            <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4 text-primary-foreground" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M2 22 C6 18 14 10 22 2" />
-              <path d="M22 2 C22 14 12 22 2 22" fill="currentColor" fillOpacity="0.3"/>
-            </svg>
-          </div>
+    <div className="flex flex-col h-[calc(100vh-56px)] bg-background text-foreground overflow-hidden relative">
+      
+      {/* Premium Background Elements */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
+          backgroundSize: '2rem 2rem',
+        }}></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
+      </div>
+
+      <div className="relative z-10 flex flex-col h-full w-full">
+        {/* Top Bar for Assessment */}
+        <div className="flex items-center justify-between px-8 py-4 border-b border-border/40 bg-card/50 flex-shrink-0 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary shadow-sm">
+              <Factory className="h-4 w-4 text-primary-foreground" />
+            </div>
           <div>
             <h1 className="text-sm font-bold text-foreground leading-none tracking-tight">Factory Assessment</h1>
             <p className="text-xs text-muted-foreground mt-1">Configure your industrial profile</p>
@@ -313,6 +322,7 @@ export default function AssessmentPage() {
 
         </form>
       </FormProvider>
+      </div>
     </div>
   )
 }

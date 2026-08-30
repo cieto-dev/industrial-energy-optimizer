@@ -119,9 +119,10 @@ const architectureData: Record<string, any> = {
   },
 };
 
-export default function ArchitectureDetail({ params }: { params: { id: string } }) {
+export default async function ArchitectureDetail({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
   // Default to mcda if not found
-  const data = architectureData[params.id] || architectureData.mcda;
+  const data = architectureData[resolvedParams.id] || architectureData.mcda;
 
   return (
     <div className="min-h-screen bg-[#111111] text-[#f4f4f4] font-sans selection:bg-white/30 overflow-x-hidden">
