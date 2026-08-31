@@ -403,16 +403,15 @@ export function RecommendationCard({ recommendation }: Props) {
 
           {/* Sidebar panel */}
           <div
-            className={`fixed top-0 right-0 z-50 h-full w-full max-w-[420px] bg-[#0d0f12] border-l border-border/60 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${showPaybackTips ? "translate-x-0" : "translate-x-full"}`}
+            className={`fixed top-0 right-0 z-50 h-full w-full max-w-[420px] bg-background border-l border-border shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${showPaybackTips ? "translate-x-0" : "translate-x-full"}`}
           >
             {/* ── Header ── */}
-            <div className="relative flex-shrink-0 px-6 py-5 border-b border-border/40"
-              style={{ background: "linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(16,185,129,0.08) 100%)" }}>
+            <div className="relative flex-shrink-0 px-6 py-5 border-b border-border bg-gradient-to-br from-blue-500/10 to-emerald-500/10">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <Zap className="w-4 h-4 text-emerald-400" />
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Payback Accelerator</p>
+                    <Zap className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">Payback Accelerator</p>
                   </div>
                   <h2 className="text-lg font-bold text-foreground leading-tight">Reduce Your Payback Period</h2>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
@@ -422,7 +421,7 @@ export function RecommendationCard({ recommendation }: Props) {
                 </div>
                 <button
                   onClick={() => setShowPaybackTips(false)}
-                  className="flex-shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-white/10 transition-colors"
+                  className="flex-shrink-0 rounded-full p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -434,7 +433,7 @@ export function RecommendationCard({ recommendation }: Props) {
 
               {/* Before / After projector */}
               <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-400 mb-3">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 mb-3">
                   Projected outcome — if all strategies applied
                 </p>
                 <div className="flex items-center justify-between gap-4 mb-4">
@@ -449,14 +448,14 @@ export function RecommendationCard({ recommendation }: Props) {
                   {/* Reduction indicator */}
                   <div className="flex flex-col items-center gap-1 px-2">
                     <div className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/15 border border-emerald-500/30">
-                      <TrendingDown className="w-5 h-5 text-emerald-400" />
+                      <TrendingDown className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
-                    <span className="text-sm font-black text-emerald-400">−{pctReduction}%</span>
+                    <span className="text-sm font-black text-emerald-600 dark:text-emerald-400">−{pctReduction}%</span>
                   </div>
                   {/* Projected */}
                   <div className="text-center flex-1">
                     <p className="text-[9px] uppercase tracking-widest text-muted-foreground mb-1">Projected</p>
-                    <p className="text-2xl font-black text-emerald-400">
+                    <p className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
                       ~{projLow}–{projHigh}
                     </p>
                     <p className="text-[10px] text-muted-foreground">years</p>
@@ -464,9 +463,9 @@ export function RecommendationCard({ recommendation }: Props) {
                 </div>
                 {/* Progress bar */}
                 <div className="space-y-1.5">
-                  <div className="h-2.5 w-full rounded-full bg-white/5 overflow-hidden">
+                  <div className="h-2.5 w-full rounded-full bg-muted overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-emerald-400"
+                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400"
                       style={{ width: `${pctReduction}%`, transition: "width 0.8s ease-out" }}
                     />
                   </div>
@@ -493,26 +492,25 @@ export function RecommendationCard({ recommendation }: Props) {
                   const tipImpact   = item.capexReductionPct + item.savingsBoostPct
                   const impactLabel = tipImpact >= 0.25 ? "High" : tipImpact >= 0.10 ? "Medium" : "Low"
                   const badgeClass  = tipImpact >= 0.25
-                    ? "text-emerald-300 bg-emerald-500/15 border-emerald-500/40"
+                    ? "text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/30"
                     : tipImpact >= 0.10
-                    ? "text-amber-300 bg-amber-500/15 border-amber-500/40"
-                    : "text-blue-300 bg-blue-500/15 border-blue-500/30"
+                    ? "text-amber-700 dark:text-amber-400 bg-amber-500/10 border-amber-500/30"
+                    : "text-blue-700 dark:text-blue-400 bg-blue-500/10 border-blue-500/30"
                   const barWidth    = Math.round(tipImpact * 200)   // visual bar scaled to max ~60%
                   const barColor    = tipImpact >= 0.25 ? "bg-emerald-500" : tipImpact >= 0.10 ? "bg-amber-500" : "bg-blue-500"
 
                   return (
-                    <div key={i} className="rounded-xl border border-border/50 bg-white/[0.03] hover:bg-white/[0.05] transition-colors p-4">
+                    <div key={i} className="rounded-xl border border-border bg-card hover:bg-accent/50 transition-colors p-4 shadow-sm">
                       <div className="flex items-start justify-between gap-2 mb-2">
                         <div className="flex items-center gap-2">
-                          <span className="flex-shrink-0 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border"
-                            style={{}} data-label={impactLabel}>
-                            <span className={`inline-block text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border ${badgeClass}`}>{impactLabel} impact</span>
+                          <span className={`inline-block text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border ${badgeClass}`}>
+                            {impactLabel} impact
                           </span>
                         </div>
                         <span className="text-[10px] text-muted-foreground font-mono flex-shrink-0">#{i + 1}</span>
                       </div>
                       {/* Impact bar */}
-                      <div className="h-1 w-full rounded-full bg-white/5 mb-2.5 overflow-hidden">
+                      <div className="h-1 w-full rounded-full bg-muted mb-2.5 overflow-hidden">
                         <div className={`h-full rounded-full ${barColor}`} style={{ width: `${barWidth}%` }} />
                       </div>
                       <p className="text-[12px] text-foreground/85 leading-relaxed">{item.tip}</p>
@@ -534,7 +532,7 @@ export function RecommendationCard({ recommendation }: Props) {
             </div>
 
             {/* ── Footer ── */}
-            <div className="flex-shrink-0 px-6 py-4 border-t border-border/40 bg-white/[0.02]">
+            <div className="flex-shrink-0 px-6 py-4 border-t border-border bg-muted/30">
               <p className="text-[10px] text-muted-foreground text-center">
                 Strategies are matched to your factory profile · {state} · {industry}
               </p>
