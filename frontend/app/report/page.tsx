@@ -148,15 +148,20 @@ export default function DashboardPage() {
         if (res.status === "success" && res.recommendation) {
           setRecommendation({
             ...res.recommendation as ExtendedRecommendation,
-            factory_name: factoryName,
-            industry:     industry,
-            state:        state,
-            district:     district,
+            factory_name:     factoryName,
+            industry:         industry,
+            state:            state,
+            district:         district,
+            cluster_name:     parsed?.cluster_name     ?? "",
+            special_category: parsed?.special_category ?? {},
           })
           return
         }
       } catch { /* backend unavailable – use baseRec */ }
 
+      // Patch cluster & ownership into baseRec too
+      ;(baseRec as any).cluster_name     = parsed?.cluster_name     ?? ""
+      ;(baseRec as any).special_category = parsed?.special_category ?? {}
       setRecommendation(baseRec)
     } catch (err) {
       console.error(err)
@@ -377,6 +382,7 @@ export default function DashboardPage() {
           <Kpi
             title="Estimated payback"
             value={`${dashboardSummary.payback > 0 ? dashboardSummary.payback.toFixed(2) + " years" : "2.8 - 4.2 years"}`}
+            subtitle="Based on your inputs — see report below for reduction strategies"
           />
         </section>
 
@@ -405,9 +411,11 @@ export default function DashboardPage() {
 function Kpi({
   title,
   value,
+  subtitle,
 }: {
   title: string
   value: string
+  subtitle?: string
 }) {
   return (
     <div className="rounded-xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:border-primary/50 hover:shadow-md">
@@ -415,6 +423,9 @@ function Kpi({
         {title}
       </p>
       <p className="mt-2 text-2xl font-bold text-foreground">{value}</p>
+      {subtitle && (
+        <p className="mt-1.5 text-[10px] text-muted-foreground leading-snug">{subtitle}</p>
+      )}
     </div>
   )
 }

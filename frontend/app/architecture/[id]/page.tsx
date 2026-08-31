@@ -3,6 +3,15 @@ import Link from "next/link";
 import { ArrowRight, Quote } from "lucide-react";
 import { UrjivaLogo } from "@/components/ui/UrjivaLogo";
 
+export function generateStaticParams() {
+  return [
+    { id: "mcda" },
+    { id: "atlas" },
+    { id: "policy" },
+    { id: "montecarlo" },
+  ];
+}
+
 // Mock data for the detailed pages
 const architectureData: Record<string, any> = {
   mcda: {

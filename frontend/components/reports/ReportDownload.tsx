@@ -23,7 +23,7 @@ export function ReportDownload({ reportId }: ReportDownloadProps) {
       const factoryName = opt.factory_name ?? "TN Textile MSME Demo"
 
       // Fetch full recommendation from backend
-      const res = await fetch(`http://localhost:8000/recommendations/${recId}`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/recommendations/${recId}`)
       const data = await res.json()
       const rec = data.recommendation
 
@@ -119,7 +119,7 @@ export function ReportDownload({ reportId }: ReportDownloadProps) {
       const opt = saved ? JSON.parse(saved) : {}
       const recId = opt.recommended_scenario_id ?? reportId
 
-      const res = await fetch(`http://localhost:8000/recommendations/${recId}`)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/recommendations/${recId}`)
       const data = await res.json()
       const rec = data.recommendation
 

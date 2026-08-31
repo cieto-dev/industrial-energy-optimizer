@@ -60,7 +60,7 @@ export default function AssessmentPage() {
       msme_classification: "small",
       udyam_registered: true,
       special_category: {
-        women_owned: true,
+        women_owned: false,
         sc_st_owned: false,
         pwd_owned: false,
         agniveer_owned: false,
@@ -112,6 +112,8 @@ export default function AssessmentPage() {
         industry: data.industry,
         state: data.state,
         district: data.district,
+        cluster_name: data.cluster_name ?? "",
+        special_category: data.special_category ?? {},
       }
       localStorage.setItem("last_optimization", JSON.stringify(enrichedResponse))
       

@@ -365,7 +365,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="max-w-[90rem] mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-xs font-bold text-foreground-muted">
-          <p>© {new Date().getFullYear()} Urjiva. Built for Smart India Hackathon 2025.</p>
+          <p>© {new Date().getFullYear()} Urjiva.</p>
           <div className="flex items-center gap-2 mt-4 md:mt-0">
             <span className="h-2 w-2 rounded-full bg-status-online" />
             <span className="uppercase tracking-widest">All Systems Operational</span>

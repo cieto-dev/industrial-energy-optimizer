@@ -17,14 +17,47 @@ import {
   Flame,
   CheckCircle2,
   AlertTriangle,
+  ChevronDown,
+  ChevronUp,
+  ExternalLink,
+  Lightbulb,
 } from "lucide-react"
 
 interface ReportPreviewProps {
   recommendation: Recommendation
 }
 
+const PAYBACK_REDUCTION_TIPS = [
+  {
+    tip: "Apply for capital subsidy under PM-KUSUM / MNRE schemes — can cover 30–40% of CAPEX upfront.",
+    link: "https://mnre.gov.in/solar/schemes",
+    label: "MNRE Solar Schemes",
+  },
+  {
+    tip: "Monetise surplus renewable energy via Open Access or net metering to boost annual savings.",
+    link: "https://cea.nic.in/net-metering",
+    label: "CEA Net Metering Guidelines",
+  },
+  {
+    tip: "Apply for carbon credit certification (Verra / Gold Standard) and sell credits on the voluntary market.",
+    link: "https://verra.org/programs/verified-carbon-standard/",
+    label: "Verra VCS Program",
+  },
+  {
+    tip: "State-level MSME energy-efficiency grants (e.g., HP Industrial Investment Policy) reduce net CAPEX significantly.",
+    link: "https://udyamregistration.gov.in",
+    label: "Udyam / MSME Portal",
+  },
+  {
+    tip: "Optimise shift scheduling to maximise equipment utilisation — higher output per unit energy directly improves ROI.",
+    link: null,
+    label: null,
+  },
+]
+
 export function ReportPreview({ recommendation }: ReportPreviewProps) {
   const [activeReportTab, setActiveReportTab] = useState<"executive" | "technical" | "financial">("executive")
+  const [showPaybackTips, setShowPaybackTips] = useState(false)
 
   const formatCurrency = (v: number) =>
     new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(v)
@@ -104,11 +137,45 @@ export function ReportPreview({ recommendation }: ReportPreviewProps) {
                 <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5 text-emerald-500" /> CO₂ Reduction</p>
                 <p className="font-bold text-lg text-emerald-500 mt-1">{recommendation.co2_reduction_pct.toFixed(1)}%</p>
               </div>
-              <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
-                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5 text-blue-500" /> Payback Period</p>
+              <div className="p-3 bg-surface-muted rounded-xl border border-border/50 col-span-1">
+                <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-blue-500" /> Payback Period
+                </p>
                 <p className="font-bold text-lg text-foreground mt-1">
                   {recommendation.payback_range_years[0].toFixed(1)}–{recommendation.payback_range_years[1].toFixed(1)} yrs
                 </p>
+                {/* Payback context note + expandable tips */}
+                <p className="text-[10px] text-muted-foreground mt-1 leading-tight">
+                  Derived from your CAPEX &amp; annual savings — not a fixed value.
+                </p>
+                <button
+                  onClick={() => setShowPaybackTips((v) => !v)}
+                  className="mt-1.5 flex items-center gap-1 text-[10px] font-semibold text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  <Lightbulb className="w-3 h-3" />
+                  How to reduce this?
+                  {showPaybackTips ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+                </button>
+                {showPaybackTips && (
+                  <div className="mt-2 space-y-2 border-t border-border/40 pt-2">
+                    {PAYBACK_REDUCTION_TIPS.map((item, i) => (
+                      <div key={i} className="text-[10px] text-muted-foreground leading-snug">
+                        <span className="text-foreground/80">• {item.tip}</span>
+                        {item.link && (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-1 inline-flex items-center gap-0.5 text-blue-400 hover:text-blue-300 underline underline-offset-2 transition-colors"
+                          >
+                            {item.label}
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="p-3 bg-surface-muted rounded-xl border border-border/50">
                 <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5"><Award className="w-3.5 h-3.5 text-amber-500" /> MCDA Score</p>

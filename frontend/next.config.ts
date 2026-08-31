@@ -1,9 +1,12 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  // Required for the multi-stage Docker build to produce a lean server.js bundle
-  output: "standalone",
+  // Required for Netlify drag and drop static HTML export
+  output: "export",
   reactStrictMode: false,
+  images: {
+    unoptimized: true,
+  },
 }
 
 export default nextConfig
