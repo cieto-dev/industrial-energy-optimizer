@@ -146,80 +146,8 @@ export default function DashboardPage() {
       try {
         const res = await apiService.getRecommendation(recId)
         if (res.status === "success" && res.recommendation) {
-          // ── AI PHYSICS INTERCEPTOR (Hackathon Demo Polish) ──
-          let rawRec = res.recommendation as ExtendedRecommendation
-          const indLower = industry.toLowerCase()
-          
-          let co2Multiplier = 1.0
-          let opexMultiplier = 1.0
-          let capexMultiplier = 1.0
-          let techOverride = rawRec.ranked_scenarios?.[0]?.technology_sequence
-
-          if (indLower.includes("pharma")) {
-            co2Multiplier = 0.55 
-            opexMultiplier = 1.4 
-            capexMultiplier = 1.8 
-            techOverride = ["Cleanroom HVAC Optimization", "Electric Heat Pumps", "Solar Rooftop PV"]
-          } else if (indLower.includes("chemical")) {
-            co2Multiplier = 0.65
-            opexMultiplier = 1.2
-            capexMultiplier = 1.5
-          } else if (indLower.includes("textile") || indLower.includes("ceramic")) {
-            co2Multiplier = 0.98
-            opexMultiplier = 0.9
-            capexMultiplier = 0.8 
-          } else if (indLower.includes("metal") || indLower.includes("forging")) {
-            co2Multiplier = 0.70
-            opexMultiplier = 1.1
-            capexMultiplier = 1.3
-            techOverride = ["Induction Heating Upgrades", "Solar PV"]
-          }
-
-          // Force top-level properties
-          if (rawRec.co2_reduction_pct) rawRec.co2_reduction_pct = parseFloat((rawRec.co2_reduction_pct * co2Multiplier).toFixed(1))
-          if (rawRec.fossil_fuel_reduction_pct) rawRec.fossil_fuel_reduction_pct = parseFloat((rawRec.fossil_fuel_reduction_pct * co2Multiplier).toFixed(1))
-          
-          const baseOpex = rawRec.annual_opex_inr || 4500000 
-          rawRec.annual_opex_inr = Math.round(baseOpex * opexMultiplier)
-          
-          if (rawRec.annual_cost_inr) {
-            rawRec.annual_cost_inr = Math.round(rawRec.annual_cost_inr * opexMultiplier)
-          }
-          if (rawRec.annual_cost) {
-            rawRec.annual_cost = Math.round(rawRec.annual_cost * opexMultiplier)
-          }
-          
-          // Fix static CAPEX
-          const baseCapex = rawRec.ranked_scenarios?.[0]?.capex_total_inr || 10000000
-          rawRec.capex_total_inr = Math.round(baseCapex * capexMultiplier)
-          
-          // Dynamically recalculate payback, using a demo-friendly divisor to ensure attractive ROI for the pitch
-          if (rawRec.annual_opex_inr > 0) {
-            const demoPaybackDivisor = 4.5; // Bring 17-28 yrs down to ~3.8-6.3 yrs
-            const pbLow = parseFloat(((rawRec.capex_total_inr / (rawRec.annual_opex_inr * 1.25)) / demoPaybackDivisor).toFixed(1))
-            const pbHigh = parseFloat(((rawRec.capex_total_inr / (rawRec.annual_opex_inr * 0.75)) / demoPaybackDivisor).toFixed(1))
-            rawRec.payback_years = [pbLow, pbHigh]
-            rawRec.payback_range_years = [pbLow, pbHigh] 
-          }
-          
-          if (techOverride) rawRec.recommended_technology_sequence = techOverride
-
-          // Force primary scenario properties to match so child components (like comparison tables) inherit the fix
-          if (rawRec.ranked_scenarios && rawRec.ranked_scenarios.length > 0) {
-            const primary = rawRec.ranked_scenarios[0]
-            primary.co2_reduction_pct = rawRec.co2_reduction_pct
-            primary.annual_opex_inr = rawRec.annual_opex_inr
-            primary.capex_total_inr = rawRec.capex_total_inr
-            primary.fossil_fuel_reduction_pct = rawRec.fossil_fuel_reduction_pct
-            if (rawRec.payback_years) {
-              primary.payback_years = rawRec.payback_years
-              primary.payback_range_years = rawRec.payback_years
-            }
-            if (techOverride) primary.technology_sequence = techOverride
-          }
-
           setRecommendation({
-            ...rawRec,
+            ...(res.recommendation as ExtendedRecommendation),
             factory_name: factoryName,
             industry: industry,
             state: state,
@@ -492,6 +420,7 @@ export default function DashboardPage() {
 
           <RejectionLog
             rejections={recommendation.explanation?.why_others_rejected ?? []}
+            recommendation={recommendation}
           />
         </section>
       </div>
