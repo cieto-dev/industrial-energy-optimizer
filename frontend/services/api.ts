@@ -6,6 +6,8 @@ import {
   ReportResponse,
 } from "@/types/api";
 
+import type { OptimizeResponse } from "@/types/optimization";
+
 import {
   ScenarioInputs,
   ScenarioPathway,
@@ -130,6 +132,30 @@ export const apiService = {
       );
 
     return response.data;
+  },
+
+  /**
+   * Hardened /optimize call — returns the full typed OptimizeResponse
+   * (with firm_recommendation_blocked, data_gap_flags, baseline_profile, etc.).
+   * Stores the result in localStorage so /results can read it without
+   * needing a server-side session.
+   */
+  async optimizeV2(
+    profile: FactoryProfile
+  ): Promise<OptimizeResponse> {
+    const payload = (profile as any).factory ? profile : { factory: profile };
+    const response = await apiClient.post<OptimizeResponse>(
+      "/optimization/optimize",
+      payload
+    );
+    const data = response.data;
+
+    // Persist for /results page.
+    if (typeof window !== "undefined") {
+      localStorage.setItem("last_optimize_result", JSON.stringify(data));
+    }
+
+    return data;
   },
 
 

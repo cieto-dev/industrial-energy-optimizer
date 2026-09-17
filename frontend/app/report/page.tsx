@@ -31,6 +31,8 @@ type ExtendedRecommendation = Recommendation & {
   scenario?: any
   pathway?: any
   district?: string
+  cluster_name?: string
+  special_category?: any
 }
 
 export default function DashboardPage() {

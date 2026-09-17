@@ -5,6 +5,37 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 
+class DataQualityWarning(BaseModel):
+    """
+    A structured warning emitted when a v2.0 parameter used in the baseline
+    has Low confidence, a missing value, or a missing source_id.
+
+    Consumers (UI, reports, optimizer) must surface these before issuing
+    recommendations. A warning does not by itself block computation, but
+    firm_recommendation_blocked in BaselineProfile must be checked.
+    """
+
+    model_config = ConfigDict(frozen=True)
+
+    field: str
+    """The parameter key that triggered the warning (e.g. 'ncv', 'emission_factor')."""
+
+    fuel_or_context: str
+    """Fuel identifier or context string (e.g. 'biomass')."""
+
+    confidence: str | None
+    """Confidence level: 'Low', 'Medium', 'High', or None if the field is absent."""
+
+    source_id: str | None
+    """source_id from the v2.0 parameter object, or None if absent."""
+
+    message: str
+    """Human-readable warning, ready to be shown in the UI or report."""
+
+    is_blocking: bool = False
+    """True when this warning caused firm_recommendation_blocked=True."""
+
+
 class CostCoverageLimitation(BaseModel):
     """
     Explicit model for electricity and energy cost coverage limitations.
@@ -165,4 +196,33 @@ class BaselineProfile(BaseModel):
             "incomplete for sites with material demand charges."
         ),
         description="Human-readable coverage limitation for reports and UI.",
+    )
+
+    # ---- v2.0 data quality gate (mandatory; checked before recommendations) ----
+    data_quality_warnings: list[DataQualityWarning] = Field(
+        default_factory=list,
+        description=(
+            "Warnings raised when any parameter used in this baseline has "
+            "Low confidence, a null value, or a missing source_id. "
+            "Downstream optimizer MUST check this list before recommendations."
+        ),
+    )
+    firm_recommendation_blocked: bool = Field(
+        default=False,
+        description=(
+            "True when any mandatory parameter is absent or has no source_id. "
+            "The baseline is computed but no firm recommendation may be issued "
+            "without operator confirmation and data-gap resolution."
+        ),
+    )
+    firm_recommendation_blocked_reasons: list[str] = Field(
+        default_factory=list,
+        description="Reasons why firm recommendations are blocked.",
+    )
+    parameter_confidence_summary: dict[str, str] = Field(
+        default_factory=dict,
+        description=(
+            "Mapping of parameter name → confidence level for every "
+            "quantitative KB parameter used in this baseline computation."
+        ),
     )

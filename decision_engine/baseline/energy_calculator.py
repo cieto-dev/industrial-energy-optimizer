@@ -6,7 +6,11 @@ from typing import Any
 from models.factory import Factory
 from decision_engine.baseline._units import standardize_daily_consumption
 from decision_engine.emissions.emission_engine import calculate_fuel_emissions
-from decision_engine.emissions.emission_factors import get_emission_factor
+from decision_engine.emissions.emission_factors import (
+    get_emission_factor,
+    get_emission_factor_value,
+    get_ncv_value,
+)
 from decision_engine.validation.validation_engine import ValidationEngine
 from decision_engine.research.assumption_registry import (
     get_assumption_registry,
@@ -141,17 +145,19 @@ def calculate_annual_fuel_input_energy(
         daily_consumption_in_target * factory.operating_days_per_year
     )
 
-    ncv = emission_factor_data.get("ncv")
-    ncv_unit = emission_factor_data.get("ncv_unit")
+    # v2.0 schema: NCV is a nested parameter object. Use the safe helper
+    # which unwraps it and raises ValueError if the value is absent.
+    ncv_param = emission_factor_data.get("ncv", {})
+    ncv_unit = (
+        ncv_param.get("unit")
+        if isinstance(ncv_param, dict)
+        else emission_factor_data.get("ncv_unit")
+    )
+    ncv = get_ncv_value(fuel_id)  # raises ValueError if absent/non-numeric
 
-    if ncv is None:
-        raise ValueError(
-            f"NCV is not configured for fuel '{fuel_id}'. "
-            "A fuel without a validated energy content cannot be "
-            "converted into thermal energy."
-        )
-
-    if ncv_unit == "TJ/kt":
+    # 1 TJ/kt ≡ 1 MJ/kg (identical numeric value, different unit expression)
+    if ncv_unit in ("TJ/kt", "MJ/kg"):
+        # annual_consumption is in kg; convert to kt for TJ calculation
         annual_consumption_kt = annual_consumption / 1_000_000.0
         annual_energy_tj = annual_consumption_kt * ncv
         annual_energy_mj = annual_energy_tj * MJ_PER_TJ
@@ -162,7 +168,8 @@ def calculate_annual_fuel_input_energy(
 
     else:
         raise ValueError(
-            f"Unsupported NCV unit '{ncv_unit}' for fuel '{fuel_id}'."
+            f"Unsupported NCV unit '{ncv_unit}' for fuel '{fuel_id}'. "
+            "Expected 'TJ/kt', 'MJ/kg', or 'MJ/m3'."
         )
 
     return (
@@ -284,10 +291,29 @@ def calculate_energy_balance(
         "overall_fuel_to_process_efficiency_pct": round(overall_efficiency, 4),
         "energy_balance_residual_mj": round(residual_mj, 9),
         "fuel": factory.current_fuel.lower().strip(),
-        "emission_factor_tco2_per_tj": ef_data["emission_factor"],
-        "emission_factor_source_id": ef_data.get("source_id"),
-        "ncv": ef_data.get("ncv"),
-        "ncv_unit": ef_data.get("ncv_unit"),
+        # v2.0: unwrap nested parameter objects for scalar reporting
+        "emission_factor_tco2_per_tj": get_emission_factor_value(factory.current_fuel.lower().strip()),
+        "emission_factor_confidence": (
+            ef_data.get("emission_factor", {}).get("confidence")
+            if isinstance(ef_data.get("emission_factor"), dict)
+            else None
+        ),
+        "emission_factor_source_id": (
+            ef_data.get("emission_factor", {}).get("source_id")
+            if isinstance(ef_data.get("emission_factor"), dict)
+            else ef_data.get("source_id")
+        ),
+        "ncv": get_ncv_value(factory.current_fuel.lower().strip()),
+        "ncv_unit": (
+            ef_data.get("ncv", {}).get("unit")
+            if isinstance(ef_data.get("ncv"), dict)
+            else ef_data.get("ncv_unit")
+        ),
+        "ncv_confidence": (
+            ef_data.get("ncv", {}).get("confidence")
+            if isinstance(ef_data.get("ncv"), dict)
+            else None
+        ),
         # Full evidence records attached (Task 3.1)
         "assumptions": {
             "boiler_efficiency_pct": assumptions.boiler_efficiency_pct,

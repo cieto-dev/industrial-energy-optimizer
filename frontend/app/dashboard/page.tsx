@@ -30,7 +30,7 @@ const products = [
     title: "Factory Dashboard",
     description: "View the synthesized decarbonization recommendations, ranked technology pathways, and detailed financial payback analysis.",
     icon: LayoutDashboard,
-    href: "/report",
+    href: "/results",
     color: "bg-blue-500/10 text-blue-500",
     border: "border-blue-500/20 hover:border-blue-500/50"
   },

@@ -54,21 +54,40 @@ def calculate_fuel_emissions(
     fuel = fuel.lower().strip()
     data = get_emission_factor(fuel)
 
-    ncv = data.get("ncv")
-    emission_factor = data.get("emission_factor")  # tCO₂ / TJ
-    ncv_unit = data.get("ncv_unit")
+    # v2.0 schema: emission_factor and ncv are nested objects with
+    # {value, unit, confidence, source_id, ...} sub-keys.
+    ef_obj = data.get("emission_factor") or {}
+    ncv_obj = data.get("ncv") or {}
+
+    # Scalar values extracted from nested objects (v2.0 schema).
+    if isinstance(ef_obj, dict):
+        emission_factor = ef_obj.get("value")           # tCO₂ / TJ
+        emission_factor_unit = ef_obj.get("unit", "tCO2/TJ")
+    else:
+        emission_factor = ef_obj                        # legacy flat scalar
+        emission_factor_unit = data.get("unit", "tCO2/TJ")
+
+    if isinstance(ncv_obj, dict):
+        ncv = ncv_obj.get("value")
+        ncv_unit = ncv_obj.get("unit")
+    else:
+        ncv = ncv_obj                                   # legacy flat scalar
+        ncv_unit = data.get("ncv_unit")
 
     # ---- validation -------------------------------------------------------
+    # Determine accounting category from accounting_boundary or source_type.
+    accounting_boundary = str(data.get("accounting_boundary", "")).lower()
+    source_type = str(data.get("source_type", "")).lower()
     category = (
         "biogenic_combustion"
-        if "biogenic" in str(data.get("source_type", "")).lower()
+        if ("biogenic" in accounting_boundary or "biogenic" in source_type)
         else "fossil_combustion"
     )
 
     validation = _VALIDATION_ENGINE.validate_emission_factor(
         parameter=f"{fuel}_emission_factor",
         emission_factor=emission_factor,
-        emission_factor_unit=data["unit"],
+        emission_factor_unit=emission_factor_unit,
         category=category,
     )
     if not validation.passed:
@@ -106,7 +125,7 @@ def calculate_fuel_emissions(
         energy_mj_day = consumption_per_day * ncv
         energy_tj_day = energy_mj_day / 1_000_000.0
     else:
-        raise ValueError(f"Unsupported NCV unit: {ncv_unit}")
+        raise ValueError(f"Unsupported NCV unit: {ncv_unit!r}")
 
     co2_tco2_day = energy_tj_day * emission_factor
     co2_tco2_year = co2_tco2_day * operating_days_per_year

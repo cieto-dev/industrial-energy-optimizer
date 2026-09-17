@@ -92,7 +92,7 @@ export function EligibilityForm() {
               <FormItem>
                 <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Annual Turnover (INR)</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
+                  <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -106,7 +106,7 @@ export function EligibilityForm() {
               <FormItem>
                 <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">P&M Investment (INR)</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
+                  <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -183,7 +183,7 @@ export function EligibilityForm() {
               <FormItem>
                 <FormLabel className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Proposed Project Cost (INR)</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
+                  <Input type="number" {...field} value={field.value ?? ""} onChange={e => field.onChange(parseFloat(e.target.value) || 0)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

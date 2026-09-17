@@ -43,6 +43,7 @@ from decision_engine.baseline.fuel_calculator import (
 from decision_engine.baseline.models import (
     BaselineProfile,
     CostCoverageLimitation,
+    DataQualityWarning,
     EnergyBalance,
     FuelConsumptionProfile,
 )
@@ -51,6 +52,8 @@ from decision_engine.emissions.emission_engine import (
 )
 from decision_engine.emissions.emission_factors import (
     get_emission_factor,
+    get_emission_factor_value,
+    get_ncv_value,
     get_grid_emission_factor,
 )
 from decision_engine.validation.validation_engine import ValidationEngine
@@ -150,6 +153,9 @@ def _build_fuel_profile(
     """
     Build the normalised annual fuel profile from the emission-factor
     knowledge base.
+
+    v2.0: NCV and emission_factor are nested parameter objects;
+    this function uses the v2.0-aware helpers to extract scalar values.
     """
     fuel = factory.current_fuel.lower().strip()
     ef_data = get_emission_factor(fuel)
@@ -170,28 +176,43 @@ def _build_fuel_profile(
         daily_consumption * factory.operating_days_per_year
     )
 
-    ncv = ef_data.get("ncv")
-    ncv_unit = ef_data.get("ncv_unit")
+    # v2.0: use helpers — raises ValueError if value absent or non-numeric
+    ncv = get_ncv_value(fuel)
+    ef_value = get_emission_factor_value(fuel)
 
-    if ncv is None:
-        raise ValueError(
-            f"Cannot build fuel profile for '{fuel}' because NCV is missing. "
-            "Biomass and other alternative fuels require a validated NCV "
-            "before they can be used in the baseline."
-        )
+    # Resolve NCV unit from the nested parameter object
+    ncv_param = ef_data.get("ncv", {})
+    ncv_unit = (
+        ncv_param.get("unit")
+        if isinstance(ncv_param, dict)
+        else ef_data.get("ncv_unit")
+    )
 
-    if ncv_unit == "TJ/kt":
+    # 1 TJ/kt ≡ 1 MJ/kg numerically
+    if ncv_unit in ("TJ/kt", "MJ/kg"):
         annual_energy_tj = (annual_consumption / 1_000_000.0) * ncv
         annual_energy_mj = annual_energy_tj * 1_000_000.0
-
     elif ncv_unit == "MJ/m3":
         annual_energy_mj = annual_consumption * ncv
         annual_energy_tj = annual_energy_mj / 1_000_000.0
-
     else:
         raise ValueError(
-            f"Unsupported NCV unit '{ncv_unit}' for fuel '{fuel}'."
+            f"Unsupported NCV unit '{ncv_unit}' for fuel '{fuel}'. "
+            "Expected 'TJ/kt', 'MJ/kg', or 'MJ/m3'."
         )
+
+    # Resolve provenance from nested parameter objects
+    ef_param = ef_data.get("emission_factor", {})
+    ef_source_id = (
+        ef_param.get("source_id")
+        if isinstance(ef_param, dict)
+        else ef_data.get("source_id")
+    )
+    ef_source_type = (
+        ef_param.get("source_type")
+        if isinstance(ef_param, dict)
+        else ef_data.get("source_type")
+    )
 
     return FuelConsumptionProfile(
         fuel=fuel,
@@ -203,10 +224,10 @@ def _build_fuel_profile(
             round(annual_energy_mj / 1000.0, 6)
         ),
         annual_fuel_input_energy_tj=float(round(annual_energy_tj, 9)),
-        emission_factor_tco2_per_tj=float(ef_data["emission_factor"]),
+        emission_factor_tco2_per_tj=float(ef_value),
         annual_co2_tonnes=float(round(annual_fuel_co2_tonnes, 6)),
-        source_id=ef_data.get("source_id"),
-        source_type=ef_data.get("source_type"),
+        source_id=ef_source_id,
+        source_type=ef_source_type,
     )
 
 
@@ -316,7 +337,13 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
     # (dimensionally wrong by a factor of operating_days_per_year).
     fuel = factory.current_fuel.lower().strip()
     fuel_ef_data = get_emission_factor(fuel)
-    fuel_source_id = fuel_ef_data.get("source_id")
+    # v2.0: unwrap nested emission_factor parameter object
+    ef_param = fuel_ef_data.get("emission_factor", {})
+    fuel_source_id = (
+        ef_param.get("source_id")
+        if isinstance(ef_param, dict)
+        else fuel_ef_data.get("source_id")
+    )
 
     from decision_engine.baseline._units import (
         standardize_daily_consumption,
@@ -448,8 +475,54 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
     source_ids = sorted(set(source_ids))
 
     # ------------------------------------------------------------------
-    # 11. Assumptions / transparency (full evidence records + Task 6)
+    # 11.5 v2.0 quality gate — validate emission-factor parameters
     # ------------------------------------------------------------------
+    # Import the repository helper. We do not instantiate KnowledgeRepository
+    # here to avoid circular imports; validate_parameter is a static method.
+    from knowledge_runtime.repository import KnowledgeRepository
+
+    dq_warnings: list[DataQualityWarning] = []
+    blocked = False
+    blocked_reasons: list[str] = []
+    confidence_summary: dict[str, str] = {}
+
+    for param_key, param_label in (
+        ("emission_factor", f"emission_factor ({fuel})"),
+        ("ncv", f"ncv ({fuel})"),
+    ):
+        status = KnowledgeRepository.validate_parameter(
+            fuel_ef_data,
+            param_key,
+            field_label=param_label,
+        )
+        confidence_summary[param_label] = status["confidence"] or "absent"
+
+        if not status["ok"]:
+            blocked = True
+            for err in status["errors"]:
+                blocked_reasons.append(err)
+                dq_warnings.append(
+                    DataQualityWarning(
+                        field=param_key,
+                        fuel_or_context=fuel,
+                        confidence=status["confidence"],
+                        source_id=status["source_id"],
+                        message=err,
+                        is_blocking=True,
+                    )
+                )
+        for warn in status["warnings"]:
+            dq_warnings.append(
+                DataQualityWarning(
+                    field=param_key,
+                    fuel_or_context=fuel,
+                    confidence=status["confidence"],
+                    source_id=status["source_id"],
+                    message=warn,
+                    is_blocking=False,
+                )
+            )
+
     thermal_assumptions = energy_balance_data.get("assumptions", {})
 
     calculation_assumptions: dict[str, Any] = {
@@ -520,14 +593,29 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
         "fuel": {
             "fuel": fuel,
             "input_unit": fuel_ef_data.get("input_unit"),
-            "ncv": fuel_ef_data.get("ncv"),
-            "ncv_unit": fuel_ef_data.get("ncv_unit"),
-            "emission_factor_tco2_per_tj": fuel_ef_data.get(
-                "emission_factor"
+            # v2.0: report unwrapped scalars + confidence metadata
+            "ncv": get_ncv_value(fuel),
+            "ncv_unit": (
+                fuel_ef_data.get("ncv", {}).get("unit")
+                if isinstance(fuel_ef_data.get("ncv"), dict)
+                else fuel_ef_data.get("ncv_unit")
+            ),
+            "ncv_confidence": (
+                fuel_ef_data.get("ncv", {}).get("confidence")
+                if isinstance(fuel_ef_data.get("ncv"), dict)
+                else None
+            ),
+            "emission_factor_tco2_per_tj": get_emission_factor_value(fuel),
+            "emission_factor_confidence": (
+                fuel_ef_data.get("emission_factor", {}).get("confidence")
+                if isinstance(fuel_ef_data.get("emission_factor"), dict)
+                else None
             ),
             "emission_factor_source_id": fuel_source_id,
-            "emission_factor_source_type": fuel_ef_data.get(
-                "source_type"
+            "emission_factor_source_type": (
+                fuel_ef_data.get("emission_factor", {}).get("source_type")
+                if isinstance(fuel_ef_data.get("emission_factor"), dict)
+                else fuel_ef_data.get("source_type")
             ),
             "daily_fuel_co2_tonnes": round(daily_fuel_co2_tonnes, 6),
             "operating_days_per_year": operating_days,
@@ -582,4 +670,9 @@ def compute_baseline(factory: Factory) -> BaselineProfile:
         annual_energy_intensity_mj_per_production_unit=energy_intensity,
         calculation_assumptions=calculation_assumptions,
         source_ids=source_ids,
+        # v2.0 quality gate
+        data_quality_warnings=dq_warnings,
+        firm_recommendation_blocked=blocked,
+        firm_recommendation_blocked_reasons=blocked_reasons,
+        parameter_confidence_summary=confidence_summary,
     )

@@ -1259,135 +1259,219 @@ def _build_dashboard_payload(
 def run_optimization(request: OptimizationRequest) -> Dict[str, Any]:
     """
     Run the complete available optimization pipeline.
-
-    The endpoint is intentionally truthful about incomplete backend layers:
-    it returns intermediate data and explicit engine statuses rather than
-    fabricating missing results.
     """
-
     try:
         factory = _model_dump(request.factory)
         preferences = request.preferences
-
         repo = KnowledgeRepository()
+
+        # ---------------------------------------------------------------
+        # 0. Hardened Baseline Layer
+        # ---------------------------------------------------------------
+        from models.factory import Factory
+        from decision_engine.baseline.baseline_engine import compute_baseline
+        factory_model = Factory.model_validate(factory)
+        baseline_profile = compute_baseline(factory_model)
+        
+        firm_recommendation_blocked = baseline_profile.firm_recommendation_blocked
+        # Collect quality warning tags from baseline
+        _bl_warnings = baseline_profile.data_quality_warnings or []
+        data_gap_flags: list[str] = [
+            w if isinstance(w, str) else (w.get("flag") or w.get("code") or str(w))
+            for w in _bl_warnings
+        ]
 
         # ---------------------------------------------------------------
         # 1. Knowledge Repository
         # ---------------------------------------------------------------
-
-        knowledge = _build_knowledge_context(
-            repo,
-            factory,
-        )
+        knowledge = _build_knowledge_context(repo, factory)
 
         # ---------------------------------------------------------------
         # 2. Biomass Engine
         # ---------------------------------------------------------------
-
         biomass = _run_biomass_engine(factory)
 
         # ---------------------------------------------------------------
         # 3. Technology Engine / filter
         # ---------------------------------------------------------------
-
         technology = _run_technology_filter(factory)
-
         feasible_technologies = list(
-            technology.get("feasible", [])
-            or technology.get("technologies", [])
-            or []
+            technology.get("feasible", []) or technology.get("technologies", []) or []
         )
-
-        # Preserve raw technology results for explainability.
-        technology["candidate_count"] = len(
-            feasible_technologies
-        )
+        technology["candidate_count"] = len(feasible_technologies)
 
         # ---------------------------------------------------------------
         # 4. Constraint Engine
         # ---------------------------------------------------------------
-
-        constraints = _run_constraint_layer(
-            factory,
-            feasible_technologies,
-        )
-
-        constraint_feasible = constraints.get(
-            "feasible"
-        )
-
+        constraints = _run_constraint_layer(factory, feasible_technologies)
+        constraint_feasible = constraints.get("feasible")
         if isinstance(constraint_feasible, list):
             feasible_technologies = constraint_feasible
 
         # ---------------------------------------------------------------
-        # 5. Scenario Generator
+        # 5. Scenario Generator (Hardened)
         # ---------------------------------------------------------------
-
-        scenario_result = _run_scenario_generator(
-            feasible_technologies,
-            factory,
-            preferences,
-        )
-
-        scenarios_list = list(
-            scenario_result.get("scenarios", [])
-            or []
-        )
-
-        # ---------------------------------------------------------------
-        # 6. Finance
-        # ---------------------------------------------------------------
-
-        finance = _run_finance_engine(
-            factory,
-            scenarios_list,
-        )
-
-        scenarios_after_finance = list(
-            finance.get("scenarios", scenarios_list)
-            or []
-        )
-
-        # ---------------------------------------------------------------
-        # 7. Tariff Engine / tariff context
-        # ---------------------------------------------------------------
-
-        tariff_result = _run_tariff_layer(
-            repo,
-            factory,
-            scenarios_after_finance,
-        )
-
-        scenarios_after_tariff = list(
-            tariff_result.get(
-                "scenarios",
-                scenarios_after_finance,
+        from decision_engine.scenario.scenario_generator import generate_candidate_pathways
+        try:
+            pathways = generate_candidate_pathways(
+                feasible_technologies,
+                minimum_scenarios=preferences.minimum_scenarios,
+                maximum_scenarios=preferences.maximum_scenarios,
+                include_biomass_scenarios=preferences.include_biomass_scenarios
             )
-            or []
+            scenarios_list = pathways
+            scenario_result = {"status": "success", "scenarios": scenarios_list}
+        except Exception as e:
+            scenarios_list = []
+            scenario_result = {"status": "error", "error": str(e), "scenarios": []}
+
+        # ---------------------------------------------------------------
+        # 6. Hardened Economics + Reliability
+        # ---------------------------------------------------------------
+        import dataclasses as _dc
+        from decision_engine.economics.economics_engine_v2 import calculate_economics_v2
+        from decision_engine.reliability.reliability_engine import (
+            run_reliability_sweep,
+            BaseCaseInputs,
         )
+
+        scenarios_after_finance: List[Dict[str, Any]] = []
+        for s in scenarios_list:
+            record = dict(s)
+            tech_sequence = record.get("technology_sequence", [])
+            tech_id = tech_sequence[0] if tech_sequence else "unknown"
+            scenario_id = record.get("scenario_id", "unknown")
+
+            try:
+                fin_model = calculate_economics_v2(
+                    baseline=baseline_profile,
+                    technology_id=tech_id,
+                    scenario_id=scenario_id,
+                    proposed_opex_inputs={},
+                )
+                fin_dict = _dc.asdict(fin_model)
+                record["financial_model"] = fin_dict
+
+                # Propagate blocked flag.
+                if fin_model.firm_recommendation_blocked:
+                    firm_recommendation_blocked = True
+
+                # Collect DataGapFlag entries.
+                for dgf in (fin_model.data_gap_flags or []):
+                    if _dc.is_dataclass(dgf):
+                        tag = (
+                            f"{getattr(dgf, 'field', 'unknown')}:"
+                            f"{getattr(dgf, 'severity', 'unknown')}"
+                        )
+                    elif isinstance(dgf, dict):
+                        tag = (
+                            f"{dgf.get('field', 'unknown')}:"
+                            f"{dgf.get('severity', 'unknown')}"
+                        )
+                    else:
+                        tag = str(dgf)
+                    if tag not in data_gap_flags:
+                        data_gap_flags.append(tag)
+
+                # Extract CAPEX range from nested capex dataclass.
+                capex_obj = fin_dict.get("capex") or {}
+                capex_min_inr = capex_obj.get("capex_min_inr") or 0
+                capex_max_inr = capex_obj.get("capex_max_inr") or 0
+
+                # Proposed OPEX total.
+                proposed_opex_obj = fin_dict.get("proposed_opex") or {}
+                proposed_opex_total = proposed_opex_obj.get("total_inr") or 0
+                baseline_opex = (baseline_profile.annual_fuel_cost_inr or 0) + (
+                    baseline_profile.annual_electricity_cost_inr or 0
+                )
+
+                # Only run reliability sweep when CAPEX is known.
+                if capex_min_inr > 0 or capex_max_inr > 0:
+                    try:
+                        base_inputs = BaseCaseInputs(
+                            capex_min=float(capex_min_inr),
+                            capex_max=float(capex_max_inr),
+                            baseline_annual_opex=float(baseline_opex),
+                            proposed_fuel_cost=float(proposed_opex_total),
+                            proposed_electricity_cost=0.0,
+                            proposed_maintenance_cost=0.0,
+                            proposed_labour_cost=0.0,
+                            proposed_other_cost=0.0,
+                            baseline_fuel_cost=float(
+                                baseline_profile.annual_fuel_cost_inr or 0
+                            ),
+                            baseline_electricity_cost=float(
+                                baseline_profile.annual_electricity_cost_inr or 0
+                            ),
+                            solar_fraction=0.0,
+                        )
+                        rel_res = run_reliability_sweep(base_inputs, n_iterations=200)
+                        record["reliability"] = _dc.asdict(rel_res)
+                        record["reliability_score_pct"] = getattr(
+                            rel_res, "score_pct", None
+                        )
+                    except Exception as rel_err:
+                        record["reliability"] = {
+                            "status": "blocked",
+                            "reason": str(rel_err),
+                            "score_pct": None,
+                        }
+                        record["reliability_score_pct"] = None
+                else:
+                    record["reliability"] = {
+                        "status": "blocked",
+                        "reason": (
+                            "CAPEX not available — reliability sweep cannot run."
+                        ),
+                        "score_pct": None,
+                    }
+                    record["reliability_score_pct"] = None
+
+                # For MCDA: expose numeric CAPEX and OPEX.
+                record["capex_inr"] = capex_max_inr or None
+                record["annual_opex_inr"] = proposed_opex_total or None
+
+            except Exception as e:
+                record["finance_error"] = str(e)
+                record["financial_model"] = {
+                    "firm_recommendation_blocked": True,
+                    "firm_recommendation_blocked_reasons": [str(e)],
+                    "capex_estimated_range": None,
+                    "data_gap_flags": [],
+                }
+                record["reliability"] = {
+                    "status": "blocked",
+                    "reason": f"Finance engine error: {e}",
+                    "score_pct": None,
+                }
+
+            scenarios_after_finance.append(record)
+
+        finance = {"status": "success", "scenarios": scenarios_after_finance}
+
+        # ---------------------------------------------------------------
+        # 7. Tariff Engine
+        # ---------------------------------------------------------------
+        tariff_result = _run_tariff_layer(repo, factory, scenarios_after_finance)
+        scenarios_after_tariff = list(tariff_result.get("scenarios", scenarios_after_finance) or [])
 
         # ---------------------------------------------------------------
         # 8. MCDA / Optimization
         # ---------------------------------------------------------------
-
-        optimization = _run_optimizer(
-            scenarios_after_tariff,
-            preferences,
-        )
+        optimization = _run_optimizer(scenarios_after_tariff, preferences)
 
         # ---------------------------------------------------------------
         # 9. Recommendation
         # ---------------------------------------------------------------
-
-        recommendation = _build_recommendation(
-            optimization,
-            scenarios_after_tariff,
-        )
+        recommendation = _build_recommendation(optimization, scenarios_after_tariff)
+        
+        # Inject blocked status into recommendation
+        recommendation["firm_recommendation_blocked"] = firm_recommendation_blocked
+        recommendation["data_gap_flags"] = list(set(data_gap_flags))
 
         # ---------------------------------------------------------------
-        # 10. Evidence
+        # 10. Evidence & Dashboard
         # ---------------------------------------------------------------
-
         evidence = _build_evidence_package(
             knowledge=knowledge,
             biomass=biomass,
@@ -1399,10 +1483,6 @@ def run_optimization(request: OptimizationRequest) -> Dict[str, Any]:
             optimization=optimization,
             recommendation=recommendation,
         )
-
-        # ---------------------------------------------------------------
-        # 11. Dashboard response
-        # ---------------------------------------------------------------
 
         dashboard = _build_dashboard_payload(
             request=request,
@@ -1421,37 +1501,18 @@ def run_optimization(request: OptimizationRequest) -> Dict[str, Any]:
         return {
             "status": "success",
             "message": "Optimization pipeline executed.",
-            "factory_id": (
-                request.factory.factory_id
-                or f"fac_{_normalise(request.factory.industry)}"
-            ),
+            "factory_id": request.factory.factory_id or f"fac_{_normalise(request.factory.industry)}",
             "generated_at": _utc_now(),
-            "pipeline": [
-                "user",
-                "api",
-                "knowledge_repository",
-                "biomass_engine",
-                "technology_engine",
-                "constraint_engine",
-                "finance_engine",
-                "tariff_engine",
-                "scenario_generator",
-                "mcda",
-                "recommendation",
-                "evidence",
-                "dashboard",
-            ],
+            "firm_recommendation_blocked": firm_recommendation_blocked,
+            "data_gap_flags": list(set(data_gap_flags)),
+            "baseline_profile": baseline_profile.model_dump(),
             "dashboard": dashboard,
+            "pipeline": [
+                "user", "api", "baseline_engine", "knowledge_repository", "biomass_engine",
+                "technology_engine", "constraint_engine", "finance_engine", "tariff_engine",
+                "scenario_generator", "mcda", "recommendation", "evidence", "dashboard"
+            ]
         }
-
-    except ValueError as exc:
-        raise HTTPException(
-            status_code=422,
-            detail={
-                "message": "Invalid optimization request.",
-                "error": str(exc),
-            },
-        ) from exc
 
     except Exception as exc:
         raise HTTPException(

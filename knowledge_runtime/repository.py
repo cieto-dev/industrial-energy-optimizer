@@ -135,6 +135,179 @@ class KnowledgeRepository:
         return result
 
     # ------------------------------------------------------------------
+    # v2.0 schema helpers
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def extract_value(
+        parameter: Any,
+        field_name: str = "<unknown>",
+    ) -> float | None:
+        """
+        Safely extract the numeric `.value` from a v2.0 parameter object.
+
+        Accepts either:
+          - a nested dict: {"value": <number>, "confidence": ..., ...}
+          - a raw scalar (legacy fallback, accepted with a warning)
+
+        Returns None if the value is absent or non-numeric.
+        Never raises; callers should check for None and apply
+        validate_parameter() for quality-gate decisions.
+        """
+        if isinstance(parameter, dict):
+            raw = parameter.get("value")
+        elif isinstance(parameter, (int, float)) and not isinstance(parameter, bool):
+            # Legacy scalar — still accepted but not preferred.
+            raw = parameter
+        else:
+            return None
+
+        if raw is None:
+            return None
+
+        try:
+            return float(raw)
+        except (TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def get_parameter(
+        record: dict[str, Any],
+        key: str,
+    ) -> dict[str, Any] | None:
+        """
+        Return the full v2.0 parameter object for *key* from *record*.
+
+        Returns None if the key is absent or its value is not a dict.
+        Use extract_value() on the result to obtain the numeric value.
+        """
+        param = record.get(key)
+        if isinstance(param, dict):
+            return param
+        return None
+
+    @staticmethod
+    def validate_parameter(
+        record: dict[str, Any],
+        key: str,
+        field_label: str | None = None,
+    ) -> dict[str, Any]:
+        """
+        Quality-gate a single v2.0 parameter and return a structured status.
+
+        Return schema::
+
+            {
+                "ok": bool,           # False blocks a firm recommendation
+                "value": float|None,
+                "confidence": str|None,
+                "source_id": str|None,
+                "last_verified": str|None,
+                "warnings": [str],    # non-empty when confidence is Low
+                "errors": [str],      # non-empty when value/source_id absent
+            }
+
+        Failsafe rules (per plan §1.1):
+          - confidence == "Low"  → ok=True but warnings populated
+          - value is None        → ok=False, errors populated
+          - source_id is absent  → ok=False, errors populated
+        """
+        label = field_label or key
+        param = record.get(key)
+        warnings: list[str] = []
+        errors: list[str] = []
+
+        if param is None:
+            errors.append(
+                f"Required parameter '{label}' is absent. "
+                "Cannot produce a firm recommendation without it."
+            )
+            return {
+                "ok": False,
+                "value": None,
+                "confidence": None,
+                "source_id": None,
+                "last_verified": None,
+                "warnings": warnings,
+                "errors": errors,
+            }
+
+        # Legacy scalar — wrap it mentally but flag for upgrade.
+        if isinstance(param, (int, float)) and not isinstance(param, bool):
+            warnings.append(
+                f"Parameter '{label}' is a raw scalar (legacy format). "
+                "It should be migrated to the v2.0 nested schema."
+            )
+            return {
+                "ok": True,
+                "value": float(param),
+                "confidence": "Low",
+                "source_id": None,
+                "last_verified": None,
+                "warnings": warnings,
+                "errors": errors,
+            }
+
+        if not isinstance(param, dict):
+            errors.append(
+                f"Parameter '{label}' has unexpected type "
+                f"({type(param).__name__}). Expected a v2.0 parameter object."
+            )
+            return {
+                "ok": False,
+                "value": None,
+                "confidence": None,
+                "source_id": None,
+                "last_verified": None,
+                "warnings": warnings,
+                "errors": errors,
+            }
+
+        raw_value = param.get("value")
+        confidence = param.get("confidence")
+        source_id = param.get("source_id")
+        last_verified = param.get("last_verified")
+
+        numeric_value: float | None = None
+        if raw_value is not None:
+            try:
+                numeric_value = float(raw_value)
+            except (TypeError, ValueError):
+                errors.append(
+                    f"Parameter '{label}' has a non-numeric value: {raw_value!r}."
+                )
+
+        if numeric_value is None and raw_value is None:
+            errors.append(
+                f"Parameter '{label}' has no value. "
+                "Cannot produce a firm recommendation without it."
+            )
+
+        if not source_id:
+            errors.append(
+                f"Parameter '{label}' has no source_id. "
+                "All quantitative values must be traceable to an allowable source."
+            )
+
+        if confidence == "Low":
+            warnings.append(
+                f"Parameter '{label}' has Low confidence. "
+                "Uncertainty ranges should be widened and this warning "
+                "must be surfaced to the operator."
+            )
+
+        ok = len(errors) == 0
+        return {
+            "ok": ok,
+            "value": numeric_value,
+            "confidence": confidence,
+            "source_id": source_id,
+            "last_verified": last_verified,
+            "warnings": warnings,
+            "errors": errors,
+        }
+
+    # ------------------------------------------------------------------
     # Index builders
     # ------------------------------------------------------------------
 

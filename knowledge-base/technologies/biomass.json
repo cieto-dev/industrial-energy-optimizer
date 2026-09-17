@@ -1,6 +1,49 @@
 {
-  "technology_id": "biomass",
-  "name": "Biomass Boiler",
-  "category": "Biomass",
-  "content": "Biomass Boiler generates steam or hot water by burning renewable solid biomass such as wood chips, pellets, briquettes, rice husk, bagasse, sawdust and agricultural residues."
+    "technology_id": "TECH_BIOMASS_BOILER",
+    "name": "Biomass Boiler",
+    "category": "Biomass",
+    "description": "Biomass boiler generating steam or hot water by burning renewable solid biomass.",
+    "performance_parameters": {
+        "efficiency_percent": {
+            "value": 75.0,
+            "unit": "%",
+            "confidence": "Medium",
+            "source_id": "mnre_giz_biomass_msme",
+            "last_verified": "2026-09-12"
+        },
+        "minimum_process_temperature_c": {
+            "value": 60,
+            "unit": "C",
+            "confidence": "High",
+            "source_id": "mnre_giz_biomass_msme",
+            "last_verified": "2026-09-12"
+        },
+        "maximum_process_temperature_c": {
+            "value": 300,
+            "unit": "C",
+            "confidence": "High",
+            "source_id": "mnre_giz_biomass_msme",
+            "last_verified": "2026-09-12"
+        }
+    },
+    "economic_parameters": {
+        "capex_per_kw": {
+            "value": null,
+            "unit": "INR/kW",
+            "confidence": "Low",
+            "source_id": "SRC_PROJECT_DEFAULTS",
+            "last_verified": "2026-09-12",
+            "note": "Requires specific OEM quotes."
+        },
+        "opex_fixed_percent_capex": {
+            "value": 3.0,
+            "unit": "%",
+            "confidence": "Medium",
+            "source_id": "SRC_PROJECT_DEFAULTS",
+            "last_verified": "2026-09-12"
+        }
+    },
+    "operational_constraints": {
+        "requires_biomass_supply": true
+    }
 }

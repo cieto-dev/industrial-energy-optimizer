@@ -29,13 +29,74 @@ def load_emission_factors() -> dict[str, Any]:
         return json.load(file)
 
 
+def _unwrap_value(param: Any) -> float | None:
+    """
+    Safely extract a numeric value from a v2.0 parameter object or a
+    legacy scalar. Returns None if the value is absent or non-numeric.
+    Never raises.
+    """
+    if isinstance(param, dict):
+        raw = param.get("value")
+    elif isinstance(param, (int, float)) and not isinstance(param, bool):
+        raw = param
+    else:
+        return None
+    if raw is None:
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
+
+
 def get_emission_factor(fuel: str) -> dict[str, Any]:
-    """Return emission-factor data for a fuel."""
+    """
+    Return the full emission-factor record for a fuel (v2.0 nested schema).
+
+    Callers that need a bare numeric value should use
+    get_emission_factor_value() instead.
+    """
     fuel = fuel.lower().strip()
     factors = load_emission_factors()
     if fuel not in factors:
         raise ValueError(f"Unknown fuel: {fuel}")
     return factors[fuel]
+
+
+def get_emission_factor_value(fuel: str) -> float:
+    """
+    Return the numeric emission factor (tCO2/TJ) for a fuel.
+
+    Unwraps v2.0 nested objects transparently.
+    Raises ValueError if the value is absent or not numeric.
+    """
+    record = get_emission_factor(fuel)
+    ef_param = record.get("emission_factor")
+    value = _unwrap_value(ef_param)
+    if value is None:
+        raise ValueError(
+            f"Emission factor value for '{fuel}' is absent or non-numeric. "
+            "Check knowledge-base/emissions/emission_factors.json."
+        )
+    return value
+
+
+def get_ncv_value(fuel: str) -> float:
+    """
+    Return the numeric net calorific value for a fuel.
+
+    Unwraps v2.0 nested objects transparently.
+    Raises ValueError if the value is absent or not numeric.
+    """
+    record = get_emission_factor(fuel)
+    ncv_param = record.get("ncv")
+    value = _unwrap_value(ncv_param)
+    if value is None:
+        raise ValueError(
+            f"NCV value for '{fuel}' is absent or non-numeric. "
+            "Check knowledge-base/emissions/emission_factors.json."
+        )
+    return value
 
 
 def load_grid_factors() -> dict[str, Any]:
@@ -126,10 +187,13 @@ if __name__ == "__main__":
     print("Fuel Emission Factors")
     print("---------------------")
     for fuel, data in load_emission_factors().items():
+        ef = data.get("emission_factor")
+        ef_value = ef.get("value") if isinstance(ef, dict) else ef
+        ef_unit = ef.get("unit") if isinstance(ef, dict) else data.get("unit", "")
+        ef_conf = ef.get("confidence", "?") if isinstance(ef, dict) else "legacy"
         print(
-            f"{fuel}: "
-            f"{data.get('emission_factor')} "
-            f"{data.get('unit')}"
+            f"{fuel}: {ef_value} {ef_unit} "
+            f"[confidence={ef_conf}]"
         )
 
     print("\nGrid Emission Factors (explicit bases)")

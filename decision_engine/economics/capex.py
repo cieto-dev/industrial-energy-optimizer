@@ -215,15 +215,82 @@ def calculate_capex(
 
     Returns CAPEX in INR.
     """
+    # This is a legacy wrapper.
+    # We should encourage the use of load_capex_result.
+    result = load_capex_result(technology_id, capacity, usd_to_inr)
+    
+    if result.status == "unavailable":
+        raise ValueError(
+            f"No usable CAPEX found for "
+            f"technology: {technology_id}"
+        )
+        
+    return {
+        "technology_id": technology_id,
+        "capex_min": result.capex_min_inr,
+        "capex_max": result.capex_max_inr,
+        "capex_estimate": result.capex_estimate_inr,
+        "currency": "INR"
+    }
 
-    technology = get_technology_data(
-        technology_id
-    )
 
-    parameters = technology.get(
-        "parameters",
-        {}
-    )
+def _normalize_confidence(confidence: float | str | None) -> str:
+    """
+    Normalize confidence from 0-1 float to High/Medium/Low string.
+    """
+    if confidence is None:
+        return "Low"
+    if isinstance(confidence, str):
+        # Pass through existing string scale if already used
+        if confidence in ["High", "Medium", "Low"]:
+            return confidence
+        # Try to parse as float if it's a string number
+        try:
+            confidence = float(confidence)
+        except ValueError:
+            return "Low"
+            
+    if isinstance(confidence, (int, float)):
+        if confidence >= 0.7:
+            return "High"
+        elif confidence >= 0.5:
+            return "Medium"
+        else:
+            return "Low"
+            
+    return "Low"
+
+
+def load_capex_result(
+    technology_id: str,
+    capacity: float | None = None,
+    usd_to_inr: float | None = None
+):
+    """
+    Calculate CAPEX for a technology and return a structured CapexResult.
+    Gracefully handles missing data instead of raising an exception.
+    """
+    # We import here to avoid circular imports if any
+    from decision_engine.economics.models import CapexResult
+    
+    try:
+        technology = get_technology_data(technology_id)
+    except ValueError:
+        # Tech not found in technology_costs.json
+        return CapexResult(
+            status="unavailable",
+            capex_min_inr=None,
+            capex_max_inr=None,
+            capex_estimate_inr=None,
+            confidence=None,
+            source_id=None,
+            last_verified=None
+        )
+
+    parameters = technology.get("parameters", {})
+    
+    # Track metadata from whichever parameter we end up using
+    used_parameter = None
 
     # --------------------------------------------------
     # CAPEX range
@@ -250,6 +317,11 @@ def calculate_capex(
         capacity=capacity,
         usd_to_inr=usd_to_inr
     )
+    
+    if min_parameter and min_parameter.get("value") is not None:
+        used_parameter = min_parameter
+    elif max_parameter and max_parameter.get("value") is not None:
+        used_parameter = max_parameter
 
     # --------------------------------------------------
     # Single CAPEX value
@@ -262,6 +334,9 @@ def calculate_capex(
         capacity=capacity,
         usd_to_inr=usd_to_inr
     )
+    
+    if capex_value is not None:
+        used_parameter = capex_parameter
 
     # --------------------------------------------------
     # CAPEX per kWth
@@ -278,6 +353,9 @@ def calculate_capex(
             capacity=capacity,
             usd_to_inr=usd_to_inr
         )
+        
+        if capex_value is not None:
+            used_parameter = capex_per_kwth
 
     # --------------------------------------------------
     # Large-scale CAPEX per MW
@@ -294,6 +372,9 @@ def calculate_capex(
             capacity=capacity,
             usd_to_inr=usd_to_inr
         )
+        
+        if capex_value is not None:
+            used_parameter = capex_per_mw
 
     # --------------------------------------------------
     # Determine final range
@@ -302,9 +383,18 @@ def calculate_capex(
     if capex_min is None and capex_max is None:
 
         if capex_value is None:
-            raise ValueError(
-                f"No usable CAPEX found for "
-                f"technology: {technology_id}"
+            # All null -> gracefully return unavailable
+            # Use metadata from capex_parameter if available (even if value is null)
+            meta_param = capex_parameter or {}
+            
+            return CapexResult(
+                status="unavailable",
+                capex_min_inr=None,
+                capex_max_inr=None,
+                capex_estimate_inr=None,
+                confidence=_normalize_confidence(meta_param.get("confidence")),
+                source_id=meta_param.get("source_id"),
+                last_verified=meta_param.get("last_verified")
             )
 
         capex_min = capex_value
@@ -337,11 +427,23 @@ def calculate_capex(
     else:
 
         capex_estimate = capex_max
+        
+    # Extract metadata
+    confidence = None
+    source_id = None
+    last_verified = None
+    
+    if used_parameter:
+        confidence = _normalize_confidence(used_parameter.get("confidence"))
+        source_id = used_parameter.get("source_id")
+        last_verified = used_parameter.get("last_verified")
 
-    return {
-        "technology_id": technology_id,
-        "capex_min": capex_min,
-        "capex_max": capex_max,
-        "capex_estimate": capex_estimate,
-        "currency": "INR"
-    }
+    return CapexResult(
+        status="available",
+        capex_min_inr=capex_min,
+        capex_max_inr=capex_max,
+        capex_estimate_inr=capex_estimate,
+        confidence=confidence,
+        source_id=source_id,
+        last_verified=last_verified
+    )

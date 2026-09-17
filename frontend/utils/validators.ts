@@ -40,15 +40,15 @@ export const FactoryProfileSchema = z.object({
   // Constraints
   roof_area_sqm: z.number().min(0, "Cannot be negative"),
   available_land_sqm: z.number().min(0, "Cannot be negative").nullable().optional(),
-  budget_inr: z.number().min(0, "Cannot be negative"),
+  budget_inr: z.number().min(0, "Cannot be negative").nullable().optional(),
   grid_reliability_pct: z.number().min(0).max(100, "Cannot exceed 100%"),
   
   // MSME & Eligibility (Module 4a)
   msme_classification: z.enum(["micro", "small", "medium"]),
   udyam_registered: z.boolean(),
   udyam_number: z.string().nullable().optional(),
-  annual_turnover_inr: z.number().min(0, "Turnover cannot be negative"),
-  plant_and_machinery_or_equipment_investment_inr: z.number().min(0, "Investment cannot be negative"),
+  annual_turnover_inr: z.number().min(0, "Turnover cannot be negative").nullable().optional(),
+  plant_and_machinery_or_equipment_investment_inr: z.number().min(0, "Investment cannot be negative").nullable().optional(),
   project_type: z.enum([
     "energy_efficiency",
     "electrification",
@@ -64,7 +64,7 @@ export const FactoryProfileSchema = z.object({
     "green_infrastructure",
     "other",
   ]),
-  project_cost_inr: z.number().min(0, "Project cost cannot be negative"),
+  project_cost_inr: z.number().min(0, "Project cost cannot be negative").nullable().optional(),
   loan_amount_inr: z.number().min(0, "Loan amount cannot be negative").nullable().optional(),
   existing_or_new_project: z.enum(["existing", "new"]),
   brownfield_or_greenfield: z.enum(["brownfield", "greenfield", "not_applicable"]).nullable().optional(),

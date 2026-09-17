@@ -169,10 +169,23 @@ def normalize_list(values: Optional[Iterable[Any]]) -> List[str]:
 def to_float(value: Any) -> Optional[float]:
     """
     Safely convert a value to float.
+
+    Accepts:
+      - raw scalars
+      - v2.0 nested parameter objects {"value": <number>, ...}
+        (only the .value field is extracted; confidence/source checks are
+        the responsibility of KnowledgeRepository.validate_parameter())
     """
     try:
         if value is None or value == "":
             return None
+
+        # v2.0 nested parameter object
+        if isinstance(value, dict):
+            inner = value.get("value")
+            if inner is None:
+                return None
+            return float(inner)
 
         return float(value)
     except (TypeError, ValueError):
