@@ -1,0 +1,11 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NEXT_PUBLIC_API_URL = "https://industrial-energy-optimizer.onrender.com"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

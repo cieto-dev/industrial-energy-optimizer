@@ -37,6 +37,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.16.0",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.3",
