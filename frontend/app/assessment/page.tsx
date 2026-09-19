@@ -196,6 +196,25 @@ export default function AssessmentWizard() {
     },
   });
 
+  const loadDemoFactory = () => {
+    methods.setValue("name", "UP Textile Mills - Unit 1");
+    methods.setValue("industry", "textile");
+    methods.setValue("state", "Uttar Pradesh");
+    methods.setValue("district", "Kanpur");
+    methods.setValue("production_per_day.value", 500);
+    methods.setValue("production_per_day.unit", "kg");
+    methods.setValue("operating_hours_per_day", 16);
+    methods.setValue("operating_days_per_year", 300);
+    methods.setValue("current_fuel", "coal");
+    methods.setValue("required_process_temperature_c", 160);
+    methods.setValue("fuel_consumption.value", 2000);
+    methods.setValue("fuel_consumption.unit", "kg");
+    methods.setValue("electricity_consumption_kwh_day", 800);
+    methods.setValue("roof_area_sqm", 1200);
+    methods.setValue("available_land_sqm", 5000);
+    methods.setValue("budget_inr", 30000000);
+  };
+
   const { trigger, handleSubmit, watch, setValue } = methods;
 
   // Watch fields to trigger smart defaults and show warnings
@@ -290,14 +309,23 @@ export default function AssessmentWizard() {
     <div className="min-h-full bg-background flex flex-col font-sans">
       <div className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-            <Factory className="h-6 w-6 text-foreground-muted" />
-            Guided Factory Assessment
-          </h1>
-          <p className="mt-2 text-sm text-foreground-muted">
-            Provide operational details to generate a decarbonization roadmap. Leave fields blank if unsure; the engine will attempt to estimate them.
-          </p>
+        <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <Factory className="h-6 w-6 text-foreground-muted" />
+              Guided Factory Assessment
+            </h1>
+            <p className="mt-2 text-sm text-foreground-muted">
+              Provide operational details to generate a decarbonization roadmap. Leave fields blank if unsure; the engine will attempt to estimate them.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={loadDemoFactory}
+            className="inline-flex items-center gap-1.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 text-xs font-semibold text-emerald-500 hover:bg-emerald-500/20 transition-colors"
+          >
+            Load UP Demo
+          </button>
         </div>
 
         {/* Progress bar */}

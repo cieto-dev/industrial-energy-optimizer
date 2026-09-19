@@ -55,7 +55,27 @@ tests/               Test suite
 
 ## Getting started
 
-> Fill in actual commands once confirmed — placeholders below based on repo structure.
+**Quick Start for Judges & Mentors (<5 minutes)**
+
+The fastest way to run the entire system (Database, Backend, Frontend) is via Docker Compose.
+
+1. Ensure Docker is running.
+2. Clone the repository and navigate to the root directory.
+3. Run the following command:
+```bash
+docker-compose -f deployment/docker-compose.yml up --build
+```
+*(Note: Environment variables for backend and frontend are pre-configured in `.env.example` and passed directly in `docker-compose.yml` for demo purposes).*
+
+**National Stage Demo Mode:**
+Once the containers are running, navigate to:
+👉 **[http://localhost:3000/demo](http://localhost:3000/demo)**
+
+This will instantly seed the engine with a pre-computed Uttar Pradesh Textile factory scenario and drop you into the honest blocked-state Results view, bypassing the Assessment wizard.
+
+---
+
+### Manual Setup (For Development)
 
 **Backend**
 ```bash
@@ -69,13 +89,7 @@ python main.py
 ```bash
 cd frontend
 npm install
-cp .env.local.example .env.local   # if applicable
 npm run dev
-```
-
-**Full stack via Docker**
-```bash
-docker-compose up --build
 ```
 
 **Run the data pipeline** (loads knowledge base into the working database)

@@ -1,28 +1,30 @@
 import React from "react"
-import { Recommendation, RejectedScenarioExplanation } from "@/types/recommendation"
+import type { ScenarioPathwayEnriched } from "@/types/optimization"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/reports/common/Table"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/reports/common/Card"
-import { motion } from "framer-motion"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts"
+
 interface Props {
-  scenarios: RejectedScenarioExplanation[]
-  recommended: Recommendation
+  pathways: ScenarioPathwayEnriched[]
 }
 
-export function ScenarioComparison({ scenarios, recommended }: Props) {
+export function ScenarioComparison({ pathways }: Props) {
   // Prepare data for the chart
-  const chartData = [
-    {
-      name: recommended.recommended_technology_sequence.join("+"),
-      score: Math.round(recommended.composite_score * 100),
-      isRecommended: true
-    },
-    ...scenarios.map(s => ({
-      name: s.technology_sequence.join("+"),
-      score: Math.round(s.composite_score * 100),
-      isRecommended: false
-    }))
-  ].sort((a, b) => b.score - a.score)
+  const chartData = pathways.map((p, index) => {
+    return {
+      name: p.technology_sequence?.join("+") || "Unknown",
+      score: p.reliability_score_pct ? Math.round(p.reliability_score_pct) : 0,
+      isRecommended: index === 0,
+      rank: index + 1,
+      key_weakness: index === 0 ? "Optimal" : "Lower Technical Match",
+      id: p.scenario_id || `pathway-${index}`
+    }
+  }).sort((a, b) => b.score - a.score)
+
+  if (chartData.length === 0) return null
+
+  const recommended = chartData.find(c => c.isRecommended) || chartData[0]
+  const scenarios = chartData.filter(c => !c.isRecommended).sort((a, b) => a.rank - b.rank)
 
   return (
     <Card className="overflow-hidden border-border/50 shadow-sm">
@@ -36,7 +38,7 @@ export function ScenarioComparison({ scenarios, recommended }: Props) {
           
           {/* Visual Chart Section */}
           <div className="p-6 bg-surface/30 flex flex-col">
-            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-6">MCDA Score Distribution</h4>
+            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-6">Match Score Distribution</h4>
             <div className="flex-1 min-h-[250px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} layout="vertical" margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
@@ -64,7 +66,7 @@ export function ScenarioComparison({ scenarios, recommended }: Props) {
                 <TableRow className="bg-surface-muted/50 hover:bg-surface-muted/50">
                   <TableHead className="w-[80px] text-center text-[10px] uppercase tracking-wider">Rank</TableHead>
                   <TableHead className="text-[10px] uppercase tracking-wider">Technology Pathway</TableHead>
-                  <TableHead className="text-right text-[10px] uppercase tracking-wider">MCDA Score</TableHead>
+                  <TableHead className="text-right text-[10px] uppercase tracking-wider">Match Score</TableHead>
                   <TableHead className="text-[10px] uppercase tracking-wider">Status / Weakness</TableHead>
                 </TableRow>
               </TableHeader>
@@ -72,8 +74,8 @@ export function ScenarioComparison({ scenarios, recommended }: Props) {
                 {/* Row 1: Recommended */}
                 <TableRow className="bg-primary/5 font-medium group hover:bg-primary/10 transition-colors cursor-pointer border-b border-border/40">
                   <TableCell className="text-center font-bold text-primary group-hover:scale-110 transition-transform">1</TableCell>
-                  <TableCell className="capitalize text-foreground font-semibold">{recommended.recommended_technology_sequence.join(" + ").replace(/_/g, " ")}</TableCell>
-                  <TableCell className="text-right text-primary font-bold">{(recommended.composite_score * 100).toFixed(0)}</TableCell>
+                  <TableCell className="capitalize text-foreground font-semibold">{recommended.name.replace(/_/g, " ")}</TableCell>
+                  <TableCell className="text-right text-primary font-bold">{recommended.score}</TableCell>
                   <TableCell>
                     <span className="inline-flex items-center rounded-full bg-primary/20 border border-primary/30 px-2.5 py-0.5 text-xs font-semibold text-primary">
                       Recommended
@@ -82,11 +84,11 @@ export function ScenarioComparison({ scenarios, recommended }: Props) {
                 </TableRow>
 
                 {/* Remaining Rows */}
-                {scenarios.sort((a, b) => a.rank - b.rank).map((scenario, i) => (
-                  <TableRow key={scenario.scenario_id} className="group hover:bg-surface-muted transition-colors cursor-pointer border-b border-border/40 last:border-0">
+                {scenarios.map((scenario) => (
+                  <TableRow key={scenario.id} className="group hover:bg-surface-muted transition-colors cursor-pointer border-b border-border/40 last:border-0">
                     <TableCell className="text-center font-medium text-muted-foreground group-hover:text-foreground transition-colors">{scenario.rank}</TableCell>
-                    <TableCell className="capitalize font-medium text-muted-foreground group-hover:text-foreground transition-colors">{scenario.technology_sequence.join(" + ").replace(/_/g, " ")}</TableCell>
-                    <TableCell className="text-right font-medium text-muted-foreground group-hover:text-foreground transition-colors">{(scenario.composite_score * 100).toFixed(0)}</TableCell>
+                    <TableCell className="capitalize font-medium text-muted-foreground group-hover:text-foreground transition-colors">{scenario.name.replace(/_/g, " ")}</TableCell>
+                    <TableCell className="text-right font-medium text-muted-foreground group-hover:text-foreground transition-colors">{scenario.score}</TableCell>
                     <TableCell className="text-muted-foreground text-xs group-hover:text-foreground transition-colors">
                       {scenario.key_weakness}
                     </TableCell>

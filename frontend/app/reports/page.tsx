@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import type { OptimizeResponse } from "@/types/optimization";
 import { BaselineSummary } from "@/components/results/BaselineSummary";
+import { RecommendationCard } from "@/components/dashboard/RecommendationCard";
+import { RejectionLog } from "@/components/dashboard/RejectionLog";
 
 export default function ReportsPage() {
   const [result, setResult] = useState<OptimizeResponse | null>(null);
@@ -64,7 +66,7 @@ export default function ReportsPage() {
     <div className="min-h-full bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 print:hidden">
           <div className="flex items-center gap-2 text-xs text-foreground-muted mb-4">
             <Link
               href="/results"
@@ -86,7 +88,7 @@ export default function ReportsPage() {
         </div>
 
         {/* Pending State Banner */}
-        <div className="mb-8 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 p-5 flex items-start gap-3">
+        <div className="mb-8 rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 p-5 flex items-start gap-3 print:hidden">
           <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
           <div>
             <h3 className="text-sm font-semibold text-amber-900 dark:text-amber-100">
@@ -96,12 +98,12 @@ export default function ReportsPage() {
               The frontend data contract has been hardened and is ready to stream
               to the PDF/Excel engines. Backend file generation endpoints are
               currently in development and will be activated shortly. No data
-              is fabricated in the meantime.
+              is fabricated in the meantime. Click "Print to PDF" to generate a client-side export.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 print:hidden">
           {/* PDF Export Card */}
           <div className="rounded-lg border border-border bg-surface p-6 flex flex-col">
             <div className="flex items-center gap-3 mb-4">
@@ -132,11 +134,11 @@ export default function ReportsPage() {
               </li>
             </ul>
             <button
-              disabled
-              className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background opacity-50 cursor-not-allowed"
+              onClick={() => window.print()}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background hover:bg-foreground/90 transition-colors print:hidden"
             >
               <Download className="h-4 w-4" />
-              Download PDF (Pending)
+              Print to PDF
             </button>
           </div>
 
@@ -181,20 +183,24 @@ export default function ReportsPage() {
 
         {/* Methodology & Confidence Preview */}
         <div>
-          <h2 className="text-lg font-semibold text-foreground mb-4 border-b border-border pb-2">
+          <h2 className="text-lg font-semibold text-foreground mb-4 border-b border-border pb-2 print:hidden">
             Report Preview: Methodology & Confidence
+          </h2>
+          <h2 className="hidden print:block text-2xl font-bold text-foreground mb-6 border-b border-border pb-4">
+            Industrial Decarbonization Assessment
           </h2>
           
           <div className="space-y-6">
             {/* Disclaimer */}
-            <div className="bg-surface-muted border border-border rounded-lg p-5">
+            <div className="bg-surface-muted border border-border rounded-lg p-5 break-inside-avoid">
               <h4 className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-2">
                 System Disclaimer: No-Invention Rule
               </h4>
               <p className="text-sm text-foreground-muted leading-relaxed">
                 All financial figures within this report represent rigorous estimations based on standard IPCC emission factors, historical industrial benchmarks, and the user's explicit inputs. 
                 <strong> The Urjiva Engine adheres strictly to a "No-Invention" rule.</strong> Where a specific capital expenditure (CAPEX) or financial parameter is not available in the proprietary knowledge base, it is explicitly marked as unavailable rather than fabricated. 
-                In these instances, vendor quotes must be provided to unlock definitive simple payback, ROI, and NPV calculations.
+                In these instances, validated vendor quotes must be provided to unlock definitive simple payback, ROI, and NPV calculations.
+                <strong> Once real CAPEX data is ingested or entered, the ranges will automatically collapse into firm payback and NPV figures.</strong>
               </p>
             </div>
 
@@ -208,7 +214,7 @@ export default function ReportsPage() {
             
             {/* Data Gaps Preview */}
             {result.data_gap_flags.length > 0 && (
-              <div>
+              <div className="break-inside-avoid">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-3">
                   Identified Data Gaps & Confidence Limitations
                 </h4>
@@ -234,6 +240,46 @@ export default function ReportsPage() {
                     );
                   })}
                 </div>
+              </div>
+            )}
+
+            {/* Technical Ranking */}
+            {result.dashboard?.finance?.scenarios && result.dashboard.finance.scenarios.length > 0 && (
+              <div className="pt-4 break-inside-avoid">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-3">
+                  Preliminary Technical Rankings
+                </h4>
+                <div className="space-y-4">
+                  {result.dashboard.finance.scenarios.slice(0, 3).map((pathway, idx) => (
+                    <RecommendationCard 
+                      key={idx} 
+                      pathway={pathway} 
+                      baseline={result.baseline_profile} 
+                      factoryContext={{
+                        state: (factoryRaw?.state as string) || "",
+                        district: (factoryRaw?.district as string) || "",
+                        industry: (factoryRaw?.industry as string) || "",
+                        factory_name: (factoryRaw?.name as string) || "",
+                        cluster_name: "",
+                        special_category: {},
+                      }} 
+                      rank={idx + 1} 
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Rejection Log */}
+            {result.dashboard?.finance?.scenarios && result.dashboard.technology_assessment?.rejected && (
+              <div className="pt-4 break-inside-avoid">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-3">
+                  Rejection Reasons & Decision Log
+                </h4>
+                <RejectionLog 
+                  pathways={result.dashboard.finance.scenarios} 
+                  rejectedTechs={result.dashboard.technology_assessment.rejected} 
+                />
               </div>
             )}
           </div>

@@ -228,8 +228,63 @@ def get_electricity_tariff_record(state: str) -> dict[str, Any]:
                     "parameter_key": "energy_charge_kvah",
                 }
 
+    # ----------------------------------------------------------------
+    # Secondary pass: match state in ANY parameter's applicability block
+    # (handles UP-style entries where state is in e.g. energy_charge_inr_per_kvah)
+    # ----------------------------------------------------------------
+    for entity_id, entity in entities.items():
+        parameters = entity.get("parameters", {})
+        for param_key, param_val in parameters.items():
+            if not isinstance(param_val, dict):
+                continue
+            appl = param_val.get("applicability", {})
+            if not isinstance(appl, dict):
+                continue
+            if str(appl.get("state", "")).strip().lower() == state.lower():
+                value = param_val.get("value")
+                if value is not None:
+                    return {
+                        "state": state,
+                        "entity_id": entity_id,
+                        "charge": float(value),
+                        "unit": param_val.get("unit", "INR/kWh"),
+                        "status": param_val.get("status", "estimated"),
+                        "confidence": param_val.get("confidence", "medium"),
+                        "source_id": param_val.get("source_id"),
+                        "source_type": param_val.get("source_type"),
+                        "parameter_key": param_key,
+                    }
+
+    # ----------------------------------------------------------------
+    # National-average fallback — avoids hard crash for uncovered states
+    # ----------------------------------------------------------------
+    national_avg = entities.get("ELEC_NATIONAL_AVG")
+    if national_avg:
+        params = national_avg.get("parameters", {})
+        charge_data = params.get("energy_charge_inr_per_kwh", {})
+        if charge_data and charge_data.get("value") is not None:
+            import logging as _logging
+            _logging.getLogger(__name__).warning(
+                "No electricity tariff found for state '%s'. "
+                "Using national average fallback (%.2f INR/kWh).",
+                state,
+                float(charge_data["value"]),
+            )
+            return {
+                "state": state,
+                "entity_id": "ELEC_NATIONAL_AVG",
+                "charge": float(charge_data["value"]),
+                "unit": charge_data.get("unit", "INR/kWh"),
+                "status": "estimated",
+                "confidence": 0.5,
+                "source_id": charge_data.get("source_id"),
+                "source_type": "national_average_fallback",
+                "parameter_key": "energy_charge_inr_per_kwh",
+            }
+
     raise ValueError(
-        f"Missing electricity tariff for state '{state}'."
+        f"Missing electricity tariff for state '{state}' and no national "
+        f"average fallback is available in the knowledge base."
     )
 
 

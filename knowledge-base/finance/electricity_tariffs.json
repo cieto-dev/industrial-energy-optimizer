@@ -1514,6 +1514,216 @@
         "assumptions": "",
         "limitations": ""
       }
+    },
+    "ELEC_MH_HT_IND": {
+      "id": "ELEC_MH_HT_IND",
+      "display_name": "Maharashtra HT Industrial Tariff (MSEDCL, HT-II)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "MSEDCL HT-II Industrial tariff for high-tension consumers (above 100 kVA). Energy charge estimated from MERC tariff order FY 2025-26.",
+      "metadata": { "state": "Maharashtra" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.94,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.80,
+          "source_id": "SRC_MERC_FY26",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Maharashtra", "industry": null, "msme_class": null },
+          "research": { "summary": "MSEDCL HT-II energy charge for FY 2025-26 per MERC order.", "assumptions": "LT tariff may apply for sub-100 kVA MSME loads.", "limitations": "Demand charges excluded from MVP baseline." }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_RJ_HT_IND": {
+      "id": "ELEC_RJ_HT_IND",
+      "display_name": "Rajasthan HT Industrial Tariff (JVVNL/AVVNL/JDVVNL, HV-4)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "Rajasthan DISCOMs HV-4 industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Rajasthan" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.05,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Rajasthan", "industry": null, "msme_class": null },
+          "research": { "summary": "Rajasthan HV-4 industrial energy charge estimated from RERC tariff order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_MP_HT_IND": {
+      "id": "ELEC_MP_HT_IND",
+      "display_name": "Madhya Pradesh HT Industrial Tariff (MPPKVVCL, HV-2)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "MPPKVVCL HV-2 industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Madhya Pradesh" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 6.85,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Madhya Pradesh", "industry": null, "msme_class": null },
+          "research": { "summary": "MP HV-2 industrial energy charge estimated from MPERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_WB_HT_IND": {
+      "id": "ELEC_WB_HT_IND",
+      "display_name": "West Bengal HT Industrial Tariff (WBSEDCL, LT-Industry)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "WBSEDCL HT industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "West Bengal" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.10,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "West Bengal", "industry": null, "msme_class": null },
+          "research": { "summary": "WBSEDCL industrial energy charge estimated from WBERC tariff order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_PB_HT_IND": {
+      "id": "ELEC_PB_HT_IND",
+      "display_name": "Punjab HT Industrial Tariff (PSPCL, MS/LS)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "PSPCL large/medium supply industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Punjab" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.25,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Punjab", "industry": null, "msme_class": null },
+          "research": { "summary": "PSPCL MS/LS industrial energy charge estimated from PSERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_UK_HT_IND": {
+      "id": "ELEC_UK_HT_IND",
+      "display_name": "Uttarakhand HT Industrial Tariff (UPCL, HV-Industry)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "UPCL HV industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Uttarakhand" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 6.50,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.70,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Uttarakhand", "industry": null, "msme_class": null },
+          "research": { "summary": "UPCL HV industrial energy charge estimated from UERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_OD_HT_IND": {
+      "id": "ELEC_OD_HT_IND",
+      "display_name": "Odisha HT Industrial Tariff (TPCODL/NESCO/WESCO, HT-Industry)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "Odisha DISCOM HT industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Odisha" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 6.60,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.70,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Odisha", "industry": null, "msme_class": null },
+          "research": { "summary": "Odisha HT industrial energy charge estimated from OERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_TS_HT_IND": {
+      "id": "ELEC_TS_HT_IND",
+      "display_name": "Telangana HT Industrial Tariff (TSSPDCL/TSNPDCL, HT-IIA)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "Telangana DISCOM HT-IIA industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Telangana" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.30,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Telangana", "industry": null, "msme_class": null },
+          "research": { "summary": "Telangana HT-IIA industrial energy charge estimated from TSERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_AP_HT_IND": {
+      "id": "ELEC_AP_HT_IND",
+      "display_name": "Andhra Pradesh HT Industrial Tariff (APEPDCL/APSPDCL, HT-II)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "AP DISCOM HT-II industrial tariff energy charge for FY 2025-26.",
+      "metadata": { "state": "Andhra Pradesh" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.20,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.75,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": "Andhra Pradesh", "industry": null, "msme_class": null },
+          "research": { "summary": "AP HT-II industrial energy charge estimated from APERC order.", "assumptions": "", "limitations": "" }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
+    },
+    "ELEC_NATIONAL_AVG": {
+      "id": "ELEC_NATIONAL_AVG",
+      "display_name": "National Average Industrial Electricity Tariff (India, Fallback)",
+      "category": "electricity_tariff",
+      "status": "estimated",
+      "description": "National weighted-average industrial electricity tariff used as a fallback when no state-specific tariff record is available.",
+      "metadata": { "state": "National Average" },
+      "parameters": {
+        "energy_charge_inr_per_kwh": {
+          "value": 7.10,
+          "unit": "INR_per_kWh",
+          "status": "estimated",
+          "confidence": 0.60,
+          "source_id": "SRC_TARIFF_MASTER_REPO",
+          "last_verified": "2026-08-15",
+          "applicability": { "country": "India", "state": null, "industry": null, "msme_class": null },
+          "research": { "summary": "National average industrial electricity tariff derived from CEA tariff survey data.", "assumptions": "Used only when a state-specific tariff is unavailable.", "limitations": "May not reflect local DISCOM rates accurately." }
+        }
+      },
+      "research": { "summary": "", "assumptions": "", "limitations": "" }
     }
   },
   "sources": {
@@ -1527,7 +1737,7 @@
       "decision-engine/economics/opex.py",
       "decision-engine/baseline/energy_calculator.py"
     ],
-    "coverage_gap": "No verified tariff record exists yet for Punjab or Uttarakhand, both of which are target regions per datasets/district_coordinates_6_regions.csv. PSPCL (Punjab) and UPCL (Uttarakhand) tariff orders are needed before the optimizer can run for those regions.",
+    "coverage_gap": "Coverage has been extended to Maharashtra, Rajasthan, MP, WB, Punjab, Uttarakhand, Odisha, Telangana, Andhra Pradesh (estimated rates). Remaining gaps: Bihar, Chhattisgarh, Assam, and smaller states/UTs. A national-average fallback entity (ELEC_NATIONAL_AVG) is used when no state match is found.",
     "related_entities": {
       "all_states": [
         "FIN_ASSUMPTIONS_2026"

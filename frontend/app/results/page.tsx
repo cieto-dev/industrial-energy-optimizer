@@ -13,6 +13,8 @@ import {
 import type { OptimizeResponse } from "@/types/optimization";
 import { BlockedState } from "@/components/results/BlockedState";
 import { ResultsView } from "@/components/results/ResultsView";
+import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
+import { BarChart2 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Storage key written by the assessment page after a successful /optimize call
@@ -88,6 +90,7 @@ export default function ResultsPage() {
   const [result, setResult] = useState<OptimizeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<"analysis" | "visualizations">("analysis");
 
   useEffect(() => {
     try {
@@ -168,11 +171,38 @@ export default function ResultsPage() {
               <span>/</span>
               <span>Results</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              {result?.firm_recommendation_blocked
-                ? "Preliminary Analysis"
-                : "Optimization Results"}
-            </h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                {result?.firm_recommendation_blocked
+                  ? "Preliminary Analysis"
+                  : "Optimization Results"}
+              </h1>
+              {result && (
+                <div className="flex items-center rounded-lg bg-muted p-1 hidden sm:flex">
+                  <button
+                    onClick={() => setActiveView("analysis")}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                      activeView === "analysis"
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    Analysis
+                  </button>
+                  <button
+                    onClick={() => setActiveView("visualizations")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                      activeView === "visualizations"
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <BarChart2 className="w-3.5 h-3.5" />
+                    Visualizations
+                  </button>
+                </div>
+              )}
+            </div>
             {factoryLabel && (
               <p className="mt-1 text-sm text-foreground-muted">{factoryLabel}</p>
             )}
@@ -213,7 +243,19 @@ export default function ResultsPage() {
 
         {!isLoading && !error && result && (
           <>
-            {result.firm_recommendation_blocked ? (
+            {activeView === "visualizations" ? (
+              <DashboardCharts 
+                dashboard={result.dashboard} 
+                baseline={result.baseline_profile}
+                factoryContext={{
+                  state: factoryRaw?.state as string,
+                  district: factoryRaw?.district as string,
+                  industry: factoryRaw?.industry as string,
+                  factory_name: factoryRaw?.name as string,
+                  cluster_name: factoryRaw?.cluster_name as string,
+                }}
+              />
+            ) : result.firm_recommendation_blocked ? (
               <BlockedState
                 dataGapFlags={result.data_gap_flags}
                 baseline={result.baseline_profile}

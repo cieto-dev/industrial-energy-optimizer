@@ -32,7 +32,7 @@ class Factory(BaseModel):
     mutating it.
     """
 
-    factory_id: str
+    factory_id: str | None = None
     name: str
 
     # Location / industry
@@ -52,7 +52,7 @@ class Factory(BaseModel):
     # Site / financial constraints
     roof_area_sqm: float = Field(ge=0)
     available_land_sqm: float | None = Field(default=None, ge=0)
-    budget_inr: float = Field(ge=0)
+    budget_inr: float | None = Field(default=None, ge=0)
     grid_reliability_pct: float = Field(ge=0, le=100)
 
     # MSME identity
@@ -61,8 +61,8 @@ class Factory(BaseModel):
     udyam_number: str | None = None
 
     # Module 4a — policy / eligibility
-    annual_turnover_inr: float = Field(ge=0)
-    plant_and_machinery_or_equipment_investment_inr: float = Field(ge=0)
+    annual_turnover_inr: float | None = Field(default=None, ge=0)
+    plant_and_machinery_or_equipment_investment_inr: float | None = Field(default=None, ge=0)
 
     project_type: Literal[
         "energy_efficiency",
@@ -80,7 +80,7 @@ class Factory(BaseModel):
         "other",
     ]
 
-    project_cost_inr: float = Field(ge=0)
+    project_cost_inr: float | None = Field(default=None, ge=0)
     loan_amount_inr: float | None = Field(default=None, ge=0)
 
     existing_or_new_project: Literal["existing", "new"]

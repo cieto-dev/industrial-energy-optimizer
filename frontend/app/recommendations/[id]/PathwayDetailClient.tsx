@@ -83,7 +83,7 @@ export default function PathwayDetailPage({
   if (error || !pathway) {
     return (
       <div className="min-h-full bg-background p-8 flex items-center justify-center">
-        <div className="max-w-md w-full bg-surface border border-border p-6 text-center">
+        <div className="max-w-md w-full bg-surface border border-border p-6 rounded-lg text-center">
           <AlertTriangle className="h-8 w-8 text-amber-500 mx-auto mb-4" />
           <h2 className="text-lg font-semibold text-foreground mb-2">
             Pathway Unavailable
@@ -93,7 +93,7 @@ export default function PathwayDetailPage({
           </p>
           <Link
             href="/results"
-            className="inline-flex items-center gap-2 bg-foreground px-4 py-2 text-sm font-medium text-background"
+            className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background"
           >
             Back to Results
           </Link>
@@ -135,7 +135,7 @@ export default function PathwayDetailPage({
             </div>
             <Link
               href="/reports"
-              className="inline-flex items-center gap-1.5 border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-surface transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-surface transition-colors"
             >
               <FileText className="h-3.5 w-3.5" />
               Export Report
@@ -146,7 +146,7 @@ export default function PathwayDetailPage({
         <div className="space-y-8">
 
           {/* Section: Why this pathway? */}
-          <section className="bg-surface border border-border p-6">
+          <section className="bg-surface border border-border rounded-lg p-6">
             <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               <Info className="h-5 w-5 text-accent" />
               Why this pathway?
@@ -178,7 +178,7 @@ export default function PathwayDetailPage({
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* CAPEX Card */}
-              <div className="bg-surface border border-border p-5">
+              <div className="bg-surface border border-border rounded-lg p-5">
                 <RangeDisplay
                   label="CAPEX Estimate"
                   value={
@@ -199,7 +199,7 @@ export default function PathwayDetailPage({
               </div>
 
               {/* Payback Card */}
-              <div className="bg-surface border border-border p-5">
+              <div className="bg-surface border border-border rounded-lg p-5">
                 <RangeDisplay
                   label="Simple Payback"
                   value={
@@ -220,7 +220,7 @@ export default function PathwayDetailPage({
               </div>
 
               {/* Savings Card */}
-              <div className="bg-surface border border-border p-5">
+              <div className="bg-surface border border-border rounded-lg p-5">
                 <RangeDisplay
                   label="Annual Savings"
                   value={
@@ -244,7 +244,7 @@ export default function PathwayDetailPage({
                 {fm.data_gap_flags.map((flag, idx) => (
                   <span
                     key={idx}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium ${flag.severity === "blocking"
+                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium ${flag.severity === "blocking"
                         ? "bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-200 dark:border-amber-800"
                         : "bg-surface-muted text-foreground-muted border border-border"
                       }`}
@@ -268,7 +268,7 @@ export default function PathwayDetailPage({
                   const altLabel = techLabel(alt.technology_sequence);
                   const isBlocked = alt.financial_model?.firm_recommendation_blocked;
                   return (
-                    <div key={idx} className="bg-surface border border-border p-4 flex flex-col sm:flex-row sm:items-start gap-4">
+                    <div key={idx} className="bg-surface border border-border rounded-lg p-4 flex flex-col sm:flex-row sm:items-start gap-4">
                       <div className="flex-shrink-0 mt-0.5">
                         <XCircle className="h-5 w-5 text-foreground-muted" />
                       </div>

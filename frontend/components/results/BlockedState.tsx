@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { BaselineProfile, Dashboard } from "@/types/optimization";
 import { BaselineSummary } from "./BaselineSummary";
-import { PathwayCard } from "./ResultsView";
+import { RecommendationCard } from "@/components/dashboard/RecommendationCard";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -168,13 +168,43 @@ export function BlockedState({
       </div>
 
       {/* ------------------------------------------------------------------ */}
+      {/* Preliminary Technical Rankings                                       */}
+      {/* ------------------------------------------------------------------ */}
+      {dashboard?.finance?.scenarios && dashboard.finance.scenarios.length > 0 && (
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-foreground mb-2">
+            Preliminary Technical Ranking
+          </h3>
+          <p className="text-sm text-foreground-muted mb-6">
+            These pathways are structurally feasible based on your temperature requirements and reliability parameters. The engine has ranked them on operational suitability to ensure production continuity.
+          </p>
+          <div className="space-y-4">
+            {dashboard.finance.scenarios.slice(0, 3).map((pathway, idx) => {
+              const factoryRaw = dashboard.factory as Record<string, unknown> | undefined;
+              const factoryContext = {
+                state: (factoryRaw?.state as string) || "",
+                district: (factoryRaw?.district as string) || "",
+                industry: (factoryRaw?.industry as string) || "",
+                factory_name: (factoryRaw?.name as string) || "",
+                cluster_name: "",
+                special_category: {},
+              };
+              return (
+                <RecommendationCard key={idx} pathway={pathway} baseline={baseline} factoryContext={factoryContext} rank={idx + 1} />
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------------ */}
       {/* Data gap details                                                     */}
       {/* ------------------------------------------------------------------ */}
       {parsedFlags.length > 0 && (
-        <div>
+        <div className="mt-12 pt-8 border-t border-border">
           <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
             <Database className="h-4 w-4 text-foreground-muted" />
-            Data Gaps — {parsedFlags.length} item{parsedFlags.length !== 1 ? "s" : ""}
+            Missing Data Required for Financial Recommendation
           </h3>
           <div className="divide-y divide-border rounded-lg border border-border overflow-hidden">
             {parsedFlags.map((flag, i) => (
@@ -227,24 +257,6 @@ export function BlockedState({
         </div>
       )}
 
-      {/* ------------------------------------------------------------------ */}
-      {/* Preliminary Technical Rankings                                       */}
-      {/* ------------------------------------------------------------------ */}
-      {dashboard?.finance?.scenarios && dashboard.finance.scenarios.length > 0 && (
-        <div className="mt-12 pt-8 border-t border-border">
-          <h3 className="text-base font-semibold text-foreground mb-4">
-            Preliminary Technical Rankings
-          </h3>
-          <p className="text-sm text-foreground-muted mb-6">
-            These pathways are structurally feasible based on your temperature requirements and reliability parameters. Financial comparison is blocked pending the required data listed above.
-          </p>
-          <div className="space-y-4">
-            {dashboard.finance.scenarios.slice(0, 3).map((pathway, idx) => (
-              <PathwayCard key={idx} pathway={pathway} rank={idx + 1} />
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* ------------------------------------------------------------------ */}
       {/* Baseline (always show — it is sound)                                */}

@@ -490,6 +490,7 @@ def _default_from_legacy(
         CRITERION_ELECTRICITY_DEPENDENCE,
         CRITERION_BIOMASS_DEPENDENCE,
         CRITERION_CONFIDENCE,
+        CRITERION_SUPPLY_RELIABILITY,
     }:
         return 50.0
 
